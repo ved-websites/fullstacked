@@ -1,0 +1,42 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Launch Edge",
+			"request": "launch",
+			"type": "pwa-msedge",
+			"url": "http://localhost:5000",
+			"webRoot": "${workspaceFolder}/src",
+			"timeout": 30000,
+			"cleanUp": "onlyTab",
+			"includeDefaultArgs": true,
+			"pauseForSourceMap": true,
+			"sourceMaps": true,
+			"preLaunchTask": "start dev",
+			"postDebugTask": "Terminate All Tasks",
+			"skipFiles": [
+				"<node_internals>/**"
+			]
+		},
+		{
+			"name": "Launch Edge - No GQL",
+			"request": "launch",
+			"type": "pwa-msedge",
+			"url": "http://localhost:5000",
+			"webRoot": "${workspaceFolder}/src",
+			"timeout": 30000,
+			"cleanUp": "onlyTab",
+			"includeDefaultArgs": true,
+			"pauseForSourceMap": true,
+			"sourceMaps": true,
+			"preLaunchTask": "start dev - no gql",
+			"postDebugTask": "Terminate All Tasks",
+			"skipFiles": [
+				"<node_internals>/**"
+			]
+		},
+	]
+}

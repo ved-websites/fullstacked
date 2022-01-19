@@ -1,0 +1,103 @@
+name: CI/CD - Client
+
+on:
+  push:
+    branches:
+      - 'master'
+      - 'dev'
+    paths:
+      - 'client/**'
+
+env:
+  NODE_VERSION: '16'
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
+      version: ${{ steps.check.outputs.version }}
+      type: ${{ steps.check.outputs.type }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - name: Version Check
+        id: check
+        uses: EndBug/version-check@v2.1.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          file-name: ./client/package.json
+
+      - name: Install
+        run: npm ci --workspace client
+
+      - name: Build
+        run: npm run build --workspace client
+
+      - name: Validate
+        run: npm run validate --workspace client
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - name: Install
+        run: npm ci --workspace client
+
+      - name: Lint
+        run: npm run lint --workspace client
+
+  release:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: [validate]
+
+    if: needs.validate.outputs.changed == 'true'
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - name: Install
+        run: npm ci --workspace client
+
+      - name: Build
+        run: npm run build --workspace client
+        env:
+          VITE_TITLE: 'Prod Title'
+          VITE_API_ADDR: '${{ secrets.API_URL }}'
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: './client/dist'
+          production-branch: master
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          netlify-config-path: ./client/netlify.toml
+          github-deployment-environment: 'Production'
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_API_ID }}
+
+      - name: 'Tag new ${{ needs.validate.outputs.type }} version: ${{ needs.validate.outputs.version }}'
+        uses: tvdias/github-tagger@v0.0.2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          tag: 'v${{ needs.validate.outputs.version }}'

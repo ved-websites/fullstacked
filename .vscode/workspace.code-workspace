@@ -1,0 +1,63 @@
+{
+    "folders": [
+		{
+			"path": "..",
+			"name": "Root (fullstacked)"
+		},
+		{
+			"path": "../api",
+			"name": "API"
+		},
+		{
+			"path": "../client",
+			"name": "Web Client"
+		}
+	],
+    "settings": {
+		"git.pullTags": false,
+		"jest.disabledWorkspaceFolders": ["Root (fullstacked)"],
+		"[json]": {
+			"editor.defaultFormatter": "vscode.json-language-features",
+			"editor.codeActionsOnSave": {
+				"source.fixAll": true
+			},
+		},
+		"[yaml]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode",
+			"editor.formatOnSave": true,
+		},
+		"[typescript]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode",
+			"editor.formatOnSave": true,
+			"editor.codeActionsOnSave": {
+				"source.organizeImports": true,
+				"source.fixAll.eslint": true
+			},
+		},
+		"[javascript]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode",
+			"editor.formatOnSave": true,
+			"editor.codeActionsOnSave": {
+				"source.fixAll.eslint": true
+			}
+		},
+		"[svelte]": {
+			"editor.defaultFormatter": "svelte.svelte-vscode",
+			"editor.formatOnSave": true,
+			"editor.codeActionsOnSave": {
+				"source.organizeImports": true,
+			},
+		},
+		"[css]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode",
+			"editor.formatOnSave": true,
+		},
+		"[graphql]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode",
+			"editor.formatOnSave": true,
+		},
+		"[prisma]": {
+			"editor.formatOnSave": true,
+		}
+	}
+}

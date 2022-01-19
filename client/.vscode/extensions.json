@@ -1,0 +1,9 @@
+{
+	"recommendations": [
+		"svelte.svelte-vscode",
+		"voorjaar.windicss-intellisense",
+		"stylelint.vscode-stylelint",
+		"graphql.vscode-graphql",
+		"digitalbrainstem.javascript-ejs-support"
+	]
+}

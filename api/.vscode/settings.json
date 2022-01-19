@@ -1,0 +1,12 @@
+{
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"jest.jestCommandLine": "npm test --",
+	"json.schemas": [
+		{
+			"fileMatch": [
+				"nest-cli.json"
+			],
+			"url": "https://json.schemastore.org/nest-cli"
+		}
+	]
+}

@@ -1,0 +1,47 @@
+name: PR - Client
+
+on:
+  pull_request:
+    paths:
+      - 'client/**'
+
+env:
+  NODE_VERSION: '16'
+
+jobs:
+  validate:
+    if: github.actor != 'renovate[bot]'
+    name: Validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - name: Install
+        run: npm ci --workspace client
+
+      - name: Build
+        run: npm run build --workspace client
+
+      - name: Validate
+        run: npm run validate --workspace client
+
+  lint:
+    if: github.actor != 'renovate[bot]'
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - name: Install
+        run: npm ci --workspace client
+
+      - name: Lint
+        run: npm run lint --workspace client

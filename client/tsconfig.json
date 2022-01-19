@@ -1,0 +1,36 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es2020",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "moduleResolution": "node",
+    
+    "baseUrl": ".",
+    "paths": {
+      "$/*": ["./src/*"],
+      "$gql": ["./src/graphql/@generated"]
+    },
+    
+    "types": [
+      "vite/client",
+      "svelte",
+      "@roxi/routify",
+      "vite-plugin-pwa/client"
+    ],
+    "typeRoots": [
+      "@types",
+      "../../node_modules/@types"
+    ],
+  },
+  "include": [
+    "src/**/*",
+    "@types"
+  ],
+  "exclude": [
+    "src/graphql/@generated/**/*"
+  ]
+}

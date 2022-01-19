@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../node_modules/@prisma/client"
+  // previewFeatures = []
+}
+
+generator nestgraphql {
+  provider = "node ../node_modules/prisma-nestjs-graphql"
+  output   = "../src/_generated/prisma-nestjs-graphql"
+  reExport = Directories
+
+  fields_Validator_from  = "class-validator"
+  fields_Validator_input = true
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  firstName String?   @map("first_name")
+  lastName  String?   @map("last_name")
+  messages  Message[]
+
+  @@map("users")
+}
+
+model Message {
+  id   Int      @id @default(autoincrement())
+  /// @Validator.IsNotEmpty()
+  text String
+  /// @HideField({ output: false, input: true })
+  time DateTime @default(now())
+  user User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  /// @HideField({ output: true, input: true })
+  userId Int
+
+  @@map("messages")
+}

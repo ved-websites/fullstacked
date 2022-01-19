@@ -1,0 +1,32 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "commonjs",
+    "lib": [
+      "es2019"
+    ],
+    
+    "baseUrl": ".",
+    "paths": {
+      "$prisma-graphql/*": ["./src/_generated/prisma-nestjs-graphql/*"],
+      "$common/*": ["./src/@common/*"],
+      "$/*": ["./src/*"],
+    },
+    
+    "typeRoots": [
+      "@types",
+      "../node_modules/@types"
+    ],
+    
+    "outDir": "./dist",
+  },
+  "include": [
+    "src/**/*.ts",
+  ],
+  "exclude": [
+    "node_modules",
+    "src/**/*.spec.ts",
+    "src/**/*.d.ts",
+  ]
+}

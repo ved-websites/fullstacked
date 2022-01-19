@@ -1,0 +1,25 @@
+:root {
+	--primary-color: #ff3e00;
+	--secondary-color: #676778;
+}
+
+html,
+body,
+#routify-app {
+	min-height: calc(100vh - (100vh - 100%));
+	min-width: calc(100vw - (100vw - 100%));
+	scroll-behavior: smooth;
+}
+
+.button-blue {
+	@apply bg-blue-500 text-white;
+	@apply hover:bg-blue-600;
+	@apply active:bg-blue-700;
+	@apply disabled:bg-blue-300;
+	@apply focus:(outline-none ring border-blue-300);
+	@apply rounded-md;
+}
+
+button:disabled {
+	@apply cursor-not-allowed;
+}

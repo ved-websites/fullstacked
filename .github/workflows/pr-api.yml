@@ -1,0 +1,130 @@
+name: PR - API
+
+on:
+  pull_request:
+    paths:
+      - 'api/**'
+
+env:
+  NODE_VERSION: '16'
+
+jobs:
+  lint:
+    if: github.actor != 'renovate[bot]'
+    name: 'Lint'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci --no-optional --workspace api
+
+      - name: Lint Prisma
+        run: npm run lint:prisma --workspace api
+
+      - name: Lint
+        run: npm run lint:src --workspace api
+
+      - name: Lint Tests
+        run: npm run lint:tests --workspace api
+
+  build:
+    if: github.actor != 'renovate[bot]'
+    name: 'Build'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci --no-optional --workspace api
+
+      - name: Build
+        run: npm run build --workspace api
+
+  seed:
+    if: github.actor != 'renovate[bot]'
+    name: 'Test Seed'
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13.4
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432/tcp
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci --no-optional --workspace api
+
+      - name: Init
+        run: npm run init --workspace api
+        env:
+          DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
+
+      - name: Seed
+        run: npm run seed --workspace api
+        env:
+          DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
+
+  pr-coverage:
+    if: github.actor != 'renovate[bot]'
+    name: 'PR Coverage'
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13.4
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432/tcp
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci --no-optional --workspace api
+
+      - name: Init
+        run: npm run init --workspace api
+        env:
+          DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
+
+      # - name: Report Coverage
+      #   uses: anuraag016/Jest-Coverage-Diff@master
+      #   with:
+      #     runCommand: "npx jest --coverage --collectCoverage=true --coverageReporters='json-summary' --coverageDirectory='./' --config 'tests/.jest/jest.all-config.ts'"
+      #     # delta: 0.5 # Delta of % changed that would make this job fail
+      #     afterSwitchCommand: 'npm ci --no-optional'
+      #   env:
+      #     TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'

@@ -1,0 +1,25 @@
+fragment ChatMessage on Message {
+	text
+	time
+	user {
+		username
+	}
+}
+
+query GetMessages {
+	messages {
+		...ChatMessage
+	}
+}
+
+subscription NewMessages {
+	messageAdded {
+		...ChatMessage
+	}
+}
+
+mutation SendNewMessage($text: String!, $username: String!) {
+	addMessage(data: { text: $text, user: { connectOrCreate: { where: { username: $username }, create: { username: $username } } } }) {
+		...ChatMessage
+	}
+}
