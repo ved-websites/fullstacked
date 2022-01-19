@@ -32,7 +32,7 @@ jobs:
           file-name: ./client/package.json
 
       - name: Install
-        run: npm ci --workspace client
+        run: npm ci
 
       - name: Build
         run: npm run build --workspace client
@@ -51,7 +51,7 @@ jobs:
           node-version: ${{env.NODE_VERSION}}
 
       - name: Install
-        run: npm ci --workspace client
+        run: npm ci
 
       - name: Lint
         run: npm run lint --workspace client
@@ -73,7 +73,7 @@ jobs:
           node-version: ${{env.NODE_VERSION}}
 
       - name: Install
-        run: npm ci --workspace client
+        run: npm ci
 
       - name: Build
         run: npm run build --workspace client

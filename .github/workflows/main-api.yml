@@ -21,7 +21,7 @@ jobs:
           cache: 'npm'
 
       - name: Install
-        run: npm ci --no-optional --workspace api
+        run: npm ci --no-optional
 
       - name: Lint Source
         run: npm run lint:src --workspace api
@@ -53,7 +53,7 @@ jobs:
           file-name: ./api/package.json
 
       - name: Install
-        run: npm ci --no-optional --workspace api
+        run: npm ci --no-optional
 
       - name: Build
         run: npm run build --workspace api
@@ -82,7 +82,7 @@ jobs:
           cache: 'npm'
 
       - name: Install
-        run: npm ci --no-optional --workspace api
+        run: npm ci --no-optional
 
       - name: Init
         run: npm run init --workspace api
@@ -118,7 +118,7 @@ jobs:
           cache: 'npm'
 
       - name: Install
-        run: npm ci --no-optional --workspace api
+        run: npm ci --no-optional
 
       - name: Init
         run: npm run init --workspace api

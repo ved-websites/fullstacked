@@ -22,7 +22,7 @@ jobs:
           cache: 'npm'
 
       - name: Install
-        run: npm ci --no-optional --workspace api
+        run: npm ci --no-optional
 
       - name: Lint Prisma
         run: npm run lint:prisma --workspace api
@@ -46,7 +46,7 @@ jobs:
           cache: 'npm'
 
       - name: Install
-        run: npm ci --no-optional --workspace api
+        run: npm ci --no-optional
 
       - name: Build
         run: npm run build --workspace api
@@ -76,7 +76,7 @@ jobs:
           cache: 'npm'
 
       - name: Install
-        run: npm ci --no-optional --workspace api
+        run: npm ci --no-optional
 
       - name: Init
         run: npm run init --workspace api
@@ -113,7 +113,7 @@ jobs:
           cache: 'npm'
 
       - name: Install
-        run: npm ci --no-optional --workspace api
+        run: npm ci --no-optional
 
       - name: Init
         run: npm run init --workspace api
