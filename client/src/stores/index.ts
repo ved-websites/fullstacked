@@ -14,5 +14,5 @@ export const isMobile = makeRefreshable(writable(true), (isMobileStore) => {
 	return breakpoints ? isMobileStore.set(window.matchMedia(breakpoints['md-and-down']).matches) : true;
 });
 
-export { localStorageStore } from './local-storage';
-export { themeStore } from './theme';
+export * from './local-storage';
+export * from './theme';
