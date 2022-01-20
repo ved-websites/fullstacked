@@ -2,6 +2,7 @@ import { exec as execCallback } from 'child_process';
 import del from 'del';
 import fs from 'fs';
 import gulp from 'gulp';
+import { prompt } from 'gulp-prompt';
 import rename from 'gulp-rename';
 import replace from 'gulp-replace';
 import ts from 'gulp-typescript';
@@ -55,12 +56,24 @@ function setupEnv() {
 	const devEnvName = '.env';
 
 	if (!fs.existsSync(devEnvName)) {
-		return gulp
+		let stream = gulp
 			.src('./.env.example')
 			.pipe(replace('MY_RANDOM_KEY', generateGuid()))
 			.pipe(replace('PORT=', `PORT=${configs.devPort}`))
 			.pipe(rename(devEnvName))
 			.pipe(gulp.dest('.'));
+
+		if (!process.env.DATABASE_URL) {
+			stream = stream.pipe(
+				prompt({
+					type: 'input',
+					name: 'confirmation',
+					message: 'A new env file was created! Go fill the db connection info and press enter to continue.',
+				}),
+			);
+		}
+
+		return stream;
 	}
 
 	return Promise.resolve();
@@ -100,9 +113,11 @@ function deletePrismaGenerated() {
 
 export const build = gulp.series(deleteDist, buildNest, buildPrisma);
 
-export const setupPrisma = gulp.series(deletePrismaGenerated, generatePrismaHelpers, updateDatabaseSchema);
+export const setupPrisma = gulp.series(deletePrismaGenerated, generatePrismaHelpers);
 
-export const init = gulp.parallel(deleteDist, gulp.series(setupEnv, setupPrisma));
+export const setupPrismaFull = gulp.series(setupPrisma, updateDatabaseSchema);
+
+export const init = gulp.series(deleteDist, setupEnv, setupPrismaFull);
 
 export const cleanBuild = gulp.series(init, build);
 
