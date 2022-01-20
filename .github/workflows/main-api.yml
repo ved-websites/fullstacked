@@ -73,6 +73,9 @@ jobs:
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npm ci --no-optional
 
+      - name: Generate Prisma Files
+        run: npm run generate --workspace api
+
       - name: Build
         run: npm run build --workspace api
 
