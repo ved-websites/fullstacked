@@ -18,9 +18,18 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{env.NODE_VERSION}}
-          cache: 'npm'
+
+      - name: Cache Modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
 
       - name: Install
+        if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npm ci --no-optional
 
       - name: Lint Source
@@ -43,7 +52,15 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{env.NODE_VERSION}}
-          cache: 'npm'
+
+      - name: Cache Modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
 
       - name: Version Check
         id: check
@@ -53,6 +70,7 @@ jobs:
           file-name: ./api/package.json
 
       - name: Install
+        if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npm ci --no-optional
 
       - name: Build
@@ -79,9 +97,18 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{env.NODE_VERSION}}
-          cache: 'npm'
+
+      - name: Cache Modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
 
       - name: Install
+        if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npm ci --no-optional
 
       - name: Init
@@ -115,9 +142,18 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{env.NODE_VERSION}}
-          cache: 'npm'
+
+      - name: Cache Modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
 
       - name: Install
+        if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npm ci --no-optional
 
       - name: Init

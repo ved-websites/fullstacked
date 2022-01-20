@@ -24,6 +24,15 @@ jobs:
         with:
           node-version: ${{env.NODE_VERSION}}
 
+      - name: Cache Modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
+
       - name: Version Check
         id: check
         uses: EndBug/version-check@v2.1.0
@@ -32,6 +41,7 @@ jobs:
           file-name: ./client/package.json
 
       - name: Install
+        if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: Build
@@ -50,7 +60,17 @@ jobs:
         with:
           node-version: ${{env.NODE_VERSION}}
 
+      - name: Cache Modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
+
       - name: Install
+        if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: Lint
@@ -92,9 +112,3 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_API_ID }}
-
-      - name: 'Tag new ${{ needs.validate.outputs.type }} version: ${{ needs.validate.outputs.version }}'
-        uses: tvdias/github-tagger@v0.0.2
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          tag: 'v${{ needs.validate.outputs.version }}'
