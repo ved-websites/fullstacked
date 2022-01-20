@@ -1,7 +1,7 @@
 {
   "name": "api",
   "version": "0.0.0",
-  "description": "",
+  "description": "NestJS API implementing GraphQL and Prisma.",
   "private": true,
   "scripts": {
     "init": "gulp init",
