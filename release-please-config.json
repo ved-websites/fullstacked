@@ -1,6 +1,7 @@
 {
 	"release-type": "node",
 	"bump-minor-pre-major": true,
+	"monorepo-tags": true,
 	"packages": {
 		"api": {},
 		"client": {}
