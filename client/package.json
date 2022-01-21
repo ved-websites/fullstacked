@@ -15,7 +15,7 @@
     "validate": "npm-run-all validate:*",
     "validate:svelte": "svelte-check --diagnostic-sources \"js,svelte\"",
     "validate:ts": "tsc --noEmit",
-    "preview": "npx -p sirv-cli sirv dist -s -p 5004",
+    "preview": "vite preview --port 5004",
     "lint": "npm-run-all lint:*",
     "lint:src": "eslint \"src/**/*.{t,j}s\"",
     "lint:css": "stylelint \"**/*.{css,svelte,html}\"",
