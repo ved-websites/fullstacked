@@ -23,6 +23,7 @@
   },
   "include": [
     "src/**/*.ts",
+    "gulpfile.ts",
   ],
   "exclude": [
     "node_modules",
