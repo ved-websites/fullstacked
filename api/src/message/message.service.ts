@@ -4,6 +4,7 @@ import { MessageCreateInput, MessageUpdateWithWhereUniqueWithoutUserInput, Messa
 import { Injectable } from '@nestjs/common';
 import { PrismaSelect } from '@paljs/plugins';
 import { GraphQLResolveInfo } from 'graphql';
+import { MESSAGE_ADDED } from './constants/triggers';
 
 @Injectable()
 export class MessageService {
@@ -18,7 +19,7 @@ export class MessageService {
 	}
 
 	async create(info: GraphQLResolveInfo, data: MessageCreateInput) {
-		const message = await this.pubSub.prismaMutate('messageAdded', info, (allSelect) => {
+		const message = await this.pubSub.prismaMutate(MESSAGE_ADDED, info, (allSelect) => {
 			return this.prisma.message.create({ data, ...allSelect });
 		});
 
@@ -37,6 +38,6 @@ export class MessageService {
 	}
 
 	subscribeAdded(info: GraphQLResolveInfo) {
-		return this.pubSub.prismaSubscribe('messageAdded', info);
+		return this.pubSub.prismaSubscribe(MESSAGE_ADDED, info);
 	}
 }

@@ -1,6 +1,7 @@
 import { Message, MessageCreateInput, MessageUpdateWithWhereUniqueWithoutUserInput, MessageWhereInput } from '$prisma-graphql/message';
 import { Args, Info, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { GraphQLResolveInfo } from 'graphql';
+import { MESSAGE_ADDED } from './constants/triggers';
 import { MessageService } from './message.service';
 
 @Resolver(() => Message)
@@ -22,7 +23,7 @@ export class MessageResolver {
 		return this.messageService.update(info, query);
 	}
 
-	@Subscription(() => Message, { name: 'messageAdded' })
+	@Subscription(() => Message, { name: MESSAGE_ADDED })
 	subscribeMessageAdded(@Info() info: GraphQLResolveInfo) {
 		return this.messageService.subscribeAdded(info);
 	}
