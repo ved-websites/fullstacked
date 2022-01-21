@@ -19,7 +19,7 @@ const baseConfig = defineBaseJestConfig({
 		'^.+\\.ts$': 'ts-jest',
 	},
 	testPathIgnorePatterns: ['<rootDir>/dist/'],
-	collectCoverageFrom: ['**/*.ts', '!.graphqlrc.ts', '!gulpfile.ts', '!<rootDir>/src/_generated/**/*'],
+	collectCoverageFrom: ['**/*.ts', '!**/*.d.ts', '!.graphqlrc.ts', '!gulpfile.ts', '!<rootDir>/src/_generated/**/*'],
 	coverageDirectory: '<rootDir>/coverage',
 	coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/prisma/', '<rootDir>/dist/'],
 	moduleNameMapper: pathsToModuleNameMapper(tsConfig.compilerOptions.paths, { prefix: '<rootDir>/' }),
