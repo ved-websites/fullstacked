@@ -32,14 +32,8 @@ jobs:
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npm ci --no-optional
 
-      - name: Lint Prisma
-        run: npm run lint:prisma
-
       - name: Lint
-        run: npm run lint:src
-
-      - name: Lint Tests
-        run: npm run lint:tests
+        run: npm run lint --workspaces
 
   build:
     name: 'Build'
@@ -65,7 +59,7 @@ jobs:
         run: npm ci --no-optional
 
       - name: Build
-        run: npm run build
+        run: npm run build --workspaces
 
   test:
     name: 'Test and Coverage'
@@ -103,12 +97,12 @@ jobs:
         run: npm ci --no-optional
 
       - name: Init
-        run: npm run init
+        run: npm run init --workspaces
         env:
           DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
       - name: Test and Coverage
-        run: npm run test:cov
+        run: npm run test:cov --workspaces
         env:
           TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
@@ -148,11 +142,11 @@ jobs:
         run: npm ci --no-optional
 
       - name: Init
-        run: npm run init
+        run: npm run init --workspaces
         env:
           DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
       - name: Seed
-        run: npx prisma db seed
+        run: npm run seed --workspaces
         env:
           DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
