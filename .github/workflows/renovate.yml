@@ -61,6 +61,9 @@ jobs:
       - name: Build
         run: npm run build --workspaces
 
+      - name: Validate
+        run: npm run validate --workspaces
+
   test:
     name: 'Test and Coverage'
     runs-on: ubuntu-latest
