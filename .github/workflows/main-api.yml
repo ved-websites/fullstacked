@@ -10,6 +10,7 @@ env:
 
 jobs:
   lint:
+    if: github.actor != 'renovate[bot]'
     name: 'Lint'
     runs-on: ubuntu-latest
 
@@ -39,6 +40,7 @@ jobs:
         run: npm run lint:tests --workspace api
 
   build:
+    if: github.actor != 'renovate[bot]'
     name: 'Build'
     runs-on: ubuntu-latest
 
@@ -80,6 +82,7 @@ jobs:
         run: npm run build --workspace api
 
   test:
+    if: github.actor != 'renovate[bot]'
     name: 'Test and Coverage'
     runs-on: ubuntu-latest
 
@@ -125,6 +128,7 @@ jobs:
           TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
   seed:
+    if: github.actor != 'renovate[bot]'
     name: 'Test Seed'
     runs-on: ubuntu-latest
 
