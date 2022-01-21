@@ -41,7 +41,14 @@
 				return m;
 			});
 		} else {
-			messages = [...messages, { active: true, ...data.messageAdded }];
+			messages = [
+				...messages.filter((m) => m.active),
+				{
+					...data.messageAdded,
+					active: true,
+				},
+				...messages.filter((m) => !m.active),
+			];
 		}
 
 		return [...prevMessages, data.messageAdded];
