@@ -29,6 +29,7 @@ jobs:
           key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
 
       - name: Install
+        if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npm ci --no-optional
 
   lint:
