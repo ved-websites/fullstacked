@@ -4,8 +4,8 @@
 	"private": true,
 	"license": "MIT",
 	"engines": {
-		"node": "^16",
-		"npm": "^8.1"
+		"node": "^16.0.0 || ^14.18.0",
+		"npm": "^8.1.0"
 	},
 	"workspaces": [
 		"./api",
