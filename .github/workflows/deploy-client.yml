@@ -1,0 +1,70 @@
+name: CD - Client
+
+on:
+  push:
+    paths:
+      - 'client/CHANGELOG.md'
+
+env:
+  NODE_VERSION: '16'
+
+jobs:
+  check-version:
+    name: 'Check Deployable'
+    runs-on: ubuntu-latest
+
+    if: github.ref == 'refs/heads/master'
+
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
+      version: ${{ steps.check.outputs.version }}
+      type: ${{ steps.check.outputs.type }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Version Check
+        id: check
+        uses: EndBug/version-check@v2.1.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          file-name: ./client/package.json
+
+  deploy:
+    name: 'Deploy'
+    runs-on: ubuntu-latest
+    needs: [check-version]
+
+    if: needs.check-version.outputs.changed == 'true'
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build --workspace client
+        env:
+          VITE_TITLE: 'Prod Title'
+          VITE_API_ADDR: '${{ secrets.API_URL }}'
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: './client/dist'
+          production-branch: master
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          netlify-config-path: ./client/netlify.toml
+          github-deployment-environment: 'Production'
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_API_ID }}

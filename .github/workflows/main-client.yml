@@ -1,23 +1,18 @@
-name: CI/CD - Client
+name: CI - Client
 
 on:
   push:
     paths:
       - 'client/**'
+      - 'package.json'
 
 env:
   NODE_VERSION: '16'
 
 jobs:
-  validate:
-    if: github.actor != 'renovate[bot]'
-    name: Validate
+  cache-modules:
+    name: 'Cache Node Modules'
     runs-on: ubuntu-latest
-
-    outputs:
-      changed: ${{ steps.check.outputs.changed }}
-      version: ${{ steps.check.outputs.version }}
-      type: ${{ steps.check.outputs.type }}
 
     steps:
       - uses: actions/checkout@v2
@@ -25,7 +20,7 @@ jobs:
         with:
           node-version: ${{env.NODE_VERSION}}
 
-      - name: Cache Modules
+      - name: Cache Node Modules
         id: cache-modules
         uses: actions/cache@v2
         with:
@@ -34,16 +29,29 @@ jobs:
             */node_modules
           key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
 
-      - name: Version Check
-        id: check
-        uses: EndBug/version-check@v2.1.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          file-name: ./client/package.json
-
       - name: Install
         if: steps.cache-modules.outputs.cache-hit != 'true'
-        run: npm ci
+        run: npm ci --no-optional
+
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    needs: [cache-modules]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - name: Retrieve Node Modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
 
       - name: Build
         run: npm run build --workspace client
@@ -52,9 +60,9 @@ jobs:
         run: npm run validate --workspace client
 
   lint:
-    if: github.actor != 'renovate[bot]'
     name: Lint
     runs-on: ubuntu-latest
+    needs: [cache-modules]
 
     steps:
       - uses: actions/checkout@v2
@@ -62,7 +70,7 @@ jobs:
         with:
           node-version: ${{env.NODE_VERSION}}
 
-      - name: Cache Modules
+      - name: Retrieve Node Modules
         id: cache-modules
         uses: actions/cache@v2
         with:
@@ -71,46 +79,5 @@ jobs:
             */node_modules
           key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
 
-      - name: Install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
-        run: npm ci
-
       - name: Lint
         run: npm run lint --workspace client
-
-  release:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs: [validate]
-
-    if: needs.validate.outputs.changed == 'true'
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{env.NODE_VERSION}}
-
-      - name: Install
-        run: npm ci
-
-      - name: Build
-        run: npm run build --workspace client
-        env:
-          VITE_TITLE: 'Prod Title'
-          VITE_API_ADDR: '${{ secrets.API_URL }}'
-
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1.2
-        with:
-          publish-dir: './client/dist'
-          production-branch: master
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          netlify-config-path: ./client/netlify.toml
-          github-deployment-environment: 'Production'
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_API_ID }}

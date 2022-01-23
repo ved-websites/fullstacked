@@ -1,17 +1,17 @@
-name: CI/CD - API
+name: CI - API
 
 on:
   push:
     paths:
       - 'api/**'
+      - 'package.json'
 
 env:
   NODE_VERSION: '16'
 
 jobs:
-  lint:
-    if: github.actor != 'renovate[bot]'
-    name: 'Lint'
+  cache-modules:
+    name: 'Cache Node Modules'
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: ${{env.NODE_VERSION}}
 
-      - name: Cache Modules
+      - name: Cache Node Modules
         id: cache-modules
         uses: actions/cache@v2
         with:
@@ -32,6 +32,26 @@ jobs:
       - name: Install
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npm ci --no-optional
+
+  lint:
+    name: 'Lint'
+    runs-on: ubuntu-latest
+    needs: [cache-modules]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - name: Retrieve Node Modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */node_modules
+          key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
 
       - name: Lint Source
         run: npm run lint:src --workspace api
@@ -40,14 +60,9 @@ jobs:
         run: npm run lint:tests --workspace api
 
   build:
-    if: github.actor != 'renovate[bot]'
     name: 'Build'
     runs-on: ubuntu-latest
-
-    outputs:
-      changed: ${{ steps.check.outputs.changed }}
-      version: ${{ steps.check.outputs.version }}
-      type: ${{ steps.check.outputs.type }}
+    needs: [cache-modules]
 
     steps:
       - uses: actions/checkout@v2
@@ -55,7 +70,7 @@ jobs:
         with:
           node-version: ${{env.NODE_VERSION}}
 
-      - name: Cache Modules
+      - name: Retrieve Node Modules
         id: cache-modules
         uses: actions/cache@v2
         with:
@@ -64,17 +79,6 @@ jobs:
             */node_modules
           key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
 
-      - name: Version Check
-        id: check
-        uses: EndBug/version-check@v2.1.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          file-name: ./api/package.json
-
-      - name: Install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
-        run: npm ci --no-optional
-
       - name: Generate Prisma Files
         run: npm run generate --workspace api
 
@@ -82,9 +86,9 @@ jobs:
         run: npm run build --workspace api
 
   test:
-    if: github.actor != 'renovate[bot]'
     name: 'Test and Coverage'
     runs-on: ubuntu-latest
+    needs: [cache-modules]
 
     services:
       postgres:
@@ -104,7 +108,7 @@ jobs:
         with:
           node-version: ${{env.NODE_VERSION}}
 
-      - name: Cache Modules
+      - name: Retrieve Node Modules
         id: cache-modules
         uses: actions/cache@v2
         with:
@@ -112,10 +116,6 @@ jobs:
             node_modules
             */node_modules
           key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
-
-      - name: Install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
-        run: npm ci --no-optional
 
       - name: Init
         run: npm run init --workspace api
@@ -127,10 +127,19 @@ jobs:
         env:
           TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
+      # - name: Report Coverage
+      #   uses: anuraag016/Jest-Coverage-Diff@master
+      #   with:
+      #     runCommand: "npx jest --coverage --collectCoverage=true --coverageReporters='json-summary' --coverageDirectory='./' --config 'tests/.jest/jest.all-config.ts'"
+      #     # delta: 0.5 # Delta of % changed that would make this job fail
+      #     afterSwitchCommand: 'npm ci --no-optional'
+      #   env:
+      #     TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
+
   seed:
-    if: github.actor != 'renovate[bot]'
     name: 'Test Seed'
     runs-on: ubuntu-latest
+    needs: [cache-modules]
 
     services:
       postgres:
@@ -150,7 +159,7 @@ jobs:
         with:
           node-version: ${{env.NODE_VERSION}}
 
-      - name: Cache Modules
+      - name: Retrieve Node Modules
         id: cache-modules
         uses: actions/cache@v2
         with:
@@ -158,10 +167,6 @@ jobs:
             node_modules
             */node_modules
           key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
-
-      - name: Install
-        if: steps.cache-modules.outputs.cache-hit != 'true'
-        run: npm ci --no-optional
 
       - name: Init
         run: npm run init --workspace api
@@ -172,22 +177,3 @@ jobs:
         run: npm run seed --workspace api
         env:
           DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
-
-  deploy:
-    name: 'Deploy'
-    runs-on: ubuntu-latest
-    needs: [build, test, seed]
-
-    if: needs.build.outputs.changed == 'true'
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Push to dokku
-        uses: dokku/github-action@master
-        with:
-          branch: 'master'
-          git_remote_url: 'ssh://dokku@${{ secrets.DOKKU_SSH_HOST }}/${{ secrets.DOKKU_APPNAME }}'
-          ssh_private_key: ${{ secrets.DOKKU_SSH_KEY }}
