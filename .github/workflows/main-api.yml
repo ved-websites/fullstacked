@@ -11,14 +11,21 @@ env:
 
 jobs:
   cache-modules:
-    name: 'Cache Node Modules'
+    name: Cache Node Modules
     runs-on: ubuntu-latest
+
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
 
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: ${{env.NODE_VERSION}}
+
+      - name: Check for dupe action
+        id: skip_check
+        uses: fkirc/skip-duplicate-actions@v3.4.0
 
       - name: Cache Node Modules
         id: cache-modules
@@ -34,9 +41,11 @@ jobs:
         run: npm ci --no-optional
 
   lint:
-    name: 'Lint'
+    name: Lint
     runs-on: ubuntu-latest
     needs: [cache-modules]
+
+    if: ${{ needs.cache-modules.outputs.should_skip != 'true' }}
 
     steps:
       - uses: actions/checkout@v2
@@ -60,9 +69,11 @@ jobs:
         run: npm run lint:tests --workspace api
 
   build:
-    name: 'Build'
+    name: Build
     runs-on: ubuntu-latest
     needs: [cache-modules]
+
+    if: ${{ needs.cache-modules.outputs.should_skip != 'true' }}
 
     steps:
       - uses: actions/checkout@v2
@@ -86,9 +97,11 @@ jobs:
         run: npm run build --workspace api
 
   test:
-    name: 'Test and Coverage'
+    name: Test and Coverage
     runs-on: ubuntu-latest
     needs: [cache-modules]
+
+    if: ${{ needs.cache-modules.outputs.should_skip != 'true' }}
 
     services:
       postgres:
@@ -137,9 +150,11 @@ jobs:
       #     TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
   seed:
-    name: 'Test Seed'
+    name: Test Seed
     runs-on: ubuntu-latest
     needs: [cache-modules]
+
+    if: ${{ needs.cache-modules.outputs.should_skip != 'true' }}
 
     services:
       postgres:
