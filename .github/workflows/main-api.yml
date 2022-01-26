@@ -136,18 +136,20 @@ jobs:
           DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
       - name: Test and Coverage
+        if: github.event_name != 'pull_request'
         run: npm run test:cov --workspace api
         env:
           TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
-      # - name: Report Coverage
-      #   uses: anuraag016/Jest-Coverage-Diff@master
-      #   with:
-      #     runCommand: "npx jest --coverage --collectCoverage=true --coverageReporters='json-summary' --coverageDirectory='./' --config 'tests/.jest/jest.all-config.ts'"
-      #     # delta: 0.5 # Delta of % changed that would make this job fail
-      #     afterSwitchCommand: 'npm ci --no-optional'
-      #   env:
-      #     TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
+      - name: Test and Coverage (PR)
+        if: github.event_name == 'pull_request'
+        uses: anuraag016/Jest-Coverage-Diff@master
+        with:
+          runCommand: "npm run test --workspace api -- --coverage --collectCoverage=true --coverageReporters='json-summary' --coverageDirectory='../'"
+          # delta: 0.5 # Delta of % changed that would make this job fail
+          afterSwitchCommand: 'npm install'
+        env:
+          TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
   seed:
     name: Test Seed
