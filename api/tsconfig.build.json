@@ -8,7 +8,7 @@
     "tests",
     "dist",
     "**/*spec.ts",
-    "gulpfile.ts",
     ".graphqlrc.ts",
+    "gulpfile.ts",
   ]
 }

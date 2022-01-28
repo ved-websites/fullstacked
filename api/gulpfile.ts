@@ -1,5 +1,6 @@
 import { exec as execCallback } from 'child_process';
 import del from 'del';
+import dotenv from 'dotenv';
 import fs from 'fs';
 import gulp from 'gulp';
 import { prompt } from 'gulp-prompt';
@@ -73,6 +74,8 @@ function setupEnv() {
 			);
 		}
 
+		stream.once('end', () => dotenv.config());
+
 		return stream;
 	}
 
@@ -111,11 +114,11 @@ function deletePrismaGenerated() {
 
 // COMBINES
 
-export const build = gulp.series(deleteDist, buildNest, buildPrisma);
-
 export const setupPrisma = gulp.series(deletePrismaGenerated, generatePrismaHelpers);
 
 export const setupPrismaFull = gulp.series(setupPrisma, updateDatabaseSchema);
+
+export const build = gulp.series(gulp.parallel(deleteDist, setupPrisma), buildNest, buildPrisma);
 
 export const init = gulp.series(deleteDist, setupEnv, setupPrismaFull);
 

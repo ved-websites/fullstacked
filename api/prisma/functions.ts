@@ -4,26 +4,32 @@ import path from 'path';
 import { ImportFixtureOptions, importFixtures } from 'prisma-fixtures';
 import util from 'util';
 
-// Prisma Utils
-
 const exec = util.promisify(execNoPromise);
 
-const prismaBinary = path.join(__dirname, '..', '..', 'node_modules', '.bin', 'prisma');
+// Prisma Utils
+
+function getPrismaBinary() {
+	const projectRoot: string[] = process.env.NODE_ENV == 'production' ? ['..'] : ['..', '..'];
+
+	const prismaBinary = path.join(__dirname, ...projectRoot, 'node_modules', '.bin', 'prisma');
+
+	return prismaBinary;
+}
 
 export async function generate() {
+	const prismaBinary = getPrismaBinary();
+
 	return exec(`${prismaBinary} generate`);
 }
 
-export type PushDbOptions = Partial<{
+export type PushDbOptions = {
 	skipGenerators: boolean;
 	acceptDataLoss: boolean;
 	forceReset: boolean;
-}>;
+};
 
-export async function pushDb(options: PushDbOptions = {}) {
-	const defaultOptions: PushDbOptions = {};
-
-	const opts: PushDbOptions = { ...defaultOptions, ...options };
+export async function pushDb(options?: Partial<PushDbOptions>) {
+	const opts: PushDbOptions = { ...{ skipGenerators: false, acceptDataLoss: false, forceReset: false }, ...(options ?? {}) };
 
 	const mapping: Record<keyof PushDbOptions, string> = {
 		skipGenerators: '--skip-generate',
@@ -41,10 +47,14 @@ export async function pushDb(options: PushDbOptions = {}) {
 		return acc;
 	}, '');
 
+	const prismaBinary = getPrismaBinary();
+
 	return exec(`${prismaBinary} db push${optionsString}`);
 }
 
 export async function seedDb() {
+	const prismaBinary = getPrismaBinary();
+
 	return exec(`${prismaBinary} db seed`);
 }
 

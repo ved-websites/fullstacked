@@ -90,9 +90,6 @@ jobs:
             */node_modules
           key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
 
-      - name: Generate Prisma Files
-        run: npm run generate --workspace api
-
       - name: Build
         run: npm run build --workspace api
 
