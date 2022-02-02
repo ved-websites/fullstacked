@@ -4,12 +4,13 @@ on:
   push:
     paths:
       - 'client/CHANGELOG.md'
+  workflow_dispatch:
 
 env:
   NODE_VERSION: '16'
 
 jobs:
-  check-version:
+  check:
     name: 'Check Deployable'
     runs-on: ubuntu-latest
 
@@ -19,14 +20,20 @@ jobs:
       changed: ${{ steps.check.outputs.changed }}
       version: ${{ steps.check.outputs.version }}
       type: ${{ steps.check.outputs.type }}
+      is_manual: ${{ steps.manual.outputs.is_manual }}
 
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
+      - name: Verify Manual Deploy
+        id: manual
+        run: echo ::set-output name=is_manual::${{ github.event_name == 'workflow_dispatch' }}
+
       - name: Version Check
         id: check
+        if: steps.manual.outputs.is_manual == 'false'
         uses: EndBug/version-check@v2.1.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -35,9 +42,9 @@ jobs:
   deploy:
     name: 'Deploy'
     runs-on: ubuntu-latest
-    needs: [check-version]
+    needs: [check]
 
-    if: needs.check-version.outputs.changed == 'true'
+    if: needs.check.outputs.changed == 'true' || needs.check.outputs.is_manual == 'true'
 
     steps:
       - uses: actions/checkout@v2
