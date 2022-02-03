@@ -53,5 +53,5 @@ jobs:
         run: |
           git reset --soft HEAD~1
           git add .
-          git commit ${{ steps.vars.outputs.commit_subject }}
+          git commit -m "${{ steps.vars.outputs.commit_subject }}"
           git push --force
