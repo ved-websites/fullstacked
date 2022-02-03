@@ -22,36 +22,36 @@ jobs:
           manifest-file: .github/release-please-manifest.json
 
       - name: Fetching Release Please's branch
-        if: steps.release-please.outputs.release_created != 'true'
+        if: steps.release-please.outputs.releases_created != 'true'
         uses: actions/checkout@v2
         with:
           ref: release-please--branches--master
           fetch-depth: 2
 
       - uses: actions/setup-node@v2
-        if: steps.release-please.outputs.release_created != 'true'
+        if: steps.release-please.outputs.releases_created != 'true'
         with:
           node-version: ${{env.NODE_VERSION}}
 
       - name: Setup vars
-        if: steps.release-please.outputs.release_created != 'true'
+        if: steps.release-please.outputs.releases_created != 'true'
         id: vars
         run: |
           echo ::set-output name=commit_subject::$(git log --format=%B -n 1 HEAD)
           echo ::set-output name=git_branch::$(git rev-parse --abbrev-ref HEAD)
 
       - name: Updating package-lock.json file
-        if: steps.release-please.outputs.release_created != 'true'
+        if: steps.release-please.outputs.releases_created != 'true'
         run: npm install --no-audit --no-fund --ignore-scripts --package-lock-only
 
       - name: Merging changes with last commit
-        if: steps.release-please.outputs.release_created != 'true'
+        if: steps.release-please.outputs.releases_created != 'true'
         run: |
           git reset --soft HEAD~1
           git add .
 
       - name: Commit & Push changes
-        if: steps.release-please.outputs.release_created != 'true'
+        if: steps.release-please.outputs.releases_created != 'true'
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
