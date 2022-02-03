@@ -53,5 +53,10 @@ jobs:
         run: |
           git reset --soft HEAD~1
           git add .
-          git commit -m "${{ steps.vars.outputs.commit_subject }}"
-          git push --force
+
+      - name: Commit & Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: '${{ steps.vars.outputs.commit_subject }}'
+          force: true
