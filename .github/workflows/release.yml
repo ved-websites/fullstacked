@@ -5,14 +5,53 @@ on:
     branches:
       - 'master'
 
+env:
+  NODE_VERSION: '16'
+
 jobs:
   release-please:
     name: 'Run'
     runs-on: ubuntu-latest
 
+    outputs:
+      release_created: ${{ steps.release-please.outputs.release_created }}
+
     steps:
       - uses: GoogleCloudPlatform/release-please-action@v3
+        id: release-please
         with:
           command: manifest
           config-file: .github/release-please-config.json
           manifest-file: .github/release-please-manifest.json
+
+  update-package-lock:
+    name: Update Release package-lock.json
+    runs-on: ubuntu-latest
+    needs: release-please
+
+    if: needs.release-please.outputs.release_created != 'true'
+
+    steps:
+      - name: Fetching Release Please's branch
+        uses: actions/checkout@v2
+        with:
+          ref: release-please--branches--master
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{env.NODE_VERSION}}
+
+      - name: Setup vars
+        id: vars
+        run: echo ::set-output name=commit_subject::$(git log --format=%B -n 1 HEAD)
+
+      - name: Updating package-lock.json file
+        run: npm install --no-audit --no-fund --ignore-scripts --package-lock-only
+
+      - name: Merging changes with last commit
+        run: |
+          git reset --soft HEAD~1
+          git add .
+          git commit ${{ steps.vars.outputs.commit_subject }}
+          git push --force
