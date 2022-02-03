@@ -24,6 +24,10 @@
 			"section": "Performance Improvements"
 		},
 		{
+			"type": "tweak",
+			"section": "Tweaks"
+		},
+		{
 			"type": "deps",
 			"section": "Dependencies"
 		},
