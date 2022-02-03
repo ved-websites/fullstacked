@@ -44,7 +44,9 @@ jobs:
 
       - name: Setup vars
         id: vars
-        run: echo ::set-output name=commit_subject::$(git log --format=%B -n 1 HEAD)
+        run: |
+          echo ::set-output name=commit_subject::$(git log --format=%B -n 1 HEAD)
+          echo ::set-output name=git_branch::$(git rev-parse --abbrev-ref HEAD)
 
       - name: Updating package-lock.json file
         run: npm install --no-audit --no-fund --ignore-scripts --package-lock-only
@@ -59,4 +61,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           message: '${{ steps.vars.outputs.commit_subject }}'
+          branch: '${{ steps.vars.outputs.git_branch }}'
           force: true
