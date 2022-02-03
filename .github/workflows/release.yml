@@ -21,37 +21,42 @@ jobs:
           config-file: .github/release-please-config.json
           manifest-file: .github/release-please-manifest.json
 
+      - name: Release Please Output
+        env:
+          STEPS_OUTPUT: ${{ toJSON(steps.release-please.outputs) }}
+        run: echo "$STEPS_OUTPUT"
+
       - name: Fetching Release Please's branch
-        if: steps.release-please.outputs.releases_created != 'true'
+        if: steps.release-please.outputs.releases_created != 'true' && steps.release-please.outputs.pr
         uses: actions/checkout@v2
         with:
           ref: release-please--branches--master
           fetch-depth: 2
 
       - uses: actions/setup-node@v2
-        if: steps.release-please.outputs.releases_created != 'true'
+        if: steps.release-please.outputs.releases_created != 'true' && steps.release-please.outputs.pr
         with:
           node-version: ${{env.NODE_VERSION}}
 
       - name: Setup vars
-        if: steps.release-please.outputs.releases_created != 'true'
+        if: steps.release-please.outputs.releases_created != 'true' && steps.release-please.outputs.pr
         id: vars
         run: |
           echo ::set-output name=commit_subject::$(git log --format=%B -n 1 HEAD)
           echo ::set-output name=git_branch::$(git rev-parse --abbrev-ref HEAD)
 
       - name: Updating package-lock.json file
-        if: steps.release-please.outputs.releases_created != 'true'
+        if: steps.release-please.outputs.releases_created != 'true' && steps.release-please.outputs.pr
         run: npm install --no-audit --no-fund --ignore-scripts --package-lock-only
 
       - name: Merging changes with last commit
-        if: steps.release-please.outputs.releases_created != 'true'
+        if: steps.release-please.outputs.releases_created != 'true' && steps.release-please.outputs.pr
         run: |
           git reset --soft HEAD~1
           git add .
 
       - name: Commit & Push changes
-        if: steps.release-please.outputs.releases_created != 'true'
+        if: steps.release-please.outputs.releases_created != 'true' && steps.release-please.outputs.pr
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
