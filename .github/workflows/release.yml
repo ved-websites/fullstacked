@@ -22,28 +22,26 @@ jobs:
           manifest-file: .github/release-please-manifest.json
 
       - name: Release Please Output
-        env:
-          STEPS_OUTPUT: ${{ toJSON(steps.release-please.outputs) }}
-        run: echo "$STEPS_OUTPUT"
+        run: echo '${{ toJSON(steps.release-please.outputs) }}'
+
+      - name: Setup vars
+        if: steps.release-please.outputs.releases_created != 'true' && steps.release-please.outputs.pr
+        id: vars
+        run: |
+          echo ::set-output name=commit_subject::"${{ fromJSON(steps.release-please.outputs.pr).title }}"
+          echo ::set-output name=git_branch::"${{ fromJSON(steps.release-please.outputs.pr).headBranchName }}"
 
       - name: Fetching Release Please's branch
         if: steps.release-please.outputs.releases_created != 'true' && steps.release-please.outputs.pr
         uses: actions/checkout@v2
         with:
-          ref: release-please--branches--master
+          ref: ${{ steps.vars.outputs.git_branch }}
           fetch-depth: 2
 
       - uses: actions/setup-node@v2
         if: steps.release-please.outputs.releases_created != 'true' && steps.release-please.outputs.pr
         with:
           node-version: ${{env.NODE_VERSION}}
-
-      - name: Setup vars
-        if: steps.release-please.outputs.releases_created != 'true' && steps.release-please.outputs.pr
-        id: vars
-        run: |
-          echo ::set-output name=commit_subject::$(git log --format=%B -n 1 HEAD)
-          echo ::set-output name=git_branch::$(git rev-parse --abbrev-ref HEAD)
 
       - name: Updating package-lock.json file
         if: steps.release-please.outputs.releases_created != 'true' && steps.release-please.outputs.pr
