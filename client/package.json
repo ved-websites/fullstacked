@@ -30,10 +30,10 @@
     "minimum-delayer": "0.2.1"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "2.4.0",
-    "@graphql-codegen/typed-document-node": "2.2.2",
-    "@graphql-codegen/typescript": "2.4.2",
-    "@graphql-codegen/typescript-operations": "2.2.3",
+    "@graphql-codegen/cli": "2.5.0",
+    "@graphql-codegen/typed-document-node": "2.2.3",
+    "@graphql-codegen/typescript": "2.4.3",
+    "@graphql-codegen/typescript-operations": "2.2.4",
     "@mdi/js": "6.5.95",
     "@roxi/routify": "2.18.4",
     "@sveltejs/vite-plugin-svelte": "1.0.0-next.37",
