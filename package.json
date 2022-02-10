@@ -13,7 +13,7 @@
   ],
   "prettier": "@v-ed/prettier-config",
   "devDependencies": {
-    "@types/node": "16.11.22",
+    "@types/node": "16.11.24",
     "@typescript-eslint/eslint-plugin": "5.10.1",
     "@typescript-eslint/parser": "5.10.1",
     "@v-ed/prettier-config": "0.1.1",
