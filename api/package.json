@@ -52,7 +52,7 @@
     "graphql-depth-limit": "1.1.0",
     "graphql-subscriptions": "1.2.1",
     "graphql-ws": "5.5.5",
-    "nest-typed-config": "2.3.0",
+    "nest-typed-config": "2.4.0",
     "reflect-metadata": "0.1.13",
     "rxjs": "7.5.4"
   },
