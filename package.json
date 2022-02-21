@@ -20,7 +20,7 @@
     "ignoreFiles": ["./**/node_modules/**/*", "./**/dist/**/*", "./**/public/theme/**/*"]
   },
   "devDependencies": {
-    "@types/node": "16.11.24",
+    "@types/node": "16.11.25",
     "@v-ed/eslint-config": "0.1.0",
     "@v-ed/prettier-config": "0.1.1",
     "@v-ed/stylelint-config": "0.2.1",
