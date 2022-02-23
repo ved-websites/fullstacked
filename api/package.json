@@ -44,6 +44,7 @@
     "@prisma/client": "3.9.2",
     "apollo-server-core": "3.6.3",
     "apollo-server-express": "3.6.3",
+    "axios": "0.26.0",
     "class-validator": "0.13.2",
     "deepmerge": "4.2.2",
     "dotenv": "16.0.0",
