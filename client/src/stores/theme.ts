@@ -1,17 +1,50 @@
 import { localStorageStore } from './local-storage';
 import { makeToggleable, Toggleable } from './toggleable';
+import { session } from '$app/stores';
+import { derived } from 'svelte/store';
+import type { Writable } from 'svelte/store';
+import { browser } from '$app/env';
 
-const themeLocalStore = localStorageStore<'light' | 'dark'>('app-theme', 'dark');
+export const themes = ['light', 'dark'] as const;
+export type Theme = typeof themes[number] | null;
 
-type ThemeStoreType = typeof themeLocalStore;
+export const isTheme = (theme: string | null) => {
+	if (!theme) {
+		return false;
+	}
+	return (themes as readonly string[]).includes(theme);
+};
 
-interface ThemeStore extends ThemeStoreType, Toggleable {
+// const themeLocalStore = localStorageStore<Theme>('app-theme', null);
+
+// type ThemeStoreType = typeof themeLocalStore;
+
+interface ThemeStore extends Toggleable {
 	/**
 	 * Toggles the theme between 'light' and 'dark'.
 	 */
 	toggle(): void;
 }
 
-export const themeStore: ThemeStore = makeToggleable(themeLocalStore, () => {
-	return themeLocalStore.update((current) => (current == 'light' ? 'dark' : 'light'));
+const theme = derived<Writable<App.Session>, Theme>(session, (sessionData, set) => {
+	set(sessionData.theme);
+});
+
+export const themeStore = makeToggleable(theme, () => {
+	return session.update((sessionData) => {
+		const currentTheme: Theme =
+			sessionData.theme ??
+			(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+		const newTheme = currentTheme == 'light' ? 'dark' : 'light';
+
+		if (browser) {
+			document.cookie = `theme=${newTheme}; expires=31 Dec 9999 12:00:00 UTC; path=/`;
+		}
+
+		return {
+			...sessionData,
+			theme: newTheme
+		};
+	});
 });

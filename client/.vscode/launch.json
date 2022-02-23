@@ -18,7 +18,8 @@
 			"preLaunchTask": "start dev",
 			"postDebugTask": "Terminate All Tasks",
 			"skipFiles": [
-				"<node_internals>/**"
+				"<node_internals>/**",
+				"**/node_modules/**"
 			]
 		},
 		{
@@ -35,7 +36,8 @@
 			"preLaunchTask": "start dev - no gql",
 			"postDebugTask": "Terminate All Tasks",
 			"skipFiles": [
-				"<node_internals>/**"
+				"<node_internals>/**",
+				"**/node_modules/**"
 			]
 		},
 	]

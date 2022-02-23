@@ -1,10 +1,7 @@
-## Snowpack ##
-.snowpack
+## SvelteKit ##
 build
+.svelte-kit
 
 # Routify
 routify/
 .routify/
-
-# dotenv environment variables file
-!.env

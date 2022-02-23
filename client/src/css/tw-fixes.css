@@ -1,5 +1,0 @@
-@layer base {
-	button {
-		@apply focus:outline-none !important;
-	}
-}

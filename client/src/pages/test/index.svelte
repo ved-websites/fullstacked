@@ -1,3 +1,3 @@
-<!-- routify:options title="Help" -->
+<!-- routify:meta title="Help" -->
 
 <h1>Hi!</h1>

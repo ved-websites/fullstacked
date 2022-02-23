@@ -11,8 +11,8 @@
 					"regexp": ""
 				},
 				"background": {
-					"beginsPattern": ".*vite .*",
-					"endsPattern": ".*ready in .*"
+					"beginsPattern": ".*SvelteKit .*",
+					"endsPattern": ".*local:\\s*http.*"
 				}
 			},
 			"presentation": {
@@ -33,8 +33,8 @@
 					"regexp": ""
 				},
 				"background": {
-					"beginsPattern": ".*vite .*",
-					"endsPattern": ".*ready in .*"
+					"beginsPattern": ".*SvelteKit .*",
+					"endsPattern": ".*local:\\s*http.*"
 				}
 			},
 			"presentation": {

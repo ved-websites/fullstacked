@@ -1,9 +1,0 @@
-overwrite: true
-schema: "${VITE_API_ADDR}/graphql"
-documents: "src/graphql/**/*.graphql"
-generates:
-  src/graphql/@generated/index.ts:
-    plugins:
-      - typescript
-      - typescript-operations
-      - typed-document-node

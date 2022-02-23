@@ -279,7 +279,7 @@ export type SendNewMessageMutationVariables = Exact<{
 }>;
 
 
-export type SendNewMessageMutation = { __typename?: 'Mutation', addMessage?: { __typename?: 'Message', text: string, time: any, user: { __typename?: 'User', username: string } } | null | undefined };
+export type SendNewMessageMutation = { __typename?: 'Mutation', addMessage?: { __typename?: 'Message', text: string, time: any, user: { __typename?: 'User', username: string } } | null };
 
 export const ChatMessageFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ChatMessage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Message"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]} as unknown as DocumentNode<ChatMessageFragment, unknown>;
 export const GetMessagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMessages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ChatMessage"}}]}}]}},...ChatMessageFragmentDoc.definitions]} as unknown as DocumentNode<GetMessagesQuery, GetMessagesQueryVariables>;
