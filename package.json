@@ -20,11 +20,6 @@
   "stylelint": {
     "extends": [
       "@v-ed/stylelint-config"
-    ],
-    "ignoreFiles": [
-      "./**/node_modules/**/*",
-      "./**/dist/**/*",
-      "./**/public/theme/**/*"
     ]
   },
   "devDependencies": {

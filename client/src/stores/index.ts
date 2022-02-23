@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { makeRefreshable } from './refreshable';
+// import { makeRefreshable } from './refreshable';
 import { makeToggleable } from './toggleable';
 
 // let breakpoints: typeof BreakpointVariants | undefined = undefined;
@@ -14,5 +14,5 @@ export const isDrawerOpen = makeToggleable(writable(false), (drawerOpenStore) =>
 // });
 
 export * from './local-storage';
-export * from './theme';
 export * from './matchMedia';
+export * from './theme';

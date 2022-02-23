@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { dev, browser } from '$app/env';
-	import { Workbox, messageSW } from 'workbox-window';
-	import Snackbar, { Actions, Label, SnackbarComponentDev } from '@smui/snackbar';
+	import { browser, dev } from '$app/env';
 	import Button from '@smui/button';
+	import Snackbar, { Actions, Label, SnackbarComponentDev } from '@smui/snackbar';
+	import { messageSW, Workbox } from 'workbox-window';
 
 	let snackbar: SnackbarComponentDev;
 	let reason = 'nothing yet';
@@ -105,29 +105,3 @@
 		</Actions>
 	</Snackbar>
 {/if}
-
-<style>
-	.pwa-toast {
-		position: fixed;
-		right: 0;
-		bottom: 0;
-		margin: 16px;
-		padding: 12px;
-		border: 1px solid #8885;
-		border-radius: 4px;
-		z-index: 1;
-		text-align: left;
-		background-color: aqua;
-		box-shadow: 3px 4px 5px 0px #8885;
-	}
-	.pwa-toast .message {
-		margin-bottom: 8px;
-	}
-	.pwa-toast button {
-		border: 1px solid #8885;
-		outline: none;
-		margin-right: 5px;
-		border-radius: 2px;
-		padding: 3px 10px;
-	}
-</style>

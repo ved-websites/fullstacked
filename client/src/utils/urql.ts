@@ -41,7 +41,7 @@ export function createClient() {
 
 export type SubscribeOptions = Partial<{ client: Client }>;
 
-export function subscribe<Result, Variables extends object = {}>(
+export function subscribe<Result, Variables extends object>(
 	node: TypedDocumentNode<Result, Variables>,
 	handler: (result: OperationResult<Result, Variables>) => Promise<unknown> | unknown,
 	options?: SubscribeOptions,

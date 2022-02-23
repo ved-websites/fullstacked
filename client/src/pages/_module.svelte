@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Drawer from '$/components/drawer/Drawer.svelte';
-	import { themeStore } from '$/stores';
 	import TopNavBar from '$/components/topnav/TopNavBar.svelte';
-	import { node } from '@roxi/routify';
+	import { themeStore } from '$/stores';
+	// import { node } from '@roxi/routify';
 	import { appTitle, capitalize } from '$/utils';
 
 	// $: contextTitle = $node.meta.title;

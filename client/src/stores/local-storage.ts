@@ -1,5 +1,5 @@
+import { browser } from '$app/env';
 import { Updater, Writable, writable } from 'svelte/store';
-import { browser } from "$app/env";
 
 // Replace with process.browser in Sapper
 // Or browser (`import { browser } from "$app/env";`) in SvelteKit
@@ -10,7 +10,11 @@ type WritableLocalStorage<T> = Writable<T>;
 // Adapted from https://higsch.me/2019/06/22/2019-06-21-svelte-local-storage/
 // Transferred to typescript from https://svelte.dev/repl/7b4d6b448f8c4ed2b3d5a3c31260be2a?version=3.32.2
 export function localStorageStore<T>(key: string, initial: T): WritableLocalStorage<T> {
-	const { set: setStore, update: updateStore, ...readableStore } = writable(initial, () => {
+	const {
+		set: setStore,
+		update: updateStore,
+		...readableStore
+	} = writable(initial, () => {
 		if (!browser) return;
 
 		getAndSetFromLocalStorage();
