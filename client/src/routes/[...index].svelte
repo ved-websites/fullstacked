@@ -1,7 +1,10 @@
 <script context="module" lang="ts">
-	import { Router, createRouter } from '@roxi/routify';
-	import routes from '../../.routify/routes.default';
+	import { createClient } from '$/utils/urql';
+	import { browser } from '$app/env';
+	import { createRouter, Router } from '@roxi/routify';
 	import type { Load } from '@sveltejs/kit';
+	import { setClient } from '@urql/svelte';
+	import routes from '../../.routify/routes.default';
 
 	const router = createRouter({ routes });
 
@@ -14,10 +17,6 @@
 </script>
 
 <script lang="ts">
-	import { setClient } from '@urql/svelte';
-	import { browser } from '$app/env';
-	import { createClient } from '$/utils/urql';
-
 	if (browser) {
 		const client = createClient();
 

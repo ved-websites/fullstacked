@@ -2,6 +2,7 @@ import adapter from '@sveltejs/adapter-netlify';
 import preprocess from 'svelte-preprocess';
 import VitePluginRoutify from '@roxi/routify/vite-plugin';
 import VitePluginTsConfigPaths from 'vite-tsconfig-paths';
+import VitePluginWindicss from 'vite-plugin-windicss';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -14,6 +15,7 @@ const config = {
 
 		vite: {
 			plugins: [
+				VitePluginWindicss(),
 				VitePluginTsConfigPaths({
 					loose: true,
 				}),

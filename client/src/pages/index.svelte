@@ -1,8 +1,8 @@
 <!-- routify:meta title="Hello!" -->
 <script lang="ts">
 	import { mdiSend, mdiThumbUp } from '@mdi/js';
+	import Button, { Icon, Label } from '@smui/button';
 	import { Svg } from '@smui/common/elements';
-	import Button, { Label, Icon } from '@smui/button';
 	import Textfield from '@smui/textfield';
 	import HelperText from '@smui/textfield/helper-text';
 
@@ -25,6 +25,7 @@
 		if (event.button === 0) {
 			clicked++;
 		} else if (event.button === 1) {
+			event.preventDefault();
 			clicked = 0;
 		}
 	}
@@ -66,9 +67,9 @@
 
 <p class="mdc-typography--body1">
 	{#if clicked}
-		You've clicked the button {clicked} time{clicked === 1 ? '' : 's'}. Middle click the button to reset.
+		<span class="text-blue-400">You've clicked the button {clicked} time{clicked === 1 ? '' : 's'}. Middle click the button to reset.</span>
 	{:else}
-		<span class="grayed">You haven't clicked the button.</span>
+		<span class="opacity-60">You haven't clicked the button.</span>
 	{/if}
 </p>
 
@@ -77,9 +78,3 @@
 {/each}
 
 <span>Hi!</span>
-
-<style>
-	.grayed {
-		opacity: 0.6;
-	}
-</style>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { SendNewMessageDocument } from '$/graphql/@generated';
 	import type { UserMessage } from '$/types/chat';
-	import Button,{ Icon as ButtonIcon,Label } from '@smui/button';
+	import Button, { Icon as ButtonIcon, Label } from '@smui/button';
 	import Textfield from '@smui/textfield';
 	import HelperText from '@smui/textfield/helper-text';
 	import TextfieldIcon from '@smui/textfield/icon';
@@ -17,7 +17,7 @@
 
 	$: canSend = username && message && !isSending;
 
-	let messageRef: HTMLElement | undefined;
+	let focusMessageField: (() => void) | undefined;
 
 	const client = getClient();
 
@@ -29,7 +29,7 @@
 				const data: UserMessage = { username, text: message };
 
 				dispatch('send', data);
-				
+
 				const { error } = await client.mutation(SendNewMessageDocument, data).toPromise();
 
 				// const mutateMessage = mutation(operationStore(SendNewMessageDocument));
@@ -46,26 +46,18 @@
 			} finally {
 				isSending = false;
 
-				messageRef?.focus();
+				focusMessageField?.();
 			}
 		}
 	}
 </script>
 
 <form on:submit|preventDefault>
-	<!-- <TextField bind:value={username} disabled={isSending} class="mt-3">Username</TextField>
-	<TextField bind:value={message} disabled={isSending} class="mt-5" bind:inputElement={messageRef} autocomplete="off">Message</TextField>
-	<div class="flex justify-center mt-5">
-		<Button disabled={!canSend} on:click={handleSend}>
-			Send Message
-			<Icon path={mdiSend} class="ml-3" />
-		</Button>
-	</div> -->
-	<Textfield bind:value={username} label="Username">
+	<Textfield bind:value={username} disabled={isSending} label="Username">
 		<TextfieldIcon class="material-icons" slot="leadingIcon">person</TextfieldIcon>
 		<HelperText slot="helper">Your beautiful username!</HelperText>
 	</Textfield>
-	<Textfield bind:value={message} label="Message">
+	<Textfield bind:value={message} disabled={isSending} bind:focus={focusMessageField} label="Message">
 		<TextfieldIcon class="material-icons" slot="leadingIcon">notes</TextfieldIcon>
 		<HelperText slot="helper">Your non-discrete message...</HelperText>
 	</Textfield>

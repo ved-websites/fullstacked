@@ -4,11 +4,22 @@
 	import { themeStore } from '$/stores';
 	// import { node } from '@roxi/routify';
 	import { appTitle, capitalize } from '$/utils';
+	import { browser } from '$app/env';
+	import { derived } from 'svelte/store';
+	import 'virtual:windi.css';
 
 	// $: contextTitle = $node.meta.title;
 	$: metaTitle = 'Hai';
 
 	$: title = capitalize(`${metaTitle ? metaTitle : ''}${metaTitle && appTitle ? ' - ' : ''}${appTitle}`);
+
+	let windiTheme = derived(themeStore, (theme) => {
+		if (!theme && browser) {
+			return window.matchMedia('(prefers-color-scheme: dark)').matches;
+		}
+
+		return theme == 'dark';
+	});
 </script>
 
 <svelte:head>
@@ -20,13 +31,15 @@
 	{/if}
 </svelte:head>
 
-<Drawer>
-	<TopNavBar />
+<div class:dark={$windiTheme}>
+	<Drawer>
+		<TopNavBar />
 
-	<main class="container">
-		<slot />
-	</main>
-</Drawer>
+		<main class="container py-3">
+			<slot />
+		</main>
+	</Drawer>
+</div>
 
 <style>
 	main {

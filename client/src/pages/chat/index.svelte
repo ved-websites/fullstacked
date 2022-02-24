@@ -4,7 +4,7 @@
 	import { onMountPromise } from '$/utils';
 	import { subscribe } from '$/utils/urql';
 	import type { ChatMessageFragment } from '$gql';
-	import { GetMessagesDocument,NewMessagesDocument } from '$gql';
+	import { GetMessagesDocument, NewMessagesDocument } from '$gql';
 	import CircularProgress from '@smui/circular-progress';
 	import { getClient } from '@urql/svelte';
 	import { delayer } from 'minimum-delayer';
@@ -72,7 +72,7 @@
 	}
 </script>
 
-<div class="block border p-3">
+<div class="p-3 border border-sky-500 dark:border-red-500">
 	{#await messagesPromise}
 		<div class="flex justify-center">
 			<span class="self-center">Loading chat service...</span>
@@ -82,7 +82,7 @@
 		{#if messages.length == 0}
 			<span>No messages yet! Be the first to send one!</span>
 		{:else}
-			<ul id="messages" class="list-disc list-inside px-5 pt-2 pb-5">
+			<ul id="messages" class="list-disc list-inside px-5">
 				{#each messages as { user: { username }, text, time, active }}
 					<Message {username} {text} {time} {active} />
 				{/each}
