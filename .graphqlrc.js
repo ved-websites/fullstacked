@@ -13,6 +13,7 @@ const typedDocNodeConfig = {
 	useTypeImports: true,
 };
 
+/** @type {import('@graphql-codegen/plugin-helpers').Types.Config} */
 const clientCodegenConfig = {
 	generates: {
 		'client/src/graphql/@generated/index.ts': {
