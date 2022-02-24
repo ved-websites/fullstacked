@@ -20,6 +20,9 @@
   "stylelint": {
     "extends": [
       "@v-ed/stylelint-config"
+    ],
+    "ignoreFiles": [
+      "./client/static/theme/**/*"
     ]
   },
   "devDependencies": {
