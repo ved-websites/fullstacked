@@ -2,7 +2,7 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "start dev",
+			"label": "client dev",
 			"type": "shell",
 			"command": "npm run dev",
 			"isBackground": true,
@@ -17,36 +17,14 @@
 			},
 			"presentation": {
 				"echo": true,
-				"reveal": "always",
+				"reveal": "silent",
 				"panel": "shared",
 				"showReuseMessage": false,
 				"clear": false,
 			}
 		},
 		{
-			"label": "start dev - no gql",
-			"type": "shell",
-			"command": "npm run dev:no-gql",
-			"isBackground": true,
-			"problemMatcher": {
-				"pattern": {
-					"regexp": ""
-				},
-				"background": {
-					"beginsPattern": ".*SvelteKit .*",
-					"endsPattern": ".*local:\\s*http.*"
-				}
-			},
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"panel": "shared",
-				"showReuseMessage": false,
-				"clear": false,
-			}
-		},
-		{
-			"label": "Terminate All Tasks",
+			"label": "Terminate Dev Server",
 			"command": "echo ${input:terminate}",
 			"type": "shell",
 			"problemMatcher": []
@@ -57,7 +35,7 @@
 			"id": "terminate",
 			"type": "command",
 			"command": "workbench.action.tasks.terminate",
-			"args": "terminateAll"
+			"args": "client dev"
 		}
 	]
 }

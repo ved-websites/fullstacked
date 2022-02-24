@@ -5,8 +5,7 @@
 	"type": "module",
 	"private": true,
 	"scripts": {
-		"dev": "npm-run-all -p gql:watch dev:no-gql",
-		"dev:no-gql": "svelte-kit dev --port 5000",
+		"dev": "svelte-kit dev --port 5000",
 		"build": "svelte-kit build",
 		"preview": "svelte-kit preview --port 5000",
 		"validate": "npm-run-all -p validate:*",
@@ -19,8 +18,6 @@
 		"smui-theme": "npm-run-all -p smui-theme:*",
 		"smui-theme:light": "smui-theme compile static/theme/smui.css -i src/theme/light",
 		"smui-theme:dark": "smui-theme compile static/theme/smui-dark.css -i src/theme/dark",
-		"gql": "graphql-codegen --config ../.graphqlrc.js --project client",
-		"gql:watch": "npm run gql -- --watch",
 		"prepare": "npm run smui-theme"
 	},
 	"dependencies": {
@@ -34,10 +31,6 @@
 		"workbox-window": "^6.4.2"
 	},
 	"devDependencies": {
-		"@graphql-codegen/cli": "^2.6.1",
-		"@graphql-codegen/typed-document-node": "^2.2.3",
-		"@graphql-codegen/typescript": "^2.4.3",
-		"@graphql-codegen/typescript-operations": "^2.3.0",
 		"@material/theme": "^13.0.0",
 		"@material/typography": "^13.0.0",
 		"@mdi/js": "^6.5.95",

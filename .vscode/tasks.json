@@ -1,0 +1,31 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "graphql codegen",
+			"type": "shell",
+			"command": "npm run gql:watch",
+			"runOptions": {
+				"runOn": "folderOpen"
+			},
+			"isBackground": true,
+			"problemMatcher": {
+				"pattern": {
+					"regexp": ""
+				},
+				"background": {
+					"beginsPattern": ".*Parse configuration.*",
+					"endsPattern": ".*Watching for changes.*"
+				}
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "never",
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": false,
+				"close": true
+			}
+		},
+	],
+}
