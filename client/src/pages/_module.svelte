@@ -2,16 +2,10 @@
 	import Drawer from '$/components/drawer/Drawer.svelte';
 	import TopNavBar from '$/components/topnav/TopNavBar.svelte';
 	import { themeStore } from '$/stores';
-	// import { node } from '@roxi/routify';
-	import { appTitle, capitalize } from '$/utils';
+	import { pageTitle } from '$/utils';
 	import { browser } from '$app/env';
 	import { derived } from 'svelte/store';
 	import 'virtual:windi.css';
-
-	// $: contextTitle = $node.meta.title;
-	$: metaTitle = 'Hai';
-
-	$: title = capitalize(`${metaTitle ? metaTitle : ''}${metaTitle && appTitle ? ' - ' : ''}${appTitle}`);
 
 	let windiTheme = derived(themeStore, (theme) => {
 		if (!theme && browser) {
@@ -23,8 +17,7 @@
 </script>
 
 <svelte:head>
-	<title>{title}</title>
-	<meta name="title" content={title} />
+	<title>{$pageTitle}</title>
 
 	{#if $themeStore}
 		<link rel="stylesheet" href={`/theme/smui${$themeStore == 'light' ? '' : '-dark'}.css`} media="screen" />

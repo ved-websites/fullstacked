@@ -1,4 +1,4 @@
-<!-- routify:options title="Chat" -->
+<!-- routify:meta title="Chat" -->
 <script lang="ts">
 	import type { UserMessage } from '$/types/chat';
 	import { onMountPromise } from '$/utils';
