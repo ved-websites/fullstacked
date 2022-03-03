@@ -1,0 +1,22 @@
+html,
+body {
+	scroll-behavior: smooth;
+}
+
+.button-blue {
+	@apply bg-blue-500 text-white;
+	@apply hover:bg-blue-600;
+	@apply active:bg-blue-700;
+	@apply disabled:bg-blue-300;
+	@apply focus:(outline-none ring border-blue-300);
+	@apply rounded-md;
+}
+
+button {
+	&:hover {
+		@apply cursor-pointer;
+	}
+	&:disabled {
+		@apply cursor-not-allowed;
+	}
+}

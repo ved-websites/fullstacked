@@ -2,6 +2,7 @@
 	import Drawer from '$/components/drawer/Drawer.svelte';
 	import TopNavBar from '$/components/topnav/TopNavBar.svelte';
 	import { themeStore } from '$/stores';
+	import '$/styles/default.scss';
 	import { pageTitle } from '$/utils';
 	import { browser } from '$app/env';
 	import { derived } from 'svelte/store';
