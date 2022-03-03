@@ -46,6 +46,7 @@
 		"eslint-plugin-svelte3": "^3.4.0",
 		"prettier": "~2.5.1",
 		"prettier-plugin-svelte": "^2.6.0",
+		"sass": "1.49.9",
 		"smui-theme": "^5.0.0",
 		"svelte": "^3.46.4",
 		"svelte-check": "^2.4.3",
