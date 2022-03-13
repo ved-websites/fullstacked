@@ -2,20 +2,20 @@
 
 /// <reference types="@sveltejs/kit" />
 
+interface SessionData {
+	theme: import('./stores').Theme;
+}
+
 // See https://kit.svelte.dev/docs#typescript
 // for information about these interfaces
 declare namespace App {
 	type Theme = import('./stores').Theme;
 
-	export interface Locals {
-		theme: Theme | null;
-	}
+	export interface Locals extends SessionData {}
 
 	export interface Platform {}
 
-	export interface Session {
-		theme: Theme | null;
-	}
+	export interface Session extends SessionData {}
 
 	export interface Stuff {}
 }

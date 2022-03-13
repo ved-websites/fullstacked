@@ -33,4 +33,5 @@ export const pageTitle = derived(activeRoute, (route) => {
 	return capitalize(rawTitle);
 });
 
+export * from './cookies';
 export * from './svelteutils';
