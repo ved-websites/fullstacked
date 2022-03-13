@@ -7,5 +7,5 @@ export const getCookieValue = (cookie: string | null, name: string): string | nu
 export function getThemeFromCookie(cookie: string | null) {
 	const themeCookie = getCookieValue(cookie, 'theme');
 
-	return isTheme(themeCookie) ? themeCookie as Theme : null;
+	return isTheme(themeCookie) ? (themeCookie as Theme) : null;
 }

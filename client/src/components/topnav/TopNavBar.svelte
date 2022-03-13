@@ -1,14 +1,10 @@
 <script lang="ts">
-	import TopAppBar, {
-		Row,
-		Section,
-		Title,
-	} from '@smui/top-app-bar';
-	import IconButton from '@smui/icon-button';
+	import { isDrawerOpen, themeStore } from '$/stores';
+	import { mdiGithub, mdiMenu, mdiWeatherNight, mdiWeb, mdiWhiteBalanceSunny } from '@mdi/js';
 	import { Icon } from '@smui/common';
 	import { Svg } from '@smui/common/elements';
-	import { mdiGithub, mdiWeb, mdiWeatherNight, mdiWhiteBalanceSunny, mdiMenu } from '@mdi/js';
-	import { isDrawerOpen, themeStore } from '$/stores';
+	import IconButton from '@smui/icon-button';
+	import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
 </script>
 
 <TopAppBar variant="static" style="position: sticky !important; top: 0;">
