@@ -1,18 +1,27 @@
 <script lang="ts">
-	import Drawer, { AppContent, Content, Header, Title, Subtitle, Scrim } from '@smui/drawer';
-	import { Icon } from '@smui/common';
-	import { Svg } from '@smui/common/elements';
-	import List, { Item, Text, Graphic, Separator, Subheader } from '@smui/list';
-	import { mdiBookmark, mdiFile, mdiInboxArrowDown, mdiSend, mdiStar } from '@mdi/js';
-	import { H6 } from '@smui/common/elements';
-	import { isDrawerOpen } from '$/stores';
+	import { isDrawerOpen, themes, themeStore } from '$/stores';
+	import { capitalize } from '$/utils';
+	import { browser } from '$app/env';
+	import { goto, isActive } from '@roxi/routify';
+	import type { RNodeRuntime } from '@roxi/routify/typings/lib/runtime/Instance/RNodeRuntime';
+	import Drawer, { AppContent, Content, Header, Scrim, Subtitle, Title } from '@smui/drawer';
+	import List, { Graphic, Item, Text } from '@smui/list';
+	import Select, { Option } from '@smui/select';
+	import PageList from './PageList.svelte';
 
-	let active = 'Inbox';
+	const systemChoice = 'system default';
 
-	function setActive(value: string) {
-		active = value;
+	const themesSelection = [systemChoice, ...themes];
+
+	export let moduleNode: RNodeRuntime;
+
+	function gotoPath(path: string) {
 		isDrawerOpen.set(false);
+		$goto(path);
 	}
+
+	$: browser && themeChoice && themeStore.set(themeChoice != systemChoice ? (themeChoice as typeof themes[number]) : null);
+	$: themeChoice = $themeStore ?? systemChoice;
 </script>
 
 <Drawer variant="modal" bind:open={$isDrawerOpen}>
@@ -22,93 +31,18 @@
 	</Header>
 	<Content>
 		<List>
-			<Item
-				href="javascript:void(0)"
-				on:click={() => setActive('Inbox')}
-				activated={active === 'Inbox'}
-			>
-				<Graphic aria-hidden="true">
-					<Icon component={Svg} viewBox="0 0 24 24">
-						<path fill="currentColor" d={mdiInboxArrowDown} />
-					</Icon>
-				</Graphic>
-				<Text>Inbox</Text>
+			<Item on:click={() => gotoPath('/')} activated={$isActive('/')}>
+				<Graphic aria-hidden="true" class="material-icons">home</Graphic>
+				<Text>Home</Text>
 			</Item>
-			<Item
-				href="javascript:void(0)"
-				on:click={() => setActive('Star')}
-				activated={active === 'Star'}
-			>
-				<Graphic aria-hidden="true">
-					<Icon component={Svg} viewBox="0 0 24 24">
-						<path fill="currentColor" d={mdiStar} />
-					</Icon>
-				</Graphic>
-				<Text>Star</Text>
-			</Item>
-			<Item
-				href="javascript:void(0)"
-				on:click={() => setActive('Sent Mail')}
-				activated={active === 'Sent Mail'}
-			>
-				<Graphic aria-hidden="true">
-					<Icon component={Svg} viewBox="0 0 24 24">
-						<path fill="currentColor" d={mdiSend} />
-					</Icon>
-				</Graphic>
-				<Text>Sent Mail</Text>
-			</Item>
-			<Item
-				href="javascript:void(0)"
-				on:click={() => setActive('Drafts')}
-				activated={active === 'Drafts'}
-			>
-				<Graphic aria-hidden="true">
-					<Icon component={Svg} viewBox="0 0 24 24">
-						<path fill="currentColor" d={mdiFile} />
-					</Icon>
-				</Graphic>
-				<Text>Drafts</Text>
-			</Item>
-
-			<Separator />
-			<Subheader component={H6}>Labels</Subheader>
-			<Item
-				href="javascript:void(0)"
-				on:click={() => setActive('Family')}
-				activated={active === 'Family'}
-			>
-				<Graphic aria-hidden="true">
-					<Icon component={Svg} viewBox="0 0 24 24">
-						<path fill="currentColor" d={mdiBookmark} />
-					</Icon>
-				</Graphic>
-				<Text>Family</Text>
-			</Item>
-			<Item
-				href="javascript:void(0)"
-				on:click={() => setActive('Friends')}
-				activated={active === 'Friends'}
-			>
-				<Graphic aria-hidden="true">
-					<Icon component={Svg} viewBox="0 0 24 24">
-						<path fill="currentColor" d={mdiBookmark} />
-					</Icon>
-				</Graphic>
-				<Text>Friend</Text>
-			</Item>
-			<Item
-				href="javascript:void(0)"
-				on:click={() => setActive('Work')}
-				activated={active === 'Work'}
-			>
-				<Graphic aria-hidden="true">
-					<Icon component={Svg} viewBox="0 0 24 24">
-						<path fill="currentColor" d={mdiBookmark} />
-					</Icon>
-				</Graphic>
-				<Text>Work</Text>
-			</Item>
+		</List>
+		<PageList pageNodes={moduleNode.pages} />
+		<List>
+			<Select bind:value={themeChoice} label="Theme" class="mdc-list-item">
+				{#each themesSelection as theme}
+					<Option value={theme}>{capitalize(theme)}</Option>
+				{/each}
+			</Select>
 		</List>
 	</Content>
 </Drawer>

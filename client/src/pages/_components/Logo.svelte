@@ -1,4 +1,4 @@
-<img src="./images/logo.svg" class="app-logo h-72" alt="logo" />
+<img src="/images/logo.svg" class="app-logo h-72" alt="logo" />
 
 <style>
 	.app-logo {

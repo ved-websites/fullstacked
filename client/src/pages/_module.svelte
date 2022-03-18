@@ -5,6 +5,7 @@
 	import '$/styles/default.scss';
 	import { pageTitle } from '$/utils';
 	import { browser } from '$app/env';
+	import { node } from '@roxi/routify';
 	import { derived } from 'svelte/store';
 	import 'virtual:windi.css';
 
@@ -26,7 +27,7 @@
 </svelte:head>
 
 <div class:dark={$windiTheme}>
-	<Drawer>
+	<Drawer moduleNode={$node}>
 		<TopNavBar />
 
 		<main class="container py-3">
