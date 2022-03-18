@@ -19,15 +19,13 @@ export function makeCookieable<K extends keyof App.Session>(key: K, valueWhenEmp
 
 			return {
 				...sessionData,
-				[key]: value as App.Session[K],
+				[key]: value,
 			};
 		});
 	}
 
 	return {
-		...derived<Writable<App.Session>, App.Session[K]>(session, (sessionData, set) => {
-			return set(sessionData[key] as App.Session[K]);
-		}),
+		...derived<Writable<App.Session>, App.Session[K]>(session, (sessionData, set) => set(sessionData[key])),
 		update: (updater) => cookieUpdater((currentValue) => currentValue && updater(currentValue)),
 		set: (newValue) => cookieUpdater(() => newValue),
 	} as Writable<App.Session[K]>;
