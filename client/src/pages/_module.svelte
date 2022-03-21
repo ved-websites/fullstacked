@@ -30,7 +30,7 @@
 	<Drawer moduleNode={$node}>
 		<TopNavBar />
 
-		<main class="container py-3">
+		<main class="w-auto container py-3">
 			<slot />
 		</main>
 	</Drawer>
