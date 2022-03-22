@@ -20,8 +20,8 @@
 		$goto(path);
 	}
 
-	$: browser && themeChoice && themeStore.set(themeChoice != systemChoice ? (themeChoice as typeof themes[number]) : null);
-	$: themeChoice = $themeStore ?? systemChoice;
+	$: browser && themeChoice && themeStore.set(themeChoice != systemChoice ? themeChoice : null);
+	$: themeChoice = ($themeStore ?? systemChoice) as typeof themes[number] | typeof systemChoice;
 </script>
 
 <Drawer variant="modal" bind:open={$isDrawerOpen}>
