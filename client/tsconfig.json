@@ -2,15 +2,17 @@
 	"extends": "@v-ed/tsconfig",
 	"compilerOptions": {
 		"moduleResolution": "node",
-		"module": "es2022",
+		"module": "es2020",
 		"lib": ["es2021", "DOM", "WebWorker"],
-		"target": "es2022",
+		"target": "es2021",
 
 		"baseUrl": ".",
 		"paths": {
 			"$/*": ["./src/*"],
 			"$gql": ["./src/graphql/@generated"]
 		},
+		
+		"outDir": "./dist",
 		
 		"types": ["@sveltejs/kit"],
 		"typeRoots": ["@types", "./node_modules/@types", "../node_modules/@types"],
