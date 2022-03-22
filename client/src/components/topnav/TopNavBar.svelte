@@ -5,6 +5,7 @@
 	import { Svg } from '@smui/common/elements';
 	import IconButton from '@smui/icon-button';
 	import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
+	import ServiceWorkerBanner from '../ServiceWorkerBanner.svelte';
 </script>
 
 <TopAppBar variant="static" style="position: sticky !important; top: 0;">
@@ -48,6 +49,8 @@
 			</IconButton>
 		</Section>
 	</Row>
+
+	<ServiceWorkerBanner />
 </TopAppBar>
 
 <style>

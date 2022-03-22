@@ -1,31 +1,19 @@
 <script lang="ts">
 	import { browser, dev } from '$app/env';
+	import Banner, { CloseReason, Icon, Label } from '@smui/banner';
 	import Button from '@smui/button';
-	import Snackbar, { Actions, Label, SnackbarComponentDev } from '@smui/snackbar';
 	import { messageSW, Workbox } from 'workbox-window';
-
-	let snackbar: SnackbarComponentDev;
-	let reason = 'nothing yet';
 
 	let wb: Workbox | undefined;
 	let registration: ServiceWorkerRegistration | undefined;
 	let offlineReady = false;
 	let needRefresh = false;
 
-	function close() {
-		offlineReady = false;
-		needRefresh = false;
-	}
-
 	function showSkipWaitingPrompt(_event: unknown) {
 		// \`event.wasWaitingBeforeRegister\` will be false if this is
 		// the first time the updated service worker is waiting.
 		// When \`event.wasWaitingBeforeRegister\` is true, a previously
 		// updated service worker is still waiting.
-		// You may want to customize the UI prompt accordingly.
-
-		// Assumes your app has some sort of prompt UI element
-		// that a user can either accept or reject.
 		needRefresh = true;
 	}
 
@@ -80,28 +68,30 @@
 	}
 
 	$: toast = offlineReady || needRefresh;
+
+	function onCloseAction(event: CustomEvent<{ reason: CloseReason }>) {
+		if (event.detail.reason == CloseReason.PRIMARY) {
+			updateServiceWorker();
+		} else {
+			offlineReady = false;
+			needRefresh = false;
+		}
+	}
 </script>
 
-<!-- {#if toast}
-	<div class="pwa-toast" role="alert">
-		<div class="message">
-			{#if offlineReady}
-				<span> App ready to work offline </span>
-			{:else}
-				<span> New content available, click on reload button to update. </span>
-			{/if}
-		</div>
-		{#if needRefresh}
-			<button on:click={updateServiceWorker}> Reload </button>
+<Banner bind:open={toast} centered mobileStacked on:SMUIBanner:closed={onCloseAction}>
+	<Icon slot="icon" class="material-icons">priority_high</Icon>
+	<Label slot="label">
+		{#if offlineReady}
+			App ready to work offline!
+		{:else}
+			New content available, click on reload button to update.
 		{/if}
-		<button on:click={close}> Close </button>
-	</div>
-{/if} -->
-{#if toast}
-	<Snackbar bind:this={snackbar}>
-		<Label>This is a leading snackbar.</Label>
-		<Actions>
-			<Button>Action</Button>
-		</Actions>
-	</Snackbar>
-{/if}
+	</Label>
+	<svelte:fragment slot="actions">
+		<Button secondary>Close</Button>
+		{#if needRefresh}
+			<Button>Reload</Button>
+		{/if}
+	</svelte:fragment>
+</Banner>
