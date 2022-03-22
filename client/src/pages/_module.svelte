@@ -16,13 +16,37 @@
 
 		return theme == 'dark';
 	});
+
+	const initialTheme = $themeStore;
+
+	const themeStylesheet = browser && (document.getElementById('selectedTheme') as HTMLLinkElement);
+
+	const themeMap = {
+		light: '/theme/smui.css',
+		dark: '/theme/smui-dark.css',
+	};
+
+	$: {
+		if (themeStylesheet) {
+			themeStylesheet.disabled = $themeStore == null;
+			themeStylesheet.href = $themeStore ? themeMap[$themeStore] : '#';
+
+			themeStylesheet.onload = () => {
+				const initialThemeStylesheet = document.getElementById('initialTheme') as HTMLLinkElement | undefined;
+
+				if (initialThemeStylesheet) {
+					initialThemeStylesheet.disabled = true;
+				}
+			};
+		}
+	}
 </script>
 
 <svelte:head>
 	<title>{$pageTitle}</title>
 
-	{#if $themeStore}
-		<link rel="stylesheet" href={`/theme/smui${$themeStore == 'light' ? '' : '-dark'}.css`} media="screen" />
+	{#if !browser && initialTheme}
+		<link id="initialTheme" rel="stylesheet" href={`/theme/smui${initialTheme == 'light' ? '' : '-dark'}.css`} media="screen" />
 	{/if}
 </svelte:head>
 
