@@ -1,4 +1,5 @@
 import { AppModule } from '$/app.module';
+import { ApolloDriver } from '@nestjs/apollo';
 import { INestApplication } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -22,9 +23,9 @@ describe('MessageController (e2e)', () => {
 		app = moduleFixture.createNestApplication();
 		await app.init();
 
-		const module = moduleFixture.get(GraphQLModule);
+		const module = moduleFixture.get<GraphQLModule<ApolloDriver>>(GraphQLModule);
 
-		apolloServer = module.apolloServer;
+		apolloServer = module.graphQlAdapter.instance;
 	});
 
 	afterAll(async () => {

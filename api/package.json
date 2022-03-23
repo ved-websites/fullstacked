@@ -36,11 +36,12 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
+    "@nestjs/apollo": "10.0.7",
     "@nestjs/common": "8.2.6",
     "@nestjs/core": "8.2.6",
-    "@nestjs/graphql": "9.1.2",
+    "@nestjs/graphql": "10.0.7",
     "@nestjs/platform-express": "8.2.6",
-    "@paljs/plugins": "4.0.13",
+    "@paljs/plugins": "4.0.18",
     "@prisma/client": "3.9.2",
     "apollo-server-core": "3.6.3",
     "apollo-server-express": "3.6.3",
@@ -49,10 +50,10 @@
     "deepmerge": "4.2.2",
     "dotenv": "16.0.0",
     "dotenv-expand": "5.1.0",
-    "graphql": "15.8.0",
+    "graphql": "16.3.0",
     "graphql-depth-limit": "1.1.0",
-    "graphql-subscriptions": "1.2.1",
-    "graphql-ws": "5.5.5",
+    "graphql-subscriptions": "2.0.0",
+    "graphql-ws": "5.6.3",
     "nest-typed-config": "2.4.0",
     "reflect-metadata": "0.1.13",
     "rxjs": "7.5.4"
