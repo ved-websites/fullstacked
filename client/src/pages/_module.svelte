@@ -9,7 +9,7 @@
 	import { derived } from 'svelte/store';
 	import 'virtual:windi.css';
 
-	let windiTheme = derived(themeStore, (theme) => {
+	let isWindiDark = derived(themeStore, (theme) => {
 		if (!theme && browser) {
 			return window.matchMedia('(prefers-color-scheme: dark)').matches;
 		}
@@ -50,7 +50,7 @@
 	{/if}
 </svelte:head>
 
-<div class:dark={$windiTheme}>
+<div class:dark={$isWindiDark}>
 	<Drawer moduleNode={$node}>
 		<TopNavBar />
 
