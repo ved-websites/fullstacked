@@ -1,47 +1,54 @@
 <script lang="ts">
-	import { isDrawerOpen, isMobile } from '$/stores';
-	import { mdiChevronUp, mdiCog, mdiHome } from '@mdi/js';
-	import Icon from 'svelte-materialify/src/components/Icon/Icon.svelte';
-	import List from 'svelte-materialify/src/components/List/List.svelte';
-	import ListGroup from 'svelte-materialify/src/components/List/ListGroup.svelte';
-	import ListItem from 'svelte-materialify/src/components/List/ListItem.svelte';
-	import NavigationDrawer from 'svelte-materialify/src/components/NavigationDrawer/NavigationDrawer.svelte';
-	import Overlay from 'svelte-materialify/src/components/Overlay/Overlay.svelte';
+	import { isDrawerOpen, themes, themeStore } from '$/stores';
+	import { capitalize } from '$/utils';
+	import { browser } from '$app/env';
+	import { goto, isActive } from '@roxi/routify';
+	import type { RNodeRuntime } from '@roxi/routify/typings/lib/runtime/Instance/RNodeRuntime';
+	import Drawer, { AppContent, Content, Header, Scrim, Subtitle, Title } from '@smui/drawer';
+	import List, { Graphic, Item, Text } from '@smui/list';
+	import Select, { Option } from '@smui/select';
+	import PageList from './PageList.svelte';
 
-	let active: boolean = false;
+	const systemChoice = 'system default';
+
+	const themesSelection = [systemChoice, ...themes];
+
+	export let moduleNode: RNodeRuntime;
+
+	function gotoPath(path: string) {
+		isDrawerOpen.set(false);
+		$goto(path);
+	}
+
+	$: browser && themeChoice && themeStore.set(themeChoice != systemChoice ? themeChoice : null);
+	$: themeChoice = ($themeStore ?? systemChoice) as typeof themes[number] | typeof systemChoice;
 </script>
 
-<NavigationDrawer fixed active={!$isMobile || $isDrawerOpen} class="drawer">
-	<List>
-		<ListItem>
-			<span slot="prepend">
-				<Icon path={mdiHome} />
-			</span>
-			Home
-		</ListItem>
-		<ListGroup bind:active offset={72}>
-			<span slot="prepend">
-				<Icon path={mdiCog} />
-			</span>
-			<span slot="activator"> Actions </span>
-			<span slot="append">
-				<Icon path={mdiChevronUp} rotate={active ? 0 : 180} />
-			</span>
-			<ListItem>Create</ListItem>
-			<ListItem>Read</ListItem>
-			<ListItem>Write</ListItem>
-			<ListItem>Delete</ListItem>
-		</ListGroup>
-	</List>
-</NavigationDrawer>
+<Drawer variant="modal" bind:open={$isDrawerOpen}>
+	<Header>
+		<Title>Super Mail</Title>
+		<Subtitle>It's the best fake mail app drawer.</Subtitle>
+	</Header>
+	<Content>
+		<List>
+			<Item on:click={() => gotoPath('/')} activated={$isActive('/')}>
+				<Graphic aria-hidden="true" class="material-icons">home</Graphic>
+				<Text>Home</Text>
+			</Item>
+		</List>
+		<PageList pageNodes={moduleNode.pages} />
+		<List>
+			<Select bind:value={themeChoice} label="Theme" class="mdc-list-item">
+				{#each themesSelection as theme}
+					<Option value={theme}>{capitalize(theme)}</Option>
+				{/each}
+			</Select>
+		</List>
+	</Content>
+</Drawer>
 
-<Overlay active={$isMobile && $isDrawerOpen} on:click={isDrawerOpen.toggle} index={1} />
+<Scrim />
 
-<style>
-	:global(.drawer:root) {
-		--s-list-group-offset: 72px;
-
-		height: calc(100vh - var(--s-nav-clipped-height));
-		top: var(--s-nav-clipped-height);
-	}
-</style>
+<AppContent>
+	<slot />
+</AppContent>

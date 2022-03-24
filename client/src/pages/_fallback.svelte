@@ -1,3 +1,2 @@
-<!-- routify:options title="Oh no..." -->
-
-<div class="m-auto text-3xl">Sorry, dead end!</div>
+<h1 class="mdc-typography--headline1"> 404 not found </h1>
+<p class="mdc-typography--body1"> This is unfortunate :( </p>

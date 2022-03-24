@@ -1,13 +1,5 @@
-:root {
-	--primary-color: #ff3e00;
-	--secondary-color: #676778;
-}
-
 html,
-body,
-#routify-app {
-	min-height: calc(100vh - (100vh - 100%));
-	min-width: calc(100vw - (100vw - 100%));
+body {
 	scroll-behavior: smooth;
 }
 
@@ -20,6 +12,11 @@ body,
 	@apply rounded-md;
 }
 
-button:disabled {
-	@apply cursor-not-allowed;
+button {
+	&:hover {
+		@apply cursor-pointer;
+	}
+	&:disabled {
+		@apply cursor-not-allowed;
+	}
 }

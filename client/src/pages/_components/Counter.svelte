@@ -6,9 +6,7 @@
 	export let name: string = 'set something you fool';
 
 	onMount(() => {
-		const interval = setInterval(() => {
-			count++;
-		}, 1000);
+		const interval = setInterval(() => count++, 1000);
 
 		return () => clearInterval(interval);
 	});

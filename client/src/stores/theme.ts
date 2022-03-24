@@ -1,17 +1,27 @@
-import { localStorageStore } from './local-storage';
+import type { Writable } from 'svelte/store';
+import { makeCookieable } from './cookie';
 import { makeToggleable, Toggleable } from './toggleable';
 
-const themeLocalStore = localStorageStore<'light' | 'dark'>('app-theme', 'dark');
+export const themes = ['dark', 'light'] as const;
+export type Theme = typeof themes[number];
 
-type ThemeStoreType = typeof themeLocalStore;
+export const isTheme = (theme: string | null) => {
+	if (!theme) {
+		return false;
+	}
+	return (themes as readonly string[]).includes(theme);
+};
 
-interface ThemeStore extends ThemeStoreType, Toggleable {
-	/**
-	 * Toggles the theme between 'light' and 'dark'.
-	 */
-	toggle(): void;
-}
-
-export const themeStore: ThemeStore = makeToggleable(themeLocalStore, () => {
-	return themeLocalStore.update((current) => (current == 'light' ? 'dark' : 'light'));
+const theme = makeCookieable('theme', () => {
+	return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 });
+
+const toggleableTheme = makeToggleable(theme, () => {
+	return theme.update((currentTheme) => {
+		return currentTheme == 'light' ? 'dark' : 'light';
+	});
+});
+
+export type ThemeStore = Writable<Theme | null> & Toggleable;
+
+export const themeStore: ThemeStore = toggleableTheme;

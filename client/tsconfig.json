@@ -1,37 +1,35 @@
 {
-  "extends": "@v-ed/tsconfig",
-  "compilerOptions": {
-    "target": "es6",
-    "module": "es2020",
-    "lib": [
-      "esnext",
-      "dom"
-    ],
-    "moduleResolution": "node",
-    
-    "baseUrl": ".",
-    "paths": {
-      "$/*": ["./src/*"],
-      "$gql": ["./src/graphql/@generated"]
-    },
-    
-    "types": [
-      "vite/client",
-      "svelte",
-      "@roxi/routify",
-      "vite-plugin-pwa/client"
-    ],
-    "typeRoots": [
-      "@types",
-      "./node_modules/@types",
-      "../node_modules/@types"
-    ],
-  },
-  "include": [
-    "src/**/*",
-    "@types"
-  ],
-  "exclude": [
-    "src/graphql/@generated/**/*"
-  ]
+	"extends": "@v-ed/tsconfig",
+	"compilerOptions": {
+		"moduleResolution": "node",
+		"module": "es2020",
+		"lib": ["es2021", "DOM", "WebWorker"],
+		"target": "es2021",
+
+		"baseUrl": ".",
+		"paths": {
+			"$/*": ["./src/*"],
+			"$gql": ["./src/graphql/@generated"]
+		},
+		
+		"outDir": "./dist",
+		
+		"types": ["@sveltejs/kit"],
+		"typeRoots": ["@types", "./node_modules/@types", "../node_modules/@types"],
+
+		"checkJs": true,
+
+		/**
+			svelte-preprocess cannot figure out whether you have a value or a type, so tell TypeScript
+			to enforce using \`import type\` instead of \`import\` for Types.
+			*/
+		"importsNotUsedAsValues": "error",
+		/**
+			To have warnings/errors of the Svelte compiler at the correct position,
+			enable source maps by default.
+			*/
+		"sourceMap": true,
+		"forceConsistentCasingInFileNames": true
+	},
+	"include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte"],
 }

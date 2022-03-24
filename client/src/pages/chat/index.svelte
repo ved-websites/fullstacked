@@ -1,13 +1,13 @@
-<!-- routify:options title="Chat" -->
+<!-- routify:meta title="Chat" -->
 <script lang="ts">
 	import type { UserMessage } from '$/types/chat';
 	import { onMountPromise } from '$/utils';
-	import { client } from '$/utils/urql';
+	import { subscribe } from '$/utils/urql';
 	import type { ChatMessageFragment } from '$gql';
 	import { GetMessagesDocument, NewMessagesDocument } from '$gql';
-	import { operationStore, subscription } from '@urql/svelte';
+	import CircularProgress from '@smui/circular-progress';
+	import { getClient } from '@urql/svelte';
 	import { delayer } from 'minimum-delayer';
-	import ProgressCircular from 'svelte-materialify/src/components/ProgressCircular/ProgressCircular.svelte';
 	import Message from './_component/Message.svelte';
 	import Form from './_component/MessageForm.svelte';
 
@@ -15,6 +15,8 @@
 
 	let username: string | undefined = undefined;
 	let messages: ChatMessage[] = [];
+
+	const client = getClient();
 
 	const messagesPromise = onMountPromise(async () => {
 		const response = await delayer(() => client.query(GetMessagesDocument).toPromise(), { delay: 500 });
@@ -32,7 +34,11 @@
 		}
 	});
 
-	subscription(operationStore(NewMessagesDocument), (prevMessages: ChatMessageFragment[] = [], data) => {
+	subscribe(NewMessagesDocument, ({ data }) => {
+		if (!data) {
+			return;
+		}
+
 		if (data.messageAdded.user.username == username) {
 			messages = messages.map((m) => {
 				if (m.text == data.messageAdded.text) {
@@ -50,8 +56,6 @@
 				...messages.filter((m) => !m.active),
 			];
 		}
-
-		return [...prevMessages, data.messageAdded];
 	});
 
 	function handleSend(e: CustomEvent) {
@@ -64,21 +68,21 @@
 			time: undefined,
 		};
 
-		messages = [...messages, newMessage];
+		messages = [...(messages ?? []), newMessage];
 	}
 </script>
 
-<div class="block border p-3">
+<div class="p-3 border border-sky-500 dark:border-red-500">
 	{#await messagesPromise}
 		<div class="flex justify-center">
 			<span class="self-center">Loading chat service...</span>
-			<ProgressCircular indeterminate color="primary" class="ml-3" />
+			<CircularProgress class="my-four-colors" style="height: 32px; width: 32px;" indeterminate fourColor />
 		</div>
 	{:then}
 		{#if messages.length == 0}
 			<span>No messages yet! Be the first to send one!</span>
 		{:else}
-			<ul id="messages" class="list-disc list-inside px-5 pt-2 pb-5">
+			<ul id="messages" class="list-disc list-inside px-5">
 				{#each messages as { user: { username }, text, time, active }}
 					<Message {username} {text} {time} {active} />
 				{/each}

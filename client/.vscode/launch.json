@@ -15,27 +15,11 @@
 			"includeDefaultArgs": true,
 			"pauseForSourceMap": true,
 			"sourceMaps": true,
-			"preLaunchTask": "start dev",
-			"postDebugTask": "Terminate All Tasks",
+			"preLaunchTask": "client dev",
+			"postDebugTask": "Terminate Dev Server",
 			"skipFiles": [
-				"<node_internals>/**"
-			]
-		},
-		{
-			"name": "Launch Edge - No GQL",
-			"request": "launch",
-			"type": "pwa-msedge",
-			"url": "http://localhost:5000",
-			"webRoot": "${workspaceFolder}/src",
-			"timeout": 30000,
-			"cleanUp": "onlyTab",
-			"includeDefaultArgs": true,
-			"pauseForSourceMap": true,
-			"sourceMaps": true,
-			"preLaunchTask": "start dev - no gql",
-			"postDebugTask": "Terminate All Tasks",
-			"skipFiles": [
-				"<node_internals>/**"
+				"<node_internals>/**",
+				"**/node_modules/**"
 			]
 		},
 	]

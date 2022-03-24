@@ -1,0 +1,13 @@
+// Import the typography styles.
+//
+// MDC Typography
+//
+@use '@material/typography/mdc-typography';
+
+@use 'tw';
+
+html,
+body {
+	padding: 0;
+	margin: 0;
+}
