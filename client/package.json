@@ -18,6 +18,7 @@
     "smui-theme": "npm-run-all -p smui-theme:*",
     "smui-theme:light": "smui-theme compile static/theme/smui.css -i src/theme/light",
     "smui-theme:dark": "smui-theme compile static/theme/smui-dark.css -i src/theme/dark",
+    "watch:smui-theme": "onchange -k \"src/theme/**/*.scss\" -- npm run smui-theme",
     "prepare": "npm run smui-theme"
   },
   "dependencies": {
@@ -40,6 +41,7 @@
     "@v-ed/tsconfig": "0.1.2",
     "dotenv": "16.0.0",
     "eslint-plugin-svelte3": "3.4.1",
+    "onchange": "7.1.0",
     "prettier-plugin-svelte": "2.6.0",
     "sass": "1.49.9",
     "smui-theme": "6.0.0-beta.15",

@@ -9,17 +9,10 @@
 				"runOn": "folderOpen"
 			},
 			"isBackground": true,
-			"problemMatcher": {
-				"pattern": {
-					"regexp": ""
-				},
-				"background": {
-					"beginsPattern": ".*Parse configuration.*",
-					"endsPattern": ".*Watching for changes.*"
-				}
-			},
+			"problemMatcher": [],
 			"presentation": {
 				"echo": true,
+				"group": "watcher",
 				"reveal": "never",
 				"panel": "shared",
 				"showReuseMessage": false,

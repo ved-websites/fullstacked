@@ -2,6 +2,26 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "smui-theme",
+			"type": "shell",
+			"command": "npm run watch:smui-theme",
+			"runOptions": {
+				"runOn": "folderOpen",
+				"instanceLimit": 1
+			},
+			"isBackground": true,
+			"problemMatcher": [],
+			"presentation": {
+				"echo": true,
+				"group": "watcher",
+				"reveal": "never",
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": false,
+				"close": true
+			}
+		},
+		{
 			"label": "client dev",
 			"type": "shell",
 			"command": "npm run dev",
