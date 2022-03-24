@@ -15,14 +15,6 @@
 	],
     "settings": {
 		"window.title": "${dirty}${activeEditorMedium}${separator}Fullstacked${separator}${appName}",
-		"git.pullTags": false,
-		"jest.disabledWorkspaceFolders": ["Root (fullstacked)"],
-		"json.schemas": [
-			{
-				"fileMatch": ["renovate.json"],
-				"url": "https://docs.renovatebot.com/renovate-schema.json"
-			}
-		],
 		"[json]": {
 			"editor.defaultFormatter": "vscode.json-language-features",
 			"editor.codeActionsOnSave": {
@@ -69,6 +61,14 @@
 		},
 		"[prisma]": {
 			"editor.formatOnSave": true,
-		}
+		},
+		"git.pullTags": false,
+		"jest.disabledWorkspaceFolders": ["Root (fullstacked)"],
+		"json.schemas": [
+			{
+				"fileMatch": ["renovate.json"],
+				"url": "https://docs.renovatebot.com/renovate-schema.json"
+			}
+		]
 	}
 }
