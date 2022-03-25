@@ -2,7 +2,7 @@ import { exec as execCallback } from 'child_process';
 import del from 'del';
 import dotenv from 'dotenv';
 import fs from 'fs';
-import gulp from 'gulp';
+import gulp, { type TaskFunction } from 'gulp';
 import { prompt } from 'gulp-prompt';
 import rename from 'gulp-rename';
 import replace from 'gulp-replace';
@@ -90,8 +90,12 @@ function updateDatabaseSchema() {
 	return pushDb({ skipGenerators: true });
 }
 
-function seedDatabase() {
-	return seedDb();
+async function seedDatabase() {
+	const outputs = await seedDb();
+
+	console.log(outputs.stdout);
+
+	return outputs;
 }
 
 // Delete tasks
@@ -114,19 +118,21 @@ function deletePrismaGenerated() {
 
 // COMBINES
 
-export const setupPrisma = gulp.series(deletePrismaGenerated, generatePrismaHelpers);
+export const setupPrisma: TaskFunction = gulp.series(deletePrismaGenerated, generatePrismaHelpers);
 
-export const setupPrismaFull = gulp.series(setupPrisma, updateDatabaseSchema);
+export const setupPrismaFull: TaskFunction = gulp.series(setupPrisma, updateDatabaseSchema);
 
-export const build = gulp.series(gulp.parallel(deleteDist, setupPrisma), buildNest, buildPrisma);
+export const build: TaskFunction = gulp.series(gulp.parallel(deleteDist, setupPrisma), buildNest, buildPrisma);
 
-export const init = gulp.series(deleteDist, setupEnv, setupPrismaFull);
+export const init: TaskFunction = gulp.series(deleteDist, setupEnv, setupPrismaFull);
 
-export const cleanBuild = gulp.series(init, build);
+export const cleanBuild: TaskFunction = gulp.series(init, build);
 
-export const cleanDb = gulp.series(setupEnv, updateDatabaseSchema);
+export const cleanDb: TaskFunction = gulp.series(setupEnv, updateDatabaseSchema);
 
-export const cleanSeed = gulp.series(cleanDb, seedDatabase);
+export const seed: TaskFunction = seedDatabase;
+
+export const cleanSeed: TaskFunction = gulp.series(cleanDb, seedDatabase);
 
 // Useful commands
 

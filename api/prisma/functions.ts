@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import { exec as execNoPromise } from 'child_process';
-import path from 'path';
 import { ImportFixtureOptions, importFixtures } from 'prisma-fixtures';
 import util from 'util';
 
@@ -8,18 +7,12 @@ const exec = util.promisify(execNoPromise);
 
 // Prisma Utils
 
-function getPrismaBinary() {
-	const projectRoot: string[] = process.env.NODE_ENV == 'production' ? ['..'] : ['..', '..'];
-
-	const prismaBinary = path.join(__dirname, ...projectRoot, 'node_modules', '.bin', 'prisma');
-
-	return prismaBinary;
+export async function generate() {
+	return exec(`npx prisma generate`);
 }
 
-export async function generate() {
-	const prismaBinary = getPrismaBinary();
-
-	return exec(`${prismaBinary} generate`);
+export async function seedDb() {
+	return exec(`npx prisma db seed`);
 }
 
 export type PushDbOptions = {
@@ -47,15 +40,7 @@ export async function pushDb(options?: Partial<PushDbOptions>) {
 		return acc;
 	}, '');
 
-	const prismaBinary = getPrismaBinary();
-
-	return exec(`${prismaBinary} db push${optionsString}`);
-}
-
-export async function seedDb() {
-	const prismaBinary = getPrismaBinary();
-
-	return exec(`${prismaBinary} db seed`);
+	return exec(`npx prisma db push${optionsString}`);
 }
 
 export async function prepareTestDb(options?: Partial<ImportFixtureOptions>) {
