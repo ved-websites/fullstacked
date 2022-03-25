@@ -8,6 +8,7 @@ on:
 
 env:
   NODE_VERSION: '16'
+  PNPM_VERSION: 6
 
 jobs:
   cache-modules:
@@ -21,24 +22,27 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: ${{env.NODE_VERSION}}
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Check for dupe action
         id: skip_check
-        uses: fkirc/skip-duplicate-actions@v3.4.1
+        uses: fkirc/skip-duplicate-actions@v3
 
-      - name: Cache Node Modules
+      - name: Cache pnpm modules
         id: cache-modules
         uses: actions/cache@v2
         with:
-          path: |
-            node_modules
-            */node_modules
-          key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
+          path: ~/.pnpm-store
+          key: ${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
 
-      - name: Install
+      - name: Install packages
         if: steps.cache-modules.outputs.cache-hit != 'true'
-        run: npm ci --no-optional
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
 
   validate:
     name: Validate
@@ -51,22 +55,28 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: ${{env.NODE_VERSION}}
+          node-version: ${{ env.NODE_VERSION }}
 
-      - name: Retrieve Node Modules
+      - name: Retrieve pnpm modules
         id: cache-modules
         uses: actions/cache@v2
         with:
-          path: |
-            node_modules
-            */node_modules
-          key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
+          path: ~/.pnpm-store
+          key: ${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
 
       - name: Build
-        run: npm run build --workspace client
+        run: pnpm run --filter client build
 
       - name: Validate
-        run: npm run validate --workspace client
+        run: pnpm run --filter client validate
 
   lint:
     name: Lint
@@ -79,16 +89,22 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: ${{env.NODE_VERSION}}
+          node-version: ${{ env.NODE_VERSION }}
 
-      - name: Retrieve Node Modules
+      - name: Retrieve pnpm modules
         id: cache-modules
         uses: actions/cache@v2
         with:
-          path: |
-            node_modules
-            */node_modules
-          key: ${{ env.NODE_VERSION }}-${{ runner.OS }}-build-${{ hashFiles('package-lock.json') }}
+          path: ~/.pnpm-store
+          key: ${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
 
       - name: Lint
-        run: npm run lint --workspace client
+        run: pnpm run --filter client lint
