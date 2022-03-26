@@ -1,4 +1,4 @@
-import { PrismaClient, User } from '@prisma/client';
+import type { PrismaClient, User } from '@prisma/client';
 import f from 'faker';
 import { Fixture, upsertRange } from 'prisma-fixtures';
 

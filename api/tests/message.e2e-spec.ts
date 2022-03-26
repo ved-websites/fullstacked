@@ -1,9 +1,9 @@
 import { AppModule } from '$/app.module';
-import { ApolloDriver } from '@nestjs/apollo';
-import { INestApplication } from '@nestjs/common';
+import type { ApolloDriver } from '@nestjs/apollo';
+import type { INestApplication } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ApolloServerBase } from 'apollo-server-core';
+import type { ApolloServerBase } from 'apollo-server-core';
 import gql from 'graphql-tag';
 import { prepareTestDb } from '../prisma/functions';
 

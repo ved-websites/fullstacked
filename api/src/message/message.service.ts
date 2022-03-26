@@ -1,9 +1,9 @@
 import { PrismaService } from '$common/prisma/prisma.service';
 import { PubSub } from '$common/prisma/pub-sub';
-import { MessageCreateInput, MessageUpdateWithWhereUniqueWithoutUserInput, MessageWhereInput } from '$prisma-graphql/message';
+import type { MessageCreateInput, MessageUpdateWithWhereUniqueWithoutUserInput, MessageWhereInput } from '$prisma-graphql/message';
 import { Injectable } from '@nestjs/common';
 import { PrismaSelect } from '@paljs/plugins';
-import { GraphQLResolveInfo } from 'graphql';
+import type { GraphQLResolveInfo } from 'graphql';
 import { MESSAGE_ADDED } from './constants/triggers';
 
 @Injectable()

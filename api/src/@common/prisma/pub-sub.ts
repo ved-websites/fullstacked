@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaSelect } from '@paljs/plugins';
 import deepmerge from 'deepmerge';
-import { GraphQLResolveInfo } from 'graphql';
+import type { GraphQLResolveInfo } from 'graphql';
 import { PubSub as PubSubGraphQL } from 'graphql-subscriptions';
 
 export function withCancel<T>(
