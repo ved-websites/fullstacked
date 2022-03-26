@@ -1,7 +1,6 @@
 # SvelteKit #
 build
 .svelte-kit
-.netlify
 
 # Routify
 routify/
