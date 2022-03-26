@@ -45,7 +45,7 @@ jobs:
     if: (github.event_name == 'workflow_dispatch' && contains(fromJson('["All", "API"]'), github.event.inputs.app)) || (needs.release.outputs.releases_created && contains(fromJSON(needs.release.outputs.paths_released), 'api'))
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -87,7 +87,7 @@ jobs:
           echo 'The VERCEL_PROJECT_ID secret is missing, this will deploy as a new site.' \
           echo 'If you wanted to update a project instead, make sure to set the VERCEL_PROJECT_ID secret and run this deploy again!'
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
