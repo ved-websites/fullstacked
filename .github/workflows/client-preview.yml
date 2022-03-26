@@ -1,0 +1,52 @@
+name: PR - Client Preview
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'client/**'
+  pull_request_target:
+    paths:
+      - 'client/**'
+
+jobs:
+  deploy-vercel:
+    if: github.actor != 'github-actions[bot]'
+    name: 'Vercel'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Vercel Token
+        if: env.VERCEL_TOKEN == ''
+        run: |
+          echo 'The owner of this repository didn't set the VERCEL_TOKEN secret!'
+          exit 1
+
+      - name: Check Vercel Org ID
+        if: env.VERCEL_ORG_ID == ''
+        run: |
+          echo 'The owner of this repository didn't set the VERCEL_ORG_ID secret!'
+          exit 1
+
+      - name: Check Vercel Project ID
+        if: env.VERCEL_PROJECT_ID == ''
+        run: |
+          echo 'The VERCEL_PROJECT_ID secret is missing, this will deploy as a new site.'
+          echo 'If you wanted to preview a project instead, make sure the owner of this repo sets the VERCEL_PROJECT_ID secret!'
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Deploy Preview to Vercel
+        id: vercel-action
+        uses: amondnet/vercel-action@v20
+        with:
+          working-directory: './client'
+          vercel-token: '${{ secrets.VERCEL_TOKEN }}'
+          vercel-org-id: '${{ secrets.VERCEL_ORG_ID }}'
+          vercel-project-id: '${{ secrets.VERCEL_PROJECT_ID }}'
+
+      - name: preview-url
+        run: |
+          echo ${{ steps.vercel-action.outputs.preview-url }}
