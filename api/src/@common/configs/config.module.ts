@@ -1,12 +1,5 @@
-import { dotenvLoader, selectConfig, TypedConfigModule } from 'nest-typed-config';
-import { EnvironmentConfig } from './env.validation';
+import { createConfigModule, selectEnvConfig } from './helpers';
 
-export const ConfigModule = TypedConfigModule.forRoot({
-	isGlobal: true,
-	schema: EnvironmentConfig,
-	load: dotenvLoader({
-		expandVariables: true,
-	}),
-});
+export const ConfigModule = createConfigModule();
 
-export const env = selectConfig(ConfigModule, EnvironmentConfig);
+export const env = selectEnvConfig(ConfigModule);
