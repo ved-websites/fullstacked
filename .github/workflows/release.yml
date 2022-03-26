@@ -37,53 +37,6 @@ jobs:
           config-file: .github/release-please-config.json
           manifest-file: .github/release-please-manifest.json
 
-      - name: Setup vars
-        if: steps.release-please.outputs.pr && github.event_name != 'workflow_dispatch'
-        id: vars
-        run: |
-          echo ::set-output name=commit_subject::"${{ fromJSON(steps.release-please.outputs.pr).title }}"
-          echo ::set-output name=git_branch::"${{ fromJSON(steps.release-please.outputs.pr).headBranchName }}"
-
-      - name: Fetching Release Please's branch
-        if: steps.release-please.outputs.pr && github.event_name != 'workflow_dispatch'
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.vars.outputs.git_branch }}
-          fetch-depth: 2
-
-      - name: Setup committer vars
-        if: steps.release-please.outputs.pr && github.event_name != 'workflow_dispatch'
-        id: commit-vars
-        run: |
-          echo ::set-output name=git_author_email::"$(git show -s --format='%aE' HEAD)"
-          echo ::set-output name=git_author_username::"$(git show -s --format='%aN' HEAD)"
-
-      - uses: actions/setup-node@v2
-        if: steps.release-please.outputs.pr && github.event_name != 'workflow_dispatch'
-        with:
-          node-version: ${{env.NODE_VERSION}}
-
-      - name: Updating package-lock.json file
-        if: steps.release-please.outputs.pr && github.event_name != 'workflow_dispatch'
-        run: npm install --no-audit --no-fund --ignore-scripts --package-lock-only
-
-      - name: Merging changes with last commit
-        if: steps.release-please.outputs.pr && github.event_name != 'workflow_dispatch'
-        run: |
-          git reset --soft HEAD~1
-          git add .
-
-      - name: Commit & Push changes
-        if: steps.release-please.outputs.pr && github.event_name != 'workflow_dispatch'
-        uses: actions-js/push@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          message: '${{ steps.vars.outputs.commit_subject }}'
-          branch: '${{ steps.vars.outputs.git_branch }}'
-          author_email: '${{ steps.commit-vars.outputs.git_author_email }}'
-          author_name: '${{ steps.commit-vars.outputs.git_author_username }}'
-          force: true
-
   deploy-api:
     name: 'Deploy API'
     runs-on: ubuntu-latest
