@@ -1,28 +1,36 @@
-import { type Types } from '@graphql-codegen/plugin-helpers';
-import { type TypeScriptTypedDocumentNodesConfig } from '@graphql-codegen/typed-document-node';
-import { type TypeScriptPluginConfig } from '@graphql-codegen/typescript';
-import { type TypeScriptDocumentsPluginConfig } from '@graphql-codegen/typescript-operations';
-import * as dotenv from 'dotenv';
-import { type IGraphQLConfig } from 'graphql-config';
+import type { Types } from '@graphql-codegen/plugin-helpers';
+import type { TypeScriptTypedDocumentNodesConfig } from '@graphql-codegen/typed-document-node';
+import type { TypeScriptPluginConfig } from '@graphql-codegen/typescript';
+import type { TypeScriptDocumentsPluginConfig } from '@graphql-codegen/typescript-operations';
+import type { RawTypesConfig } from '@graphql-codegen/visitor-plugin-common';
+import type { IGraphQLConfig } from 'graphql-config';
+import { createAndSelectConfig } from './api/src/@common/configs/helpers';
 
-const apiEnv = dotenv.config({ path: `${__dirname}/api/.env` }).parsed ?? {};
-// const clientEnv = dotenv.config({ path: `${__dirname}/client/.env` }).parsed ?? {};
+const apiEnv = createAndSelectConfig({
+	envFilePath: `./api/.env`,
+});
+
+const tsCommonConfig: RawTypesConfig = {
+	useTypeImports: true,
+};
 
 const codegen: Types.Config = {
 	generates: {
 		'client/src/graphql/@generated/index.ts': {
 			plugins: [
 				{
-					typescript: {} as TypeScriptPluginConfig,
+					typescript: {
+						...tsCommonConfig,
+					} as TypeScriptPluginConfig,
 				},
 				{
 					'typescript-operations': {
-						useTypeImports: true,
+						...tsCommonConfig,
 					} as TypeScriptDocumentsPluginConfig,
 				},
 				{
 					'typed-document-node': {
-						useTypeImports: true,
+						...tsCommonConfig,
 					} as TypeScriptTypedDocumentNodesConfig,
 				},
 			],

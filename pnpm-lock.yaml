@@ -12,7 +12,7 @@ importers:
       '@v-ed/eslint-config': 0.1.0
       '@v-ed/prettier-config': 0.1.1
       '@v-ed/stylelint-config': 0.2.2
-      dotenv: 16.0.0
+      '@v-ed/tsconfig': 0.1.2
       eslint: 8.12.0
       eslint-config-prettier: 8.5.0
       eslint-plugin-prettier: 4.0.0
@@ -30,7 +30,7 @@ importers:
       '@v-ed/eslint-config': 0.1.0_eslint@8.12.0
       '@v-ed/prettier-config': 0.1.1
       '@v-ed/stylelint-config': 0.2.2_stylelint@14.6.1
-      dotenv: 16.0.0
+      '@v-ed/tsconfig': 0.1.2
       eslint: 8.12.0
       eslint-config-prettier: 8.5.0_eslint@8.12.0
       eslint-plugin-prettier: 4.0.0_b253a92c95b42c3296c682f11cccb3bd
