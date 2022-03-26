@@ -12,7 +12,7 @@
     "./client"
   ],
   "scripts": {
-    "gql": "graphql-codegen --config .graphqlrc.js",
+    "gql": "graphql-codegen --config .graphqlrc.ts",
     "gql:watch": "npm run gql -- --watch"
   },
   "prettier": "@v-ed/prettier-config",
