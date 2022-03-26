@@ -26,7 +26,7 @@
 		return {
 			path,
 			children: node.children.filter((child) => child.name != 'index'),
-			title: node.name.replaceAll('_', ' '),
+			title: node.name.replace(/_/g, ' '),
 			meta: indexOrDirNode.meta,
 			isActive: $isActive(indexOrDirNode.path),
 		};

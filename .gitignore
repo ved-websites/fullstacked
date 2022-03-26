@@ -122,3 +122,7 @@
 .env
 .env.local
 .env.*.local
+
+#Vercel
+.vercel
+.vercel_build_output
