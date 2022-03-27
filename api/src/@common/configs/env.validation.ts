@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 
 export enum Environment {
 	Development = 'development',
@@ -16,11 +16,11 @@ export class EnvironmentConfig {
 	readonly NODE_ENV: Environment = Environment.Development;
 
 	@Type(() => Number)
-	@IsNumber()
+	@IsInt()
 	readonly PORT: number = DEFAULT_PORT;
 
 	@Type(() => Number)
-	@IsNumber()
+	@IsInt()
 	readonly GRAPHQL_DEPTH_LIMIT: number = DEFAULT_GRAPHQL_DEPTH_LIMIT;
 
 	@IsString()
