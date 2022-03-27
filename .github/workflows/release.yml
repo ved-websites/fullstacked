@@ -21,7 +21,7 @@ env:
 
 jobs:
   release:
-    name: 'Release Please'
+    name: Release Please
     runs-on: ubuntu-latest
 
     outputs:
@@ -38,7 +38,7 @@ jobs:
           manifest-file: .github/release-please-manifest.json
 
   deploy-api:
-    name: 'Deploy API'
+    name: Deploy API
     runs-on: ubuntu-latest
     needs: [release]
 
@@ -57,7 +57,7 @@ jobs:
           ssh_private_key: ${{ secrets.DOKKU_SSH_KEY }}
 
   deploy-client:
-    name: 'Deploy Client'
+    name: Deploy Client
     runs-on: ubuntu-latest
     needs: [release]
 
