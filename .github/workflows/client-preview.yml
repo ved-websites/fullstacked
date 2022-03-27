@@ -13,24 +13,29 @@ jobs:
 
     if: github.actor != 'github-actions[bot]'
 
+    env:
+      VERCEL_TOKEN: '${{ secrets.VERCEL_TOKEN }}'
+      VERCEL_ORG_ID: '${{ secrets.VERCEL_ORG_ID }}'
+      VERCEL_PROJECT_ID: '${{ secrets.VERCEL_PROJECT_ID }}'
+
     steps:
-      # - name: Check Vercel Token
-      #   if: env.VERCEL_TOKEN == ''
-      #   run: |
-      #     echo 'The owner of this repository didn't set the VERCEL_TOKEN secret!'
-      #     exit 1
+      - name: Check Vercel Token
+        if: env.VERCEL_TOKEN == ''
+        run: |
+          echo 'The owner of this repository didn't set the VERCEL_TOKEN secret!'
+          exit 1
 
-      # - name: Check Vercel Org ID
-      #   if: env.VERCEL_ORG_ID == ''
-      #   run: |
-      #     echo 'The owner of this repository didn't set the VERCEL_ORG_ID secret!'
-      #     exit 1
+      - name: Check Vercel Org ID
+        if: env.VERCEL_ORG_ID == ''
+        run: |
+          echo 'The owner of this repository didn't set the VERCEL_ORG_ID secret!'
+          exit 1
 
-      # - name: Check Vercel Project ID
-      #   if: env.VERCEL_PROJECT_ID == ''
-      #   run: |
-      #     echo 'The owner of this repository didn't set the VERCEL_PROJECT_ID secret!'
-      #     exit 1
+      - name: Check Vercel Project ID
+        if: env.VERCEL_PROJECT_ID == ''
+        run: |
+          echo 'The owner of this repository didn't set the VERCEL_PROJECT_ID secret!'
+          exit 1
 
       - uses: actions/checkout@v3
         with:
