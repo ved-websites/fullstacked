@@ -84,8 +84,8 @@ jobs:
       - name: Check Vercel Project ID
         if: env.VERCEL_PROJECT_ID == ''
         run: |
-          echo 'The VERCEL_PROJECT_ID secret is missing, this will deploy as a new site.'
-          echo 'If you wanted to update a project instead, make sure to set the VERCEL_PROJECT_ID secret and run this deploy again!'
+          echo 'You are missing the VERCEL_PROJECT_ID secret!'
+          exit 1
 
       - uses: actions/checkout@v3
         with:
@@ -94,7 +94,6 @@ jobs:
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v20
         with:
-          working-directory: 'client'
           vercel-token: '${{ secrets.VERCEL_TOKEN }}'
           vercel-org-id: '${{ secrets.VERCEL_ORG_ID }}'
           vercel-project-id: '${{ secrets.VERCEL_PROJECT_ID }}'
