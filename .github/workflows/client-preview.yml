@@ -1,11 +1,8 @@
 name: PR - Client Preview
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - master
-    paths:
-      - 'client/**'
-  pull_request_target:
     paths:
       - 'client/**'
 
