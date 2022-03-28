@@ -34,11 +34,6 @@ const config = {
 				noExternal: [/^@material\//, /^@smui(?:-extra)?\//],
 			},
 		},
-
-		browser: {
-			router: false,
-			hydrate: true,
-		},
 	},
 };
 
