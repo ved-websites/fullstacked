@@ -20,3 +20,8 @@ button {
 		@apply cursor-not-allowed;
 	}
 }
+
+// Partial Fix until https://github.com/hperrin/svelte-material-ui/issues/427 is closed
+.smui-accordion__panel.smui-accordion__panel--opened:not(.smui-accordion__panel--open) {
+	overflow: hidden;
+}

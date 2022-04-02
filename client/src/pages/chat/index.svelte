@@ -1,4 +1,3 @@
-<!-- routify:meta title="Chat" -->
 <script lang="ts">
 	import type { UserMessage } from '$/types/chat';
 	import { onMountPromise } from '$/utils';
@@ -71,6 +70,11 @@
 		messages = [...(messages ?? []), newMessage];
 	}
 </script>
+
+<!-- routify:meta title="Chat" -->
+<!-- routify:meta icon="chat" -->
+<!-- routify:meta dirname="Comms" -->
+<!-- routify:meta diricon="email" -->
 
 <div class="p-3 border border-sky-500 dark:border-red-500">
 	{#await messagesPromise}
