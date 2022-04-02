@@ -44,7 +44,7 @@ function generateGuid() {
 // Build Tasks
 
 function buildNest() {
-	return exec('npx nest build');
+	return exec('pnpx nest build');
 }
 
 function buildPrisma() {

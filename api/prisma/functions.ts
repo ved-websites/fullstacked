@@ -8,11 +8,11 @@ const exec = util.promisify(execNoPromise);
 // Prisma Utils
 
 export async function generate() {
-	return exec(`npx prisma generate`);
+	return exec(`pnpx prisma generate`);
 }
 
 export async function seedDb() {
-	return exec(`npx prisma db seed`);
+	return exec(`pnpx prisma db seed`);
 }
 
 export type PushDbOptions = {
@@ -38,7 +38,7 @@ export async function pushDb(options?: Partial<PushDbOptions>) {
 		return acc;
 	}, '');
 
-	return exec(`npx prisma db push${optionsString}`);
+	return exec(`pnpx prisma db push${optionsString}`);
 }
 
 export async function prepareTestDb(options?: Partial<ImportFixtureOptions>) {
