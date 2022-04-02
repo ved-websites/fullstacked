@@ -42,7 +42,7 @@ export function createClient() {
 export type SubscribeOptions = Partial<{ client: Client }>;
 
 export function subscribe<Result, Variables extends object>(
-	node: TypedDocumentNode<Result, Variables>,
+	params: TypedDocumentNode<Result, { [key: string]: never }> | [TypedDocumentNode<Result, Variables>, Variables],
 	handler: (result: OperationResult<Result, Variables>) => Promise<unknown> | unknown,
 	options?: SubscribeOptions,
 ) {
@@ -52,7 +52,9 @@ export function subscribe<Result, Variables extends object>(
 
 	const client = options?.client ?? getClient();
 
-	const { unsubscribe } = pipe(client.subscription(node), wonkaSubscribe(handler));
+	const subArgs = Array.isArray(params) ? params : ([params, undefined] as [TypedDocumentNode<Result, Variables>, Variables | undefined]);
+
+	const { unsubscribe } = pipe(client.subscription(...subArgs), wonkaSubscribe(handler));
 
 	onDestroy(unsubscribe);
 }
