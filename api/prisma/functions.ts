@@ -22,8 +22,6 @@ export type PushDbOptions = {
 };
 
 export async function pushDb(options?: Partial<PushDbOptions>) {
-	const opts: PushDbOptions = { ...{ skipGenerators: false, acceptDataLoss: false, forceReset: false }, ...(options ?? {}) };
-
 	const mapping: Record<keyof PushDbOptions, string> = {
 		skipGenerators: '--skip-generate',
 		acceptDataLoss: '--accept-data-loss',
@@ -33,7 +31,7 @@ export async function pushDb(options?: Partial<PushDbOptions>) {
 	const entries = Object.entries(mapping) as Array<[keyof PushDbOptions, string]>;
 
 	const optionsString = entries.reduce((acc, [key, option]) => {
-		if (opts[key]) {
+		if (options?.[key]) {
 			return `${acc} ${option}`;
 		}
 
