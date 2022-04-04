@@ -12,9 +12,24 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Get git HEAD sha
+        id: commit-vars
+        run: |
+          echo ::set-output name=git_head_sha::"$(git rev-parse HEAD)"
+
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
           branch: 'master'
           git_remote_url: 'ssh://dokku@${{ secrets.DOKKU_SSH_HOST }}/${{ secrets.DOKKU_APPNAME }}'
           ssh_private_key: ${{ secrets.DOKKU_SSH_KEY }}
+
+      - name: Comment on deploy commit
+        uses: peter-evans/commit-comment@v2
+        with:
+          token: '${{ secrets.GH_BOT_TOKEN }}'
+          sha: '${{ steps.commit-vars.outputs.git_head_sha }}'
+          body: |
+            🤖 This commit was deployed to the Dokku server!
+
+            App : ${{ secrets.DOKKU_APPNAME }}

@@ -35,12 +35,29 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Get git HEAD sha
+        id: commit-vars
+        run: |
+          echo ::set-output name=git_head_sha::"$(git rev-parse HEAD)"
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v20
+        id: vercel-action
         with:
-          github-token: '${{ secrets.GH_BOT_TOKEN }}'
           vercel-token: '${{ secrets.VERCEL_TOKEN }}'
           vercel-org-id: '${{ secrets.VERCEL_ORG_ID }}'
           vercel-project-id: '${{ secrets.VERCEL_PROJECT_ID }}'
           vercel-args: '--prod'
-          github-comment: true
+          github-comment: false
+
+      - name: Comment on deploy commit
+        uses: peter-evans/commit-comment@v2
+        with:
+          token: '${{ secrets.GH_BOT_TOKEN }}'
+          sha: '${{ steps.commit-vars.outputs.git_head_sha }}'
+          body: |
+            🤖 This commit is now deployed to Vercel!
+
+            ## ${{ steps.vercel-action.outputs.preview-name }}
+
+            ${{ steps.vercel-action.outputs.preview-url }}
