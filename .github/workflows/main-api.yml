@@ -5,6 +5,8 @@ on:
     paths:
       - 'api/**'
       - 'package.json'
+    branches:
+      - '!release-please**'
 
 env:
   NODE_VERSION: '16'

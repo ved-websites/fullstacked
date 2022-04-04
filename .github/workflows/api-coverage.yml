@@ -3,6 +3,7 @@ on:
   pull_request:
     branches:
       - master
+      - '!release-please**'
     paths:
       - 'api/**'
 
@@ -11,7 +12,7 @@ jobs:
     name: Coverage
     runs-on: ubuntu-latest
 
-    if: github.actor != 'ved-bot'
+    if: contains(fromJson('["ved-bot", "renovate[bot]"]'), github.actor))
 
     steps:
       - uses: actions/checkout@v3
