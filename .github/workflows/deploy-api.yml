@@ -1,0 +1,20 @@
+name: CD - API
+
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Push to dokku
+        uses: dokku/github-action@master
+        with:
+          branch: 'master'
+          git_remote_url: 'ssh://dokku@${{ secrets.DOKKU_SSH_HOST }}/${{ secrets.DOKKU_APPNAME }}'
+          ssh_private_key: ${{ secrets.DOKKU_SSH_KEY }}

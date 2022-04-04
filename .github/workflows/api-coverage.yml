@@ -1,0 +1,44 @@
+name: PR - API
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'api/**'
+
+jobs:
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+
+    if: github.actor != 'ved-bot'
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Retrieve pnpm modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
+
+      - name: Test and Coverage (PR)
+        uses: anuraag016/Jest-Coverage-Diff@master
+        with:
+          accessToken: '${{ secrets.GH_BOT_TOKEN }}'
+          runCommand: "pnpm run --filter api test -- --coverage --collectCoverage=true --coverageReporters='json-summary' --coverageDirectory='../'"
+          # delta: 0.5 # Delta of % changed that would make this job fail
+          afterSwitchCommand: 'pnpm i'
+        env:
+          TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'

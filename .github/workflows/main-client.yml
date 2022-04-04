@@ -58,7 +58,6 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Retrieve pnpm modules
-        id: cache-modules
         uses: actions/cache@v3
         with:
           path: ~/.pnpm-store
@@ -92,7 +91,6 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Retrieve pnpm modules
-        id: cache-modules
         uses: actions/cache@v3
         with:
           path: ~/.pnpm-store
