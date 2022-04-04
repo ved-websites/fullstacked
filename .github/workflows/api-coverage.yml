@@ -12,7 +12,7 @@ jobs:
     name: Coverage
     runs-on: ubuntu-latest
 
-    if: contains(fromJson('["ved-bot", "renovate[bot]"]'), github.actor)) == false
+    if: contains(fromJson('["ved-bot", "renovate[bot]"]'), github.actor) == false
 
     steps:
       - uses: actions/checkout@v3
