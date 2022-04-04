@@ -5,8 +5,6 @@ on:
     paths:
       - 'api/**'
       - 'package.json'
-    branches:
-      - '!release-please**'
 
 env:
   NODE_VERSION: '16'
@@ -32,6 +30,7 @@ jobs:
 
       - name: Cache pnpm modules
         id: cache-modules
+        if: steps.skip_check.outputs.should_skip != 'true'
         uses: actions/cache@v3
         with:
           path: ~/.pnpm-store
@@ -40,7 +39,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install packages
-        if: steps.cache-modules.outputs.cache-hit != 'true'
+        if: steps.skip_check.outputs.should_skip != 'true' && steps.cache-modules.outputs.cache-hit != 'true'
         uses: pnpm/action-setup@v2
         with:
           version: ${{ env.PNPM_VERSION }}
@@ -51,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [cache-modules]
 
-    if: ${{ needs.cache-modules.outputs.should_skip != 'true' }}
+    if: needs.cache-modules.outputs.should_skip != 'true' && contains(fromJson('["ved-bot", "renovate[bot]"]'), github.actor)) == false
 
     steps:
       - uses: actions/checkout@v3
@@ -84,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [cache-modules]
 
-    if: ${{ needs.cache-modules.outputs.should_skip != 'true' }}
+    if: needs.cache-modules.outputs.should_skip != 'true'
 
     steps:
       - uses: actions/checkout@v3
@@ -114,7 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [cache-modules]
 
-    if: ${{ needs.cache-modules.outputs.should_skip != 'true' }}
+    if: needs.cache-modules.outputs.should_skip != 'true' && contains(fromJson('["ved-bot"]'), github.actor)) == false
 
     services:
       postgres:
