@@ -105,12 +105,23 @@ jobs:
       - name: Build
         run: pnpm run --filter client build
 
+      - name: Cache Build Folders
+        if: contains(fromJson('["ved-bot"]'), github.actor) == false
+        uses: actions/cache@v3
+        with:
+          path: |
+            .routify/**/*
+            .svelte-kit/**/*
+          key: build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('dist/**') }}
+          restore-keys: |
+            build-${{ env.NODE_VERSION }}-${{ runner.os }}-
+
   validate:
     name: Validate
     runs-on: ubuntu-latest
-    needs: [cache-modules]
+    needs: [cache-modules, build]
 
-    if: needs.cache-modules.outputs.should_skip != 'true' && contains(fromJson('["ved-bot", "renovate[bot]"]'), github.actor) == false
+    if: needs.cache-modules.outputs.should_skip != 'true' && contains(fromJson('["ved-bot"]'), github.actor) == false
 
     steps:
       - uses: actions/checkout@v3
@@ -131,6 +142,16 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
           run_install: true
+
+      - name: Fetch Cached Build Folders
+        uses: actions/cache@v3
+        with:
+          path: |
+            .routify/**/*
+            .svelte-kit/**/*
+          key: build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('dist/**') }}
+          restore-keys: |
+            build-${{ env.NODE_VERSION }}-${{ runner.os }}-
 
       - name: Validate
         run: pnpm run --filter client validate
