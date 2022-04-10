@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Drawer from '$/components/drawer/Drawer.svelte';
 	import TopNavBar from '$/components/topnav/TopNavBar.svelte';
-	import { themeStore } from '$/stores';
+	import { themeStore, type Theme } from '$/stores';
 	import '$/styles/default.scss';
 	import { pageTitle } from '$/utils';
 	import { browser } from '$app/env';
@@ -21,7 +21,7 @@
 
 	const themeStylesheet = browser && (document.getElementById('selectedTheme') as HTMLLinkElement);
 
-	const themeMap = {
+	const themeMap: Record<Theme, string> = {
 		light: '/theme/smui.css',
 		dark: '/theme/smui-dark.css',
 	};
