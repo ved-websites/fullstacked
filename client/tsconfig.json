@@ -15,7 +15,7 @@
     "outDir": "./dist",
     
     "types": ["@sveltejs/kit"],
-    "typeRoots": ["@types", "./node_modules/@types", "../node_modules/@types"],
+    "typeRoots": ["@types", "./node_modules/@types", "../node_modules/@types", "./.svelte-kit/types"],
 
     "checkJs": true,
 
