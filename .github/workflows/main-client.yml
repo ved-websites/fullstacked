@@ -111,9 +111,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            .routify
-            .svelte-kit
-          key: client-build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/.routify/**', '**/.svelte-kit/**') }}
+            client/.routify
+            client/.svelte-kit
+          key: client-build2-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/.routify/**', 'client/.svelte-kit/**') }}
 
   validate:
     name: Validate
@@ -146,11 +146,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            .routify
-            .svelte-kit
-          key: client-build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/.routify/**', '**/.svelte-kit/**') }}
+            client/.routify
+            client/.svelte-kit
+          key: client-build2-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/.routify/**', 'client/.svelte-kit/**') }}
           restore-keys: |
-            client-build-${{ env.NODE_VERSION }}-${{ runner.os }}-
+            client-build2-${{ env.NODE_VERSION }}-${{ runner.os }}-
 
       - name: Validate
         run: pnpm run --filter client validate
