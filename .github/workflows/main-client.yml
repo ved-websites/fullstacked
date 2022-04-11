@@ -113,7 +113,7 @@ jobs:
           path: |
             .routify
             .svelte-kit
-          key: build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('.routify/**/*.js', '.svelte-kit/**/*.js') }}
+          key: build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/.routify/**', '**/.svelte-kit/**') }}
 
   validate:
     name: Validate
