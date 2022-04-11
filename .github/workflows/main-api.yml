@@ -5,6 +5,7 @@ on:
     paths:
       - 'api/**'
       - 'package.json'
+      - '.github/workflows/main-api.yml'
 
 env:
   NODE_VERSION: '16'
