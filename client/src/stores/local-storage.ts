@@ -1,20 +1,57 @@
 import { browser } from '$app/env';
 import { Updater, Writable, writable } from 'svelte/store';
 
-// Replace with process.browser in Sapper
-// Or browser (`import { browser } from "$app/env";`) in SvelteKit
-// const browser = true;
+export function setLocalItem(key: string, value: string | null) {
+	try {
+		if (value) {
+			localStorage.setItem(key, value);
+		} else {
+			localStorage.removeItem(key);
+		}
+	} catch (error) {
+		console.error(`The \`${key}\` store's new value \`${value}\` could not be persisted to localStorage because of ${error}.`);
+	}
+}
 
-type WritableLocalStorage<T> = Writable<T>;
+export function getLocalItem(key: string) {
+	try {
+		return localStorage.getItem(key);
+	} catch (error) {
+		console.error(`The \`${key}\` store's value could not be restored from localStorage because of ${error}.`);
+	}
+
+	return null;
+}
+
+export type LocalStorageParser = {
+	serialize: <T = unknown>(value: T) => string | null;
+	deserialize: <T = unknown>(value: string | null) => T | null;
+};
+
+export type DefaultLocalStorageParsers = 'JSON';
+
+export const LocalStorageParsers: Record<DefaultLocalStorageParsers, LocalStorageParser> = {
+	JSON: {
+		serialize: (value) => (value == null ? null : JSON.stringify(value)),
+		deserialize: (value) => (value == null ? null : JSON.parse(value)),
+	},
+};
+
+export type LocalStorageStoreOptions<T> = {
+	valueWhenEmpty: () => T;
+	parser: LocalStorageParser;
+};
 
 // Adapted from https://higsch.me/2019/06/22/2019-06-21-svelte-local-storage/
 // Transferred to typescript from https://svelte.dev/repl/7b4d6b448f8c4ed2b3d5a3c31260be2a?version=3.32.2
-export function localStorageStore<T>(key: string, initial: T): WritableLocalStorage<T> {
+export function useLocalStorage<T = string>(key: string, options?: Partial<LocalStorageStoreOptions<T>>) {
+	const { valueWhenEmpty, parser = LocalStorageParsers.JSON } = options ?? {};
+
 	const {
 		set: setStore,
 		update: updateStore,
 		...readableStore
-	} = writable(initial, () => {
+	} = writable<T | null>(null, () => {
 		if (!browser) return;
 
 		getAndSetFromLocalStorage();
@@ -28,25 +65,21 @@ export function localStorageStore<T>(key: string, initial: T): WritableLocalStor
 	});
 
 	// Set both localStorage and this Svelte store
-	const set = (value: T) => {
-		try {
-			localStorage.setItem(key, JSON.stringify(value));
-		} catch (error) {
-			console.error(`the \`${key}\` store's new value \`${value}\` could not be persisted to localStorage because of ${error}`);
-		}
+	const set = (value: T | null) => {
+		const parsedValue = parser.serialize(value);
+
+		setLocalItem(key, parsedValue);
 
 		setStore(value);
 	};
 
-	const update = (updater: Updater<T>) => {
+	const update = (updater: Updater<T | null>) => {
 		updateStore((current) => {
 			const newValue = updater(current);
 
-			try {
-				localStorage.setItem(key, JSON.stringify(newValue));
-			} catch (error) {
-				console.error(`the \`${key}\` store's new value \`${current}\` could not be persisted to localStorage because of ${error}`);
-			}
+			const parsedValue = parser.serialize(newValue);
+
+			setLocalItem(key, parsedValue);
 
 			return newValue;
 		});
@@ -54,23 +87,20 @@ export function localStorageStore<T>(key: string, initial: T): WritableLocalStor
 
 	// Synchronize the Svelte store with localStorage
 	const getAndSetFromLocalStorage = () => {
-		let localValue = null;
+		const localValue = getLocalItem(key);
 
-		try {
-			localValue = localStorage.getItem(key);
-		} catch (error) {
-			console.error(`the \`${key}\` store's value could not be restored from localStorage because of ${error}`);
-		}
+		const parsedValue = parser.deserialize<T>(localValue);
 
-		if (localValue === null) set(initial);
-		else {
+		if (parsedValue === null) {
+			set(valueWhenEmpty?.() ?? null);
+		} else {
 			try {
-				setStore(JSON.parse(localValue));
+				setStore(parsedValue);
 			} catch {
-				set(initial);
+				set(valueWhenEmpty?.() ?? null);
 			}
 		}
 	};
 
-	return { ...readableStore, update, set };
+	return { ...readableStore, update, set } as Writable<T | null>;
 }
