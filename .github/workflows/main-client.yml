@@ -110,8 +110,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            .routify/**/*
-            .svelte-kit/**/*
+            .routify
+            .svelte-kit
           key: build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('dist/**') }}
           restore-keys: |
             build-${{ env.NODE_VERSION }}-${{ runner.os }}-
@@ -147,8 +147,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            .routify/**/*
-            .svelte-kit/**/*
+            .routify
+            .svelte-kit
           key: build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('dist/**') }}
           restore-keys: |
             build-${{ env.NODE_VERSION }}-${{ runner.os }}-
