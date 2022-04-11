@@ -1,5 +1,5 @@
 import type { Writable } from 'svelte/store';
-import { makeCookieable } from './cookie';
+import { useLocalCookie } from './local-cookie';
 import { makeToggleable, Toggleable } from './toggleable';
 
 export const themes = ['dark', 'light'] as const;
@@ -12,9 +12,7 @@ export const isTheme = (theme: string | null) => {
 	return (themes as readonly string[]).includes(theme);
 };
 
-const theme = makeCookieable('theme', () => {
-	return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-});
+const theme = useLocalCookie('theme');
 
 const toggleableTheme = makeToggleable(theme, () => {
 	return theme.update((currentTheme) => {

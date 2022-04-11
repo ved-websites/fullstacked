@@ -45,7 +45,7 @@
 <svelte:head>
 	<title>{$pageTitle}</title>
 
-	{#if !browser && initialTheme}
+	{#if initialTheme}
 		<link id="initialTheme" rel="stylesheet" href={`/theme/smui${initialTheme == 'light' ? '' : '-dark'}.css`} media="screen" />
 	{/if}
 </svelte:head>

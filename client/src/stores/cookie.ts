@@ -3,17 +3,23 @@ import { session } from '$app/stores';
 import { derived, type Writable } from 'svelte/store';
 
 export function updateCookie(key: string, value?: string | null) {
-	if (browser) {
-		if (value) {
-			document.cookie = `${key}=${value}; expires=31 Dec 9999 12:00:00 UTC; path=/`;
-		} else {
-			document.cookie = `${key}=; expires=01 Jan 1970 00:00:01 UTC; path=/`;
-		}
+	if (!browser) {
+		return;
+	}
+
+	if (value) {
+		document.cookie = `${key}=${value}; expires=31 Dec 9999 12:00:00 UTC; SameSite=Lax; path=/`;
+	} else {
+		document.cookie = `${key}=; expires=01 Jan 1970 00:00:01 UTC; path=/`;
 	}
 }
 
-export function makeCookieable<K extends keyof App.Session>(key: K, valueWhenEmpty?: () => App.Session[K]) {
+export function useCookie<K extends keyof App.Session>(key: K, valueWhenEmpty?: () => App.Session[K]) {
 	function cookieUpdater(valueFetcher: (currentValue: App.Session[K]) => App.Session[K]) {
+		if (!browser) {
+			return;
+		}
+
 		session.update((sessionData) => {
 			const sessionValue = sessionData[key];
 			const currentValue = sessionValue ?? valueWhenEmpty?.() ?? null;
