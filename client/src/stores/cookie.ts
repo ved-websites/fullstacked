@@ -20,8 +20,8 @@ export function useCookie<K extends keyof App.Session>(key: K, valueWhenEmpty?: 
 			return;
 		}
 
-		session.update((sessionData) => {
-			const sessionValue = sessionData[key];
+		session.update(($session) => {
+			const sessionValue = $session[key];
 			const currentValue = sessionValue ?? valueWhenEmpty?.() ?? null;
 
 			const value = valueFetcher(currentValue);
@@ -29,14 +29,14 @@ export function useCookie<K extends keyof App.Session>(key: K, valueWhenEmpty?: 
 			updateCookie(key, value);
 
 			return {
-				...sessionData,
+				...$session,
 				[key]: value,
 			};
 		});
 	}
 
 	return {
-		...derived<Writable<App.Session>, App.Session[K]>(session, (sessionData, set) => set(sessionData[key])),
+		...derived<Writable<App.Session>, App.Session[K]>(session, ($session, set) => set($session[key])),
 		update: (updater) => cookieUpdater((currentValue) => updater(currentValue)),
 		set: (newValue) => cookieUpdater(() => newValue),
 	} as Writable<App.Session[K]>;
