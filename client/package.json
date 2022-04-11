@@ -18,7 +18,7 @@
     "smui-theme": "npm-run-all -p smui-theme:*",
     "smui-theme:light": "smui-theme compile static/theme/smui.css -i src/theme/light -i ../node_modules",
     "smui-theme:dark": "smui-theme compile static/theme/smui-dark.css -i src/theme/dark -i ../node_modules",
-    "watch:smui-theme": "onchange -k \"src/theme/**/*.scss\" -- npm run smui-theme"
+    "watch:smui-theme": "onchange -k \"src/theme/**/*.scss\" -- pnpm smui-theme"
   },
   "dependencies": {
     "@urql/svelte": "1.3.3",

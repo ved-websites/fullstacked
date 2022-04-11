@@ -71,6 +71,7 @@
 			}
 		],
 		"windicss.enableAttrUtilityCompletion": false,
-		"windicss.enableAttrVariantCompletion": false
+		"windicss.enableAttrVariantCompletion": false,
+		"svelte.plugin.css.diagnostics.enable": false,
 	}
 }

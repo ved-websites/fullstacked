@@ -4,7 +4,7 @@
 		{
 			"label": "smui-theme",
 			"type": "shell",
-			"command": "npm run watch:smui-theme",
+			"command": "pnpm watch:smui-theme",
 			"runOptions": {
 				"runOn": "folderOpen",
 				"instanceLimit": 1
@@ -24,7 +24,7 @@
 		{
 			"label": "client dev",
 			"type": "shell",
-			"command": "npm run dev",
+			"command": "pnpm dev",
 			"isBackground": true,
 			"problemMatcher": {
 				"pattern": {

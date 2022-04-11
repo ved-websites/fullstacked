@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "gql": "graphql-codegen --config .graphqlrc.ts",
-    "gql:watch": "npm run gql -- --watch"
+    "gql:watch": "pnpm gql -- --watch"
   },
   "prettier": "@v-ed/prettier-config",
   "eslintConfig": {
