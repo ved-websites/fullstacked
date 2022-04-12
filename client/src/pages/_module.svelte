@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Drawer from '$/components/drawer/Drawer.svelte';
 	import TopNavBar from '$/components/topnav/TopNavBar.svelte';
-	import { themeStore, type Theme } from '$/stores';
+	import { themeStore, useMediaQuery, type Theme } from '$/stores';
 	import '$/styles/default.scss';
 	import { pageTitle } from '$/utils';
 	import { browser } from '$app/env';
@@ -9,12 +9,14 @@
 	import { derived } from 'svelte/store';
 	import 'virtual:windi.css';
 
-	let isWindiDark = derived(themeStore, (theme) => {
-		if (!theme && browser) {
-			return window.matchMedia('(prefers-color-scheme: dark)').matches;
+	const mediaDarkScheme = useMediaQuery('(prefers-color-scheme: dark)');
+
+	let isWindiDark = derived([themeStore, mediaDarkScheme], ([$theme, $mediaDark]) => {
+		if (!$theme) {
+			return $mediaDark;
 		}
 
-		return theme == 'dark';
+		return $theme == 'dark';
 	});
 
 	const initialTheme = $themeStore;
