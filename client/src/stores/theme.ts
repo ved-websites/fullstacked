@@ -1,5 +1,5 @@
 import type { Writable } from 'svelte/store';
-import { useLocalCookie } from './local-cookie';
+import { useLocalStorage } from './local-storage';
 import { Toggleable, useToggleable } from './toggleable';
 
 export const themes = ['dark', 'light'] as const;
@@ -12,7 +12,7 @@ export const isTheme = (theme: string | null) => {
 	return (themes as readonly string[]).includes(theme);
 };
 
-const theme = useLocalCookie('theme');
+const theme = useLocalStorage<Theme>('theme');
 
 const toggleableTheme = useToggleable(theme, () => {
 	return theme.update((currentTheme) => {

@@ -15,8 +15,8 @@
 
 html,
 body {
-	background-color: theme.$background;
-	color: theme.$on-surface;
+	background-color: var(--mdc-theme-background, theme.$background);
+	color: var(--mdc-theme-on-surface, theme.$on-surface);
 }
 
 a {

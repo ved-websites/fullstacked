@@ -9,7 +9,7 @@ export function useLocalCookie<K extends keyof App.Session>(key: K, options?: Pa
 	const scopedLocalStorage = useLocalStorage(key, { valueWhenEmpty, parser });
 
 	const derivedStore = derived([scopedCookie, scopedLocalStorage], ([$cookieValue, $localStorageValue], set) => {
-		const properValue = $cookieValue ?? $localStorageValue;
+		const properValue = $localStorageValue ?? $cookieValue;
 
 		set(properValue);
 	});
