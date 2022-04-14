@@ -28,11 +28,19 @@
 		dark: '/theme/smui-dark.css',
 	};
 
+	function removeVarStyle() {
+		document.documentElement.removeAttribute('style');
+	}
+
 	$: if (themeStylesheet) {
 		themeStylesheet.disabled = $themeStore == null;
 		themeStylesheet.href = $themeStore ? themeMap[$themeStore] : '#';
 
-		themeStylesheet.onload = () => document.documentElement.removeAttribute('style');
+		if ($themeStore == null) {
+			removeVarStyle();
+		} else {
+			themeStylesheet.onload = removeVarStyle;
+		}
 	}
 </script>
 

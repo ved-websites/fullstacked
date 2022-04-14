@@ -2,12 +2,14 @@
 
 @use '@material/theme/color-palette';
 
+@use '../variables.module' as vars;
+
 // Svelte Colors!
 @use '@material/theme/index' as theme with (
-	$primary: #ff3e00,
-	$secondary: #676778,
-	$surface: #fff,
-	$background: #fff,
+	$primary: map-get(vars.$colors-light, 'primary'),
+	$secondary: map-get(vars.$colors-light, 'secondary'),
+	$surface: map-get(vars.$colors-light, 'surface'),
+	$background: map-get(vars.$colors-light, 'background'),
 	$error: color-palette.$red-900
 );
 
