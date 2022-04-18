@@ -74,7 +74,7 @@ jobs:
           run_install: true
 
       - name: Lint
-        run: pnpm run --filter client lint
+        run: pnpm run --filter ./client lint
 
   build:
     name: Build
@@ -104,7 +104,7 @@ jobs:
           run_install: true
 
       - name: Build
-        run: pnpm run --filter client build
+        run: pnpm run --filter ./client build
 
       - name: Cache Build Folders
         if: contains(fromJson('["ved-bot"]'), github.actor) == false
@@ -153,4 +153,4 @@ jobs:
             client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-
 
       - name: Validate
-        run: pnpm run --filter client validate
+        run: pnpm run --filter ./client validate

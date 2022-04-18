@@ -74,10 +74,10 @@ jobs:
           run_install: true
 
       - name: Lint Source
-        run: pnpm run --filter api lint:src
+        run: pnpm run --filter ./api lint:src
 
       - name: Lint Tests
-        run: pnpm run --filter api lint:tests
+        run: pnpm run --filter ./api lint:tests
 
   build:
     name: Build
@@ -107,7 +107,7 @@ jobs:
           run_install: true
 
       - name: Build
-        run: pnpm run --filter api build
+        run: pnpm run --filter ./api build
 
   test:
     name: Test and Coverage
@@ -149,16 +149,16 @@ jobs:
           run_install: true
 
       - name: Init
-        run: pnpm run --filter api init
+        run: pnpm run --filter ./api init
         env:
           DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
       - name: Test Seed
-        run: pnpm run --filter api seed
+        run: pnpm run --filter ./api seed
         env:
           DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
       - name: Test and Coverage
-        run: pnpm run --filter api test:cov
+        run: pnpm run --filter ./api test:cov
         env:
           TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
