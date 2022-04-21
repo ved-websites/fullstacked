@@ -1,5 +1,5 @@
+import type { PrismaClient, User } from '$prisma-client';
 import { faker as f } from '@faker-js/faker';
-import type { PrismaClient, User } from '@prisma/client';
 import { Fixture, upsertRange } from 'prisma-fixtures';
 
 export default class UserFixture extends Fixture<User> {

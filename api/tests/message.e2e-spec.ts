@@ -4,6 +4,7 @@ import type { INestApplication } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { Test, TestingModule } from '@nestjs/testing';
 import type { ApolloServerBase } from 'apollo-server-core';
+import assert from 'assert';
 import gql from 'graphql-tag';
 import { prepareTestDb } from '../prisma/functions';
 
@@ -45,12 +46,12 @@ describe('MessageController (e2e)', () => {
 			// variables: {},
 		});
 
-		expect(result.data).toBeDefined();
+		assert(result.data);
 
-		expect(Array.isArray(result.data!.messages)).toBe(true);
-		expect(result.data!.messages.length).toBe(3);
+		expect(Array.isArray(result.data.messages)).toBe(true);
+		expect(result.data.messages.length).toBe(3);
 
-		result.data!.messages.forEach((message: any) => {
+		result.data.messages.forEach((message: any) => {
 			expect(message).toEqual({
 				text: expect.any(String),
 				time: expect.any(String),

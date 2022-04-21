@@ -1,4 +1,4 @@
-import { exec as execCallback } from 'child_process';
+import { exec as execNoPromise } from 'child_process';
 import del from 'del';
 import dotenv from 'dotenv';
 import fs from 'fs';
@@ -10,7 +10,7 @@ import ts from 'gulp-typescript';
 import util from 'util';
 import { generate as generatePrisma, pushDb, seedDb } from './prisma/functions';
 
-const exec = util.promisify(execCallback);
+const exec = util.promisify(execNoPromise);
 
 // CONFIGS
 
@@ -44,7 +44,7 @@ function generateGuid() {
 // Build Tasks
 
 function buildNest() {
-	return exec('pnpx nest build');
+	return exec('pnpm exec nest build');
 }
 
 function buildPrisma() {

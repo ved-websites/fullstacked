@@ -1,5 +1,5 @@
+import type { Message, PrismaClient } from '$prisma-client';
 import { faker as f } from '@faker-js/faker';
-import type { Message, PrismaClient } from '@prisma/client';
 import { Fixture, LinkMethod, LinkMode, upsertRange } from 'prisma-fixtures';
 import UserFixture from './Users';
 

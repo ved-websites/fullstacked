@@ -1,6 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import { exec as execNoPromise } from 'child_process';
-import { ImportFixtureOptions, importFixtures } from 'prisma-fixtures';
+import { importFixtures, type ImportFixtureOptions } from 'prisma-fixtures';
 import util from 'util';
 
 const exec = util.promisify(execNoPromise);
@@ -8,11 +7,11 @@ const exec = util.promisify(execNoPromise);
 // Prisma Utils
 
 export async function generate() {
-	return exec(`pnpx prisma generate`);
+	return exec(`pnpm exec prisma generate`);
 }
 
 export async function seedDb() {
-	return exec(`pnpx prisma db seed`);
+	return exec(`pnpm exec prisma db seed`);
 }
 
 export type PushDbOptions = {
@@ -38,7 +37,7 @@ export async function pushDb(options?: Partial<PushDbOptions>) {
 		return acc;
 	}, '');
 
-	return exec(`pnpx prisma db push${optionsString}`);
+	return exec(`pnpm exec prisma db push${optionsString}`);
 }
 
 export async function prepareTestDb(options?: Partial<ImportFixtureOptions>) {
@@ -55,11 +54,24 @@ export async function prepareTestDb(options?: Partial<ImportFixtureOptions>) {
 	return seed(testArgs);
 }
 
-export function seed(options?: Partial<ImportFixtureOptions>) {
-	return importFixtures({
+export async function seed(options?: Partial<ImportFixtureOptions>) {
+	const importOptions: Partial<ImportFixtureOptions> = {
 		...{
-			prisma: options?.prisma ?? new PrismaClient(),
+			prisma: options?.prisma ?? (await getPrismaClient()),
 		},
 		...options,
-	});
+	};
+
+	return importFixtures(importOptions);
+}
+
+export async function getPrismaClient() {
+	try {
+		// @ts-ignore
+		const { PrismaClient } = await import('./_generated/.prisma/client');
+
+		return new PrismaClient();
+	} catch (error) {
+		throw new Error(`An error happened while getting the Prisma Client. Did you run a generate command?`);
+	}
 }

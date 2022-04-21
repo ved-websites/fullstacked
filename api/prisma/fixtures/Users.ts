@@ -1,4 +1,4 @@
-import type { PrismaClient, User } from '@prisma/client';
+import type { PrismaClient, User } from '$prisma-client';
 import { Fixture, upsertMany } from 'prisma-fixtures';
 
 export default class UserFixture extends Fixture<User> {

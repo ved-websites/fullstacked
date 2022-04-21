@@ -1,4 +1,4 @@
-import type { Message, PrismaClient } from '@prisma/client';
+import type { Message, PrismaClient } from '$prisma-client';
 import { Fixture, LinkMethod } from 'prisma-fixtures';
 import UserFixture from './Users';
 

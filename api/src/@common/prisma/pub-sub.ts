@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaSelect } from '@paljs/plugins';
-import deepmerge from 'deepmerge';
 import type { GraphQLResolveInfo } from 'graphql';
 import { PubSub as PubSubGraphQL } from 'graphql-subscriptions';
+import { getPrismaSelector } from './prisma.service';
 
 export function withCancel<T>(
 	asyncIterator: AsyncIterator<T | undefined>,
@@ -32,12 +32,13 @@ export class PubSub extends PubSubGraphQL {
 	eventSubsSelectors: Record<string, unknown[] | undefined> = {};
 
 	prismaSubscribe(triggers: AsyncIteratorParamType, info: GraphQLResolveInfo, onUnsubscribe?: () => PromiseLike<void> | void) {
-		const sub = this.asyncIterator(triggers);
+		const select = getPrismaSelector(info);
 
-		const select = new PrismaSelect(info).value;
 		const fullTriggers = Array.isArray(triggers) ? triggers : [triggers];
 
 		fullTriggers.forEach((trigger) => (this.eventSubsSelectors[trigger] = (this.eventSubsSelectors[trigger] ?? []).concat(select)));
+
+		const sub = this.asyncIterator(triggers);
 
 		return withCancel(sub, () => {
 			fullTriggers.forEach((trigger) => {
@@ -53,19 +54,23 @@ export class PubSub extends PubSubGraphQL {
 	}
 
 	async prismaMutate<T>(
-		triggerName: PublishParamType,
+		triggers: PublishParamType | PublishParamType[],
 		info: GraphQLResolveInfo,
 		mutator: (allSelect: PrismaSelector) => PromiseLike<T> | T,
 	) {
-		const select = new PrismaSelect(info).value;
+		const select = getPrismaSelector(info);
 
-		const subscriberSelects = this.eventSubsSelectors[triggerName];
+		const fullTriggers = Array.isArray(triggers) ? triggers : [triggers];
 
-		const allSelect: PrismaSelector = subscriberSelects ? deepmerge.all([select, ...subscriberSelects]) : select;
+		const subscriberSelects = fullTriggers
+			.map((triggerName) => this.eventSubsSelectors[triggerName] ?? [])
+			.reduce((acc, triggerSelector) => acc.concat(triggerSelector), []);
+
+		const allSelect = PrismaSelect.mergeDeep(select, ...subscriberSelects);
 
 		const returnValue = await mutator(allSelect);
 
-		this.publish(triggerName, { [triggerName]: returnValue });
+		fullTriggers.forEach((triggerName) => this.publish(triggerName, { [triggerName]: returnValue }));
 
 		return returnValue;
 	}

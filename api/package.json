@@ -31,7 +31,7 @@
     "test:watch": "pnpm test -- --watch",
     "test:cov": "pnpm test -- --coverage",
     "seed": "gulp seed",
-    "prepare": "pnpm generate"
+    "studio": "prisma studio"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
