@@ -23,8 +23,13 @@ export class MessageResolver {
 		return this.messageService.update(info, query);
 	}
 
-	@Subscription(() => Message, { name: MESSAGE_ADDED })
-	subscribeMessageAdded(@Info() info: GraphQLResolveInfo) {
-		return this.messageService.subscribeAdded(info);
+	@Subscription(() => Message, {
+		name: MESSAGE_ADDED,
+		filter: (payload: { [MESSAGE_ADDED]: Message }, variables: { where?: MessageWhereInput }) => {
+			return !variables.where?.text?.startsWith || payload[MESSAGE_ADDED].text.startsWith(variables.where.text.startsWith);
+		},
+	})
+	subscribeMessageAdded(@Info() info: GraphQLResolveInfo, @Args('where', { nullable: true }) _where: MessageWhereInput) {
+		return this.messageService.subscribeAdded(info, MESSAGE_ADDED);
 	}
 }

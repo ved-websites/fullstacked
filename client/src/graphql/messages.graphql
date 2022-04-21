@@ -18,6 +18,12 @@ subscription NewMessages {
 	}
 }
 
+subscription NewMessagesStartingWith($text: String!) {
+	messageAdded(where: { text: { startsWith: $text } }) {
+		...ChatMessage
+	}
+}
+
 mutation SendNewMessage($text: String!, $username: String!) {
 	addMessage(data: { text: $text, user: { connectOrCreate: { where: { username: $username }, create: { username: $username } } } }) {
 		...ChatMessage

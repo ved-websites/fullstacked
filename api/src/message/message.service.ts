@@ -32,7 +32,7 @@ export class MessageService {
 		return updatedMessage;
 	}
 
-	subscribeAdded(info: GraphQLResolveInfo) {
-		return this.pubSub.prismaSubscribe(MESSAGE_ADDED, info);
+	subscribeAdded(info: GraphQLResolveInfo, triggers: Parameters<MessageService['pubSub']['prismaSubscribe']>[0]) {
+		return this.pubSub.prismaSubscribe(triggers, info);
 	}
 }

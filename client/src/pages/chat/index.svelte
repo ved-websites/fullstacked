@@ -2,8 +2,7 @@
 	import type { UserMessage } from '$/types/chat';
 	import { onMountPromise } from '$/utils';
 	import { subscribe } from '$/utils/urql';
-	import type { ChatMessageFragment } from '$gql';
-	import { GetMessagesDocument, NewMessagesDocument } from '$gql';
+	import { ChatMessageFragment, GetMessagesDocument, NewMessagesDocument, NewMessagesStartingWithDocument } from '$gql';
 	import CircularProgress from '@smui/circular-progress';
 	import { getClient } from '@urql/svelte';
 	import { delayer } from 'minimum-delayer';
@@ -57,6 +56,14 @@
 		}
 	});
 
+	subscribe([NewMessagesStartingWithDocument, { text: 'this' }], ({ data }) => {
+		if (!data) {
+			return;
+		}
+
+		console.log(`A new message was logged that starts with 'this'!`, data.messageAdded);
+	});
+
 	function handleSend(e: CustomEvent) {
 		const { username, text } = e.detail as UserMessage;
 
@@ -67,7 +74,7 @@
 			time: undefined,
 		};
 
-		messages = [...(messages ?? []), newMessage];
+		messages = [...messages, newMessage];
 	}
 </script>
 
