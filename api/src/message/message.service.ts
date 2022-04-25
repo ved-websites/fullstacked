@@ -3,7 +3,7 @@ import { PubSub } from '$common/prisma/pub-sub';
 import type { MessageCreateInput, MessageUpdateWithWhereUniqueWithoutUserInput, MessageWhereInput } from '$prisma-graphql/message';
 import { Injectable } from '@nestjs/common';
 import type { GraphQLResolveInfo } from 'graphql';
-import { MESSAGE_ADDED } from './constants/triggers';
+import { MESSAGE_ADDED, MESSAGE_UPDATED } from './constants/triggers';
 
 @Injectable()
 export class MessageService {
@@ -27,7 +27,9 @@ export class MessageService {
 		const where = query.where;
 		const data = { time: new Date(), ...query.data };
 
-		const updatedMessage = await this.prisma.message.update({ where, data, ...getPrismaSelector(info) });
+		const updatedMessage = await this.pubSub.prismaMutate([MESSAGE_UPDATED], info, (allSelect) => {
+			return this.prisma.message.update({ where, data, ...allSelect });
+		});
 
 		return updatedMessage;
 	}
