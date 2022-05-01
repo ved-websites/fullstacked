@@ -1,5 +1,3 @@
-import { createConfigModule, selectEnvConfig } from './helpers';
+import { createConfigModule } from './helpers';
 
 export const ConfigModule = createConfigModule();
-
-export const env = selectEnvConfig(ConfigModule);

@@ -1,4 +1,4 @@
-import { env } from '$common/configs/config.module';
+import { env } from '$common/configs';
 import { Environment } from '$common/configs/env.validation';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';
