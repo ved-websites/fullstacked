@@ -20,7 +20,12 @@
 			"skipFiles": [
 				"<node_internals>/**",
 				"**/node_modules/**"
-			]
+			],
+			"presentation": {
+				"hidden": false,
+				"group": "Client",
+				"order": 1,
+			}
 		},
 	]
 }

@@ -9,7 +9,7 @@ on:
 
 env:
   NODE_VERSION: '16'
-  PNPM_VERSION: 6
+  PNPM_VERSION: 7
 
 jobs:
   cache-modules:
@@ -158,7 +158,10 @@ jobs:
         env:
           DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
-      - name: Test and Coverage
-        run: pnpm run --filter ./api test:cov
+      - name: Test Specs
+        run: pnpm run --filter ./api test:specs
+
+      - name: Test E2E
+        run: pnpm run --filter ./api test:e2e
         env:
           TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'

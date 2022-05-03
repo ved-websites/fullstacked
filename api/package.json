@@ -28,8 +28,8 @@
     "test": "jest --config tests/.jest/jest.all-config.ts",
     "test:specs": "jest --config tests/.jest/jest.specs-config.ts",
     "test:e2e": "jest --config tests/.jest/jest.e2e-config.ts",
-    "test:watch": "pnpm test -- --watch",
-    "test:cov": "pnpm test -- --coverage",
+    "test:watch": "pnpm test --watch",
+    "test:cov": "pnpm test --coverage",
     "seed": "gulp seed",
     "studio": "prisma studio"
   },
@@ -84,13 +84,12 @@
     "jest": "27.5.1",
     "json5": "2.2.1",
     "prisma": "3.12.0",
-    "prisma-fixtures": "0.0.1",
+    "prisma-fixtures": "0.1.5",
     "prisma-nestjs-graphql": "15.2.1",
     "supertest": "6.2.2",
     "ts-jest": "27.1.4",
     "ts-loader": "9.2.8",
     "ts-node": "10.7.0",
-    "tsconfig-paths": "3.14.1",
     "typescript": "4.6.3"
   }
 }

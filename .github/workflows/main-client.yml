@@ -9,7 +9,7 @@ on:
 
 env:
   NODE_VERSION: '16'
-  PNPM_VERSION: 6
+  PNPM_VERSION: 7
 
 jobs:
   cache-modules:

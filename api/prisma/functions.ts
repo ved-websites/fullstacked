@@ -67,6 +67,7 @@ export async function seed(options?: Partial<ImportFixtureOptions>) {
 
 export async function getPrismaClient() {
 	try {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		const { PrismaClient } = await import('./_generated/.prisma/client');
 
