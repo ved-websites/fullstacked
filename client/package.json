@@ -35,7 +35,7 @@
     "@material/typography": "13.0.0",
     "@mdi/js": "6.6.96",
     "@roxi/routify": "3.0.0-next.90",
-    "@sveltejs/adapter-vercel": "1.0.0-next.47",
+    "@sveltejs/adapter-vercel": "1.0.0-next.50",
     "@sveltejs/kit": "1.0.0-next.310",
     "@v-ed/tsconfig": "0.1.2",
     "dotenv": "16.0.0",
