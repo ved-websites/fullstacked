@@ -18,6 +18,18 @@ jobs:
 
     if: contains(fromJson('["ved-bot", "renovate[bot]"]'), github.actor) == false
 
+    services:
+      postgres:
+        image: postgres:13.4
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432/tcp
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -37,6 +49,11 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
           run_install: true
+
+      - name: Init
+        run: pnpm run --filter ./api init
+        env:
+          DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
       - name: Test and Coverage (PR)
         uses: anuraag016/Jest-Coverage-Diff@master
