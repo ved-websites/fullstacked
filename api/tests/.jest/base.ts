@@ -24,6 +24,7 @@ const baseConfig = defineBaseJestConfig({
 	coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/prisma/', '<rootDir>/dist/'],
 	moduleNameMapper: pathsToModuleNameMapper(tsConfig.compilerOptions.paths, { prefix: '<rootDir>/' }),
 	testTimeout: 30000,
+	passWithNoTests: true,
 });
 
 export function defineJestConfig<T extends Config.InitialOptions>(config: T): T & typeof baseConfig {
