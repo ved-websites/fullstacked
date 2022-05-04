@@ -7,6 +7,10 @@ on:
     paths:
       - 'api/**'
 
+env:
+  NODE_VERSION: '16'
+  PNPM_VERSION: 7
+
 jobs:
   coverage:
     name: Coverage
