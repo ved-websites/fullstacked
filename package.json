@@ -38,7 +38,7 @@
     "@v-ed/eslint-config": "0.1.1",
     "@v-ed/prettier-config": "0.1.1",
     "@v-ed/stylelint-config": "0.2.3",
-    "@v-ed/tsconfig": "0.1.2",
+    "@v-ed/tsconfig": "0.2.0",
     "eslint": "8.14.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.0.0",
