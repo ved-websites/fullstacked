@@ -25,7 +25,7 @@
 		if (rnode.children.length) {
 			const childNodes = rnode.children.filter(({ name }) => !name.startsWith('_'));
 
-			if (childNodes.length == 1 && childNodes[0].name == 'index') {
+			if (childNodes.length == 1 && childNodes[0]?.name == 'index') {
 				return formatNode(childNodes[0], childNodes[0].meta.name ?? rnode.name);
 			}
 

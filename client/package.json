@@ -37,7 +37,7 @@
     "@roxi/routify": "3.0.0-next.90",
     "@sveltejs/adapter-vercel": "1.0.0-next.50",
     "@sveltejs/kit": "1.0.0-next.324",
-    "@v-ed/tsconfig": "0.1.2",
+    "@v-ed/tsconfig": "0.2.0",
     "dotenv": "16.0.0",
     "eslint-plugin-svelte3": "3.4.1",
     "onchange": "7.1.0",

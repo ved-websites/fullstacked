@@ -72,7 +72,7 @@
     "@types/gulp-replace": "0.0.31",
     "@types/jest": "27.4.1",
     "@types/supertest": "2.0.12",
-    "@v-ed/tsconfig": "0.1.2",
+    "@v-ed/tsconfig": "0.2.0",
     "del": "6.0.0",
     "graphql-config": "4.3.0",
     "graphql-tag": "2.12.6",

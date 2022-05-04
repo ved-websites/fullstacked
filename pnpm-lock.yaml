@@ -12,7 +12,7 @@ importers:
       '@v-ed/eslint-config': 0.1.1
       '@v-ed/prettier-config': 0.1.1
       '@v-ed/stylelint-config': 0.2.3
-      '@v-ed/tsconfig': 0.1.2
+      '@v-ed/tsconfig': 0.2.0
       eslint: 8.14.0
       eslint-config-prettier: 8.5.0
       eslint-plugin-prettier: 4.0.0
@@ -31,7 +31,7 @@ importers:
       '@v-ed/eslint-config': 0.1.1_t725usgvqspm5woeqpaxbfp2qu
       '@v-ed/prettier-config': 0.1.1
       '@v-ed/stylelint-config': 0.2.3_stylelint@14.8.2
-      '@v-ed/tsconfig': 0.1.2
+      '@v-ed/tsconfig': 0.2.0
       eslint: 8.14.0
       eslint-config-prettier: 8.5.0_eslint@8.14.0
       eslint-plugin-prettier: 4.0.0_mzpligoj26dazigcet37nxg2zy
@@ -62,7 +62,7 @@ importers:
       '@types/gulp-replace': 0.0.31
       '@types/jest': 27.4.1
       '@types/supertest': 2.0.12
-      '@v-ed/tsconfig': 0.1.2
+      '@v-ed/tsconfig': 0.2.0
       apollo-server-core: 3.6.7
       apollo-server-express: 3.6.7
       axios: 0.26.1
@@ -131,7 +131,7 @@ importers:
       '@types/gulp-replace': 0.0.31
       '@types/jest': 27.4.1
       '@types/supertest': 2.0.12
-      '@v-ed/tsconfig': 0.1.2
+      '@v-ed/tsconfig': 0.2.0
       del: 6.0.0
       graphql-config: 4.3.0_p3vaqft5uoeyiavxkjyaljm52u
       graphql-tag: 2.12.6_graphql@16.3.0
@@ -160,7 +160,7 @@ importers:
       '@sveltejs/adapter-vercel': 1.0.0-next.50
       '@sveltejs/kit': 1.0.0-next.324
       '@urql/svelte': 1.3.3
-      '@v-ed/tsconfig': 0.1.2
+      '@v-ed/tsconfig': 0.2.0
       dotenv: 16.0.0
       eslint-plugin-svelte3: 3.4.1
       graphql: 16.3.0
@@ -201,7 +201,7 @@ importers:
       '@roxi/routify': 3.0.0-next.90
       '@sveltejs/adapter-vercel': 1.0.0-next.50
       '@sveltejs/kit': 1.0.0-next.324_sass@1.50.0+svelte@3.47.0
-      '@v-ed/tsconfig': 0.1.2
+      '@v-ed/tsconfig': 0.2.0
       dotenv: 16.0.0
       eslint-plugin-svelte3: 3.4.1_svelte@3.47.0
       onchange: 7.1.0
@@ -4230,8 +4230,8 @@ packages:
       stylelint-config-standard: 25.0.0_stylelint@14.8.2
     dev: true
 
-  /@v-ed/tsconfig/0.1.2:
-    resolution: {integrity: sha512-gaMDdYElJXLOMfyEGXo4zL7RJyAVHgAoSAS49NS8LeJtPc0gYOPE/KCY+89yrh9CYxe0TE9bVus11IFYwyyZXw==}
+  /@v-ed/tsconfig/0.2.0:
+    resolution: {integrity: sha512-SkfkjDM8sWD3QOtQ8EcGI/gBtnQfoptjyWZZGpnM1oXSjRABgTodN2lxuOrXhWUnyVpNG05w+yw3uOc1yvwhwA==}
     engines: {node: '>=14'}
     dev: true
 
