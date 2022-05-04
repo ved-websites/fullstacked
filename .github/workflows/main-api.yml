@@ -36,8 +36,6 @@ jobs:
         with:
           path: ~/.local/share/pnpm/store
           key: install-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            install-${{ env.NODE_VERSION }}-${{ runner.os }}-
 
       - name: Install packages
         if: steps.skip_check.outputs.should_skip != 'true' && steps.cache-modules.outputs.cache-hit != 'true'
