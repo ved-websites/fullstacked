@@ -31,22 +31,22 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "2.6.2",
-    "@graphql-codegen/typed-document-node": "2.2.8",
-    "@graphql-codegen/typescript": "2.4.8",
-    "@graphql-codegen/typescript-operations": "2.3.5",
+    "@graphql-codegen/typed-document-node": "2.2.9",
+    "@graphql-codegen/typescript": "2.4.9",
+    "@graphql-codegen/typescript-operations": "2.3.6",
     "@types/node": "16.11.33",
     "@v-ed/eslint-config": "0.1.1",
     "@v-ed/prettier-config": "0.1.1",
     "@v-ed/stylelint-config": "0.2.3",
     "@v-ed/tsconfig": "0.1.2",
-    "eslint": "8.12.0",
+    "eslint": "8.14.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.0.0",
     "graphql": "^16.0.0",
     "npm-run-all": "4.1.5",
-    "prettier": "2.6.1",
-    "stylelint": "14.6.1",
-    "tslib": "2.3.1",
-    "typescript": "4.6.3"
+    "prettier": "2.6.2",
+    "stylelint": "14.8.2",
+    "tslib": "2.4.0",
+    "typescript": "4.6.4"
   }
 }
