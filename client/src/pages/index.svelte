@@ -124,7 +124,7 @@
 
 <div class="self-center">
 	{#each items as item, index (item)}
-		{#if index == 0 || items[index - 1].done}
+		{#if index == 0 || items[index - 1]?.done}
 			<Item name={item.name} bind:count={item.count} bind:isDone={item.done} />
 		{/if}
 	{/each}
