@@ -6,6 +6,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import type { ApolloServerBase } from 'apollo-server-core';
 import assert from 'assert';
 import gql from 'graphql-tag';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { prepareTestDb } from '../prisma/functions';
 
 beforeAll(async () => {

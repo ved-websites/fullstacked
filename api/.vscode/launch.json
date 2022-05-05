@@ -55,6 +55,22 @@
 				"group": "App",
 				"order": 2,
 			}
+		},
+		{
+			"type": "pwa-node",
+			"request": "launch",
+			"name": "Debug Current Test File",
+			"autoAttachChildProcesses": true,
+			"skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+			"program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
+			"args": ["run", "${relativeFile}", "--config", "tests/.vitest/vitest.all-config.ts"],
+			"smartStep": true,
+			"console": "internalConsole",
+			"presentation": {
+				"hidden": false,
+				"group": "tests",
+				"order": 1,
+			}
 		}
 	]
 }

@@ -1,6 +1,7 @@
 {
   "extends": "@v-ed/tsconfig",
   "compilerOptions": {
+    "moduleResolution": "node",
     "target": "es2019",
     "module": "commonjs",
     "lib": [

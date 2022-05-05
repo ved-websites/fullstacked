@@ -1,5 +1,6 @@
 import { PrismaModule } from '$common/prisma/prisma.module';
 import { Test, TestingModule } from '@nestjs/testing';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { MessageResolver } from './message.resolver';
 import { MessageService } from './message.service';
 
