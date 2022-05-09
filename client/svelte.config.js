@@ -26,7 +26,7 @@ const config = {
 			},
 
 			optimizeDeps: {
-				exclude: ['@urql/svelte'],
+				exclude: ['@urql/svelte', 'minimum-delayer'],
 			},
 
 			// @ts-ignore
