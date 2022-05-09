@@ -15,6 +15,7 @@ const vitestBaseConfig = defineConfig({
 	plugins: [VitePluginTsConfigPaths({ loose: true })],
 	test: {
 		testTimeout: 30000,
+		passWithNoTests: true,
 		coverage: {
 			reportsDirectory: coverageDirectory,
 			reporter: coverageReporter,
