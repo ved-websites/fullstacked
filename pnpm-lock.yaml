@@ -86,7 +86,7 @@ importers:
       gulp-typescript: 6.0.0-alpha.1
       nest-typed-config: 2.4.1
       prisma: 3.13.0
-      prisma-fixtures: 0.1.6
+      prisma-fixtures: 0.1.9
       prisma-nestjs-graphql: 15.3.0
       reflect-metadata: 0.1.13
       rxjs: 7.5.5
@@ -142,7 +142,7 @@ importers:
       gulp-replace: 1.1.3
       gulp-typescript: 6.0.0-alpha.1_typescript@4.6.4
       prisma: 3.13.0
-      prisma-fixtures: 0.1.6_prisma@3.13.0
+      prisma-fixtures: 0.1.9_prisma@3.13.0
       prisma-nestjs-graphql: 15.3.0_y67lm3svokr4p3tqyyp2rumfa4
       supertest: 6.2.3
       ts-node: 10.7.0_pekypooaliwpg7ddlflnyizj34
@@ -591,6 +591,8 @@ packages:
     resolution: {integrity: sha512-n2Q6i+fnJqzOaq2VkdXxy2TCPCWQZHiCo0XqmrCvDWcZQKRyZzYi4Z0yxlBuN0w+r2ZHmre+Q087DSrw3pbJDQ==}
     engines: {node: '>=6.0.0'}
     hasBin: true
+    dependencies:
+      '@babel/types': 7.17.10
     dev: true
 
   /@babel/plugin-proposal-class-properties/7.16.7_@babel+core@7.17.10:
@@ -1045,6 +1047,7 @@ packages:
       - typescript
       - utf-8-validate
       - zen-observable
+      - zenObservable
     dev: true
 
   /@graphql-codegen/core/2.5.1_graphql@16.3.0:
@@ -2519,6 +2522,8 @@ packages:
       express: 4.17.3
       multer: 1.4.4
       tslib: 2.3.1
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /@nestjs/schematics/8.0.11_ezuyfu3uj65g35wdjb6342atpm:
@@ -2627,6 +2632,21 @@ packages:
     dependencies:
       '@prisma/engines-version': 3.13.0-17.efdf9b1183dddfd4258cd181a72125755215ab7b
       prisma: 3.13.0
+    dev: false
+
+  /@prisma/client/3.14.0_prisma@3.13.0:
+    resolution: {integrity: sha512-atb41UpgTR1MCst0VIbiHTMw8lmXnwUvE1KyUCAkq08+wJyjRE78Due+nSf+7uwqQn+fBFYVmoojtinhlLOSaA==}
+    engines: {node: '>=12.6'}
+    requiresBuild: true
+    peerDependencies:
+      prisma: '*'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+    dependencies:
+      '@prisma/engines-version': 3.14.0-36.2b0c12756921c891fec4f68d9444e18c7d5d4a6a
+      prisma: 3.13.0
+    dev: true
 
   /@prisma/debug/3.13.0:
     resolution: {integrity: sha512-uzL4ug7pWbiodTSW/WMAJ9SOP/ulxn6EVlV4YTpKaidgPMOLPqSV7iLZP7P4w7q3HGSpWZp+kr2a4nq7+ANEfg==}
@@ -2638,6 +2658,11 @@ packages:
 
   /@prisma/engines-version/3.13.0-17.efdf9b1183dddfd4258cd181a72125755215ab7b:
     resolution: {integrity: sha512-TGp9rvgJIKo8NgvAHSwOosbut9mTA7VC6/rpQI9gh+ySSRjdQFhbGyNUiOcQrlI9Ob2DWeO7y4HEnhdKxYiECg==}
+    dev: false
+
+  /@prisma/engines-version/3.14.0-36.2b0c12756921c891fec4f68d9444e18c7d5d4a6a:
+    resolution: {integrity: sha512-D+yHzq4a2r2Rrd0ZOW/mTZbgDIkUkD8ofKgusEI1xPiZz60Daks+UM7Me2ty5FzH3p/TgyhBpRrfIHx+ha20RQ==}
+    dev: true
 
   /@prisma/engines/3.13.0-17.efdf9b1183dddfd4258cd181a72125755215ab7b:
     resolution: {integrity: sha512-Ip9CcCeUocH61eXu4BUGpvl5KleQyhcUVLpWCv+0ZmDv44bFaDpREqjGHHdRupvPN/ugB6gTlD9b9ewdj02yVA==}
@@ -2734,8 +2759,10 @@ packages:
       zen-observable:
         optional: true
     dependencies:
-      any-observable: 0.3.0
+      any-observable: 0.3.0_rxjs@6.6.7
       rxjs: 6.6.7
+    transitivePeerDependencies:
+      - zenObservable
     dev: true
 
   /@sindresorhus/is/0.14.0:
@@ -4321,9 +4348,19 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /any-observable/0.3.0:
+  /any-observable/0.3.0_rxjs@6.6.7:
     resolution: {integrity: sha512-/FQM1EDkTsf63Ub2C6O7GuYFDsSXUwsaZDurV0np41ocwq0jthUAYCmhBX9f+KwlaCgIuWyr/4WlUQUBfKfZog==}
     engines: {node: '>=6'}
+    peerDependencies:
+      rxjs: '*'
+      zenObservable: '*'
+    peerDependenciesMeta:
+      rxjs:
+        optional: true
+      zenObservable:
+        optional: true
+    dependencies:
+      rxjs: 6.6.7
     dev: true
 
   /anymatch/2.0.0:
@@ -4331,6 +4368,8 @@ packages:
     dependencies:
       micromatch: 3.1.10
       normalize-path: 2.1.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /anymatch/3.1.2:
@@ -4435,6 +4474,7 @@ packages:
       parseurl: 1.3.3
     transitivePeerDependencies:
       - encoding
+      - supports-color
     dev: false
 
   /apollo-server-plugin-base/3.5.3_graphql@16.3.0:
@@ -4793,6 +4833,8 @@ packages:
       qs: 6.9.7
       raw-body: 2.4.3
       type-is: 1.6.18
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /body-parser/1.20.0:
@@ -4811,6 +4853,8 @@ packages:
       raw-body: 2.5.1
       type-is: 1.6.18
       unpipe: 1.0.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /boolbase/1.0.0:
@@ -4844,6 +4888,8 @@ packages:
       snapdragon-node: 2.1.1
       split-string: 3.1.0
       to-regex: 3.0.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /braces/3.0.2:
@@ -5148,6 +5194,8 @@ packages:
       upath: 1.2.0
     optionalDependencies:
       fsevents: 1.2.13
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /chokidar/3.5.3:
@@ -5169,8 +5217,8 @@ packages:
     engines: {node: '>=6.0'}
     dev: true
 
-  /class-importer/0.1.3:
-    resolution: {integrity: sha512-AZyQqIkkynKgQWPsMpKg3I0eVnfsZRgiYKcbLYhdiYdaY9ncC4r1hp6HG9sSmyGow+eiZhy6TmaNOmR7qSOPmg==}
+  /class-importer/0.1.6:
+    resolution: {integrity: sha512-9e0aJHfHJNK7sokysMMe9qwkluoqJoUAc6snuEC+yeTLQTeAjPbfsIGh0T8ldXwFwfyhbOhk/5488D3VKMnhRA==}
     dependencies:
       dependency-graph: 0.11.0
       recursive-readdir: 2.2.2
@@ -5628,6 +5676,11 @@ packages:
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
     dependencies:
       ms: 2.0.0
 
@@ -6518,6 +6571,8 @@ packages:
       regex-not: 1.0.2
       snapdragon: 0.8.2
       to-regex: 3.0.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /expand-tilde/2.0.2:
@@ -6561,6 +6616,8 @@ packages:
       type-is: 1.6.18
       utils-merge: 1.0.1
       vary: 1.1.2
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /ext/1.6.0:
@@ -6618,6 +6675,8 @@ packages:
       regex-not: 1.0.2
       snapdragon: 0.8.2
       to-regex: 3.0.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /extract-files/11.0.0:
@@ -6781,6 +6840,8 @@ packages:
       parseurl: 1.3.3
       statuses: 1.5.0
       unpipe: 1.0.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /find-up/1.1.2:
@@ -6815,6 +6876,8 @@ packages:
       is-glob: 3.1.0
       micromatch: 3.1.10
       resolve-dir: 1.0.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /findup-sync/3.0.0:
@@ -6825,6 +6888,8 @@ packages:
       is-glob: 4.0.3
       micromatch: 3.1.10
       resolve-dir: 1.0.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /fined/1.2.0:
@@ -7160,6 +7225,8 @@ packages:
       just-debounce: 1.1.0
       normalize-path: 3.0.0
       object.defaults: 1.1.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /glob/7.2.0:
@@ -7467,6 +7534,8 @@ packages:
       semver-greatest-satisfied-range: 1.1.0
       v8flags: 3.2.0
       yargs: 7.1.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /gulp-prompt/1.2.0:
@@ -7517,6 +7586,8 @@ packages:
       gulp-cli: 2.3.0
       undertaker: 1.3.0
       vinyl-fs: 3.0.3
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /gulplog/1.0.0:
@@ -8518,6 +8589,8 @@ packages:
       object.map: 1.0.1
       rechoir: 0.6.2
       resolve: 1.22.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /lines-and-columns/1.2.4:
@@ -8570,6 +8643,7 @@ packages:
       rxjs: 6.6.7
     transitivePeerDependencies:
       - zen-observable
+      - zenObservable
     dev: true
 
   /load-json-file/1.1.0:
@@ -8835,6 +8909,8 @@ packages:
       micromatch: 3.1.10
       resolve: 1.22.0
       stack-trace: 0.0.10
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /mathml-tag-names/2.1.3:
@@ -8931,6 +9007,8 @@ packages:
       regex-not: 1.0.2
       snapdragon: 0.8.2
       to-regex: 3.0.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /micromatch/4.0.5:
@@ -9112,6 +9190,8 @@ packages:
       regex-not: 1.0.2
       snapdragon: 0.8.2
       to-regex: 3.0.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /natural-compare/1.4.0:
@@ -9852,11 +9932,11 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /prisma-fixtures/0.1.6_prisma@3.13.0:
-    resolution: {integrity: sha512-6i2ZqrI9+4WCME3YTg9Qtu+3cgPDcp01Gx9jbFnXihFqXrPP7x2r9bwdSt/LK4xnPzbykbjpFfXIWjxbiQAVcQ==}
+  /prisma-fixtures/0.1.9_prisma@3.13.0:
+    resolution: {integrity: sha512-Km6xsLMrONn37L1n6hMjlCIhtU+p+tYMqHfE2QP9mDXOLECrA/zTpQ9qwkKRsg6VaWX1tj77yONK8MxfoRtcCg==}
     dependencies:
-      '@prisma/client': 3.13.0_prisma@3.13.0
-      class-importer: 0.1.3
+      '@prisma/client': 3.14.0_prisma@3.13.0
+      class-importer: 0.1.6
     transitivePeerDependencies:
       - prisma
     dev: true
@@ -10102,6 +10182,8 @@ packages:
       graceful-fs: 4.2.9
       micromatch: 3.1.10
       readable-stream: 2.3.7
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /readdirp/3.6.0:
@@ -10531,6 +10613,8 @@ packages:
       on-finished: 2.3.0
       range-parser: 1.2.1
       statuses: 1.5.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /sentence-case/3.0.4:
@@ -10555,6 +10639,8 @@ packages:
       escape-html: 1.0.3
       parseurl: 1.3.3
       send: 0.17.2
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /set-blocking/2.0.0:
@@ -10709,6 +10795,8 @@ packages:
       source-map: 0.5.7
       source-map-resolve: 0.5.3
       use: 3.1.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /sorcery/0.10.0:
