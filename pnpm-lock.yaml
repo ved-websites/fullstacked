@@ -86,7 +86,7 @@ importers:
       gulp-typescript: 6.0.0-alpha.1
       nest-typed-config: 2.4.1
       prisma: 3.13.0
-      prisma-fixtures: 0.1.9
+      prisma-fixtures: 0.1.11
       prisma-nestjs-graphql: 15.3.0
       reflect-metadata: 0.1.13
       rxjs: 7.5.5
@@ -142,7 +142,7 @@ importers:
       gulp-replace: 1.1.3
       gulp-typescript: 6.0.0-alpha.1_typescript@4.6.4
       prisma: 3.13.0
-      prisma-fixtures: 0.1.9_prisma@3.13.0
+      prisma-fixtures: 0.1.11
       prisma-nestjs-graphql: 15.3.0_y67lm3svokr4p3tqyyp2rumfa4
       supertest: 6.2.3
       ts-node: 10.7.0_pekypooaliwpg7ddlflnyizj34
@@ -2622,20 +2622,6 @@ packages:
       prisma: 3.13.0
     dev: false
 
-  /@prisma/client/3.14.0_prisma@3.13.0:
-    resolution: {integrity: sha512-atb41UpgTR1MCst0VIbiHTMw8lmXnwUvE1KyUCAkq08+wJyjRE78Due+nSf+7uwqQn+fBFYVmoojtinhlLOSaA==}
-    engines: {node: '>=12.6'}
-    requiresBuild: true
-    peerDependencies:
-      prisma: '*'
-    peerDependenciesMeta:
-      prisma:
-        optional: true
-    dependencies:
-      '@prisma/engines-version': 3.14.0-36.2b0c12756921c891fec4f68d9444e18c7d5d4a6a
-      prisma: 3.13.0
-    dev: true
-
   /@prisma/debug/3.13.0:
     resolution: {integrity: sha512-uzL4ug7pWbiodTSW/WMAJ9SOP/ulxn6EVlV4YTpKaidgPMOLPqSV7iLZP7P4w7q3HGSpWZp+kr2a4nq7+ANEfg==}
     dependencies:
@@ -2647,10 +2633,6 @@ packages:
   /@prisma/engines-version/3.13.0-17.efdf9b1183dddfd4258cd181a72125755215ab7b:
     resolution: {integrity: sha512-TGp9rvgJIKo8NgvAHSwOosbut9mTA7VC6/rpQI9gh+ySSRjdQFhbGyNUiOcQrlI9Ob2DWeO7y4HEnhdKxYiECg==}
     dev: false
-
-  /@prisma/engines-version/3.14.0-36.2b0c12756921c891fec4f68d9444e18c7d5d4a6a:
-    resolution: {integrity: sha512-D+yHzq4a2r2Rrd0ZOW/mTZbgDIkUkD8ofKgusEI1xPiZz60Daks+UM7Me2ty5FzH3p/TgyhBpRrfIHx+ha20RQ==}
-    dev: true
 
   /@prisma/engines/3.13.0-17.efdf9b1183dddfd4258cd181a72125755215ab7b:
     resolution: {integrity: sha512-Ip9CcCeUocH61eXu4BUGpvl5KleQyhcUVLpWCv+0ZmDv44bFaDpREqjGHHdRupvPN/ugB6gTlD9b9ewdj02yVA==}
@@ -5184,10 +5166,9 @@ packages:
     engines: {node: '>=6.0'}
     dev: true
 
-  /class-importer/0.1.6:
-    resolution: {integrity: sha512-9e0aJHfHJNK7sokysMMe9qwkluoqJoUAc6snuEC+yeTLQTeAjPbfsIGh0T8ldXwFwfyhbOhk/5488D3VKMnhRA==}
+  /class-importer/0.2.2:
+    resolution: {integrity: sha512-N9VJCkvKJ7X1FWheqyoBTEHC6DwKvP5g6aRZjJ/Qvlp+4vyfozcKm4Ogg6Se9bOHhMpIkPQTvs6vAV7NZRAZhQ==}
     dependencies:
-      dependency-graph: 0.11.0
       recursive-readdir: 2.2.2
     dev: true
 
@@ -9855,13 +9836,11 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /prisma-fixtures/0.1.9_prisma@3.13.0:
-    resolution: {integrity: sha512-Km6xsLMrONn37L1n6hMjlCIhtU+p+tYMqHfE2QP9mDXOLECrA/zTpQ9qwkKRsg6VaWX1tj77yONK8MxfoRtcCg==}
+  /prisma-fixtures/0.1.11:
+    resolution: {integrity: sha512-c7rzTTA4+t7PMZ/lvp1m6P+cmjs9AsqatwZbFCGKrAU7ICinJMGxzKMVoTK3dxSjyRO3dFZtsNty93DgOHqQzw==}
     dependencies:
-      '@prisma/client': 3.14.0_prisma@3.13.0
-      class-importer: 0.1.6
-    transitivePeerDependencies:
-      - prisma
+      class-importer: 0.2.2
+      dependency-graph: 0.11.0
     dev: true
 
   /prisma-nestjs-graphql/15.3.0_y67lm3svokr4p3tqyyp2rumfa4:
