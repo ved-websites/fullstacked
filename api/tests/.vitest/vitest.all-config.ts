@@ -4,6 +4,7 @@ import specsConfigs from './vitest.specs-config';
 
 const allConfigs = defineVitestConfig({
 	plugins: [...e2eConfigs.plugins, ...specsConfigs.plugins],
+	ssr: e2eConfigs.ssr,
 	test: {
 		include: [...e2eConfigs.test.include, ...specsConfigs.test.include],
 	},
