@@ -9,16 +9,15 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
   output   = "_generated/.prisma/client"
-  // previewFeatures = []
 }
 
 generator nestgraphql {
   provider = "node prisma/generators/prisma-nestjs-graphql.js"
   output   = "../src/_generated/prisma-nestjs-graphql"
-  reExport = Directories
+  reExport = "Directories"
 
   fields_Validator_from  = "class-validator"
-  fields_Validator_input = true
+  fields_Validator_input = "true"
 }
 
 model User {
@@ -37,7 +36,7 @@ model Message {
   text String
   /// @HideField({ output: false, input: true })
   time DateTime @default(now())
-  user User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   /// @HideField({ output: true, input: true })
   userId Int
