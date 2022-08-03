@@ -1,5 +1,5 @@
 import { exec as execNoPromise } from 'child_process';
-import del from 'del';
+import { deleteAsync } from 'del';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import gulp, { type TaskFunction } from 'gulp';
@@ -101,7 +101,7 @@ async function seedDatabase() {
 // Delete tasks
 
 function deleteDist() {
-	return del(configs.buildDest);
+	return deleteAsync(configs.buildDest);
 }
 
 // function deleteUploads() {
@@ -109,7 +109,7 @@ function deleteDist() {
 // }
 
 function deletePrismaGenerated() {
-	return del(configs.prismaGeneratedFolder);
+	return deleteAsync(configs.prismaGeneratedFolder);
 }
 
 // ------------------------
