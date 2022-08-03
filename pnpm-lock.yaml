@@ -65,7 +65,7 @@ importers:
       apollo-server-core: 3.7.0
       apollo-server-express: 3.7.0
       axios: 0.27.2
-      c8: 7.11.2
+      c8: 7.12.0
       class-transformer: 0.4.0
       class-validator: 0.13.2
       deepmerge: 4.2.2
@@ -130,7 +130,7 @@ importers:
       '@types/gulp-rename': 2.0.1
       '@types/supertest': 2.0.12
       '@v-ed/tsconfig': 0.2.0
-      c8: 7.11.2
+      c8: 7.12.0
       del: 6.0.0
       graphql-config: 4.3.0_4hcubs5x32tutgf4mlhjf2tgoi
       graphql-tag: 2.12.6_graphql@16.3.0
@@ -147,7 +147,7 @@ importers:
       typescript: 4.6.4
       unplugin-swc: 1.3.2_@swc+core@1.2.179
       vite-tsconfig-paths: 3.5.0
-      vitest: 0.20.2_c8@7.11.2
+      vitest: 0.20.2_c8@7.12.0
 
   client:
     specifiers:
@@ -4901,8 +4901,8 @@ packages:
     resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
     engines: {node: '>= 0.8'}
 
-  /c8/7.11.2:
-    resolution: {integrity: sha512-6ahJSrhS6TqSghHm+HnWt/8Y2+z0hM/FQyB1ybKhAR30+NYL9CTQ1uwHxuWw6U7BHlHv6wvhgOrH81I+lfCkxg==}
+  /c8/7.12.0:
+    resolution: {integrity: sha512-CtgQrHOkyxr5koX1wEUmN/5cfDa2ckbHRA4Gy5LAL0zaCFtVWJS5++n+w4/sr2GWGerBxgTjpKeDclk/Qk6W/A==}
     engines: {node: '>=10.12.0'}
     hasBin: true
     dependencies:
@@ -5235,7 +5235,7 @@ packages:
     dev: true
 
   /cliui/3.2.0:
-    resolution: {integrity: sha1-EgYBU3qRbSmUD5NNo7SNWFo5IT0=}
+    resolution: {integrity: sha512-0yayqDxWQbqk3ojkYqUKqaAQ6AfNKeKWRNA8kR0WXzAsdHpP4BIaOmMAG87JGuO6qcobyW4GjxHd9PmhEd+T9w==}
     dependencies:
       string-width: 1.0.2
       strip-ansi: 3.0.1
@@ -6973,7 +6973,7 @@ packages:
       - supports-color
 
   /find-up/1.1.2:
-    resolution: {integrity: sha1-ay6YIrGizgpgq2TWEOzK1TyyTQ8=}
+    resolution: {integrity: sha512-jvElSjyuo4EMQGoTwo1uJU5pQMwTW5lS1x05zzfJuTIyLR3zwO27LYrxNg+dlvKpGOuGy/MzBdXh80g0ve5+HA==}
     engines: {node: '>=0.10.0'}
     dependencies:
       path-exists: 2.1.0
@@ -7111,7 +7111,7 @@ packages:
       memfs: 3.4.1
       minimatch: 3.1.2
       schema-utils: 3.1.1
-      semver: 7.3.5
+      semver: 7.3.7
       tapable: 2.2.1
       typescript: 4.6.2
       webpack: 5.71.0_@swc+core@1.2.179
@@ -9821,7 +9821,7 @@ packages:
     dev: true
 
   /path-exists/2.1.0:
-    resolution: {integrity: sha1-D+tsZPD8UY2adU3V77YscCJ2H0s=}
+    resolution: {integrity: sha512-yTltuKuhtNeFJKa1PiRzfLAU5182q1y4Eb4XCJ3PBqyzEDkAZRzBrKKBct682ls9reBVHf9udYLN5Nd+K1B9BQ==}
     engines: {node: '>=0.10.0'}
     dependencies:
       pinkie-promise: 2.0.1
@@ -10706,14 +10706,6 @@ packages:
     hasBin: true
     dev: true
 
-  /semver/7.3.5:
-    resolution: {integrity: sha512-PoeGJYh8HK4BTO/a9Tf6ZG3veo/A7ZVsYrSA6J8ny9nb3B1VrpkuN+z9OE5wfE5p6H4LchYZsegiQgbJD94ZFQ==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      lru-cache: 6.0.0
-    dev: true
-
   /semver/7.3.7:
     resolution: {integrity: sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==}
     engines: {node: '>=10'}
@@ -11077,7 +11069,7 @@ packages:
     dev: true
 
   /string-width/1.0.2:
-    resolution: {integrity: sha1-EYvfW4zcUaKn5w0hHgfisLmxB9M=}
+    resolution: {integrity: sha512-0XsVpQLnVCXHJfyEs8tC0zpTVIr5PKKsQtkT29IwupnPTjtPmQ3xT/4yCREF9hYkV/3M3kzcUTSAZT6a6h81tw==}
     engines: {node: '>=0.10.0'}
     dependencies:
       code-point-at: 1.1.0
@@ -12344,7 +12336,7 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest/0.20.2_c8@7.11.2:
+  /vitest/0.20.2_c8@7.12.0:
     resolution: {integrity: sha512-AFXTHrwG4d2OO6SAL8WP5ZkOwLtgeF4tlrHfXFqrHc+5chNegeR53pge0lv/C4316SqJ2DbYaUBH8vh3CdF+BQ==}
     engines: {node: '>=v14.16.0'}
     hasBin: true
@@ -12372,7 +12364,7 @@ packages:
       '@types/chai': 4.3.1
       '@types/chai-subset': 1.3.3
       '@types/node': 17.0.23
-      c8: 7.11.2
+      c8: 7.12.0
       chai: 4.3.6
       debug: 4.3.4
       local-pkg: 0.4.2
