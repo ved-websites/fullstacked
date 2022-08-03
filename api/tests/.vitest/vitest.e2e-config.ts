@@ -2,7 +2,10 @@ import swc from 'unplugin-swc';
 import { defineVitestConfig } from './base';
 
 const e2eConfigs = defineVitestConfig({
-	plugins: [swc.vite()],
+	plugins: [
+		// @ts-ignore
+		swc.vite(),
+	],
 	ssr: {
 		noExternal: ['prisma-fixtures', 'class-importer'],
 	},

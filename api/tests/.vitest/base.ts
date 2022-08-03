@@ -16,7 +16,10 @@ function defineConfig<T extends UserConfig>(config: T): T {
 }
 
 const vitestBaseConfig = defineConfig({
-	plugins: [VitePluginTsConfigPaths({ loose: true })],
+	plugins: [
+		// @ts-ignore
+		VitePluginTsConfigPaths({ loose: true }),
+	],
 	test: {
 		testTimeout: 30000,
 		passWithNoTests: true,
