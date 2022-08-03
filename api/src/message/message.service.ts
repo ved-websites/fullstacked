@@ -10,7 +10,9 @@ export class MessageService {
 	constructor(private readonly prisma: PrismaService, private pubSub: PubSub) {}
 
 	async find(info: GraphQLResolveInfo, where?: MessageWhereInput) {
-		const messages = await this.prisma.message.findMany({ where, ...getPrismaSelector(info) });
+		const selectors = await getPrismaSelector(info);
+
+		const messages = await this.prisma.message.findMany({ where, ...selectors });
 
 		return messages;
 	}

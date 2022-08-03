@@ -31,8 +31,8 @@ type PrismaSelector = Record<string, unknown>;
 export class PubSub extends PubSubGraphQL {
 	eventSubsSelectors: Record<string, unknown[] | undefined> = {};
 
-	prismaSubscribe(triggers: AsyncIteratorParamType, info: GraphQLResolveInfo, onUnsubscribe?: () => PromiseLike<void> | void) {
-		const select = getPrismaSelector(info);
+	async prismaSubscribe(triggers: AsyncIteratorParamType, info: GraphQLResolveInfo, onUnsubscribe?: () => PromiseLike<void> | void) {
+		const select = await getPrismaSelector(info);
 
 		const fullTriggers = Array.isArray(triggers) ? triggers : [triggers];
 
@@ -58,7 +58,7 @@ export class PubSub extends PubSubGraphQL {
 		info: GraphQLResolveInfo,
 		mutator: (allSelect: PrismaSelector) => PromiseLike<T> | T,
 	) {
-		const select = getPrismaSelector(info);
+		const select = await getPrismaSelector(info);
 
 		const fullTriggers = Array.isArray(triggers) ? triggers : [triggers];
 
