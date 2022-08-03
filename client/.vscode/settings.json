@@ -2,5 +2,4 @@
 	"css.validate": false,
 	"less.validate": false,
 	"scss.validate": false,
-	"jest.jestCommandLine": "pnpm test",
 }

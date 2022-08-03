@@ -7,7 +7,7 @@
 		{
 			"name": "Launch Edge",
 			"request": "launch",
-			"type": "pwa-msedge",
+			"type": "msedge",
 			"url": "http://localhost:5000",
 			"webRoot": "${workspaceFolder}/src",
 			"timeout": 30000,
