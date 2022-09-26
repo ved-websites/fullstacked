@@ -87,7 +87,7 @@ importers:
       nest-typed-config: 2.4.2
       prisma: 4.1.1
       prisma-fixtures: 0.1.11
-      prisma-nestjs-graphql: 17.0.0
+      prisma-nestjs-graphql: 17.0.1
       reflect-metadata: 0.1.13
       rxjs: 7.5.6
       supertest: 6.2.4
@@ -143,7 +143,7 @@ importers:
       gulp-typescript: 6.0.0-alpha.1_typescript@4.7.4
       prisma: 4.1.1
       prisma-fixtures: 0.1.11
-      prisma-nestjs-graphql: 17.0.0
+      prisma-nestjs-graphql: 17.0.1
       supertest: 6.2.4
       ts-node: 10.9.1_phjeyyababh7nspptcoxgc6gue
       typescript: 4.7.4
@@ -10510,8 +10510,8 @@ packages:
       dependency-graph: 0.11.0
     dev: true
 
-  /prisma-nestjs-graphql/17.0.0:
-    resolution: {integrity: sha512-et/QVi1tOyYcNCsk60aIl4SN6UtuhbW6ph5NSITT1KC+HU0MQ2RHOqi4/WH+3ZQjQ3MPNPYX1V9lV6UlWRZENQ==}
+  /prisma-nestjs-graphql/17.0.1:
+    resolution: {integrity: sha512-QH4A+O8arymgvlGaf2SXDbXKltBonGYUSXSb2HZyXoeoIZQHh1QqCcX6CJ+FfSFd24f5sNr1SFn0xk0b4fpUCA==}
     hasBin: true
     dependencies:
       '@prisma/generator-helper': 4.1.1
