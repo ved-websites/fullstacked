@@ -74,7 +74,7 @@ importers:
       dotenv: 16.0.1
       dotenv-expand: 8.0.3
       graphql: 16.3.0
-      graphql-config: 4.3.5
+      graphql-config: 4.3.6
       graphql-depth-limit: 1.1.0
       graphql-subscriptions: 2.0.0
       graphql-tag: 2.12.6
@@ -134,7 +134,7 @@ importers:
       '@v-ed/tsconfig': 0.2.0
       c8: 7.12.0
       del: 6.1.1
-      graphql-config: 4.3.5_f64bqjq6vqtzjwxifsd4cnsacy
+      graphql-config: 4.3.6_f64bqjq6vqtzjwxifsd4cnsacy
       graphql-tag: 2.12.6_graphql@16.3.0
       gulp: 4.0.2
       gulp-prompt: 1.2.0
@@ -1055,7 +1055,7 @@ packages:
       glob: 7.2.0
       globby: 11.1.0
       graphql: 16.3.0
-      graphql-config: 4.3.5_d4qwhyosd5ugd4krfym75k4ymq
+      graphql-config: 4.3.6_d4qwhyosd5ugd4krfym75k4ymq
       inquirer: 8.2.0
       is-glob: 4.0.3
       json-to-pretty-yaml: 1.2.2
@@ -7858,8 +7858,8 @@ packages:
     resolution: {integrity: sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==}
     dev: true
 
-  /graphql-config/4.3.5_d4qwhyosd5ugd4krfym75k4ymq:
-    resolution: {integrity: sha512-B4jXhHL7j3llCem+ACeo48wvVYhtJxRyt5SfSnvywbRlVYyUzt5ibZV6WJU2Yii2/rcVRIGi7BHDgcAPWdWdJg==}
+  /graphql-config/4.3.6_d4qwhyosd5ugd4krfym75k4ymq:
+    resolution: {integrity: sha512-i7mAPwc0LAZPnYu2bI8B6yXU5820Wy/ArvmOseDLZIu0OU1UTULEuexHo6ZcHXeT9NvGGaUPQZm8NV3z79YydA==}
     engines: {node: '>= 10.0.0'}
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
@@ -7888,8 +7888,8 @@ packages:
       - utf-8-validate
     dev: true
 
-  /graphql-config/4.3.5_f64bqjq6vqtzjwxifsd4cnsacy:
-    resolution: {integrity: sha512-B4jXhHL7j3llCem+ACeo48wvVYhtJxRyt5SfSnvywbRlVYyUzt5ibZV6WJU2Yii2/rcVRIGi7BHDgcAPWdWdJg==}
+  /graphql-config/4.3.6_f64bqjq6vqtzjwxifsd4cnsacy:
+    resolution: {integrity: sha512-i7mAPwc0LAZPnYu2bI8B6yXU5820Wy/ArvmOseDLZIu0OU1UTULEuexHo6ZcHXeT9NvGGaUPQZm8NV3z79YydA==}
     engines: {node: '>= 10.0.0'}
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
