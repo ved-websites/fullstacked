@@ -178,7 +178,7 @@ importers:
       tslib: 2.4.0
       typescript: 4.6.4
       urql: 2.2.3
-      vite-plugin-windicss: 1.8.4
+      vite-plugin-windicss: 1.8.8
       vite-tsconfig-paths: 3.4.1
       windicss: 3.5.2
       workbox-precaching: 6.5.3
@@ -216,7 +216,7 @@ importers:
       tslib: 2.4.0
       typescript: 4.6.4
       urql: 2.2.3_graphql@16.5.0
-      vite-plugin-windicss: 1.8.4
+      vite-plugin-windicss: 1.8.8
       vite-tsconfig-paths: 3.4.1
       windicss: 3.5.2
 
@@ -304,8 +304,8 @@ packages:
       - chokidar
     dev: true
 
-  /@antfu/utils/0.5.1:
-    resolution: {integrity: sha512-8Afo0+xvYe1K8Wm4xHTymfTkpzy36aaqDvhXIayUwl+mecMG9Xzl3XjXa6swG6Bk8FBeQ646RyvmsYt6+2Be9g==}
+  /@antfu/utils/0.5.2:
+    resolution: {integrity: sha512-CQkeV+oJxUazwjlHD0/3ZD08QWKuGQkhnrKo3e6ly5pd48VUpXbb77q0xMU4+vc2CkJnDS02Eq/M9ugyX20XZA==}
     dev: true
 
   /@apollo/protobufjs/1.2.4:
@@ -3520,7 +3520,7 @@ packages:
       '@rollup/pluginutils': 4.2.1
       debug: 4.3.4
       kleur: 4.1.4
-      magic-string: 0.26.1
+      magic-string: 0.26.7
       svelte: 3.48.0
       svelte-hmr: 0.14.11_svelte@3.48.0
       vite: 2.9.8_sass@1.51.0
@@ -4368,26 +4368,26 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@windicss/config/1.8.4:
-    resolution: {integrity: sha512-i4fFGFfZoRess6WMkauykHC3PFd9xKYVx7lSuLfMK7sgo6x3+l4dY42GbsWMHyLqH1sTMfyt1LgfXSIKYJozSA==}
+  /@windicss/config/1.8.8:
+    resolution: {integrity: sha512-kNas/zMkwsDFMcJPmHoPDJlQi1MHvYwx8BSxo9JKcbCW7Gaj8Rg2CnEImX5YdT+ZcFQqQ+kUn0Vi/ScsAxhGEw==}
     dependencies:
       debug: 4.3.4
-      jiti: 1.13.0
-      windicss: 3.5.2
+      jiti: 1.16.0
+      windicss: 3.5.6
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@windicss/plugin-utils/1.8.4:
-    resolution: {integrity: sha512-DqJVwAfzlgd8nYSNlmhXOey32pI8UwH7QiOWdFS/AR2O/q9oLDGHDn97Its/kZdfoyhi8ylwZNP2Pk0H7cihhQ==}
+  /@windicss/plugin-utils/1.8.8:
+    resolution: {integrity: sha512-a+npbTKmdrAvnMqzVJvyPa29xyNcPaSkt6qQpgWY9m0WyVlYd9BM8V0+cbqt279fTlvlaZpUs9dqmilB1PUH6g==}
     dependencies:
-      '@antfu/utils': 0.5.1
-      '@windicss/config': 1.8.4
+      '@antfu/utils': 0.5.2
+      '@windicss/config': 1.8.8
       debug: 4.3.4
       fast-glob: 3.2.11
-      magic-string: 0.26.1
+      magic-string: 0.26.7
       micromatch: 4.0.5
-      windicss: 3.5.2
+      windicss: 3.5.6
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8915,8 +8915,8 @@ packages:
       supports-color: 8.1.1
     dev: true
 
-  /jiti/1.13.0:
-    resolution: {integrity: sha512-/n9mNxZj/HDSrincJ6RP+L+yXbpnB8FybySBa+IjIaoH9FIxBbrbRT5XUbe8R7zuVM2AQqNMNDDqz0bzx3znOQ==}
+  /jiti/1.16.0:
+    resolution: {integrity: sha512-L3BJStEf5NAqNuzrpfbN71dp43mYIcBUlCRea/vdyv5dW/AYa1d4bpelko4SHdY3I6eN9Wzyasxirj1/vv5kmg==}
     hasBin: true
     dev: true
 
@@ -9418,6 +9418,13 @@ packages:
 
   /magic-string/0.26.1:
     resolution: {integrity: sha512-ndThHmvgtieXe8J/VGPjG+Apu7v7ItcD5mhEIvOscWjPF/ccOiLxHaSuCAS2G+3x4GKsAbT8u7zdyamupui8Tg==}
+    engines: {node: '>=12'}
+    dependencies:
+      sourcemap-codec: 1.4.8
+    dev: true
+
+  /magic-string/0.26.7:
+    resolution: {integrity: sha512-hX9XH3ziStPoPhJxLq1syWuZMxbDvGNbVchfrdCtanC7D13888bMFow61x8axrx+GfHLtVeAx2kxL7tTGRl+Ow==}
     engines: {node: '>=12'}
     dependencies:
       sourcemap-codec: 1.4.8
@@ -12753,15 +12760,15 @@ packages:
       replace-ext: 1.0.1
     dev: true
 
-  /vite-plugin-windicss/1.8.4:
-    resolution: {integrity: sha512-LSZAO8BZn3x406GRbYX5t5ONXXJVdqiQtN1qrznLA/Dy5/NzZVhfcrL6N1qEYYO7HsCDT4pLAjTzObvDnM9Y8A==}
+  /vite-plugin-windicss/1.8.8:
+    resolution: {integrity: sha512-iyu+ZX0NmhNEUaLPv7xtC+EFRBpWMmw0nhd9a9upayfuNG/thwslKiQKmRB7U/dG0k/2oWLvPDvN/B9i7oRgSA==}
     peerDependencies:
-      vite: ^2.0.1
+      vite: ^2.0.1 || ^3.0.0
     dependencies:
-      '@windicss/plugin-utils': 1.8.4
+      '@windicss/plugin-utils': 1.8.8
       debug: 4.3.4
       kolorist: 1.5.1
-      windicss: 3.5.2
+      windicss: 3.5.6
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13016,6 +13023,12 @@ packages:
 
   /windicss/3.5.2:
     resolution: {integrity: sha512-Vy06iCcKXjR9izEViwIcwdaZHouzNWmjqWmVt3lyfZVNm6hWz6ME6s+6pIwrHMbylbal9hW3M9LRbN9mzFhccQ==}
+    engines: {node: '>= 12'}
+    hasBin: true
+    dev: true
+
+  /windicss/3.5.6:
+    resolution: {integrity: sha512-P1mzPEjgFMZLX0ZqfFht4fhV/FX8DTG7ERG1fBLiWvd34pTLVReS5CVsewKn9PApSgXnVfPWwvq+qUsRwpnwFA==}
     engines: {node: '>= 12'}
     hasBin: true
     dev: true
