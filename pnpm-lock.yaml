@@ -180,7 +180,7 @@ importers:
       urql: 2.2.3
       vite-plugin-windicss: 1.8.8
       vite-tsconfig-paths: 3.4.1
-      windicss: 3.5.2
+      windicss: 3.5.6
       workbox-precaching: 6.5.3
       workbox-routing: 6.5.3
       workbox-strategies: 6.5.3
@@ -218,7 +218,7 @@ importers:
       urql: 2.2.3_graphql@16.5.0
       vite-plugin-windicss: 1.8.8
       vite-tsconfig-paths: 3.4.1
-      windicss: 3.5.2
+      windicss: 3.5.6
 
 packages:
 
@@ -13020,12 +13020,6 @@ packages:
     hasBin: true
     dependencies:
       isexe: 2.0.0
-
-  /windicss/3.5.2:
-    resolution: {integrity: sha512-Vy06iCcKXjR9izEViwIcwdaZHouzNWmjqWmVt3lyfZVNm6hWz6ME6s+6pIwrHMbylbal9hW3M9LRbN9mzFhccQ==}
-    engines: {node: '>= 12'}
-    hasBin: true
-    dev: true
 
   /windicss/3.5.6:
     resolution: {integrity: sha512-P1mzPEjgFMZLX0ZqfFht4fhV/FX8DTG7ERG1fBLiWvd34pTLVReS5CVsewKn9PApSgXnVfPWwvq+qUsRwpnwFA==}

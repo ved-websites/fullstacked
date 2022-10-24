@@ -54,6 +54,6 @@
     "urql": "2.2.3",
     "vite-plugin-windicss": "1.8.8",
     "vite-tsconfig-paths": "3.4.1",
-    "windicss": "3.5.2"
+    "windicss": "3.5.6"
   }
 }
