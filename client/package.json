@@ -25,10 +25,10 @@
     "graphql": "16.5.0",
     "graphql-ws": "5.8.1",
     "minimum-delayer": "0.3.2",
-    "workbox-precaching": "6.5.3",
-    "workbox-routing": "6.5.3",
-    "workbox-strategies": "6.5.3",
-    "workbox-window": "6.5.3"
+    "workbox-precaching": "6.5.4",
+    "workbox-routing": "6.5.4",
+    "workbox-strategies": "6.5.4",
+    "workbox-window": "6.5.4"
   },
   "devDependencies": {
     "@material/theme": "14.0.0",
