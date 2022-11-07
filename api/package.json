@@ -61,7 +61,7 @@
     "rxjs": "7.5.7"
   },
   "devDependencies": {
-    "@faker-js/faker": "7.3.0",
+    "@faker-js/faker": "7.6.0",
     "@nestjs/cli": "9.0.0",
     "@nestjs/schematics": "9.0.1",
     "@nestjs/testing": "9.0.8",

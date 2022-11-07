@@ -44,7 +44,7 @@ importers:
 
   api:
     specifiers:
-      '@faker-js/faker': 7.3.0
+      '@faker-js/faker': 7.6.0
       '@nestjs/apollo': 10.0.19
       '@nestjs/cli': 9.0.0
       '@nestjs/common': 9.0.8
@@ -121,7 +121,7 @@ importers:
       reflect-metadata: 0.1.13
       rxjs: 7.5.7
     devDependencies:
-      '@faker-js/faker': 7.3.0
+      '@faker-js/faker': 7.6.0
       '@nestjs/cli': 9.0.0_@swc+core@1.2.244
       '@nestjs/schematics': 9.0.1_typescript@4.7.4
       '@nestjs/testing': 9.0.8_lwpb2d46aphloofqfhxfte74su
@@ -1020,8 +1020,8 @@ packages:
       - supports-color
     dev: true
 
-  /@faker-js/faker/7.3.0:
-    resolution: {integrity: sha512-1W0PZezq2rxlAssoWemi9gFRD8IQxvf0FPL5Km3TOmGHFG7ib0TbFBJ0yC7D/1NsxunjNTK6WjUXV8ao/mKZ5w==}
+  /@faker-js/faker/7.6.0:
+    resolution: {integrity: sha512-XK6BTq1NDMo9Xqw/YkYyGjSsg44fbNwYRx7QK2CuoQgyy+f1rrTDHoExVM5PsyXCtfl2vs2vVJ0MN0yN6LppRw==}
     engines: {node: '>=14.0.0', npm: '>=6.0.0'}
     dev: true
 
