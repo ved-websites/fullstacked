@@ -57,7 +57,7 @@ importers:
       '@prisma/client': 4.1.1
       '@prisma/internals': 4.1.1
       '@swc/core': 1.3.23
-      '@types/express': 4.17.14
+      '@types/express': 4.17.15
       '@types/graphql-depth-limit': 1.1.3
       '@types/gulp': 4.0.10
       '@types/gulp-rename': 2.0.1
@@ -126,7 +126,7 @@ importers:
       '@nestjs/schematics': 9.0.1_typescript@4.7.4
       '@nestjs/testing': 9.0.8_lwpb2d46aphloofqfhxfte74su
       '@swc/core': 1.3.23
-      '@types/express': 4.17.14
+      '@types/express': 4.17.15
       '@types/graphql-depth-limit': 1.1.3
       '@types/gulp': 4.0.10
       '@types/gulp-rename': 2.0.1
@@ -3784,6 +3784,7 @@ packages:
       '@types/node': 17.0.23
       '@types/qs': 6.9.7
       '@types/range-parser': 1.2.4
+    dev: false
 
   /@types/express-serve-static-core/4.17.31:
     resolution: {integrity: sha512-DxMhY+NAsTwMMFHBTtJFNp5qiHKJ7TeqOo23zVEM9alT1Ml27Q3xcTH0xwxn7Q0BbMcVEJOs/7aQtUWupUQN3Q==}
@@ -3791,7 +3792,6 @@ packages:
       '@types/node': 17.0.23
       '@types/qs': 6.9.7
       '@types/range-parser': 1.2.4
-    dev: false
 
   /@types/express/4.17.14:
     resolution: {integrity: sha512-TEbt+vaPFQ+xpxFLFssxUDXj5cWCxZJjIcB7Yg0k0GMHGtgtQgpvx/MUQUeAkNbA9AAGrwkAsoeItdTgS7FMyg==}
@@ -3800,6 +3800,16 @@ packages:
       '@types/express-serve-static-core': 4.17.29
       '@types/qs': 6.9.7
       '@types/serve-static': 1.13.10
+    dev: false
+
+  /@types/express/4.17.15:
+    resolution: {integrity: sha512-Yv0k4bXGOH+8a+7bELd2PqHQsuiANB+A8a4gnQrkRWzrkKlb6KHaVvyXhqs04sVW/OWlbPyYxRgYlIXLfrufMQ==}
+    dependencies:
+      '@types/body-parser': 1.19.2
+      '@types/express-serve-static-core': 4.17.31
+      '@types/qs': 6.9.7
+      '@types/serve-static': 1.13.10
+    dev: true
 
   /@types/glob-stream/6.1.1:
     resolution: {integrity: sha512-AGOUTsTdbPkRS0qDeyeS+6KypmfVpbT5j23SN8UPG63qjKXNKjXn6V9wZUr8Fin0m9l8oGYaPK8b2WUMF8xI1A==}
