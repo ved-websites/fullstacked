@@ -82,7 +82,7 @@ importers:
       gulp: 4.0.2
       gulp-prompt: 1.2.0
       gulp-rename: 2.0.0
-      gulp-replace: 1.1.3
+      gulp-replace: 1.1.4
       gulp-typescript: 6.0.0-alpha.1
       nest-typed-config: 2.4.6
       prisma: 4.1.1
@@ -139,7 +139,7 @@ importers:
       gulp: 4.0.2
       gulp-prompt: 1.2.0
       gulp-rename: 2.0.0
-      gulp-replace: 1.1.3
+      gulp-replace: 1.1.4
       gulp-typescript: 6.0.0-alpha.1_typescript@4.7.4
       prisma: 4.1.1
       prisma-fixtures: 0.1.11
@@ -3899,10 +3899,6 @@ packages:
   /@types/node/10.17.60:
     resolution: {integrity: sha512-F0KIgDJfy2nA3zMLmWGKxcH2ZVEtCZXHHdOQs2gSaQ27+lNeEfGxzkIw90aXswATX7AZ33tahPbzy6KAfUreVw==}
     dev: false
-
-  /@types/node/14.18.12:
-    resolution: {integrity: sha512-q4jlIR71hUpWTnGhXWcakgkZeHa3CCjcQcnuzU8M891BAWA2jHiziiWEPEkdS5pFsz7H9HJiy8BrK7tBRNrY7A==}
-    dev: true
 
   /@types/node/16.11.66:
     resolution: {integrity: sha512-+xvMrGl3eAygKcf5jm+4zA4tbfEgmKM9o6/glTmN0RFVdu2VuFXMYYtRmuv3zTGCgAYMnEZLde3B7BTp+Yxcig==}
@@ -8055,15 +8051,15 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /gulp-replace/1.1.3:
-    resolution: {integrity: sha512-HcPHpWY4XdF8zxYkDODHnG2+7a3nD/Y8Mfu3aBgMiCFDW3X2GiOKXllsAmILcxe3KZT2BXoN18WrpEFm48KfLQ==}
+  /gulp-replace/1.1.4:
+    resolution: {integrity: sha512-SVSF7ikuWKhpAW4l4wapAqPPSToJoiNKsbDoUnRrSgwZHH7lH8pbPeQj1aOVYQrbZKhfSVBxVW+Py7vtulRktw==}
     engines: {node: '>=10'}
     dependencies:
-      '@types/node': 14.18.12
+      '@types/node': 17.0.23
       '@types/vinyl': 2.0.6
       istextorbinary: 3.3.0
       replacestream: 4.0.3
-      yargs-parser: 21.0.1
+      yargs-parser: 21.1.1
     dev: true
 
   /gulp-typescript/6.0.0-alpha.1_typescript@4.7.4:
