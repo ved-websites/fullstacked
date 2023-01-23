@@ -84,7 +84,7 @@ importers:
       gulp-rename: 2.0.0
       gulp-replace: 1.1.4
       gulp-typescript: 6.0.0-alpha.1
-      nest-typed-config: 2.4.6
+      nest-typed-config: 2.4.7
       prisma: 4.1.1
       prisma-fixtures: 0.1.11
       prisma-nestjs-graphql: 17.0.2
@@ -117,7 +117,7 @@ importers:
       graphql-depth-limit: 1.1.0_graphql@16.3.0
       graphql-subscriptions: 2.0.0_graphql@16.3.0
       graphql-ws: 5.9.1_graphql@16.3.0
-      nest-typed-config: 2.4.6_6hdgzoxb2gpzahxv5bgjzjau5a
+      nest-typed-config: 2.4.7_6hdgzoxb2gpzahxv5bgjzjau5a
       reflect-metadata: 0.1.13
       rxjs: 7.5.7
     devDependencies:
@@ -9771,8 +9771,8 @@ packages:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
     dev: true
 
-  /nest-typed-config/2.4.6_6hdgzoxb2gpzahxv5bgjzjau5a:
-    resolution: {integrity: sha512-R5al1qXKD4sesxRGJDtorLafsUUEQOQ62wSdm5dWOCxIxCtkRj5PIgDtU4NKghG8dP38vD2lR+28nEk6TsBY5w==}
+  /nest-typed-config/2.4.7_6hdgzoxb2gpzahxv5bgjzjau5a:
+    resolution: {integrity: sha512-vNfgrox7UcivO12qnuE72NqbLqkJuWeJ8s3Vi4r0KKEPly7PXFIziT9q4ynJuvr9+KZgDodHUIqdWZQrRwFNKg==}
     peerDependencies:
       '@nestjs/common': '>= 6.10.0 < 10'
       reflect-metadata: ^0.1.12
