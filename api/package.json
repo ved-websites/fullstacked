@@ -72,7 +72,7 @@
     "@types/gulp-rename": "2.0.1",
     "@types/supertest": "2.0.12",
     "@v-ed/tsconfig": "0.2.0",
-    "c8": "7.12.0",
+    "c8": "7.13.0",
     "del": "6.1.1",
     "graphql-config": "4.3.6",
     "graphql-tag": "2.12.6",
