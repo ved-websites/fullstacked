@@ -14,7 +14,7 @@ importers:
       '@v-ed/stylelint-config': 0.2.3
       '@v-ed/tsconfig': 0.2.0
       eslint: 8.33.0
-      eslint-config-prettier: 8.5.0
+      eslint-config-prettier: 8.7.0
       eslint-plugin-prettier: 4.2.1
       graphql: ^16.0.0
       npm-run-all: 4.1.5
@@ -33,8 +33,8 @@ importers:
       '@v-ed/stylelint-config': 0.2.3_stylelint@14.9.1
       '@v-ed/tsconfig': 0.2.0
       eslint: 8.33.0
-      eslint-config-prettier: 8.5.0_eslint@8.33.0
-      eslint-plugin-prettier: 4.2.1_o7n7t45turo2yal5a73ridttaa
+      eslint-config-prettier: 8.7.0_eslint@8.33.0
+      eslint-plugin-prettier: 4.2.1_lulfe25isoomsgc6hbvibaxmsa
       graphql: 16.3.0
       npm-run-all: 4.1.5
       prettier: 2.8.4
@@ -6800,8 +6800,8 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
-  /eslint-config-prettier/8.5.0_eslint@8.33.0:
-    resolution: {integrity: sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q==}
+  /eslint-config-prettier/8.7.0_eslint@8.33.0:
+    resolution: {integrity: sha512-HHVXLSlVUhMSmyW4ZzEuvjpwqamgmlfkutD53cYXLikh4pt/modINRcCIApJ84czDxM4GZInwUrromsDdTImTA==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -6809,7 +6809,7 @@ packages:
       eslint: 8.33.0
     dev: true
 
-  /eslint-plugin-prettier/4.2.1_o7n7t45turo2yal5a73ridttaa:
+  /eslint-plugin-prettier/4.2.1_lulfe25isoomsgc6hbvibaxmsa:
     resolution: {integrity: sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -6821,7 +6821,7 @@ packages:
         optional: true
     dependencies:
       eslint: 8.33.0
-      eslint-config-prettier: 8.5.0_eslint@8.33.0
+      eslint-config-prettier: 8.7.0_eslint@8.33.0
       prettier: 2.8.4
       prettier-linter-helpers: 1.0.0
     dev: true
