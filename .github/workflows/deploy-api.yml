@@ -21,7 +21,7 @@ jobs:
         uses: dokku/github-action@master
         with:
           branch: 'master'
-          git_remote_url: 'ssh://dokku@${{ secrets.DOKKU_SSH_HOST }}/${{ secrets.DOKKU_APPNAME }}'
+          git_remote_url: 'ssh://dokku@${{ vars.DOKKU_SSH_HOST }}/${{ vars.DOKKU_APPNAME }}'
           ssh_private_key: ${{ secrets.DOKKU_SSH_KEY }}
 
       - name: Comment on deploy commit
@@ -32,4 +32,4 @@ jobs:
           body: |
             🤖 This commit was deployed to the Dokku server!
 
-            App : ${{ secrets.DOKKU_APPNAME }}
+            App : ${{ vars.DOKKU_APPNAME }}
