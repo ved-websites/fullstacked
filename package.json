@@ -39,7 +39,7 @@
     "@v-ed/prettier-config": "0.1.2",
     "@v-ed/stylelint-config": "0.2.3",
     "@v-ed/tsconfig": "0.2.0",
-    "eslint": "8.36.0",
+    "eslint": "8.38.0",
     "eslint-config-prettier": "8.7.0",
     "eslint-plugin-prettier": "4.2.1",
     "graphql": "^16.0.0",
