@@ -8,8 +8,6 @@ async function runCliSeeds() {
 		'Models Count': data.models.length,
 	}));
 
-	const assumedLength = 29;
-
 	const seedersName = seedData.map((data) => data.name);
 	const maxSeederLength = Math.max(...seedersName.map((el) => el.length));
 
@@ -19,11 +17,15 @@ async function runCliSeeds() {
 	const spacingStart = ` `.repeat(spacingStartCount);
 	const spacingEnd = ` `.repeat(spacingEndCount);
 
+	const tableHeader = `Seed data, ordered by run order`;
+
+	const assumedLength = tableHeader.length - 2;
+
 	const topBar = `─`.repeat(Math.max(assumedLength + 4, assumedLength + maxSeederLength));
 
 	console.log();
 	console.log(`┌${topBar}┐`);
-	console.log(`|${spacingStart}Seed data, ordered by run order${spacingEnd}|`);
+	console.log(`|${spacingStart}${tableHeader}${spacingEnd}|`);
 	console.table(formattedData);
 }
 

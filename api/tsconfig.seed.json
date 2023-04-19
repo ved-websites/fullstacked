@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "ES2020",
+    "lib": [
+      "es2019"
+    ],
+  },
+  "include": [
+    "prisma/**/*.ts"
+  ],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+    "moduleTypes": {
+      "prisma/**/*.ts": "esm",
+    },
+  },
+}
