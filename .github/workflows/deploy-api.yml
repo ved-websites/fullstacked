@@ -16,11 +16,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get git HEAD sha
-        id: commit-vars
-        run: |
-          echo ::set-output name=git_head_sha::"$(git rev-parse HEAD)"
-
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
@@ -39,14 +34,25 @@ jobs:
           FOLDER: api
           GITHUB_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
 
+      - name: Get SHA of Deployed Commit
+        id: deployed-commit-sha
+        run: |
+          echo "sha=$(git rev-parse api-deploy)" >> $GITHUB_OUTPUT
+
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
           branch: 'master'
           ci_branch_name: ${{ env.DEPLOY_BRANCH_NAME }}
+          ci_commit: ${{ steps.deployed-commit-sha.outputs.sha }}
           git_push_flags: '--force'
           git_remote_url: 'ssh://dokku@${{ vars.DOKKU_SSH_HOST }}/${{ vars.DOKKU_APPNAME }}'
           ssh_private_key: ${{ secrets.DOKKU_SSH_KEY }}
+
+      - name: Get SHA of HEAD commit for Logging
+        id: commit-vars
+        run: |
+          echo "git_head_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: Comment on deploy commit
         uses: peter-evans/commit-comment@v2
