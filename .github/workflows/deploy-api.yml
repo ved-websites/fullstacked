@@ -37,7 +37,7 @@ jobs:
       - name: Get SHA of Deployed Commit
         id: deployed-commit-sha
         run: |
-          echo "sha=$(git rev-parse api-deploy)" >> $GITHUB_OUTPUT
+          echo "sha=$(git rev-parse origin/${{ env.DEPLOY_BRANCH_NAME }})" >> $GITHUB_OUTPUT
 
       - name: Push to dokku
         uses: dokku/github-action@master
