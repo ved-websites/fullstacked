@@ -4,6 +4,7 @@ on: workflow_dispatch
 
 env:
   DEPLOY_BRANCH_NAME: 'api-deploy'
+  PNPM_VERSION: 8
 
 jobs:
   deploy:
@@ -19,6 +20,11 @@ jobs:
         id: commit-vars
         run: |
           echo ::set-output name=git_head_sha::"$(git rev-parse HEAD)"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Generate API Lockfile
         run: |
