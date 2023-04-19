@@ -4180,18 +4180,18 @@ packages:
     resolution: {integrity: sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==}
     dependencies:
       '@types/eslint': 8.37.0
-      '@types/estree': 1.0.0
+      '@types/estree': 1.0.1
     dev: true
 
   /@types/eslint@8.37.0:
     resolution: {integrity: sha512-Piet7dG2JBuDIfohBngQ3rCt7MgO9xCO4xIMKxBThCq5PNRB91IjlJ10eJVwfoNtvTErmxLzwBZ7rHZtbOMmFQ==}
     dependencies:
-      '@types/estree': 1.0.0
+      '@types/estree': 1.0.1
       '@types/json-schema': 7.0.11
     dev: true
 
-  /@types/estree@1.0.0:
-    resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
+  /@types/estree@1.0.1:
+    resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==}
     dev: true
 
   /@types/expect@1.20.4:
@@ -4943,7 +4943,7 @@ packages:
     dev: true
 
   /ansi-regex@2.1.1:
-    resolution: {integrity: sha1-w7M6te42DYbg5ijwRorn7yfWVN8=}
+    resolution: {integrity: sha512-TIGnTpdo+E3+pCyAluZvtED5p5wCqLdezCyhPZzKPcxvFplEt4i+W7OONCKgeZFT3+y5NZZfOOS/Bdcanm1MYA==}
     engines: {node: '>=0.10.0'}
     dev: true
 
@@ -5902,8 +5902,8 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /class-importer@0.2.3:
-    resolution: {integrity: sha512-inyXS0oJl/wY3TJf8hqVdaVP4KEPFAmmtF3w8g97qZ2tirmbgjzNxxT7wpVvAfeQkpQKDZW/PJ4pQPU0bIEtDg==}
+  /class-importer@0.2.4:
+    resolution: {integrity: sha512-rnHSzUVJ/ti3Ophde0DlpaCZ2/7p2QMOgKVDVD0aUCoO6my0Zl66M0PVdLPFPbaf1N8kNMERfcM7WDq9EVTK9Q==}
     dependencies:
       recursive-readdir: 2.2.3
     dev: true
@@ -8031,7 +8031,7 @@ packages:
       minimatch: 3.1.2
       node-abort-controller: 3.1.1
       schema-utils: 3.1.2
-      semver: 7.3.7
+      semver: 7.5.0
       tapable: 2.2.1
       typescript: 4.9.5
       webpack: 5.79.0(@swc/core@1.3.49)
@@ -10495,7 +10495,7 @@ packages:
     dev: true
 
   /number-is-nan@1.0.1:
-    resolution: {integrity: sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=}
+    resolution: {integrity: sha512-4jbtZXNAsfZbAHiiqjLPBiCl16dES1zI4Hpzzxw61Tk+loF+sBDBKx1ICKKKwIqQ7M0mFn1TmkN7euSncWgHiQ==}
     engines: {node: '>=0.10.0'}
     dev: true
 
@@ -11113,7 +11113,7 @@ packages:
   /prisma-fixtures@0.1.11:
     resolution: {integrity: sha512-c7rzTTA4+t7PMZ/lvp1m6P+cmjs9AsqatwZbFCGKrAU7ICinJMGxzKMVoTK3dxSjyRO3dFZtsNty93DgOHqQzw==}
     dependencies:
-      class-importer: 0.2.3
+      class-importer: 0.2.4
       dependency-graph: 0.11.0
     dev: true
 
@@ -13720,7 +13720,7 @@ packages:
         optional: true
     dependencies:
       '@types/eslint-scope': 3.7.4
-      '@types/estree': 1.0.0
+      '@types/estree': 1.0.1
       '@webassemblyjs/ast': 1.11.1
       '@webassemblyjs/wasm-edit': 1.11.1
       '@webassemblyjs/wasm-parser': 1.11.1
