@@ -130,6 +130,9 @@ importers:
       rxjs:
         specifier: 7.5.7
         version: 7.5.7
+      tslib:
+        specifier: 2.4.1
+        version: 2.4.1
     devDependencies:
       '@faker-js/faker':
         specifier: 7.6.0
