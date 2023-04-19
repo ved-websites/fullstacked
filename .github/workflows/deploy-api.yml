@@ -2,6 +2,9 @@ name: CD - API
 
 on: workflow_dispatch
 
+env:
+  DEPLOY_BRANCH_NAME: 'api-deploy'
+
 jobs:
   deploy:
     name: Deploy
@@ -17,10 +20,23 @@ jobs:
         run: |
           echo ::set-output name=git_head_sha::"$(git rev-parse HEAD)"
 
+      - name: Generate API Lockfile
+        run: |
+          pnpm config set shared-workspace-lockfile false
+          pnpm --filter api install --lockfile-only --frozen-lockfile
+
+      - name: Push API to Deploy Branch
+        uses: s0/git-publish-subdir-action@v2.6.0
+        env:
+          REPO: self
+          BRANCH: ${{ env.DEPLOY_BRANCH_NAME }}
+          FOLDER: api
+
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
-          branch: 'master'
+          branch: ${{ env.DEPLOY_BRANCH_NAME }}
+          git_push_flags: '--force'
           git_remote_url: 'ssh://dokku@${{ vars.DOKKU_SSH_HOST }}/${{ vars.DOKKU_APPNAME }}'
           ssh_private_key: ${{ secrets.DOKKU_SSH_KEY }}
 
