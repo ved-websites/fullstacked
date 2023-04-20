@@ -15,7 +15,6 @@
 	],
     "settings": {
 		"window.title": "${dirty}${activeEditorMedium}${separator}Fullstacked${separator}${appName}",
-		"jest.disabledWorkspaceFolders": ["Root (fullstacked)"],
 		"[json]": {
 			"editor.defaultFormatter": "vscode.json-language-features",
 			"editor.codeActionsOnSave": {
