@@ -20,31 +20,30 @@ jobs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
       - name: Check for dupe action
         id: skip_check
-        uses: fkirc/skip-duplicate-actions@v3
+        uses: fkirc/skip-duplicate-actions@v5
+        continue-on-error: true
 
-      - name: Cache pnpm modules
-        id: cache-modules
+      - uses: actions/checkout@v3
         if: steps.skip_check.outputs.should_skip != 'true'
-        uses: actions/cache@v3
-        with:
-          path: ~/.local/share/pnpm/store
-          key: install-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - name: Install packages
-        if: steps.skip_check.outputs.should_skip != 'true' && steps.cache-modules.outputs.cache-hit != 'true'
+      - name: Install pnpm
+        if: steps.skip_check.outputs.should_skip != 'true'
         uses: pnpm/action-setup@v2
         with:
           version: ${{ env.PNPM_VERSION }}
-          run_install: |
-            - recursive: true
-              args: [--frozen-lockfile, --ignore-scripts]
+
+      - uses: actions/setup-node@v3
+        if: steps.skip_check.outputs.should_skip != 'true'
+        id: setup-node
+        with:
+          cache: 'pnpm'
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install packages
+        if: steps.skip_check.outputs.should_skip != 'true' && steps.setup-node.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
   lint:
     name: Lint
@@ -55,23 +54,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Retrieve pnpm modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.local/share/pnpm/store
-          key: install-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            install-${{ env.NODE_VERSION }}-${{ runner.os }}-
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: ${{ env.PNPM_VERSION }}
-          run_install: true
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'pnpm'
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install packages
+        run: pnpm install
 
       - name: Lint Source
         run: pnpm run --filter ./api lint:src
@@ -88,23 +83,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Retrieve pnpm modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.local/share/pnpm/store
-          key: install-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            install-${{ env.NODE_VERSION }}-${{ runner.os }}-
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: ${{ env.PNPM_VERSION }}
-          run_install: true
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'pnpm'
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install packages
+        run: pnpm install
 
       - name: Build
         run: pnpm run --filter ./api build
@@ -130,23 +121,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Retrieve pnpm modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.local/share/pnpm/store
-          key: install-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            install-${{ env.NODE_VERSION }}-${{ runner.os }}-
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: ${{ env.PNPM_VERSION }}
-          run_install: true
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'pnpm'
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install packages
+        run: pnpm install
 
       - name: Init
         run: pnpm run --filter ./api init

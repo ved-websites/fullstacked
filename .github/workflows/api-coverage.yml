@@ -32,23 +32,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Retrieve pnpm modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.local/share/pnpm/store
-          key: install-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            install-${{ env.NODE_VERSION }}-${{ runner.os }}-
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: ${{ env.PNPM_VERSION }}
-          run_install: true
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'pnpm'
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install packages
+        run: pnpm install
 
       - name: Init
         run: pnpm run --filter ./api init
