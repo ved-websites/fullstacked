@@ -31,6 +31,11 @@ jobs:
           config-file: .github/release-please-config.json
           manifest-file: .github/release-please-manifest.json
 
+      - uses: actions/checkout@v3
+        if: (github.event_name == 'workflow_dispatch' && contains(fromJson('["All", "API"]'), github.event.inputs.app)) || steps.release-please.outputs.releases_created
+        with:
+          fetch-depth: 0
+
       - name: Deploy API
         if: (github.event_name == 'workflow_dispatch' && contains(fromJson('["All", "API"]'), github.event.inputs.app)) || (steps.release-please.outputs.releases_created && contains(fromJSON(steps.release-please.outputs.paths_released), 'api'))
         env:
