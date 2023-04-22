@@ -1,4 +1,5 @@
 import swc from 'unplugin-swc';
+import { UserConfig } from 'vitest/config';
 import { defineVitestConfig } from './base';
 
 const e2eConfigs = defineVitestConfig({
@@ -14,6 +15,6 @@ const e2eConfigs = defineVitestConfig({
 		threads: false,
 		isolate: false,
 	},
-});
+} satisfies UserConfig);
 
 export default e2eConfigs;

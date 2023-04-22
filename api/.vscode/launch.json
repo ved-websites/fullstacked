@@ -63,7 +63,7 @@
 			"autoAttachChildProcesses": true,
 			"skipFiles": ["<node_internals>/**", "**/node_modules/**"],
 			"runtimeExecutable": "pnpm",
-			"runtimeArgs": ["exec", "vitest", "run", "${relativeFile}", "--config", "tests/.vitest/vitest.all-config.ts"],
+			"runtimeArgs": ["exec", "vitest", "--config", "tests/.vitest/vitest.config.all.ts", "run", "${relativeFile}"],
 			"smartStep": true,
 			"console": "internalConsole",
 			"presentation": {

@@ -12,11 +12,7 @@ type CoverageReporter = CoverageC8Options['reporter'];
 const coverageReporter = (process.env.COV_REPORTER ?? 'lcov') as NonNullable<CoverageReporter>;
 const coverageDirectory: string = process.env.COV_DIRECTORY ?? `./coverage`;
 
-function defineConfig<T extends UserConfig>(config: T): T {
-	return config;
-}
-
-const vitestBaseConfig = defineConfig({
+const vitestBaseConfig = {
 	plugins: [
 		// @ts-ignore
 		VitePluginTsConfigPaths({ loose: true }),
@@ -32,9 +28,9 @@ const vitestBaseConfig = defineConfig({
 			exclude: ['**/*.d.ts', '.graphqlrc.ts', 'gulpfile.ts', '**/_generated/**', '**/prisma/**', '**/dist/**', '**/fixtures/**'],
 		},
 	},
-});
+} satisfies UserConfig;
 
-export function defineVitestConfig<T extends UserConfig>(config: T): T & typeof vitestBaseConfig {
+export function defineVitestConfig<T>(config: T) {
 	return deepmerge<T, typeof vitestBaseConfig>(config, vitestBaseConfig);
 }
 

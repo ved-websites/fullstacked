@@ -25,9 +25,9 @@
     "format:prettier": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
     "format:eslint": "eslint \"{src,apps,libs,tests}/**/*.ts\" --fix",
     "format:prisma": "prisma format",
-    "test": "vitest --config tests/.vitest/vitest.all-config.ts",
-    "test:specs": "vitest --config tests/.vitest/vitest.specs-config.ts",
-    "test:e2e": "vitest --config tests/.vitest/vitest.e2e-config.ts",
+    "test": "vitest --config tests/.vitest/vitest.config.all.ts",
+    "test:specs": "vitest --config tests/.vitest/vitest.config.specs.ts",
+    "test:e2e": "vitest --config tests/.vitest/vitest.config.e2e.ts",
     "test:cov": "pnpm test --coverage",
     "seed": "gulp seed",
     "studio": "prisma studio"
