@@ -38,7 +38,7 @@
     "@v-ed/eslint-config": "0.1.3",
     "@v-ed/prettier-config": "0.1.2",
     "@v-ed/stylelint-config": "0.2.3",
-    "@v-ed/tsconfig": "0.2.0",
+    "@v-ed/tsconfig": "0.3.0",
     "eslint": "8.38.0",
     "eslint-config-prettier": "8.7.0",
     "eslint-plugin-prettier": "4.2.1",
@@ -47,6 +47,12 @@
     "prettier": "2.8.7",
     "stylelint": "14.9.1",
     "tslib": "2.4.1",
-    "typescript": "4.6.4"
+    "typescript": "5.0.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "@typescript-eslint/eslint-plugin": "^5.55.0",
+      "@typescript-eslint/typescript-estree": "^5.55.0"
+    }
   }
 }
