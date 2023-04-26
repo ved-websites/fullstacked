@@ -18,7 +18,7 @@
     "clean:db": "gulp cleanDb",
     "delete:dist": "gulp deleteDist",
     "generate": "gulp setupPrisma",
-    "lint": "npm-run-all lint:*",
+    "lint": "npm-run-all -p lint:*",
     "lint:src": "eslint \"{src,apps,libs}/**/*.ts\"",
     "lint:tests": "eslint \"tests/**/*.ts\"",
     "format": "npm-run-all format:*",
