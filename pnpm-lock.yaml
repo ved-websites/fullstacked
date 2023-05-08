@@ -272,8 +272,8 @@ importers:
         specifier: 1.0.0-next.326
         version: 1.0.0-next.326(sass@1.60.0)(svelte@3.48.0)
       '@v-ed/tsconfig':
-        specifier: 0.2.0
-        version: 0.2.0
+        specifier: 0.3.0
+        version: 0.3.0(typescript@4.6.4)
       dotenv:
         specifier: 16.0.0
         version: 16.0.0
@@ -4633,9 +4633,13 @@ packages:
       stylelint-config-standard: 25.0.0(stylelint@14.9.1)
     dev: true
 
-  /@v-ed/tsconfig@0.2.0:
-    resolution: {integrity: sha512-SkfkjDM8sWD3QOtQ8EcGI/gBtnQfoptjyWZZGpnM1oXSjRABgTodN2lxuOrXhWUnyVpNG05w+yw3uOc1yvwhwA==}
+  /@v-ed/tsconfig@0.3.0(typescript@4.6.4):
+    resolution: {integrity: sha512-dA/dTM0CqYQyvAoRVzmgBhQeO1QfCcUjmQqcU5Oza0a30ICmfAZuMj9+MCgcevnXFKLT5+Ag21Ny1UY3G4Cr8A==}
     engines: {node: '>=14'}
+    peerDependencies:
+      typescript: ^5
+    dependencies:
+      typescript: 4.6.4
     dev: true
 
   /@v-ed/tsconfig@0.3.0(typescript@5.0.4):
