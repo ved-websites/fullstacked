@@ -302,8 +302,8 @@ importers:
         specifier: 2.7.0
         version: 2.7.0(@babel/core@7.17.10)(postcss@8.4.14)(sass@1.60.0)(svelte@3.48.0)
       svelte-material-ui:
-        specifier: 6.0.0-beta.16
-        version: 6.0.0-beta.16(svelte@3.48.0)(typescript@4.6.4)
+        specifier: 6.2.0
+        version: 6.2.0(svelte@3.48.0)(typescript@4.6.4)
       svelte-preprocess:
         specifier: 4.10.7
         version: 4.10.7(@babel/core@7.17.10)(postcss@8.4.14)(sass@1.60.0)(svelte@3.48.0)(typescript@4.6.4)
@@ -12439,8 +12439,8 @@ packages:
       svelte: 3.48.0
     dev: true
 
-  /svelte-material-ui@6.0.0-beta.16(svelte@3.48.0)(typescript@4.6.4):
-    resolution: {integrity: sha512-lztDBPv6+/Xhdlf7sxdrYAbo+1N+TwXTbhncl00FF7mU05ZWhhmtDtqMUeMLEX8x956XSV8TT1J1bywRjbSdtQ==}
+  /svelte-material-ui@6.2.0(svelte@3.48.0)(typescript@4.6.4):
+    resolution: {integrity: sha512-/iS1gJr2Y4N+jDyt8AQZYaOTp9hAisWd5BXo20CIVUQbp2PX583S6w1JP5SpztjQnyGONpIa+qAg3Ntbj51c7Q==}
     dependencies:
       '@smui-extra/accordion': 6.1.4(svelte@3.48.0)(typescript@4.6.4)
       '@smui-extra/autocomplete': 6.2.0(svelte@3.48.0)(typescript@4.6.4)
