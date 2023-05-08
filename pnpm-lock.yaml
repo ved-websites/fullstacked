@@ -290,8 +290,8 @@ importers:
         specifier: 1.60.0
         version: 1.60.0
       smui-theme:
-        specifier: 6.0.0
-        version: 6.0.0
+        specifier: 6.2.0
+        version: 6.2.0
       svelte:
         specifier: 3.48.0
         version: 3.48.0
@@ -11869,8 +11869,8 @@ packages:
       is-fullwidth-code-point: 3.0.0
     dev: true
 
-  /smui-theme@6.0.0:
-    resolution: {integrity: sha512-3OTp3f/tJ5hNs1HYmdKGm0z1ScmISQthcK2BOmjg54Uycwhcu5ToDKczGpOvTvfpiyF7CtDHzlgk76FPn6V3kQ==}
+  /smui-theme@6.2.0:
+    resolution: {integrity: sha512-oe6QMldLfNXXbABC3As2HIXhyNNu+SYCPhHkeLaEQI1rSqQFaprmapZxIXWAmG1OZXguzTZs/7gqrctQX6R69w==}
     hasBin: true
     dependencies:
       '@material/theme': 13.0.0
