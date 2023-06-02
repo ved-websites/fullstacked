@@ -8,7 +8,6 @@ export type AsyncIteratorParamType = Parameters<PubSub['asyncIterator']>[0];
 export type PublishParamType = Parameters<PubSub['publish']>[0];
 
 export type PrismaSelector = {
-	select: Record<string, unknown>;
 	[x: string]: unknown;
 };
 
