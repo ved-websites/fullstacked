@@ -10,7 +10,7 @@ export default class MessageFixture extends Fixture<Message> {
 		f.seed(123456789);
 
 		const messages = await upsertRange(prisma.message.upsert, 3, (current) => {
-			const text = f.random.words(4);
+			const text = f.word.words(4);
 			const userId = link(UserFixture, LinkMode.RANDOM).id;
 
 			return {

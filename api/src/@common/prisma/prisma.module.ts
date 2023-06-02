@@ -1,9 +1,15 @@
 import { Module } from '@nestjs/common';
+import { PubSub } from 'graphql-subscriptions';
 import { PrismaService } from './prisma.service';
-import { PubSub } from './pub-sub';
 
 @Module({
-	providers: [PrismaService, PubSub],
-	exports: [PrismaService, PubSub],
+	providers: [
+		PrismaService,
+		{
+			provide: 'PUB_SUB',
+			useValue: new PubSub(),
+		},
+	],
+	exports: [PrismaService],
 })
 export class PrismaModule {}

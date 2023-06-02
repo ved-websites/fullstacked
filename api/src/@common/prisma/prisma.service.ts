@@ -1,11 +1,22 @@
 import { PrismaClient } from '$prisma-client';
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { PrismaSelect } from '@paljs/plugins';
-import { getDMMF, getSchemaPath } from '@prisma/internals';
-import type { GraphQLResolveInfo } from 'graphql';
+import { PubSub } from 'graphql-subscriptions';
+import { withCancel } from '../utils/withCancel';
+
+export type AsyncIteratorParamType = Parameters<PubSub['asyncIterator']>[0];
+export type PublishParamType = Parameters<PubSub['publish']>[0];
+
+export type PrismaSelector = Record<string, unknown>;
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+	private eventSubsSelectors: Record<string, unknown[] | undefined> = {};
+
+	constructor(@Inject('PUB_SUB') private pubSub: PubSub) {
+		super();
+	}
+
 	async onModuleInit(): Promise<void> {
 		await this.$connect();
 	}
@@ -13,24 +24,68 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 	async onModuleDestroy(): Promise<void> {
 		await this.$disconnect();
 	}
-}
 
-async function getPrismaDMMF() {
-	const schemaPath = await getSchemaPath();
+	async subscribe(triggers: AsyncIteratorParamType, select: PrismaSelector, onUnsubscribe?: () => PromiseLike<void> | void) {
+		const fullTriggers = Array.isArray(triggers) ? triggers : [triggers];
 
-	const dmmf = await getDMMF({
-		datamodelPath: schemaPath!,
-	});
+		fullTriggers.forEach((trigger) => (this.eventSubsSelectors[trigger] = (this.eventSubsSelectors[trigger] ?? []).concat(select)));
 
-	return dmmf;
-}
+		const sub = this.pubSub.asyncIterator(triggers);
 
-const promisedDMMF = getPrismaDMMF();
+		return withCancel(sub, () => {
+			fullTriggers.forEach((trigger) => {
+				this.eventSubsSelectors[trigger] = this.eventSubsSelectors[trigger]?.filter((selector) => selector != select);
 
-export async function getPrismaSelector(info: GraphQLResolveInfo) {
-	const dmmf = await promisedDMMF;
+				if (!this.eventSubsSelectors[trigger]?.length) {
+					delete this.eventSubsSelectors[trigger];
+				}
+			});
 
-	return new PrismaSelect(info, {
-		dmmf: [dmmf],
-	}).value;
+			return onUnsubscribe?.();
+		});
+	}
+
+	async mutate<T>(
+		triggers: PublishParamType | PublishParamType[],
+		select: PrismaSelector,
+		mutator: (allSelect: PrismaSelector) => PromiseLike<T> | T,
+	) {
+		const fullTriggers = Array.isArray(triggers) ? triggers : [triggers];
+
+		const subscriberSelects = fullTriggers
+			.map((triggerName) => this.eventSubsSelectors[triggerName] ?? [])
+			.reduce((acc, triggerSelector) => acc.concat(triggerSelector), []);
+
+		const allSelect = PrismaSelect.mergeDeep(select, ...subscriberSelects);
+
+		const returnValue = await mutator(allSelect);
+
+		fullTriggers.forEach((triggerName) => this.pubSub.publish(triggerName, { [triggerName]: returnValue }));
+
+		return returnValue;
+	}
+
+	/**
+	 * Testing out the ability to call mutators directly.
+	 *
+	 * Example :
+	 * ```
+	 * const message = await this.prisma.customMutate([MESSAGE_ADDED], select, this.prisma.message.create, { data });
+	 * ```
+	 */
+	async customMutate<T, Args extends Record<string, unknown>>(
+		triggers: PublishParamType | PublishParamType[],
+		select: PrismaSelector,
+		mutator: (...args: Args[]) => T,
+		args: Args,
+	) {
+		return this.mutate(triggers, select, (allSelect) => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
+			return mutator({ ...args, ...allSelect });
+		});
+		// return this.mutate(triggers, select, (allSelect) => {
+		// 	return this.prisma.message.update({ where, data, ...allSelect });
+		// });
+	}
 }

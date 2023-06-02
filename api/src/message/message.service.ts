@@ -1,42 +1,39 @@
-import { getPrismaSelector, PrismaService } from '$common/prisma/prisma.service';
-import { PubSub } from '$common/prisma/pub-sub';
+import { PrismaService } from '$common/prisma/prisma.service';
+import type { PrismaSelector } from '$common/prisma/select-ql.decorator';
 import type { MessageCreateInput, MessageUpdateWithWhereUniqueWithoutUserInput, MessageWhereInput } from '$prisma-graphql/message';
 import { Injectable } from '@nestjs/common';
-import type { GraphQLResolveInfo } from 'graphql';
 import { MESSAGE_ADDED, MESSAGE_UPDATED } from './constants/triggers';
 
 @Injectable()
 export class MessageService {
-	constructor(private readonly prisma: PrismaService, private pubSub: PubSub) {}
+	constructor(private readonly prisma: PrismaService) {}
 
-	async find(info: GraphQLResolveInfo, where?: MessageWhereInput) {
-		const selectors = await getPrismaSelector(info);
-
-		const messages = await this.prisma.message.findMany({ where, ...selectors });
+	async find(select: PrismaSelector, where?: MessageWhereInput) {
+		const messages = await this.prisma.message.findMany({ where, ...select });
 
 		return messages;
 	}
 
-	async create(info: GraphQLResolveInfo, data: MessageCreateInput) {
-		const message = await this.pubSub.prismaMutate([MESSAGE_ADDED], info, (allSelect) => {
+	async create(select: PrismaSelector, data: MessageCreateInput) {
+		const message = await this.prisma.mutate([MESSAGE_ADDED], select, (allSelect) => {
 			return this.prisma.message.create({ data, ...allSelect });
 		});
 
 		return message;
 	}
 
-	async update(info: GraphQLResolveInfo, query: MessageUpdateWithWhereUniqueWithoutUserInput) {
+	async update(select: PrismaSelector, query: MessageUpdateWithWhereUniqueWithoutUserInput) {
 		const where = query.where;
 		const data = { time: new Date(), ...query.data };
 
-		const updatedMessage = await this.pubSub.prismaMutate([MESSAGE_UPDATED], info, (allSelect) => {
+		const updatedMessage = await this.prisma.mutate([MESSAGE_UPDATED], select, (allSelect) => {
 			return this.prisma.message.update({ where, data, ...allSelect });
 		});
 
 		return updatedMessage;
 	}
 
-	subscribeAdded(info: GraphQLResolveInfo, triggers: Parameters<MessageService['pubSub']['prismaSubscribe']>[0]) {
-		return this.pubSub.prismaSubscribe(triggers, info);
+	subscribeAdded(select: PrismaSelector, triggers: Parameters<PrismaService['subscribe']>[0]) {
+		return this.prisma.subscribe(triggers, select);
 	}
 }

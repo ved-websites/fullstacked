@@ -1,4 +1,5 @@
 import { Environment, EnvironmentConfig } from '$common/configs/env.validation';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';
 import depthLimit from 'graphql-depth-limit';
@@ -17,7 +18,8 @@ export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>(
 				'graphql-ws': true,
 			},
 			debug: !isProd,
-			playground: !isProd,
+			playground: false,
+			plugins: [ApolloServerPluginLandingPageLocalDefault()],
 			validationRules: [depthLimit(env.GRAPHQL_DEPTH_LIMIT)],
 		};
 	},

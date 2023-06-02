@@ -1,9 +1,10 @@
 import { AppModule } from '$/app.module';
+import type { Message } from '$prisma-graphql/message';
+import type { ApolloServer } from '@apollo/server';
 import type { ApolloDriver } from '@nestjs/apollo';
 import type { INestApplication } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { Test, TestingModule } from '@nestjs/testing';
-import type { ApolloServerBase } from 'apollo-server-core';
 import assert from 'assert';
 import gql from 'graphql-tag';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
@@ -15,7 +16,7 @@ beforeAll(async () => {
 
 describe('MessageController (e2e)', () => {
 	let app: INestApplication;
-	let apolloServer: ApolloServerBase;
+	let apolloServer: ApolloServer;
 
 	beforeEach(async () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -35,7 +36,7 @@ describe('MessageController (e2e)', () => {
 	});
 
 	it('/ (GET)', async () => {
-		const result = await apolloServer.executeOperation({
+		const result = await apolloServer.executeOperation<{ messages: Message[] }>({
 			query: gql`
 				query {
 					messages {
@@ -47,12 +48,18 @@ describe('MessageController (e2e)', () => {
 			// variables: {},
 		});
 
-		assert(result.data);
+		const data = (function () {
+			if (result.body.kind == 'single') {
+				return result.body.singleResult.data;
+			}
+		})();
 
-		expect(Array.isArray(result.data.messages)).toBe(true);
-		expect(result.data.messages.length).toBe(3);
+		assert(data);
 
-		result.data.messages.forEach((message: any) => {
+		expect(Array.isArray(data.messages)).toBe(true);
+		expect(data.messages.length).toBe(3);
+
+		data.messages.forEach((message: any) => {
 			expect(message).toEqual({
 				text: expect.any(String),
 				time: expect.any(String),

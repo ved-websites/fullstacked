@@ -4,11 +4,6 @@ import type { TypeScriptPluginConfig } from '@graphql-codegen/typescript';
 import type { TypeScriptDocumentsPluginConfig } from '@graphql-codegen/typescript-operations';
 import type { RawTypesConfig } from '@graphql-codegen/visitor-plugin-common';
 import type { IGraphQLConfig } from 'graphql-config';
-import { createAndSelectConfig } from './api/src/@common/configs/helpers';
-
-const apiEnv = createAndSelectConfig({
-	envFilePath: `./api/.env`,
-});
 
 const tsCommonConfig: RawTypesConfig = {
 	useTypeImports: true,
@@ -39,7 +34,7 @@ const codegen: Types.Config = {
 };
 
 const config: IGraphQLConfig = {
-	schema: `http://localhost:${apiEnv.PORT ?? 3000}/graphql`,
+	schema: `http://localhost:3000/graphql`,
 	documents: 'client/src/graphql/**/*.graphql',
 	extensions: {
 		codegen,

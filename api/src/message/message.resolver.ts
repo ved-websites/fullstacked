@@ -1,6 +1,6 @@
+import { PrismaSelector, SelectQL } from '$common/prisma/select-ql.decorator';
 import { Message, MessageCreateInput, MessageUpdateWithWhereUniqueWithoutUserInput, MessageWhereInput } from '$prisma-graphql/message';
-import { Args, Info, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
-import type { GraphQLResolveInfo } from 'graphql';
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { MESSAGE_ADDED } from './constants/triggers';
 import { MessageService } from './message.service';
 
@@ -9,18 +9,18 @@ export class MessageResolver {
 	constructor(private messageService: MessageService) {}
 
 	@Query(() => [Message])
-	messages(@Info() info: GraphQLResolveInfo, @Args('where', { nullable: true }) where: MessageWhereInput) {
-		return this.messageService.find(info, where);
+	messages(@SelectQL() select: PrismaSelector, @Args('where', { nullable: true }) where: MessageWhereInput) {
+		return this.messageService.find(select, where);
 	}
 
 	@Mutation(() => Message, { nullable: true })
-	addMessage(@Info() info: GraphQLResolveInfo, @Args('data') data: MessageCreateInput) {
-		return this.messageService.create(info, data);
+	addMessage(@SelectQL() select: PrismaSelector, @Args('data') data: MessageCreateInput) {
+		return this.messageService.create(select, data);
 	}
 
 	@Mutation(() => Message)
-	updateMessage(@Info() info: GraphQLResolveInfo, @Args('query') query: MessageUpdateWithWhereUniqueWithoutUserInput) {
-		return this.messageService.update(info, query);
+	updateMessage(@SelectQL() select: PrismaSelector, @Args('query') query: MessageUpdateWithWhereUniqueWithoutUserInput) {
+		return this.messageService.update(select, query);
 	}
 
 	@Subscription(() => Message, {
@@ -29,7 +29,7 @@ export class MessageResolver {
 			return !variables.where?.text?.startsWith || payload[MESSAGE_ADDED].text.startsWith(variables.where.text.startsWith);
 		},
 	})
-	subscribeMessageAdded(@Info() info: GraphQLResolveInfo, @Args('where', { nullable: true }) _where: MessageWhereInput) {
-		return this.messageService.subscribeAdded(info, MESSAGE_ADDED);
+	subscribeMessageAdded(@SelectQL() select: PrismaSelector, @Args('where', { nullable: true }) _where: MessageWhereInput) {
+		return this.messageService.subscribeAdded(select, MESSAGE_ADDED);
 	}
 }
