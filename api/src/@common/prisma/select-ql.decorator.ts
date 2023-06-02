@@ -3,8 +3,7 @@ import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
 import { Info } from '@nestjs/graphql';
 import { PrismaSelect } from '@paljs/plugins';
 import type { GraphQLResolveInfo } from 'graphql';
-
-export type PrismaSelector = Record<string, unknown>;
+import type { PrismaSelector } from './prisma.service';
 
 @Injectable()
 export class SelectQLPipe implements PipeTransform<GraphQLResolveInfo, PrismaSelector> {

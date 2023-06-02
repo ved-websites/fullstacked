@@ -1,5 +1,4 @@
-import { PrismaService } from '$common/prisma/prisma.service';
-import type { PrismaSelector } from '$common/prisma/select-ql.decorator';
+import { PrismaSelector, PrismaService } from '$common/prisma/prisma.service';
 import type { MessageCreateInput, MessageUpdateWithWhereUniqueWithoutUserInput, MessageWhereInput } from '$prisma-graphql/message';
 import { Injectable } from '@nestjs/common';
 import { MESSAGE_ADDED, MESSAGE_UPDATED } from './constants/triggers';

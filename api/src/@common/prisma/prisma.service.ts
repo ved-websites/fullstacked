@@ -7,7 +7,10 @@ import { withCancel } from '../utils/withCancel';
 export type AsyncIteratorParamType = Parameters<PubSub['asyncIterator']>[0];
 export type PublishParamType = Parameters<PubSub['publish']>[0];
 
-export type PrismaSelector = Record<string, unknown>;
+export type PrismaSelector = {
+	select: Record<string, unknown>;
+	[x: string]: unknown;
+};
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
@@ -63,29 +66,5 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 		fullTriggers.forEach((triggerName) => this.pubSub.publish(triggerName, { [triggerName]: returnValue }));
 
 		return returnValue;
-	}
-
-	/**
-	 * Testing out the ability to call mutators directly.
-	 *
-	 * Example :
-	 * ```
-	 * const message = await this.prisma.customMutate([MESSAGE_ADDED], select, this.prisma.message.create, { data });
-	 * ```
-	 */
-	async customMutate<T, Args extends Record<string, unknown>>(
-		triggers: PublishParamType | PublishParamType[],
-		select: PrismaSelector,
-		mutator: (...args: Args[]) => T,
-		args: Args,
-	) {
-		return this.mutate(triggers, select, (allSelect) => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			return mutator({ ...args, ...allSelect });
-		});
-		// return this.mutate(triggers, select, (allSelect) => {
-		// 	return this.prisma.message.update({ where, data, ...allSelect });
-		// });
 	}
 }
