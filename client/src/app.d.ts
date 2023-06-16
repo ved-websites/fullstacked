@@ -9,9 +9,7 @@ export interface SessionData {
 declare global {
 	namespace App {
 		// interface Locals {}
-
 		// interface PageData {}
-
 		// interface Error {}
 		// interface Platform {}
 	}

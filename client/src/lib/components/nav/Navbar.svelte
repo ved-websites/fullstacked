@@ -1,23 +1,23 @@
 <script lang="ts">
+	import { navElements } from '$/navigation';
+	import { page } from '$app/stores';
+	import { isDrawerHidden } from '$lib/stores';
 	import {
-		Navbar,
-		NavBrand,
-		NavLi,
-		NavUl,
-		NavHamburger,
 		Avatar,
-		Dropdown,
-		DropdownItem,
-		DropdownHeader,
-		DropdownDivider,
 		Button,
 		Chevron,
+		Dropdown,
+		DropdownDivider,
+		DropdownHeader,
+		DropdownItem,
+		NavBrand,
+		NavHamburger,
+		NavLi,
+		NavUl,
+		Navbar,
 	} from 'flowbite-svelte';
-	import { page } from '$app/stores';
 	import DarkMode from '../DarkMode.svelte';
-	import { navElements } from '$/navigation';
 	import Drawer from './Drawer.svelte';
-	import { isDrawerHidden } from '$lib/stores';
 
 	export let session: any | null;
 </script>

@@ -19,7 +19,7 @@ export function getApiUrl(path?: string): URL {
 
 	return url;
 }
-	
+
 export const appTitle = PUBLIC_TITLE ?? '';
 
 export * from './svelteutils';

@@ -1,10 +1,8 @@
 <script lang="ts">
 	import '../app.postcss';
 
-	import { onMount } from 'svelte';
-	import { invalidate } from '$app/navigation';
-	import Navbar from '$lib/components/nav/Navbar.svelte';
 	import InitialTheme from '$lib/InitialTheme.svelte';
+	import Navbar from '$lib/components/nav/Navbar.svelte';
 
 	// export let data;
 

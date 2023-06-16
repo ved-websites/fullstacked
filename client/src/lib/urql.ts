@@ -1,14 +1,14 @@
 import { browser } from '$app/environment';
 import {
 	Client,
-	createClient as createURQLClient,
-	type OperationResult,
-	subscriptionExchange,
-	type TypedDocumentNode,
 	cacheExchange,
+	createClient as createURQLClient,
 	fetchExchange,
 	getContextClient,
+	subscriptionExchange,
 	type AnyVariables,
+	type OperationResult,
+	type TypedDocumentNode,
 } from '@urql/svelte';
 import { createClient as createWSClient } from 'graphql-ws';
 import { onDestroy } from 'svelte';
@@ -31,17 +31,17 @@ export function createClient() {
 			fetchExchange,
 			subscriptionExchange({
 				forwardSubscription(request) {
-				  const input = { ...request, query: request.query || '' };
+					const input = { ...request, query: request.query || '' };
 
-				  return {
-					subscribe(sink) {
-					  const unsubscribe = wsClient.subscribe(input, sink);
+					return {
+						subscribe(sink) {
+							const unsubscribe = wsClient.subscribe(input, sink);
 
-					  return { unsubscribe };
-					},
-				  };
+							return { unsubscribe };
+						},
+					};
 				},
-			  }),
+			}),
 		],
 	});
 

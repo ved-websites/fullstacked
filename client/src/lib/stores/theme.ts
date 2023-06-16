@@ -3,7 +3,7 @@ import { useLocalStorage } from './local-storage';
 import { useToggleable, type Toggleable } from './toggleable';
 
 export const themes = ['dark', 'light'] as const;
-export type Theme = typeof themes[number];
+export type Theme = (typeof themes)[number];
 
 export const isTheme = (theme: string | null) => {
 	if (!theme) {
