@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VARIANT: 18-bullseye
+        PNPM_VERSION: 8
+
+    volumes:
+      - ..:/home/node/workspace:cached
+      - vscode-extensions:/home/node/.vscode-server/extensions
+      - pnpm-store:/home/node/.local/share/pnpm/store
+      - ~/.bash_aliases:/home/node/.bash_aliases
+      - ~/.bash_profile:/home/node/.bash_profile
+      - ~/.ssh:/home/node/.ssh
+      - ~/.ncurc.json:/home/node/.ncurc.json
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+  postgres:
+    image: postgres:13
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_MULTIPLE_DATABASES: tests
+
+    network_mode: service:app
+
+    volumes:
+      - ./scripts/postgres:/docker-entrypoint-initdb.d
+      - postgres-data:/var/lib/postgresql/data
+
+  minio:
+    image: minio/minio
+    restart: unless-stopped
+
+    command: server /home/shared --console-address ":9001"
+
+    network_mode: service:app
+    
+    # environment:
+      # - MINIO_ROOT_USER=minioadmin
+      # - MINIO_ROOT_PASSWORD=minioadmin
+
+    volumes:
+      - minio:/data
+
+volumes:
+  vscode-extensions:
+    external: true
+  pnpm-store:
+    external: true
+  postgres-data:
+  minio:

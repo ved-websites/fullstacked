@@ -15,17 +15,35 @@
 			"includeDefaultArgs": true,
 			"pauseForSourceMap": true,
 			"sourceMaps": true,
-			"preLaunchTask": "client dev",
-			"postDebugTask": "Terminate Dev Server",
 			"skipFiles": [
 				"<node_internals>/**",
-				"**/node_modules/**"
+				"**/node_modules/**",
+				"**/.svelte-kit/**",
+				"**/@vite/**",
 			],
 			"presentation": {
 				"hidden": false,
 				"group": "Client",
 				"order": 1,
-			}
+			},
+		},
+		{
+			"name": "Debug Server Side",
+			"type": "node",
+			"request": "launch",
+			"runtimeExecutable": "pnpm",
+			"runtimeArgs": [
+				"run",
+				"debug"
+			],
+			"skipFiles": [
+				"<node_internals>/**",
+				"**/node_modules/**",
+				"**/.svelte-kit/**",
+				"**/@vite/**",
+			],
+			"preLaunchTask": "Terminate Dev Server",
+			"postDebugTask": "client dev",
 		},
 	]
 }

@@ -11,6 +11,8 @@ export const DEFAULT_PORT = 3000;
 
 export const DEFAULT_GRAPHQL_DEPTH_LIMIT = 10;
 
+export const DEFAULT_MINIO_PORT = 9000;
+
 export class EnvironmentConfig {
 	@IsEnum(Environment)
 	readonly NODE_ENV: Environment = Environment.Development;
@@ -68,4 +70,24 @@ export class EnvironmentConfig {
 	@IsOptional()
 	@IsString()
 	readonly TEST_DATABASE_URL?: string;
+
+	// ---------------
+	//     Minio
+	// ---------------
+
+	@IsString()
+	readonly MINIO_ENDPOINT: string = 'localhost';
+
+	@Type(() => Number)
+	@IsInt()
+	readonly MINIO_PORT: number = DEFAULT_MINIO_PORT;
+
+	@IsString()
+	readonly MINIO_ACCESS_KEY: string = 'minioadmin';
+
+	@IsString()
+	readonly MINIO_SECRET_KEY: string = 'minioadmin';
+
+	@IsString()
+	readonly MINIO_BUCKET_PREFIX!: string;
 }

@@ -1,0 +1,27 @@
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+	.link {
+		@apply hover:underline;
+		@apply text-blue-400;
+		@apply active:text-blue-500;
+		@apply disabled:text-blue-200;
+	}
+}
+
+html,
+body {
+	scroll-behavior: smooth;
+}
+
+button {
+	&:hover {
+		@apply cursor-pointer;
+	}
+	&:disabled {
+		@apply cursor-not-allowed;
+	}
+}

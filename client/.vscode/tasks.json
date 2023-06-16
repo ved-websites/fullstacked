@@ -2,45 +2,33 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "smui-theme",
-			"type": "shell",
-			"command": "pnpm watch:smui-theme",
-			"runOptions": {
-				"runOn": "folderOpen",
-				"instanceLimit": 1
-			},
-			"isBackground": true,
-			"problemMatcher": [],
-			"presentation": {
-				"echo": true,
-				"group": "watcher",
-				"reveal": "never",
-				"panel": "shared",
-				"showReuseMessage": false,
-				"clear": false,
-				"close": true
-			}
-		},
-		{
 			"label": "client dev",
 			"type": "shell",
 			"command": "pnpm dev",
 			"isBackground": true,
+			"runOptions": {
+				"runOn": "folderOpen"
+			},
+			"icon": {
+				"id": "rocket"
+			},
 			"problemMatcher": {
 				"pattern": {
 					"regexp": ""
 				},
 				"background": {
-					"beginsPattern": ".*SvelteKit .*",
-					"endsPattern": ".*local:\\s*http.*"
+					"beginsPattern": ".*VITE .*",
+					"endsPattern": ".*Local:\\s*http.*"
 				}
 			},
 			"presentation": {
 				"echo": true,
-				"reveal": "silent",
+				"reveal": "never",
 				"panel": "shared",
+				"group": "dev",
 				"showReuseMessage": false,
 				"clear": false,
+				"close": true,
 			}
 		},
 		{

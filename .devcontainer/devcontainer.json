@@ -1,0 +1,63 @@
+{
+	"name": "fullstacked",
+
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/home/node/workspace",
+
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"remote.extensionKind": {
+					"mtxr.sqltools": ["ui"],
+					"mtxr.sqltools-driver-pg": ["ui"]
+				}
+			},
+
+			"extensions": [
+				"svelte.svelte-vscode",
+				"esbenp.prettier-vscode",
+				"dbaeumer.vscode-eslint",
+				"stylelint.vscode-stylelint",
+				"graphql.vscode-graphql",
+				"prisma.prisma",
+				"bradlc.vscode-tailwindcss",
+				"ZixuanChen.vitest-explorer",
+				"mtxr.sqltools",
+				"mtxr.sqltools-driver-pg"
+			]
+		}
+	},
+
+	"remoteEnv": {
+		"TZ": "${localEnv:TZ:Canada/Eastern}"
+	},
+
+	"forwardPorts": [5000, 5432, 9000, 9001],
+
+	"portsAttributes": {
+		"3000": {
+			"label": "API Port"
+		},
+		"5000": {
+			"label": "Client Port"
+		},
+		"5432": {
+			"label": "Postgres Port"
+		},
+		"9000": {
+			"label": "Minio Buckets"
+		},
+		"9001": {
+			"label": "Minio Console"
+		},
+		"6000-60000": {
+			"onAutoForward": "ignore"
+		}
+	},
+
+	"initializeCommand": ".devcontainer/scripts/initialize.sh",
+	"postCreateCommand": ".devcontainer/scripts/install.sh",
+
+	"remoteUser": "node"
+}
