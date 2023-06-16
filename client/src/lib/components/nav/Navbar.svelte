@@ -65,8 +65,9 @@
 						id={navElement.id}
 						class="cursor-pointer"
 						active={navElement.elements.some((navSubElement) => $page.url.pathname == navSubElement.url)}
-						><Chevron aligned>{navElement.title}</Chevron></NavLi
 					>
+						<Chevron aligned>{navElement.title}</Chevron>
+					</NavLi>
 					<Dropdown triggeredBy="#{navElement.id}" class="w-44 z-20">
 						{#each navElement.elements as navSubElement}
 							<DropdownItem href={navSubElement.url}>{navSubElement.title}</DropdownItem>
