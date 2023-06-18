@@ -1,6 +1,6 @@
 {
-	"name": "flowbite-svelte-starter",
-	"description": "Flowbite-Svelte starter kit",
+	"name": "client",
+	"description": "Web client using Sveltekit, Flowbite and supports GraphQL using URQL.",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
