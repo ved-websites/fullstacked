@@ -102,9 +102,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            client/.routify
+            client/.vercel
             client/.svelte-kit
-          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/.routify/**', 'client/.svelte-kit/**') }}
+          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/.vercel/**', 'client/.svelte-kit/**') }}
 
   validate:
     name: Validate
@@ -133,9 +133,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            client/.routify
+            client/.vercel
             client/.svelte-kit
-          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/.routify/**', 'client/.svelte-kit/**') }}
+          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/.vercel/**', 'client/.svelte-kit/**') }}
           restore-keys: |
             client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-
 
