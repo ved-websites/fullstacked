@@ -57,7 +57,7 @@ export async function replaceProjectNames() {
 
 	try {
 		await replaceInFile({
-			files: ['.devcontainer/devcontainer.json', './api/.env', './api/.env.example', './project.json'],
+			files: ['.devcontainer/devcontainer.json', './api/.env', './api/.env.example', './package.json'],
 			from: oldProjectName,
 			to: cleanProjectName,
 			allowEmptyPaths: true,
