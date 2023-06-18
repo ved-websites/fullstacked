@@ -8,6 +8,9 @@
 			"runOptions": {
 				"runOn": "folderOpen"
 			},
+			"icon": {
+				"id": "issue-reopened"
+			},
 			"isBackground": true,
 			"problemMatcher": [],
 			"presentation": {

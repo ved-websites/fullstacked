@@ -6,7 +6,7 @@
 	"compounds": [
 		{
 			"name": "Debug Fullstack",
-			"configurations": ["Run App - Debugging", "Launch Edge"],
+			"configurations": ["Attach to API", "Launch Edge"],
 			"presentation": {
 				"hidden": false,
 				"group": "A - Fullstack",

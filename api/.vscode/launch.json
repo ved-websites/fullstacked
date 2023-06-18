@@ -5,55 +5,25 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Run App - Debugging",
+			"name": "Attach to API",
 			"type": "node",
-			"request": "launch",
+			"request": "attach",
 			"restart": true,
 			"skipFiles": [
 				"<node_internals>/**",
 				"${workspaceFolder}/node_modules/**/*.js"
 			],
-			"runtimeExecutable": "npm",
-			"runtimeArgs": [
-				"run",
-				"start:debug",
-			],
-			"console": "internalConsole",
+			"port": 9229,
 			"resolveSourceMapLocations": [
 				"${workspaceFolder}/**",
-				"!**/node_modules/**"
+				"!**/node_modules/**",
+				"!**/_generated/**",
 			],
 			"outputCapture": "std",
 			"presentation": {
 				"hidden": false,
 				"group": "App",
 				"order": 1,
-			}
-		},
-		{
-			"name": "Run App - Debugging No Watch",
-			"type": "node",
-			"request": "launch",
-			"restart": true,
-			"skipFiles": [
-				"<node_internals>/**",
-				"${workspaceFolder}/node_modules/**/*.js"
-			],
-			"runtimeExecutable": "npm",
-			"runtimeArgs": [
-				"run",
-				"start:debug:no-watch",
-			],
-			"console": "internalConsole",
-			"resolveSourceMapLocations": [
-				"${workspaceFolder}/**",
-				"!**/node_modules/**"
-			],
-			"outputCapture": "std",
-			"presentation": {
-				"hidden": false,
-				"group": "App",
-				"order": 2,
 			}
 		},
 		{

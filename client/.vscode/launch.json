@@ -42,8 +42,13 @@
 				"**/.svelte-kit/**",
 				"**/@vite/**",
 			],
-			"preLaunchTask": "Terminate Dev Server",
+			"preLaunchTask": "Terminate Client Dev Server",
 			"postDebugTask": "client dev",
+			"presentation": {
+				"hidden": false,
+				"group": "Client",
+				"order": 2,
+			},
 		},
 	]
 }

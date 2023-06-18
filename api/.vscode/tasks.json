@@ -2,23 +2,23 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "client dev",
+			"label": "api dev",
 			"type": "shell",
-			"command": "pnpm dev",
+			"command": "pnpm start:debug",
 			"isBackground": true,
 			"runOptions": {
 				"runOn": "folderOpen"
 			},
 			"icon": {
-				"id": "zap"
+				"id": "circuit-board"
 			},
 			"problemMatcher": {
 				"pattern": {
 					"regexp": ""
 				},
 				"background": {
-					"beginsPattern": ".*VITE .*",
-					"endsPattern": ".*Local:\\s*http.*"
+					"beginsPattern": ".*Starting compilation.*",
+					"endsPattern": ".*Server launched.*"
 				}
 			},
 			"presentation": {
@@ -32,18 +32,18 @@
 			}
 		},
 		{
-			"label": "Terminate Client Dev Server",
-			"command": "echo ${input:terminate-client}",
+			"label": "Terminate Dev Server",
+			"command": "echo ${input:terminate-api}",
 			"type": "shell",
 			"problemMatcher": []
 		}
 	],
 	"inputs": [
 		{
-			"id": "terminate-client",
+			"id": "terminate-api",
 			"type": "command",
 			"command": "workbench.action.tasks.terminate",
-			"args": "client dev"
+			"args": "api dev"
 		}
 	]
 }
