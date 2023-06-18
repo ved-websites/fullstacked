@@ -11,7 +11,9 @@
     "./api",
     "./client"
   ],
+  "type": "module",
   "scripts": {
+    "init": "ts-node-esm ./scripts/init.ts",
     "gql": "graphql-codegen --config .graphqlrc.ts",
     "gql:watch": "pnpm gql --watch"
   },
@@ -53,7 +55,7 @@
     "@graphql-codegen/typed-document-node": "5.0.0",
     "@graphql-codegen/typescript": "4.0.0",
     "@graphql-codegen/typescript-operations": "4.0.0",
-    "@types/node": "16.11.66",
+    "@types/node": "18.16.18",
     "@v-ed/eslint-config": "0.1.6",
     "@v-ed/prettier-config": "0.2.1",
     "@v-ed/stylelint-config": "0.2.3",
@@ -65,7 +67,9 @@
     "graphql": "^16.0.0",
     "npm-run-all": "4.1.5",
     "prettier": "2.8.8",
+    "replace-in-file": "7.0.1",
     "stylelint": "15.7.0",
+    "ts-node": "10.9.1",
     "tslib": "2.5.3",
     "typescript": "5.1.3"
   },

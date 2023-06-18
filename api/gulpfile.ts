@@ -1,11 +1,7 @@
 import { exec as execNoPromise } from 'child_process';
 import del from 'del';
-import dotenv from 'dotenv';
 import fs from 'fs';
 import gulp, { type TaskFunction } from 'gulp';
-import { prompt } from 'gulp-prompt';
-import rename from 'gulp-rename';
-import replace from 'gulp-replace';
 import ts from 'gulp-typescript';
 import util from 'util';
 import { generate as generatePrisma, pushDb, seedDb } from './prisma/functions';
@@ -22,22 +18,6 @@ export const configs = {
 	devPort: 3005,
 	prismaGeneratedFolder: 'src/_generated',
 };
-
-// UTILS
-
-function generateGuid() {
-	const dashPositions = [8, 12, 16, 20];
-
-	return Array.from(Array(32))
-		.map((_v, index) => {
-			const randomChar = Math.floor(Math.random() * 16)
-				.toString(16)
-				.toUpperCase();
-
-			return dashPositions.includes(index) ? `-${randomChar}` : randomChar;
-		})
-		.join('');
-}
 
 // TASKS
 
@@ -57,26 +37,7 @@ function setupEnv() {
 	const devEnvName = '.env';
 
 	if (!fs.existsSync(devEnvName)) {
-		let stream = gulp
-			.src('./.env.example')
-			.pipe(replace('MY_RANDOM_KEY', generateGuid()))
-			.pipe(replace('PORT=', `PORT=${configs.devPort}`))
-			.pipe(rename(devEnvName))
-			.pipe(gulp.dest('.'));
-
-		if (!process.env.DATABASE_URL) {
-			stream = stream.pipe(
-				prompt({
-					type: 'input',
-					name: 'confirmation',
-					message: 'A new env file was created! Go fill the db connection info and press enter to continue.',
-				}),
-			);
-		}
-
-		stream.once('end', () => dotenv.config());
-
-		return stream;
+		throw `Project not initialized! Make sure to run "pnpm run init" in the project's folder root.`;
 	}
 
 	return Promise.resolve();

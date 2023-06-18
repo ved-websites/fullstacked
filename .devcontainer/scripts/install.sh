@@ -11,3 +11,5 @@ fi
 pnpm install --frozen-lockfile
 
 pnpx playwright install
+
+pnpm run init
