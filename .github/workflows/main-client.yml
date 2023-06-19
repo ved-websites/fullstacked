@@ -104,7 +104,7 @@ jobs:
           path: |
             client/.vercel
             client/.svelte-kit
-          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/.vercel/**', 'client/.svelte-kit/**') }}
+          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/package.json', 'client/.vercel/**', 'client/.svelte-kit/**') }}
 
   validate:
     name: Validate
@@ -138,7 +138,7 @@ jobs:
           path: |
             client/.vercel
             client/.svelte-kit
-          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/.vercel/**', 'client/.svelte-kit/**') }}
+          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/package.json', 'client/.vercel/**', 'client/.svelte-kit/**') }}
           restore-keys: |
             client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-
 
