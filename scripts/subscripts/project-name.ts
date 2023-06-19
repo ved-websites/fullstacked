@@ -38,11 +38,12 @@ async function getOldProjectName(rl: Interface) {
 }
 
 export async function replaceProjectNames() {
-	const rl = readline.createInterface({ input, output });
+	const rl = readline.createInterface({ input, output, removeHistoryDuplicates: true });
 
 	const oldProjectName = await getOldProjectName(rl);
 
 	if (!oldProjectName) {
+		rl.close();
 		return {};
 	}
 
@@ -52,7 +53,29 @@ export async function replaceProjectNames() {
 	console.log(`Once finished, your vscode window will probably reload as the workspace filename will be changed.`);
 	console.log(`~~~~~~`);
 
-	const projectName = await rl.question('New project name : ');
+	const nameController = new AbortController();
+
+	rl.once('SIGINT', () => {
+		console.log('\nCancelled renaming.');
+		nameController.abort();
+	});
+
+	let projectName: string;
+
+	try {
+		const dirtyName = await rl.question('New project name (Ctrl-C to cancel) : ', { signal: nameController.signal });
+
+		projectName = dirtyName.trim();
+	} catch (error) {
+		rl.close();
+		return {};
+	}
+
+	if (!projectName) {
+		rl.close();
+		return {};
+	}
+
 	const cleanProjectName = projectName.toLowerCase().replaceAll(' ', '-');
 
 	try {
@@ -71,6 +94,8 @@ export async function replaceProjectNames() {
 		});
 	} catch (error) {
 		console.error(`An error happened while replacing old project name in files! Check file permissions and try again.`);
+
+		rl.close();
 
 		throw error;
 	}

@@ -14,12 +14,12 @@
 			},
 			"problemMatcher": {
 				"pattern": {
-					"regexp": ""
+					"regexp": "",
 				},
 				"background": {
 					"beginsPattern": ".*Starting compilation.*",
-					"endsPattern": ".*Server launched.*"
-				}
+					"endsPattern": ".*Server launched.*",
+				},
 			},
 			"presentation": {
 				"echo": true,
@@ -35,15 +35,15 @@
 			"label": "Terminate Dev Server",
 			"command": "echo ${input:terminate-api}",
 			"type": "shell",
-			"problemMatcher": []
-		}
+			"problemMatcher": [],
+		},
 	],
 	"inputs": [
 		{
 			"id": "terminate-api",
 			"type": "command",
 			"command": "workbench.action.tasks.terminate",
-			"args": "api dev"
-		}
+			"args": "api dev",
+		},
 	]
 }

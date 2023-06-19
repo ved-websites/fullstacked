@@ -33,7 +33,7 @@
 		"TZ": "${localEnv:TZ:Canada/Eastern}"
 	},
 
-	"forwardPorts": [5000, 5432, 9000, 9001],
+	"forwardPorts": [3000, 5000, 5432, 9000, 9001],
 
 	"portsAttributes": {
 		"3000": {

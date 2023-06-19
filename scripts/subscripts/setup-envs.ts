@@ -9,10 +9,10 @@ async function setupAPI() {
 	const folder = './api';
 
 	if (fs.existsSync(`${folder}/.env`)) {
-		return;
+		return false;
 	}
 	if (!fs.existsSync(`${folder}/.env.example`)) {
-		return;
+		return false;
 	}
 
 	await copyFile(`${folder}/.env.example`, `${folder}/.env`);
@@ -22,19 +22,23 @@ async function setupAPI() {
 		from: 'MY_RANDOM_KEY',
 		to: generateGuid(),
 	});
+
+	return true;
 }
 
 async function setupClient() {
 	const folder = './client';
 
 	if (fs.existsSync(`${folder}/.env`)) {
-		return;
+		return false;
 	}
 	if (!fs.existsSync(`${folder}/.env.example`)) {
-		return;
+		return false;
 	}
 
 	await copyFile(`${folder}/.env.example`, `${folder}/.env`);
+
+	return true;
 }
 
 export async function setupEnvs() {
