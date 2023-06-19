@@ -19,8 +19,9 @@
 		"test:unit": "pnpm run vitest --run",
 		"vitest": "vitest",
 		"playwright:test": "npm-run-all -s build preview",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"validate": "npm-run-all -p validate:*",
+		"validate:svelte": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"validate:ts": "tsc --noEmit",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write ."
 	},
