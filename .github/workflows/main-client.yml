@@ -129,6 +129,9 @@ jobs:
       - name: Install packages
         run: pnpm install
 
+      - name: Init
+        run: pnpm run init
+
       - name: Fetch Cached Build Folders
         uses: actions/cache@v3
         with:
