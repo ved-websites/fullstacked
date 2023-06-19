@@ -130,7 +130,7 @@ jobs:
         run: pnpm install
 
       - name: Init
-        run: pnpm run init
+        run: pnpm run init --no-api
 
       - name: Fetch Cached Build Folders
         uses: actions/cache@v3
