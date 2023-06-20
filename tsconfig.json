@@ -2,19 +2,19 @@
   "extends": "@v-ed/tsconfig",
   "compilerOptions": {
     "moduleResolution": "node",
-    "module": "es2022",
-    "lib": ["es2022"],
-    "target": "es2022",
+    "module": "commonjs",
+    "lib": ["es2021"],
+    "target": "es2021",
 
     "baseUrl": ".",
-    
+
     "outDir": "./dist",
-    
+
     "typeRoots": ["@types", "./node_modules/@types"],
 
     "importsNotUsedAsValues": "error",
 
     "forceConsistentCasingInFileNames": true
   },
-  "include": [".graphqlrc.ts", "./scripts/**/*.ts"],
+  "include": [".graphqlrc.ts"],
 }

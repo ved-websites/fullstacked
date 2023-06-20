@@ -6,22 +6,33 @@ import {
 	fetchExchange,
 	getContextClient,
 	subscriptionExchange,
+	mutationStore as urqlMutationStore,
+	queryStore as urqlQueryStore,
 	type AnyVariables,
 	type OperationResult,
+	type OperationResultState,
 	type TypedDocumentNode,
 } from '@urql/svelte';
 import { createClient as createWSClient } from 'graphql-ws';
 import { onDestroy } from 'svelte';
+import { readable, type Readable } from 'svelte/store';
 import { pipe, subscribe as wonkaSubscribe } from 'wonka';
 import { getApiUrl } from './utils';
 
-export function createClient() {
+export type ClientOptions = {
+	fetch?: typeof fetch;
+	token?: string;
+	ws?: unknown;
+};
+
+export function createClient(options?: ClientOptions) {
 	const apiUrl = getApiUrl();
 
 	const wsProtocol = apiUrl.protocol == 'https:' ? 'wss' : 'ws';
 
 	const wsClient = createWSClient({
 		url: `${wsProtocol}://${apiUrl.host}/graphql`,
+		webSocketImpl: options?.ws,
 	});
 
 	const client = createURQLClient({
@@ -43,9 +54,53 @@ export function createClient() {
 				},
 			}),
 		],
+		fetch: options?.fetch,
+		fetchOptions: () => {
+			return {
+				headers: {
+					authorization: options?.token ? `Bearer ${options.token}` : '',
+				},
+			};
+		},
 	});
 
 	return client;
+}
+
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
+export function queryStore<Data = unknown, Variables extends AnyVariables = AnyVariables>(
+	args: Optional<Parameters<typeof urqlQueryStore<Data, Variables>>[0], 'client'>,
+) {
+	if (!browser) {
+		return readable({
+			fetching: true,
+			isServer: true,
+		}) as Readable<OperationResultState<Data, Variables> & { isServer: true }>;
+	}
+
+	// @ts-expect-error Typing issues
+	return urqlQueryStore({
+		client: args.client ?? getContextClient(),
+		...args,
+	}) as Readable<OperationResultState<Data, Variables> & { isServer?: boolean }>;
+}
+
+export function mutationStore<Data = unknown, Variables extends AnyVariables = AnyVariables>(
+	args: Optional<Parameters<typeof urqlMutationStore<Data, Variables>>[0], 'client'>,
+) {
+	if (!browser) {
+		return readable({
+			fetching: true,
+			isServer: true,
+		}) as Readable<OperationResultState<Data, Variables> & { isServer: true }>;
+	}
+
+	// @ts-expect-error Typing issues
+	return urqlMutationStore({
+		client: args.client ?? getContextClient(),
+		...args,
+	}) as Readable<OperationResultState<Data, Variables> & { isServer?: boolean }>;
 }
 
 export type SubscribeOptions = Partial<{ client: Client }>;

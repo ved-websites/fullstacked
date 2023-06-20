@@ -9,6 +9,8 @@
 			"$lib/*":["./src/lib/*"],
 		},
 		
+		"declaration": false,
+		
 		"allowJs": true,
 		"checkJs": true,
 		"esModuleInterop": true,

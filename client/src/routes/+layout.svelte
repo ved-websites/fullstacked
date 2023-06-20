@@ -1,24 +1,20 @@
 <script lang="ts">
 	import '../app.postcss';
 
+	import { createClient } from '$/lib/urql';
+	import { getCookie } from '$/lib/utils/cookie';
+	import { browser } from '$app/environment';
 	import InitialTheme from '$lib/InitialTheme.svelte';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
+	import { setContextClient } from '@urql/svelte';
 
-	// export let data;
+	if (browser) {
+		const client = createClient({
+			token: getCookie('authorization'),
+		});
 
-	// $: ({ session } = data);
-
-	// onMount(() => {
-	// 	const {
-	// 		data: { subscription },
-	// 	} = supabase.auth.onAuthStateChange((_event, _session) => {
-	// 		if (_session?.expires_at !== session?.expires_at) {
-	// 			invalidate('supabase:auth');
-	// 		}
-	// 	});
-
-	// 	return () => subscription.unsubscribe();
-	// });
+		setContextClient(client);
+	}
 </script>
 
 <InitialTheme />

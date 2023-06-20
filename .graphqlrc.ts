@@ -31,11 +31,12 @@ const codegen: Types.Config = {
 			],
 		},
 	},
+	watch: 'client/src/**/*',
 };
 
 const config: IGraphQLConfig = {
 	schema: `http://localhost:3000/graphql`,
-	documents: 'client/src/graphql/**/*.graphql',
+	documents: ['client/src/**/*.graphql', 'client/src/**/*.svelte'],
 	extensions: {
 		codegen,
 	},

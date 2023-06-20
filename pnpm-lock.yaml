@@ -66,6 +66,12 @@ importers:
       stylelint:
         specifier: 15.7.0
         version: 15.7.0
+      svelte:
+        specifier: 3.59.1
+        version: 3.59.1
+      svelte2tsx:
+        specifier: 0.6.15
+        version: 0.6.15(svelte@3.59.1)(typescript@5.1.3)
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@swc/core@1.3.61)(@types/node@18.16.18)(typescript@5.1.3)
@@ -262,6 +268,9 @@ importers:
       wonka:
         specifier: ^6.3.2
         version: 6.3.2
+      ws:
+        specifier: 8.13.0
+        version: 8.13.0
       zod:
         specifier: 3.21.4
         version: 3.21.4
@@ -275,6 +284,9 @@ importers:
       '@sveltejs/kit':
         specifier: 1.20.4
         version: 1.20.4(svelte@3.59.1)(vite@4.3.9)
+      '@types/ws':
+        specifier: 8.5.5
+        version: 8.5.5
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.55.0
         version: 5.59.0(@typescript-eslint/parser@5.59.11)(eslint@8.42.0)(typescript@5.1.3)
@@ -1760,7 +1772,7 @@ packages:
     dependencies:
       '@graphql-tools/utils': 10.0.0(graphql@16.3.0)
       '@repeaterjs/repeater': 3.0.4
-      '@types/ws': 8.5.3
+      '@types/ws': 8.5.5
       graphql: 16.3.0
       graphql-ws: 5.13.1(graphql@16.3.0)
       isomorphic-ws: 5.0.0(ws@8.13.0)
@@ -1779,7 +1791,7 @@ packages:
     dependencies:
       '@graphql-tools/utils': 10.0.0(graphql@16.6.0)
       '@repeaterjs/repeater': 3.0.4
-      '@types/ws': 8.5.3
+      '@types/ws': 8.5.5
       graphql: 16.6.0
       graphql-ws: 5.13.1(graphql@16.6.0)
       isomorphic-ws: 5.0.0(ws@8.13.0)
@@ -1835,7 +1847,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@graphql-tools/utils': 10.0.0(graphql@16.3.0)
-      '@types/ws': 8.5.3
+      '@types/ws': 8.5.5
       graphql: 16.3.0
       isomorphic-ws: 5.0.0(ws@8.13.0)
       tslib: 2.5.3
@@ -1852,7 +1864,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@graphql-tools/utils': 10.0.0(graphql@16.6.0)
-      '@types/ws': 8.5.3
+      '@types/ws': 8.5.5
       graphql: 16.6.0
       isomorphic-ws: 5.0.0(ws@8.13.0)
       tslib: 2.5.3
@@ -2190,7 +2202,7 @@ packages:
       '@graphql-tools/executor-legacy-ws': 1.0.0(graphql@16.3.0)
       '@graphql-tools/utils': 10.0.0(graphql@16.3.0)
       '@graphql-tools/wrap': 10.0.0(graphql@16.3.0)
-      '@types/ws': 8.5.3
+      '@types/ws': 8.5.5
       '@whatwg-node/fetch': 0.9.1
       graphql: 16.3.0
       isomorphic-ws: 5.0.0(ws@8.13.0)
@@ -2217,7 +2229,7 @@ packages:
       '@graphql-tools/executor-legacy-ws': 1.0.0(graphql@16.6.0)
       '@graphql-tools/utils': 10.0.0(graphql@16.6.0)
       '@graphql-tools/wrap': 10.0.0(graphql@16.6.0)
-      '@types/ws': 8.5.3
+      '@types/ws': 8.5.5
       '@whatwg-node/fetch': 0.9.1
       graphql: 16.6.0
       isomorphic-ws: 5.0.0(ws@8.13.0)
@@ -3477,8 +3489,8 @@ packages:
       '@types/node': 18.16.18
     dev: true
 
-  /@types/ws@8.5.3:
-    resolution: {integrity: sha512-6YOoWjruKj1uLf3INHH7D3qTXwFfEsg1kf3c0uDdSBJwfa/llkwIjrAGV7j7mVgGNbzTQ3HiHKKDXl6bJPD97w==}
+  /@types/ws@8.5.5:
+    resolution: {integrity: sha512-lwhs8hktwxSjf9UaZ9tG5M03PGogvFaH8gUgLNbN9HKIg0dvv6q+gkSuJ8HN4/VbyxkuLzCjlN7GquQ0gUJfIg==}
     dependencies:
       '@types/node': 18.16.18
     dev: true
@@ -5523,6 +5535,10 @@ packages:
   /decode-uri-component@0.2.2:
     resolution: {integrity: sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==}
     engines: {node: '>=0.10'}
+
+  /dedent-js@1.0.1:
+    resolution: {integrity: sha512-OUepMozQULMLUmhxS95Vudo0jb0UchLimi3+pQ2plj61Fcy8axbP9hbiD4Sz6DPqn6XG3kfmziVfQ1rSys5AJQ==}
+    dev: true
 
   /deep-eql@4.1.3:
     resolution: {integrity: sha512-WaEtAOpRA1MQ0eohqZjpGD8zdI0Ovsm8mmFhaDN8dvDZzyoUMcYDnf5Y6iu7HTXxf8JDS23qWa4a+hKCDyOPzw==}
@@ -11246,6 +11262,18 @@ packages:
       postcss: 8.4.24
       sorcery: 0.11.0
       strip-indent: 3.0.0
+      svelte: 3.59.1
+      typescript: 5.1.3
+    dev: true
+
+  /svelte2tsx@0.6.15(svelte@3.59.1)(typescript@5.1.3):
+    resolution: {integrity: sha512-+j6RmA3g5pPs1DHa/rdzJjjhZuCfWx0IbNPaR99A2bvOSPPY6BlVkBGU0urI+DGcWHhYEG28Flo942KqlAkpEQ==}
+    peerDependencies:
+      svelte: ^3.55 || ^4.0
+      typescript: ^4.9.4 || ^5.0.0
+    dependencies:
+      dedent-js: 1.0.1
+      pascal-case: 3.1.2
       svelte: 3.59.1
       typescript: 5.1.3
     dev: true

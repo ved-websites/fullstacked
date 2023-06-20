@@ -1,5 +1,5 @@
-import { mdiHome, mdiInformation, mdiAbacus, mdiSpiritLevel } from '@mdi/js';
 import type { NavElement } from '$lib/components/nav/nav-elements';
+import { mdiAbacus, mdiHome, mdiInformation, mdiSpiritLevel } from '@mdi/js';
 
 export const navElements: NavElement[] = [
 	{
@@ -15,14 +15,20 @@ export const navElements: NavElement[] = [
 		drawerIconPath: mdiInformation,
 	},
 	{
-		title: 'Testing multi-level',
+		title: 'Data Driven',
 		id: 'test',
 		isPublic: true,
 		drawerIconPath: mdiSpiritLevel,
 		elements: [
 			{
-				title: 'test1',
-				url: '/nani',
+				title: 'Data',
+				url: '/data',
+				isPublic: true,
+				drawerIconPath: mdiAbacus,
+			},
+			{
+				title: 'Chat',
+				url: '/chat',
 				isPublic: true,
 				drawerIconPath: mdiAbacus,
 			},
