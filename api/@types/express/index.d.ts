@@ -3,7 +3,7 @@ import type { Auth } from '../../src/@common/lucia/lucia.module';
 
 declare global {
 	namespace Express {
-		interface Response {
+		interface Locals {
 			auth: AuthRequest<Auth>;
 		}
 	}

@@ -8,7 +8,9 @@ export class AuthResolver {
 	constructor(private readonly authService: AuthService) {}
 
 	@Query(() => [])
-	login(@Res() response: Response) {
-		response.auth;
+	async login(@Res() response: Response) {
+		const session = await this.authService.login('bla', 'bloo');
+
+		response.locals.auth.setSession(session);
 	}
 }
