@@ -8,7 +8,7 @@ export class AuthResolver {
 	constructor(private readonly authService: AuthService) {}
 
 	@Query(() => [])
-	login(@Res() _response: Response) {
-		// response.auth;
+	login(@Res() response: Response) {
+		response.auth;
 	}
 }
