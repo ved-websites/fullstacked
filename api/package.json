@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@apollo/server": "4.7.4",
+    "@lucia-auth/adapter-prisma": "2.0.0",
     "@nestjs/apollo": "11.0.6",
     "@nestjs/common": "9.4.2",
     "@nestjs/core": "9.4.2",
@@ -55,6 +56,7 @@
     "graphql-depth-limit": "1.1.0",
     "graphql-subscriptions": "2.0.0",
     "graphql-ws": "5.13.1",
+    "lucia-auth": "1.8.0",
     "nest-typed-config": "2.5.2",
     "nestjs-minio-client": "2.0.0",
     "reflect-metadata": "0.1.13",

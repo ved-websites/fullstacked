@@ -1,5 +1,5 @@
 import { PrismaSelector, PrismaService } from '$common/prisma/prisma.service';
-import type { MessageCreateInput, MessageUpdateWithWhereUniqueWithoutUserInput, MessageWhereInput } from '$prisma-graphql/message';
+import type { MessageCreateInput, MessageUpdateWithWhereUniqueWithoutAuthUserInput, MessageWhereInput } from '$prisma-graphql/message';
 import { Injectable } from '@nestjs/common';
 import { MESSAGE_ADDED, MESSAGE_UPDATED } from './constants/triggers';
 
@@ -21,7 +21,7 @@ export class MessageService {
 		return message;
 	}
 
-	async update(select: PrismaSelector, query: MessageUpdateWithWhereUniqueWithoutUserInput) {
+	async update(select: PrismaSelector, query: MessageUpdateWithWhereUniqueWithoutAuthUserInput) {
 		const where = query.where;
 		const data = { time: new Date(), ...query.data };
 

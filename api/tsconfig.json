@@ -24,6 +24,8 @@
     
     "outDir": "./dist",
     
+    "declaration": false,
+    
     "importsNotUsedAsValues": "error",
   },
   "include": [

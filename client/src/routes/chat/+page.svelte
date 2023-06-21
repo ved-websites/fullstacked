@@ -9,7 +9,7 @@
 			query GetChatMessages {
 				messages {
 					text
-					user {
+					authUser {
 						username
 					}
 				}
@@ -21,9 +21,9 @@
 		const result = mutationStore({
 			query: gql<SendMessageMutation, SendMessageMutationVariables>`
 				mutation SendMessage($text: String!, $username: String!) {
-					addMessage(data: { text: $text, user: { connect: { username: $username } } }) {
+					addMessage(data: { text: $text, authUser: { connect: { username: $username } } }) {
 						text
-						user {
+						authUser {
 							username
 						}
 					}
@@ -55,7 +55,7 @@
 	<P color="red">{$messages.error}</P>
 {:else}
 	{#each $messages.data.messages as message}
-		<P>{message.user.username} : {message.text}</P>
+		<P>{message.authUser.username} : {message.text}</P>
 	{/each}
 {/if}
 
