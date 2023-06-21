@@ -11,9 +11,8 @@
     "./api",
     "./client"
   ],
-  "type": "module",
   "scripts": {
-    "init": "ts-node-esm --project ./tsconfig.scripts.json ./scripts/init.ts",
+    "init": "ts-node-esm ./scripts/init.ts",
     "gql": "graphql-codegen --config .graphqlrc.ts",
     "gql:watch": "pnpm gql --watch"
   },

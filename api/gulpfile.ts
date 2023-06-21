@@ -48,7 +48,7 @@ function generatePrismaHelpers() {
 }
 
 function updateDatabaseSchema() {
-	return pushDb({ skipGenerators: true });
+	return pushDb({ skipGenerators: true, forceReset: true });
 }
 
 async function seedDatabase() {
