@@ -2,24 +2,23 @@ import { ConfigModule } from '$common/configs/config.module';
 import { EnvironmentConfig } from '$common/configs/env.validation';
 import { PrismaModule } from '$common/prisma/prisma.module';
 import { PrismaService } from '$common/prisma/prisma.service';
-import { Module } from '@nestjs/common';
-import { luciaFactory } from './lucia.factory';
-import { AuthenticationMiddleware } from './lucia.middleware';
-
-export const AuthFactory = 'AUTH';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { LuciaFactory, luciaFactory } from './lucia.factory';
+import { LuciaMiddleware } from './lucia.middleware';
 
 @Module({
 	imports: [PrismaModule, ConfigModule],
 	providers: [
 		{
-			provide: AuthFactory,
+			provide: LuciaFactory,
 			inject: [PrismaService, EnvironmentConfig],
 			useFactory: luciaFactory,
 		},
-		AuthenticationMiddleware,
 	],
-	exports: [AuthFactory, AuthenticationMiddleware],
+	exports: [LuciaFactory],
 })
-export class LuciaModule {}
-
-export type { Auth } from './lucia.factory';
+export class LuciaModule implements NestModule {
+	configure(consumer: MiddlewareConsumer) {
+		consumer.apply(LuciaMiddleware).forRoutes('*');
+	}
+}

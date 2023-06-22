@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { superForm } from 'sveltekit-superforms/client';
-	import { Alert, Input, Label, Helper, Button } from 'flowbite-svelte';
 	import { page } from '$app/stores';
+	import { Alert, Button, Helper, Input, Label } from 'flowbite-svelte';
+	import { superForm } from 'sveltekit-superforms/client';
 
 	$: isRedirected = $page.url.searchParams.has('redirectTo');
 

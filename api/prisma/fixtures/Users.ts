@@ -7,13 +7,14 @@ export default class UserFixture extends Fixture<User> {
 	override async seed(prisma: PrismaClient): Promise<User[]> {
 		const users = await upsertMany(prisma.user.upsert, {
 			create: {
-				username: 'V-ed',
+				id: 'adawdad',
+				email: 'email@mail.com',
 				firstName: 'Guilaume',
 				lastName: 'Marcoux',
 			},
 			update: {},
 			where: {
-				username: 'V-ed',
+				email: 'email@mail.com',
 			},
 		});
 

@@ -36,7 +36,7 @@ const codegen: Types.Config = {
 
 const config: IGraphQLConfig = {
 	schema: `http://localhost:3000/graphql`,
-	documents: ['client/src/**/*.graphql', 'client/src/**/*.svelte'],
+	documents: ['client/src/**/*.graphql', 'client/src/**/*.svelte', 'client/src/**/*.server.ts'],
 	extensions: {
 		codegen,
 	},

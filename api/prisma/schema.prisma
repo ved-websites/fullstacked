@@ -20,46 +20,46 @@ generator nestgraphql {
   fields_Validator_input = "true"
 }
 
-model AuthUser {
-  id           String        @id @unique
-  auth_session AuthSession[]
-  auth_key     AuthKey[]
-  // here you can add custom fields for your user
-  // e.g. name, email, username, roles, etc.
+// ===========
+//     AUTH
+// ===========
 
-  username  String    @unique
+model User {
+  id String @id @unique
+
+  auth_session Session[]
+  auth_key     Key[]
+
+  email     String    @unique
   firstName String?   @map("first_name")
   lastName  String?   @map("last_name")
   messages  Message[]
-
-  @@map("auth_users")
 }
 
-model AuthSession {
+model Session {
   id             String @id @unique
   user_id        String
   active_expires BigInt
   idle_expires   BigInt
-
-  auth_user AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  // pass this key to `userRelationKey`
+  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
-  @@map("auth_sessions")
 }
 
-model AuthKey {
+model Key {
   id              String  @id @unique
-  /// @HideField({ output: true, input: true })
   hashed_password String?
   user_id         String
-  primary_key     Boolean
-  expires         BigInt?
-
-  auth_user AuthUser @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  // pass this key to `userRelationKey`
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
-  @@map("auth_keys")
 }
+
+// ===========
+//  END AUTH
+// ===========
 
 model Message {
   id   Int      @id @default(autoincrement())
@@ -68,9 +68,9 @@ model Message {
   /// @HideField({ output: false, input: true })
   time DateTime @default(now())
 
-  authUser   AuthUser @relation(fields: [authUserId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   /// @HideField({ output: true, input: true })
-  authUserId String
+  userId String
 
   @@map("messages")
 }

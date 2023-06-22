@@ -1,15 +1,10 @@
-import { AuthenticationMiddleware } from '$common/lucia/lucia.middleware';
 import { LuciaModule } from '$common/lucia/lucia.module';
-import { Module, NestModule, type MiddlewareConsumer } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { Module } from '@nestjs/common';
 import { AuthResolver } from './auth.resolver';
+import { AuthService } from './auth.service';
 
 @Module({
 	imports: [LuciaModule],
-	providers: [AuthenticationMiddleware, AuthService, AuthResolver],
+	providers: [AuthResolver, AuthService],
 })
-export class AuthModule implements NestModule {
-	configure(consumer: MiddlewareConsumer) {
-		consumer.apply(AuthenticationMiddleware).forRoutes('*');
-	}
-}
+export class AuthModule {}

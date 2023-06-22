@@ -16,190 +16,6 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
-export type AuthKey = {
-  __typename?: 'AuthKey';
-  auth_user: AuthUser;
-  expires?: Maybe<Scalars['String']['output']>;
-  hashed_password?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  primary_key: Scalars['Boolean']['output'];
-  user_id: Scalars['String']['output'];
-};
-
-export type AuthKeyCreateManyAuth_UserInput = {
-  expires?: InputMaybe<Scalars['String']['input']>;
-  hashed_password?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
-  primary_key: Scalars['Boolean']['input'];
-};
-
-export type AuthKeyCreateManyAuth_UserInputEnvelope = {
-  data: Array<AuthKeyCreateManyAuth_UserInput>;
-  skipDuplicates?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-export type AuthKeyCreateNestedManyWithoutAuth_UserInput = {
-  connect?: InputMaybe<Array<AuthKeyWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<AuthKeyCreateOrConnectWithoutAuth_UserInput>>;
-  create?: InputMaybe<Array<AuthKeyCreateWithoutAuth_UserInput>>;
-  createMany?: InputMaybe<AuthKeyCreateManyAuth_UserInputEnvelope>;
-};
-
-export type AuthKeyCreateOrConnectWithoutAuth_UserInput = {
-  create: AuthKeyCreateWithoutAuth_UserInput;
-  where: AuthKeyWhereUniqueInput;
-};
-
-export type AuthKeyCreateWithoutAuth_UserInput = {
-  expires?: InputMaybe<Scalars['String']['input']>;
-  hashed_password?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
-  primary_key: Scalars['Boolean']['input'];
-};
-
-export type AuthKeyListRelationFilter = {
-  every?: InputMaybe<AuthKeyWhereInput>;
-  none?: InputMaybe<AuthKeyWhereInput>;
-  some?: InputMaybe<AuthKeyWhereInput>;
-};
-
-export type AuthKeyWhereInput = {
-  AND?: InputMaybe<Array<AuthKeyWhereInput>>;
-  NOT?: InputMaybe<Array<AuthKeyWhereInput>>;
-  OR?: InputMaybe<Array<AuthKeyWhereInput>>;
-  auth_user?: InputMaybe<AuthUserRelationFilter>;
-  expires?: InputMaybe<BigIntNullableFilter>;
-  hashed_password?: InputMaybe<StringNullableFilter>;
-  id?: InputMaybe<StringFilter>;
-  primary_key?: InputMaybe<BoolFilter>;
-  user_id?: InputMaybe<StringFilter>;
-};
-
-export type AuthKeyWhereUniqueInput = {
-  id?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type AuthSession = {
-  __typename?: 'AuthSession';
-  active_expires: Scalars['String']['output'];
-  auth_user: AuthUser;
-  id: Scalars['ID']['output'];
-  idle_expires: Scalars['String']['output'];
-  user_id: Scalars['String']['output'];
-};
-
-export type AuthSessionCreateManyAuth_UserInput = {
-  active_expires: Scalars['String']['input'];
-  id: Scalars['String']['input'];
-  idle_expires: Scalars['String']['input'];
-};
-
-export type AuthSessionCreateManyAuth_UserInputEnvelope = {
-  data: Array<AuthSessionCreateManyAuth_UserInput>;
-  skipDuplicates?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-export type AuthSessionCreateNestedManyWithoutAuth_UserInput = {
-  connect?: InputMaybe<Array<AuthSessionWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<AuthSessionCreateOrConnectWithoutAuth_UserInput>>;
-  create?: InputMaybe<Array<AuthSessionCreateWithoutAuth_UserInput>>;
-  createMany?: InputMaybe<AuthSessionCreateManyAuth_UserInputEnvelope>;
-};
-
-export type AuthSessionCreateOrConnectWithoutAuth_UserInput = {
-  create: AuthSessionCreateWithoutAuth_UserInput;
-  where: AuthSessionWhereUniqueInput;
-};
-
-export type AuthSessionCreateWithoutAuth_UserInput = {
-  active_expires: Scalars['String']['input'];
-  id: Scalars['String']['input'];
-  idle_expires: Scalars['String']['input'];
-};
-
-export type AuthSessionListRelationFilter = {
-  every?: InputMaybe<AuthSessionWhereInput>;
-  none?: InputMaybe<AuthSessionWhereInput>;
-  some?: InputMaybe<AuthSessionWhereInput>;
-};
-
-export type AuthSessionWhereInput = {
-  AND?: InputMaybe<Array<AuthSessionWhereInput>>;
-  NOT?: InputMaybe<Array<AuthSessionWhereInput>>;
-  OR?: InputMaybe<Array<AuthSessionWhereInput>>;
-  active_expires?: InputMaybe<BigIntFilter>;
-  auth_user?: InputMaybe<AuthUserRelationFilter>;
-  id?: InputMaybe<StringFilter>;
-  idle_expires?: InputMaybe<BigIntFilter>;
-  user_id?: InputMaybe<StringFilter>;
-};
-
-export type AuthSessionWhereUniqueInput = {
-  id?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type AuthUser = {
-  __typename?: 'AuthUser';
-  _count: AuthUserCount;
-  auth_key?: Maybe<Array<AuthKey>>;
-  auth_session?: Maybe<Array<AuthSession>>;
-  firstName?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  lastName?: Maybe<Scalars['String']['output']>;
-  messages?: Maybe<Array<Message>>;
-  username: Scalars['String']['output'];
-};
-
-export type AuthUserCount = {
-  __typename?: 'AuthUserCount';
-  auth_key: Scalars['Int']['output'];
-  auth_session: Scalars['Int']['output'];
-  messages: Scalars['Int']['output'];
-};
-
-export type AuthUserCreateNestedOneWithoutMessagesInput = {
-  connect?: InputMaybe<AuthUserWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<AuthUserCreateOrConnectWithoutMessagesInput>;
-  create?: InputMaybe<AuthUserCreateWithoutMessagesInput>;
-};
-
-export type AuthUserCreateOrConnectWithoutMessagesInput = {
-  create: AuthUserCreateWithoutMessagesInput;
-  where: AuthUserWhereUniqueInput;
-};
-
-export type AuthUserCreateWithoutMessagesInput = {
-  auth_key?: InputMaybe<AuthKeyCreateNestedManyWithoutAuth_UserInput>;
-  auth_session?: InputMaybe<AuthSessionCreateNestedManyWithoutAuth_UserInput>;
-  firstName?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
-  lastName?: InputMaybe<Scalars['String']['input']>;
-  username: Scalars['String']['input'];
-};
-
-export type AuthUserRelationFilter = {
-  is?: InputMaybe<AuthUserWhereInput>;
-  isNot?: InputMaybe<AuthUserWhereInput>;
-};
-
-export type AuthUserWhereInput = {
-  AND?: InputMaybe<Array<AuthUserWhereInput>>;
-  NOT?: InputMaybe<Array<AuthUserWhereInput>>;
-  OR?: InputMaybe<Array<AuthUserWhereInput>>;
-  auth_key?: InputMaybe<AuthKeyListRelationFilter>;
-  auth_session?: InputMaybe<AuthSessionListRelationFilter>;
-  firstName?: InputMaybe<StringNullableFilter>;
-  id?: InputMaybe<StringFilter>;
-  lastName?: InputMaybe<StringNullableFilter>;
-  messages?: InputMaybe<MessageListRelationFilter>;
-  username?: InputMaybe<StringFilter>;
-};
-
-export type AuthUserWhereUniqueInput = {
-  id?: InputMaybe<Scalars['String']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type BigIntFilter = {
   equals?: InputMaybe<Scalars['String']['input']>;
   gt?: InputMaybe<Scalars['String']['input']>;
@@ -209,22 +25,6 @@ export type BigIntFilter = {
   lte?: InputMaybe<Scalars['String']['input']>;
   not?: InputMaybe<NestedBigIntFilter>;
   notIn?: InputMaybe<Array<Scalars['String']['input']>>;
-};
-
-export type BigIntNullableFilter = {
-  equals?: InputMaybe<Scalars['String']['input']>;
-  gt?: InputMaybe<Scalars['String']['input']>;
-  gte?: InputMaybe<Scalars['String']['input']>;
-  in?: InputMaybe<Array<Scalars['String']['input']>>;
-  lt?: InputMaybe<Scalars['String']['input']>;
-  lte?: InputMaybe<Scalars['String']['input']>;
-  not?: InputMaybe<NestedBigIntNullableFilter>;
-  notIn?: InputMaybe<Array<Scalars['String']['input']>>;
-};
-
-export type BoolFilter = {
-  equals?: InputMaybe<Scalars['Boolean']['input']>;
-  not?: InputMaybe<NestedBoolFilter>;
 };
 
 export type IntFilter = {
@@ -238,12 +38,86 @@ export type IntFilter = {
   notIn?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
+export type Key = {
+  __typename?: 'Key';
+  hashed_password?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  user: User;
+  user_id: Scalars['String']['output'];
+};
+
+export type KeyCreateManyUserInput = {
+  hashed_password?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+};
+
+export type KeyCreateManyUserInputEnvelope = {
+  data: Array<KeyCreateManyUserInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type KeyCreateNestedManyWithoutUserInput = {
+  connect?: InputMaybe<Array<KeyWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<KeyCreateOrConnectWithoutUserInput>>;
+  create?: InputMaybe<Array<KeyCreateWithoutUserInput>>;
+  createMany?: InputMaybe<KeyCreateManyUserInputEnvelope>;
+};
+
+export type KeyCreateOrConnectWithoutUserInput = {
+  create: KeyCreateWithoutUserInput;
+  where: KeyWhereUniqueInput;
+};
+
+export type KeyCreateWithoutUserInput = {
+  hashed_password?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+};
+
+export type KeyListRelationFilter = {
+  every?: InputMaybe<KeyWhereInput>;
+  none?: InputMaybe<KeyWhereInput>;
+  some?: InputMaybe<KeyWhereInput>;
+};
+
+export type KeyWhereInput = {
+  AND?: InputMaybe<Array<KeyWhereInput>>;
+  NOT?: InputMaybe<Array<KeyWhereInput>>;
+  OR?: InputMaybe<Array<KeyWhereInput>>;
+  hashed_password?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  user?: InputMaybe<UserRelationFilter>;
+  user_id?: InputMaybe<StringFilter>;
+};
+
+export type KeyWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type LoggedUserOutput = {
+  __typename?: 'LoggedUserOutput';
+  /** Generated accessToken of the user */
+  accessToken: Scalars['String']['output'];
+};
+
+export type LoginUserInput = {
+  /** Email of the user */
+  email: Scalars['String']['input'];
+  /** Password of the user */
+  password: Scalars['String']['input'];
+};
+
+export type LogoutOutput = {
+  __typename?: 'LogoutOutput';
+  /** if the user was logged out or not */
+  loggedOut: Scalars['Boolean']['output'];
+};
+
 export type Message = {
   __typename?: 'Message';
-  authUser: AuthUser;
   id: Scalars['ID']['output'];
   text: Scalars['String']['output'];
   time: Scalars['DateTime']['output'];
+  user: User;
 };
 
 export type MessageAvgAggregate = {
@@ -260,8 +134,8 @@ export type MessageCountAggregate = {
 };
 
 export type MessageCreateInput = {
-  authUser: AuthUserCreateNestedOneWithoutMessagesInput;
   text: Scalars['String']['input'];
+  user: UserCreateNestedOneWithoutMessagesInput;
 };
 
 export type MessageListRelationFilter = {
@@ -289,12 +163,12 @@ export type MessageSumAggregate = {
   id?: Maybe<Scalars['Int']['output']>;
 };
 
-export type MessageUpdateWithWhereUniqueWithoutAuthUserInput = {
-  data: MessageUpdateWithoutAuthUserInput;
+export type MessageUpdateWithWhereUniqueWithoutUserInput = {
+  data: MessageUpdateWithoutUserInput;
   where: MessageWhereUniqueInput;
 };
 
-export type MessageUpdateWithoutAuthUserInput = {
+export type MessageUpdateWithoutUserInput = {
   text?: InputMaybe<StringFieldUpdateOperationsInput>;
 };
 
@@ -302,9 +176,9 @@ export type MessageWhereInput = {
   AND?: InputMaybe<Array<MessageWhereInput>>;
   NOT?: InputMaybe<Array<MessageWhereInput>>;
   OR?: InputMaybe<Array<MessageWhereInput>>;
-  authUser?: InputMaybe<AuthUserRelationFilter>;
   id?: InputMaybe<IntFilter>;
   text?: InputMaybe<StringFilter>;
+  user?: InputMaybe<UserRelationFilter>;
 };
 
 export type MessageWhereUniqueInput = {
@@ -314,6 +188,9 @@ export type MessageWhereUniqueInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   addMessage?: Maybe<Message>;
+  login: LoggedUserOutput;
+  logout?: Maybe<LogoutOutput>;
+  register: RegisterOutput;
   updateMessage: Message;
 };
 
@@ -323,8 +200,18 @@ export type MutationAddMessageArgs = {
 };
 
 
+export type MutationLoginArgs = {
+  data: LoginUserInput;
+};
+
+
+export type MutationRegisterArgs = {
+  data: RegisterInput;
+};
+
+
 export type MutationUpdateMessageArgs = {
-  query: MessageUpdateWithWhereUniqueWithoutAuthUserInput;
+  query: MessageUpdateWithWhereUniqueWithoutUserInput;
 };
 
 export type NestedBigIntFilter = {
@@ -336,22 +223,6 @@ export type NestedBigIntFilter = {
   lte?: InputMaybe<Scalars['String']['input']>;
   not?: InputMaybe<NestedBigIntFilter>;
   notIn?: InputMaybe<Array<Scalars['String']['input']>>;
-};
-
-export type NestedBigIntNullableFilter = {
-  equals?: InputMaybe<Scalars['String']['input']>;
-  gt?: InputMaybe<Scalars['String']['input']>;
-  gte?: InputMaybe<Scalars['String']['input']>;
-  in?: InputMaybe<Array<Scalars['String']['input']>>;
-  lt?: InputMaybe<Scalars['String']['input']>;
-  lte?: InputMaybe<Scalars['String']['input']>;
-  not?: InputMaybe<NestedBigIntNullableFilter>;
-  notIn?: InputMaybe<Array<Scalars['String']['input']>>;
-};
-
-export type NestedBoolFilter = {
-  equals?: InputMaybe<Scalars['Boolean']['input']>;
-  not?: InputMaybe<NestedBoolFilter>;
 };
 
 export type NestedIntFilter = {
@@ -395,6 +266,7 @@ export type NestedStringNullableFilter = {
 
 export type Query = {
   __typename?: 'Query';
+  getUser: User;
   messages: Array<Message>;
 };
 
@@ -407,6 +279,78 @@ export enum QueryMode {
   Default = 'default',
   Insensitive = 'insensitive'
 }
+
+export type RegisterInput = {
+  /** Email of the user */
+  email: Scalars['String']['input'];
+  /** Password of the user */
+  password: Scalars['String']['input'];
+};
+
+export type RegisterOutput = {
+  __typename?: 'RegisterOutput';
+  /** Generated accessToken of the user */
+  accessToken: Scalars['String']['output'];
+};
+
+export type Session = {
+  __typename?: 'Session';
+  active_expires: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  idle_expires: Scalars['String']['output'];
+  user: User;
+  user_id: Scalars['String']['output'];
+};
+
+export type SessionCreateManyUserInput = {
+  active_expires: Scalars['String']['input'];
+  id: Scalars['String']['input'];
+  idle_expires: Scalars['String']['input'];
+};
+
+export type SessionCreateManyUserInputEnvelope = {
+  data: Array<SessionCreateManyUserInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type SessionCreateNestedManyWithoutUserInput = {
+  connect?: InputMaybe<Array<SessionWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<SessionCreateOrConnectWithoutUserInput>>;
+  create?: InputMaybe<Array<SessionCreateWithoutUserInput>>;
+  createMany?: InputMaybe<SessionCreateManyUserInputEnvelope>;
+};
+
+export type SessionCreateOrConnectWithoutUserInput = {
+  create: SessionCreateWithoutUserInput;
+  where: SessionWhereUniqueInput;
+};
+
+export type SessionCreateWithoutUserInput = {
+  active_expires: Scalars['String']['input'];
+  id: Scalars['String']['input'];
+  idle_expires: Scalars['String']['input'];
+};
+
+export type SessionListRelationFilter = {
+  every?: InputMaybe<SessionWhereInput>;
+  none?: InputMaybe<SessionWhereInput>;
+  some?: InputMaybe<SessionWhereInput>;
+};
+
+export type SessionWhereInput = {
+  AND?: InputMaybe<Array<SessionWhereInput>>;
+  NOT?: InputMaybe<Array<SessionWhereInput>>;
+  OR?: InputMaybe<Array<SessionWhereInput>>;
+  active_expires?: InputMaybe<BigIntFilter>;
+  id?: InputMaybe<StringFilter>;
+  idle_expires?: InputMaybe<BigIntFilter>;
+  user?: InputMaybe<UserRelationFilter>;
+  user_id?: InputMaybe<StringFilter>;
+};
+
+export type SessionWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']['input']>;
+};
 
 export type StringFieldUpdateOperationsInput = {
   set?: InputMaybe<Scalars['String']['input']>;
@@ -452,25 +396,133 @@ export type SubscriptionMessageAddedArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
+export type User = {
+  __typename?: 'User';
+  _count: UserCount;
+  auth_key?: Maybe<Array<Key>>;
+  auth_session?: Maybe<Array<Session>>;
+  email: Scalars['String']['output'];
+  firstName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastName?: Maybe<Scalars['String']['output']>;
+  messages?: Maybe<Array<Message>>;
+};
+
+export type UserCount = {
+  __typename?: 'UserCount';
+  auth_key: Scalars['Int']['output'];
+  auth_session: Scalars['Int']['output'];
+  messages: Scalars['Int']['output'];
+};
+
+export type UserCountAggregate = {
+  __typename?: 'UserCountAggregate';
+  _all: Scalars['Int']['output'];
+  email: Scalars['Int']['output'];
+  firstName: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  lastName: Scalars['Int']['output'];
+};
+
+export type UserCreateNestedOneWithoutMessagesInput = {
+  connect?: InputMaybe<UserWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutMessagesInput>;
+  create?: InputMaybe<UserCreateWithoutMessagesInput>;
+};
+
+export type UserCreateOrConnectWithoutMessagesInput = {
+  create: UserCreateWithoutMessagesInput;
+  where: UserWhereUniqueInput;
+};
+
+export type UserCreateWithoutMessagesInput = {
+  auth_key?: InputMaybe<KeyCreateNestedManyWithoutUserInput>;
+  auth_session?: InputMaybe<SessionCreateNestedManyWithoutUserInput>;
+  email: Scalars['String']['input'];
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  lastName?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UserMaxAggregate = {
+  __typename?: 'UserMaxAggregate';
+  email?: Maybe<Scalars['String']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  lastName?: Maybe<Scalars['String']['output']>;
+};
+
+export type UserMinAggregate = {
+  __typename?: 'UserMinAggregate';
+  email?: Maybe<Scalars['String']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  lastName?: Maybe<Scalars['String']['output']>;
+};
+
+export type UserRelationFilter = {
+  is?: InputMaybe<UserWhereInput>;
+  isNot?: InputMaybe<UserWhereInput>;
+};
+
+export type UserWhereInput = {
+  AND?: InputMaybe<Array<UserWhereInput>>;
+  NOT?: InputMaybe<Array<UserWhereInput>>;
+  OR?: InputMaybe<Array<UserWhereInput>>;
+  auth_key?: InputMaybe<KeyListRelationFilter>;
+  auth_session?: InputMaybe<SessionListRelationFilter>;
+  email?: InputMaybe<StringFilter>;
+  firstName?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  lastName?: InputMaybe<StringNullableFilter>;
+  messages?: InputMaybe<MessageListRelationFilter>;
+};
+
+export type UserWhereUniqueInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type GetUserFromSessionQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserFromSessionQuery = { __typename?: 'Query', getUser: { __typename?: 'User', email: string, firstName?: string | null, lastName?: string | null } };
+
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = { __typename?: 'Mutation', logout?: { __typename?: 'LogoutOutput', loggedOut: boolean } | null };
+
 export type GetChatMessagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetChatMessagesQuery = { __typename?: 'Query', messages: Array<{ __typename?: 'Message', text: string, authUser: { __typename?: 'AuthUser', username: string } }> };
+export type GetChatMessagesQuery = { __typename?: 'Query', messages: Array<{ __typename?: 'Message', text: string, user: { __typename?: 'User', email: string } }> };
 
 export type SendMessageMutationVariables = Exact<{
-  text: Scalars['String']['input'];
-  username: Scalars['String']['input'];
+  message: Scalars['String']['input'];
+  email: Scalars['String']['input'];
 }>;
 
 
-export type SendMessageMutation = { __typename?: 'Mutation', addMessage?: { __typename?: 'Message', text: string, authUser: { __typename?: 'AuthUser', username: string } } | null };
+export type SendMessageMutation = { __typename?: 'Mutation', addMessage?: { __typename: 'Message' } | null };
 
 export type GetInitialMessagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetInitialMessagesQuery = { __typename?: 'Query', messages: Array<{ __typename?: 'Message', text: string, authUser: { __typename?: 'AuthUser', username: string } }> };
+export type GetInitialMessagesQuery = { __typename?: 'Query', messages: Array<{ __typename?: 'Message', text: string, user: { __typename?: 'User', email: string } }> };
+
+export type LoginMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+}>;
 
 
-export const GetChatMessagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetChatMessages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"authUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}}]} as unknown as DocumentNode<GetChatMessagesQuery, GetChatMessagesQueryVariables>;
-export const SendMessageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SendMessage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"text"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"username"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addMessage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"text"},"value":{"kind":"Variable","name":{"kind":"Name","value":"text"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"authUser"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"connect"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"username"},"value":{"kind":"Variable","name":{"kind":"Name","value":"username"}}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"authUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}}]} as unknown as DocumentNode<SendMessageMutation, SendMessageMutationVariables>;
-export const GetInitialMessagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetInitialMessages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"authUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}}]}}]} as unknown as DocumentNode<GetInitialMessagesQuery, GetInitialMessagesQueryVariables>;
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoggedUserOutput', accessToken: string } };
+
+
+export const GetUserFromSessionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserFromSession"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}}]}}]} as unknown as DocumentNode<GetUserFromSessionQuery, GetUserFromSessionQueryVariables>;
+export const LogoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Logout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"logout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"loggedOut"}}]}}]}}]} as unknown as DocumentNode<LogoutMutation, LogoutMutationVariables>;
+export const GetChatMessagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetChatMessages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]}}]} as unknown as DocumentNode<GetChatMessagesQuery, GetChatMessagesQueryVariables>;
+export const SendMessageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SendMessage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"message"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addMessage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"text"},"value":{"kind":"Variable","name":{"kind":"Name","value":"message"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"user"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"connect"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]} as unknown as DocumentNode<SendMessageMutation, SendMessageMutationVariables>;
+export const GetInitialMessagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetInitialMessages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]}}]} as unknown as DocumentNode<GetInitialMessagesQuery, GetInitialMessagesQueryVariables>;
+export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;

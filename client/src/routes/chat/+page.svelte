@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { GetChatMessagesQuery, SendMessageMutation, SendMessageMutationVariables } from '$/graphql/@generated';
-	import { mutationStore, queryStore } from '$/lib/urql';
+	import { mutation, queryStore } from '$/lib/urql';
 	import { gql } from '@urql/svelte';
 	import { Button, Input, Label, P } from 'flowbite-svelte';
 
@@ -9,42 +9,31 @@
 			query GetChatMessages {
 				messages {
 					text
-					authUser {
-						username
+					user {
+						email
 					}
 				}
 			}
 		`,
 	});
 
-	function sendMessage(username: string, text: string) {
-		const result = mutationStore({
-			query: gql<SendMessageMutation, SendMessageMutationVariables>`
-				mutation SendMessage($text: String!, $username: String!) {
-					addMessage(data: { text: $text, authUser: { connect: { username: $username } } }) {
-						text
-						authUser {
-							username
-						}
-					}
-				}
-			`,
-			variables: {
-				text,
-				username,
-			},
-		});
-	}
+	const useSendMessage = mutation(gql<SendMessageMutation, SendMessageMutationVariables>`
+		mutation SendMessage($message: String!, $email: String!) {
+			addMessage(data: { text: $message, user: { connect: { email: $email } } }) {
+				__typename
+			}
+		}
+	`);
 
 	function handleSend() {
-		if (!username || !message) {
+		if (!email || !message) {
 			return;
 		}
 
-		sendMessage(username, message);
+		useSendMessage({ email, message });
 	}
 
-	let username: string | null = null;
+	let email: string | null = null;
 	let message: string | null = null;
 </script>
 
@@ -55,15 +44,15 @@
 	<P color="red">{$messages.error}</P>
 {:else}
 	{#each $messages.data.messages as message}
-		<P>{message.authUser.username} : {message.text}</P>
+		<P>{message.user.email} : {message.text}</P>
 	{/each}
 {/if}
 
 <form on:submit|preventDefault>
 	<div class="gap-6 mb-6 md:grid-cols-2">
 		<div>
-			<Label for="username" class="mb-2">Username</Label>
-			<Input type="text" name="username" placeholder="Joe Blo" bind:value={username} />
+			<Label for="username" class="mb-2">Email</Label>
+			<Input type="text" name="username" placeholder="Joe Blo" bind:value={email} />
 		</div>
 		<div>
 			<Label for="message" class="mb-2">Message</Label>

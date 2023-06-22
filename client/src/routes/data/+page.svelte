@@ -9,8 +9,8 @@
 			query GetInitialMessages {
 				messages {
 					text
-					authUser {
-						username
+					user {
+						email
 					}
 				}
 			}
@@ -25,7 +25,7 @@
 	<P color="red">{$messages.error}</P>
 {:else}
 	{#each $messages.data.messages as message}
-		<P>{message.authUser.username} : {message.text}</P>
+		<P>{message.user.email} : {message.text}</P>
 	{/each}
 {/if}
 

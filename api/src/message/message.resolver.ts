@@ -1,6 +1,6 @@
 import type { PrismaSelector } from '$common/prisma/prisma.service';
 import { SelectQL } from '$common/prisma/select-ql.decorator';
-import { Message, MessageCreateInput, MessageUpdateWithWhereUniqueWithoutAuthUserInput, MessageWhereInput } from '$prisma-graphql/message';
+import { Message, MessageCreateInput, MessageUpdateWithWhereUniqueWithoutUserInput, MessageWhereInput } from '$prisma-graphql/message';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { MESSAGE_ADDED } from './constants/triggers';
 import { MessageService } from './message.service';
@@ -20,7 +20,7 @@ export class MessageResolver {
 	}
 
 	@Mutation(() => Message)
-	updateMessage(@SelectQL() select: PrismaSelector, @Args('query') query: MessageUpdateWithWhereUniqueWithoutAuthUserInput) {
+	updateMessage(@SelectQL() select: PrismaSelector, @Args('query') query: MessageUpdateWithWhereUniqueWithoutUserInput) {
 		return this.messageService.update(select, query);
 	}
 

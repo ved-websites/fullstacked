@@ -1,4 +1,6 @@
 import { browser } from '$app/environment';
+import type { MaybePromise } from '@sveltejs/kit';
+import { authExchange } from '@urql/exchange-auth';
 import {
 	Client,
 	cacheExchange,
@@ -9,6 +11,7 @@ import {
 	mutationStore as urqlMutationStore,
 	queryStore as urqlQueryStore,
 	type AnyVariables,
+	type DocumentInput,
 	type OperationResult,
 	type OperationResultState,
 	type TypedDocumentNode,
@@ -21,7 +24,7 @@ import { getApiUrl } from './utils';
 
 export type ClientOptions = {
 	fetch?: typeof fetch;
-	token?: string;
+	requestToken?: string | null | (() => MaybePromise<string | undefined | null>);
 	ws?: unknown;
 };
 
@@ -39,6 +42,29 @@ export function createClient(options?: ClientOptions) {
 		url: `${apiUrl.origin}/graphql`,
 		exchanges: [
 			cacheExchange,
+			authExchange(async (utils) => {
+				const requestToken = options?.requestToken;
+
+				const token = typeof requestToken == 'string' ? requestToken : await requestToken?.();
+
+				return {
+					addAuthToOperation(operation) {
+						if (!token) {
+							return operation;
+						}
+
+						return utils.appendHeaders(operation, {
+							Authorization: `Bearer ${token}`,
+						});
+					},
+					didAuthError(error, _operation) {
+						return error.graphQLErrors.some((e) => e.extensions?.code === 'FORBIDDEN');
+					},
+					async refreshAuth() {
+						// invalidateAll();
+					},
+				};
+			}),
 			fetchExchange,
 			subscriptionExchange({
 				forwardSubscription(request) {
@@ -55,13 +81,6 @@ export function createClient(options?: ClientOptions) {
 			}),
 		],
 		fetch: options?.fetch,
-		fetchOptions: () => {
-			return {
-				headers: {
-					authorization: options?.token ? `Bearer ${options.token}` : '',
-				},
-			};
-		},
 	});
 
 	return client;
@@ -86,21 +105,39 @@ export function queryStore<Data = unknown, Variables extends AnyVariables = AnyV
 	}) as Readable<OperationResultState<Data, Variables> & { isServer?: boolean }>;
 }
 
+export function mutation<Data = unknown, Variables extends AnyVariables = AnyVariables>(
+	query: DocumentInput<Data, Variables>,
+	context?: Parameters<ReturnType<typeof getContextClient>['mutation']>[2] & { client?: ReturnType<typeof getContextClient> },
+) {
+	const client = context?.client ?? getContextClient();
+
+	return (variables: Variables, requestContext?: typeof context) => {
+		return client.mutation<Data, Variables>(query, variables, requestContext ?? context).toPromise();
+	};
+}
+
 export function mutationStore<Data = unknown, Variables extends AnyVariables = AnyVariables>(
-	args: Optional<Parameters<typeof urqlMutationStore<Data, Variables>>[0], 'client'>,
+	args: Omit<Optional<Parameters<typeof urqlMutationStore<Data, Variables>>[0], 'client'>, 'variables'>,
 ) {
 	if (!browser) {
-		return readable({
-			fetching: true,
-			isServer: true,
-		}) as Readable<OperationResultState<Data, Variables> & { isServer: true }>;
+		return () => {
+			return readable({
+				fetching: true,
+				isServer: true,
+			}) as Readable<OperationResultState<Data, Variables> & { isServer: true }>;
+		};
 	}
 
-	// @ts-expect-error Typing issues
-	return urqlMutationStore({
-		client: args.client ?? getContextClient(),
-		...args,
-	}) as Readable<OperationResultState<Data, Variables> & { isServer?: boolean }>;
+	const client = args.client ?? getContextClient();
+
+	return (variables: Parameters<typeof urqlMutationStore<Data, Variables>>[0]['variables']) => {
+		// @ts-expect-error Typing issues
+		return urqlMutationStore({
+			client,
+			variables,
+			...args,
+		}) as Readable<OperationResultState<Data, Variables> & { isServer?: boolean }>;
+	};
 }
 
 export type SubscribeOptions = Partial<{ client: Client }>;

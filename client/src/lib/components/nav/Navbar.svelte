@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { ClientUser } from '$/lib/utils/hooks-helper.server';
 	import { navElements } from '$/navigation';
 	import { page } from '$app/stores';
 	import { isDrawerHidden } from '$lib/stores';
@@ -19,7 +20,7 @@
 	import DarkMode from '../DarkMode.svelte';
 	import Drawer from './Drawer.svelte';
 
-	export let session: any | null;
+	export let user: ClientUser;
 </script>
 
 <Navbar let:hidden navClass="px-2 sm:px-4 py-2.5 fixed w-full z-20 top-0 left-0 border-b">
@@ -30,17 +31,17 @@
 	</NavBrand>
 	<div class="flex items-center md:order-2">
 		<DarkMode class="mr-3 hidden md:flex" />
-		{#if session}
+		{#if user}
 			<Avatar id="avatar-menu" src="https://static-00.iconduck.com/assets.00/user-icon-2048x2048-ihoxz4vq.png" />
 		{:else}
-			<Button href="/login" class={session ? 'hidden' : ''}>Login</Button>
+			<Button href="/login" class={user ? 'hidden' : ''}>Login</Button>
 		{/if}
 	</div>
-	{#if session}
+	{#if user}
 		<Dropdown placement="bottom" triggeredBy="#avatar-menu">
 			<DropdownHeader>
-				<span class="block text-sm"> {session?.user.user_metadata.name} </span>
-				<span class="block truncate text-sm font-medium"> {session?.user.email} </span>
+				<span class="block text-sm">{user.firstName} {user.lastName}</span>
+				<span class="block truncate text-sm font-medium"> {user.email} </span>
 			</DropdownHeader>
 			<DropdownItem>Dashboard</DropdownItem>
 			<DropdownItem>Settings</DropdownItem>
@@ -55,7 +56,7 @@
 	{/if}
 	<NavUl {hidden}>
 		{#each navElements as navElement}
-			{#if navElement.isPublic || session}
+			{#if navElement.isPublic || user}
 				{#if 'url' in navElement}
 					<NavLi href={navElement.url} active={$page.url.pathname == navElement.url}>
 						{navElement.title}
