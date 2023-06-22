@@ -1,9 +1,8 @@
 import { LuciaAuth, LuciaAuthRequest } from '$common/lucia/lucia.decorator';
 import { User } from '$prisma-graphql/user';
-import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import type { Session } from 'lucia';
-import { AuthGuard } from './auth.guard';
+import { Public } from './auth.guard';
 import { AuthService } from './auth.service';
 import { LoggedUserOutput } from './dtos/logged-user.output';
 import { LoginUserInput } from './dtos/login-user.input';
@@ -16,7 +15,6 @@ import { AuthSession } from './session.decorator';
 export class AuthResolver {
 	constructor(private readonly authService: AuthService) {}
 
-	@UseGuards(AuthGuard)
 	@Query(() => User)
 	async getUser(@AuthSession() session: Session) {
 		return session.user;
@@ -33,6 +31,7 @@ export class AuthResolver {
 		} as RegisterOutput;
 	}
 
+	@Public()
 	@Mutation(() => LoggedUserOutput)
 	async login(@LuciaAuth() auth: LuciaAuthRequest, @Args('data') { email, password }: LoginUserInput) {
 		const session = await this.authService.login(email, password);
@@ -44,7 +43,7 @@ export class AuthResolver {
 		} as LoggedUserOutput;
 	}
 
-	@Mutation(() => LogoutOutput, { nullable: true })
+	@Mutation(() => LogoutOutput)
 	async logout(@LuciaAuth() auth: LuciaAuthRequest) {
 		const session = await auth.validateBearerToken();
 
