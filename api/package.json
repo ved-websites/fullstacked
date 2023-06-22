@@ -82,7 +82,7 @@
     "gulp": "4.0.2",
     "gulp-typescript": "6.0.0-alpha.1",
     "prisma": "4.15.0",
-    "prisma-fixtures": "0.1.14",
+    "prisma-fixtures": "0.1.15",
     "prisma-nestjs-graphql": "18.0.2",
     "supertest": "6.3.3",
     "ts-node": "10.9.1",

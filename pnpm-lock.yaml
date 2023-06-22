@@ -218,8 +218,8 @@ importers:
         specifier: 4.15.0
         version: 4.15.0
       prisma-fixtures:
-        specifier: 0.1.14
-        version: 0.1.14(prisma@4.15.0)
+        specifier: 0.1.15
+        version: 0.1.15(prisma@4.15.0)
       prisma-nestjs-graphql:
         specifier: 18.0.2
         version: 18.0.2
@@ -9703,8 +9703,8 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /prisma-fixtures@0.1.14(prisma@4.15.0):
-    resolution: {integrity: sha512-D14dpiZObu5sKL1Oj9fp5D2IDt05oAbjb3gRzpZn/y9wap5Qom/gTedX0Ax/4Eq40VoGGNncw/+yNSgxWPLNCA==}
+  /prisma-fixtures@0.1.15(prisma@4.15.0):
+    resolution: {integrity: sha512-8e+Whcg+uEhgazNrDCnw7kx0ILiDzEbHYd8fOR/TBF3olET+elszssF2V5MSjKNjGS9tMWdUrq2IL7CBmbvrJA==}
     dependencies:
       class-importer: 0.2.6
       dependency-graph: 0.11.0
