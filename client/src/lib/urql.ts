@@ -117,6 +117,12 @@ export function mutation<Data = unknown, Variables extends AnyVariables = AnyVar
 	query: DocumentInput<Data, Variables>,
 	context?: Parameters<ReturnType<typeof getContextClient>['mutation']>[2] & { client?: ReturnType<typeof getContextClient> },
 ) {
+	if (!browser) {
+		return () => {
+			return;
+		};
+	}
+
 	const client = context?.client ?? getContextClient();
 
 	return (variables: Variables, requestContext?: typeof context) => {
