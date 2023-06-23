@@ -1,4 +1,3 @@
-import { LuciaAuth, LuciaAuthRequest } from '$common/lucia/lucia.decorator';
 import { User } from '$prisma-graphql/user';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import type { Session } from 'lucia';
@@ -10,6 +9,7 @@ import { LogoutOutput } from './dtos/logout.output';
 import { RegisterInput } from './dtos/register.input';
 import { RegisterOutput } from './dtos/register.output';
 import { RenewedSessionOutput } from './dtos/renewed-session.output';
+import { LuciaAuth, LuciaAuthRequest } from './lucia/lucia.decorator';
 import { AuthSession } from './session.decorator';
 
 @Resolver(() => User)

@@ -1,6 +1,6 @@
-import { getLuciaAuthFromContext } from '$common/lucia/lucia.decorator';
 import { CanActivate, ExecutionContext, Injectable, SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { getLuciaAuthFromContext } from './lucia/lucia.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

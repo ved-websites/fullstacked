@@ -1,6 +1,6 @@
-import { Auth, LuciaFactory } from '$common/lucia/lucia.factory';
 import { Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes } from 'lucia';
+import { Auth, LuciaFactory } from './lucia/lucia.factory';
 
 @Injectable()
 export class AuthService {

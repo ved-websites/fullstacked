@@ -1,8 +1,8 @@
 import { ConfigModule } from '$common/configs/config.module';
-import { LuciaFactory } from '$common/lucia/lucia.factory';
 import { Test, TestingModule } from '@nestjs/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { AuthService } from './auth.service';
+import { LuciaFactory } from './lucia/lucia.factory';
 
 describe('AuthService', () => {
 	let service: AuthService;
