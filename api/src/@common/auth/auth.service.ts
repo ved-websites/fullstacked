@@ -31,6 +31,10 @@ export class AuthService {
 	}
 
 	async logout(sessionId: string) {
-		await this.auth.invalidateSession(sessionId);
+		return await this.auth.invalidateSession(sessionId);
+	}
+
+	async renewSession(sessionId: string) {
+		return await this.auth.renewSession(sessionId);
 	}
 }

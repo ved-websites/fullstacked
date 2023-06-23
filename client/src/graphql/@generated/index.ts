@@ -159,6 +159,7 @@ export type Mutation = {
   login: LoggedUserOutput;
   logout: LogoutOutput;
   register: RegisterOutput;
+  renewSession?: Maybe<RenewedSessionOutput>;
   updateMessage: Message;
 };
 
@@ -258,6 +259,12 @@ export type RegisterInput = {
 export type RegisterOutput = {
   __typename?: 'RegisterOutput';
   /** Generated accessToken of the user */
+  accessToken: Scalars['String']['output'];
+};
+
+export type RenewedSessionOutput = {
+  __typename?: 'RenewedSessionOutput';
+  /** Regenerated accessToken of the user */
   accessToken: Scalars['String']['output'];
 };
 
@@ -393,6 +400,11 @@ export type UserWhereInput = {
   messages?: InputMaybe<MessageListRelationFilter>;
 };
 
+export type RenewBearerTokenMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RenewBearerTokenMutation = { __typename?: 'Mutation', renewSession?: { __typename?: 'RenewedSessionOutput', accessToken: string } | null };
+
 export type GetUserFromSessionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -429,6 +441,7 @@ export type LoginMutationVariables = Exact<{
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoggedUserOutput', accessToken: string } };
 
 
+export const RenewBearerTokenDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RenewBearerToken"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"renewSession"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}}]}}]}}]} as unknown as DocumentNode<RenewBearerTokenMutation, RenewBearerTokenMutationVariables>;
 export const GetUserFromSessionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserFromSession"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}}]}}]} as unknown as DocumentNode<GetUserFromSessionQuery, GetUserFromSessionQueryVariables>;
 export const LogoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Logout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"logout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"loggedOut"}}]}}]}}]} as unknown as DocumentNode<LogoutMutation, LogoutMutationVariables>;
 export const GetChatMessagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetChatMessages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]}}]} as unknown as DocumentNode<GetChatMessagesQuery, GetChatMessagesQueryVariables>;

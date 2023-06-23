@@ -1,3 +1,4 @@
+import type { RenewBearerTokenMutation, RenewBearerTokenMutationVariables } from '$/graphql/@generated';
 import { browser } from '$app/environment';
 import type { MaybePromise } from '@sveltejs/kit';
 import { authExchange } from '@urql/exchange-auth';
@@ -7,6 +8,7 @@ import {
 	createClient as createURQLClient,
 	fetchExchange,
 	getContextClient,
+	gql,
 	subscriptionExchange,
 	mutationStore as urqlMutationStore,
 	queryStore as urqlQueryStore,
@@ -42,27 +44,29 @@ export function createClient(options?: ClientOptions) {
 		url: `${apiUrl.origin}/graphql`,
 		exchanges: [
 			cacheExchange,
-			authExchange(async (_utils) => {
-				// const requestToken = options?.requestToken;
-
-				// const token = typeof requestToken == 'string' ? requestToken : await requestToken?.();
-
+			authExchange(async (utils) => {
 				return {
 					addAuthToOperation(operation) {
-						// if (!token) {
-						// 	return operation;
-						// }
-
-						// return utils.appendHeaders(operation, {
-						// 	Authorization: `Bearer ${token}`,
-						// });
 						return operation;
 					},
 					didAuthError(error, _operation) {
 						return error.graphQLErrors.some((e) => e.extensions?.code === 'FORBIDDEN');
 					},
 					async refreshAuth() {
-						// invalidateAll();
+						try {
+							await utils.mutate(
+								gql<RenewBearerTokenMutation, RenewBearerTokenMutationVariables>`
+									mutation RenewBearerToken {
+										renewSession {
+											accessToken
+										}
+									}
+								`,
+								{},
+							);
+						} catch (error) {
+							// Renew token failed, ah well
+						}
 					},
 				};
 			}),

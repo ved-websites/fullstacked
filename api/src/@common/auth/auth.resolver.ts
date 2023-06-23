@@ -9,6 +9,7 @@ import { LoginUserInput } from './dtos/login-user.input';
 import { LogoutOutput } from './dtos/logout.output';
 import { RegisterInput } from './dtos/register.input';
 import { RegisterOutput } from './dtos/register.output';
+import { RenewedSessionOutput } from './dtos/renewed-session.output';
 import { AuthSession } from './session.decorator';
 
 @Resolver(() => User)
@@ -16,8 +17,8 @@ export class AuthResolver {
 	constructor(private readonly authService: AuthService) {}
 
 	@Query(() => User)
-	async getUser(@AuthSession() session: Session) {
-		return session.user;
+	async getUser(@AuthSession() { user }: Session) {
+		return user;
 	}
 
 	@Mutation(() => RegisterOutput)
@@ -60,5 +61,20 @@ export class AuthResolver {
 		return {
 			loggedOut: false,
 		} as LogoutOutput;
+	}
+
+	@Mutation(() => RenewedSessionOutput, { nullable: true })
+	async renewSession(@LuciaAuth() auth: LuciaAuthRequest) {
+		const session = await auth.renewBearerToken();
+
+		auth.setSession(session);
+
+		if (!session) {
+			return null;
+		}
+
+		return {
+			accessToken: session.sessionId,
+		} as RenewedSessionOutput;
 	}
 }
