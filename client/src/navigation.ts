@@ -17,19 +17,16 @@ export const navElements: NavElement[] = [
 	{
 		title: 'Data Driven',
 		id: 'test',
-		isPublic: true,
 		drawerIconPath: mdiSpiritLevel,
 		elements: [
 			{
 				title: 'Data',
 				url: '/data',
-				isPublic: true,
 				drawerIconPath: mdiAbacus,
 			},
 			{
 				title: 'Chat',
 				url: '/chat',
-				isPublic: true,
 				drawerIconPath: mdiAbacus,
 			},
 		],

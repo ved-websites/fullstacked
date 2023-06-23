@@ -20,20 +20,21 @@
 	const useSendMessage = mutation(gql<SendMessageMutation, SendMessageMutationVariables>`
 		mutation SendMessage($message: String!, $email: String!) {
 			addMessage(data: { text: $message, user: { connect: { email: $email } } }) {
-				__typename
+				text
 			}
 		}
 	`);
 
 	function handleSend() {
-		if (!email || !message) {
+		if (!message) {
 			return;
 		}
 
-		useSendMessage({ email, message });
+		useSendMessage({ email: data.user!.email, message });
 	}
 
-	let email: string | null = null;
+	export let data;
+
 	let message: string | null = null;
 </script>
 
@@ -50,10 +51,6 @@
 
 <form on:submit|preventDefault>
 	<div class="gap-6 mb-6 md:grid-cols-2">
-		<div>
-			<Label for="username" class="mb-2">Email</Label>
-			<Input type="text" name="username" placeholder="Joe Blo" bind:value={email} />
-		</div>
 		<div>
 			<Label for="message" class="mb-2">Message</Label>
 			<Input type="text" name="message" bind:value={message} />

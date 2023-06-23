@@ -45,10 +45,12 @@ export class AuthResolver {
 
 	@Mutation(() => LogoutOutput)
 	async logout(@LuciaAuth() auth: LuciaAuthRequest) {
-		const session = await auth.validateBearerToken();
+		const session = await auth.validate();
 
 		if (session) {
 			await this.authService.logout(session.sessionId);
+
+			auth.setSession(null);
 
 			return {
 				loggedOut: true,

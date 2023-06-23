@@ -3,12 +3,13 @@ import { createClient } from '$lib/urql';
 import { getUser } from '$lib/utils/hooks-helper.server';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 import ws from 'ws';
+import { AUTH_COOKIE_NAME } from './lib/utils/auth';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.getClient = (clientEvent, options) => {
 		return createClient({
 			fetch: clientEvent.fetch,
-			requestToken: clientEvent.cookies.get('session'),
+			requestToken: clientEvent.cookies.get(AUTH_COOKIE_NAME),
 			ws,
 			...options,
 		});
@@ -30,6 +31,12 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 		if (cookieHeader) {
 			request.headers.set('cookie', cookieHeader);
 		}
+
+		// const authHeader = event.request.headers.get('authorization');
+
+		// if (authHeader) {
+		// 	request.headers.set('authorization', authHeader);
+		// }
 	}
 
 	return fetch(request);

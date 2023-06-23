@@ -7,17 +7,13 @@
 	import Navbar from '$lib/components/nav/Navbar.svelte';
 	import { setContextClient } from '@urql/svelte';
 
+	export let data;
+
 	if (browser) {
-		const client = createClient({
-			requestToken: () => {
-				return '';
-			},
-		});
+		const client = createClient();
 
 		setContextClient(client);
 	}
-
-	export let data;
 </script>
 
 <InitialTheme />

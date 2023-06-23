@@ -1,4 +1,5 @@
 import type { LoginMutation, LoginMutationVariables } from '$/graphql/@generated';
+import { AUTH_COOKIE_NAME } from '$/lib/utils/auth';
 import { redirect } from '@sveltejs/kit';
 import { gql } from '@urql/svelte';
 import { StatusCodes } from 'http-status-codes';
@@ -47,7 +48,7 @@ export const actions = {
 			return message(form, error?.message);
 		}
 
-		event.cookies.set('session', data.login.accessToken);
+		event.cookies.set(AUTH_COOKIE_NAME, data.login.accessToken);
 
 		const redirectTo = event.url.searchParams.get('redirectTo');
 

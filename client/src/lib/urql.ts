@@ -42,20 +42,21 @@ export function createClient(options?: ClientOptions) {
 		url: `${apiUrl.origin}/graphql`,
 		exchanges: [
 			cacheExchange,
-			authExchange(async (utils) => {
-				const requestToken = options?.requestToken;
+			authExchange(async (_utils) => {
+				// const requestToken = options?.requestToken;
 
-				const token = typeof requestToken == 'string' ? requestToken : await requestToken?.();
+				// const token = typeof requestToken == 'string' ? requestToken : await requestToken?.();
 
 				return {
 					addAuthToOperation(operation) {
-						if (!token) {
-							return operation;
-						}
+						// if (!token) {
+						// 	return operation;
+						// }
 
-						return utils.appendHeaders(operation, {
-							Authorization: `Bearer ${token}`,
-						});
+						// return utils.appendHeaders(operation, {
+						// 	Authorization: `Bearer ${token}`,
+						// });
+						return operation;
 					},
 					didAuthError(error, _operation) {
 						return error.graphQLErrors.some((e) => e.extensions?.code === 'FORBIDDEN');
@@ -81,6 +82,9 @@ export function createClient(options?: ClientOptions) {
 			}),
 		],
 		fetch: options?.fetch,
+		fetchOptions: {
+			credentials: 'include',
+		},
 	});
 
 	return client;
