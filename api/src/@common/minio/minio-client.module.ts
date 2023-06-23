@@ -1,5 +1,5 @@
+import { EnvironmentConfig } from '$/env.validation';
 import { ConfigModule } from '$configs/config.module';
-import { EnvironmentConfig } from '$configs/env.validation';
 import { Module } from '@nestjs/common';
 import { MinioModule } from 'nestjs-minio-client';
 

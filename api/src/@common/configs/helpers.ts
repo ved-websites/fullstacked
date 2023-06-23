@@ -1,6 +1,6 @@
+import { EnvironmentConfig } from '$/env.validation';
 import type { DynamicModule } from '@nestjs/common';
-import { dotenvLoader, selectConfig, TypedConfigModule, type DotenvLoaderOptions } from 'nest-typed-config';
-import { EnvironmentConfig } from './env.validation';
+import { TypedConfigModule, dotenvLoader, selectConfig, type DotenvLoaderOptions } from 'nest-typed-config';
 
 export function createConfigModule(options?: DotenvLoaderOptions) {
 	return TypedConfigModule.forRoot({

@@ -1,5 +1,5 @@
+import { EnvironmentConfig } from '$/env.validation';
 import { ConfigModule } from '$configs/config.module';
-import { EnvironmentConfig } from '$configs/env.validation';
 import { PrismaModule } from '$prisma/prisma.module';
 import { PrismaService } from '$prisma/prisma.service';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';

@@ -1,4 +1,4 @@
-import { Environment, type EnvironmentConfig } from '$configs/env.validation';
+import { Environment, type EnvironmentConfig } from '$/env.validation';
 import type { PrismaClient } from '$prisma-client';
 import { luciaCryptoNode18, luciaMiddleware, luciaModule, prismaAdapterModule } from './modules-compat';
 
