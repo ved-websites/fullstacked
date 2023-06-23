@@ -18,22 +18,20 @@
 	});
 
 	const useSendMessage = mutation(gql<SendMessageMutation, SendMessageMutationVariables>`
-		mutation SendMessage($message: String!, $email: String!) {
-			addMessage(data: { text: $message, user: { connect: { email: $email } } }) {
+		mutation SendMessage($message: String!) {
+			addMessage(data: { text: $message }) {
 				text
 			}
 		}
 	`);
 
-	function handleSend() {
+	const handleSend = () => {
 		if (!message) {
 			return;
 		}
 
-		useSendMessage({ email: data.user!.email, message });
-	}
-
-	export let data;
+		useSendMessage({ message });
+	};
 
 	let message: string | null = null;
 </script>

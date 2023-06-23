@@ -1,6 +1,11 @@
 import { PrismaSelector, PrismaService } from '$common/prisma/prisma.service';
-import type { MessageCreateInput, MessageUpdateWithWhereUniqueWithoutUserInput, MessageWhereInput } from '$prisma-graphql/message';
+import type {
+	MessageCreateWithoutUserInput,
+	MessageUpdateWithWhereUniqueWithoutUserInput,
+	MessageWhereInput,
+} from '$prisma-graphql/message';
 import { Injectable } from '@nestjs/common';
+import type { User } from 'lucia';
 import { MESSAGE_ADDED, MESSAGE_UPDATED } from './constants/triggers';
 
 @Injectable()
@@ -13,9 +18,15 @@ export class MessageService {
 		return messages;
 	}
 
-	async create(select: PrismaSelector, data: MessageCreateInput) {
+	async create(select: PrismaSelector, data: MessageCreateWithoutUserInput, user: User) {
 		const message = await this.prisma.mutate([MESSAGE_ADDED], select, (allSelect) => {
-			return this.prisma.message.create({ data, ...allSelect });
+			return this.prisma.message.create({
+				data: {
+					...data,
+					user: { connect: { email: user.email } },
+				},
+				...allSelect,
+			});
 		});
 
 		return message;
