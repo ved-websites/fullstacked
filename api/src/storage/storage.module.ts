@@ -1,4 +1,4 @@
-import { MinioClientModule } from '$common/minio/minio-client.module';
+import { MinioClientModule } from '$minio/minio-client.module';
 import { Module } from '@nestjs/common';
 import { ImagesController } from './images.controller';
 import { ImagesService } from './images.service';

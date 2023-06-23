@@ -1,7 +1,7 @@
-import { ConfigModule } from '$common/configs/config.module';
-import { EnvironmentConfig } from '$common/configs/env.validation';
-import { PrismaModule } from '$common/prisma/prisma.module';
-import { PrismaService } from '$common/prisma/prisma.service';
+import { ConfigModule } from '$configs/config.module';
+import { EnvironmentConfig } from '$configs/env.validation';
+import { PrismaModule } from '$prisma/prisma.module';
+import { PrismaService } from '$prisma/prisma.service';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { LuciaFactory, luciaFactory } from './lucia.factory';
 import { LuciaMiddleware } from './lucia.middleware';

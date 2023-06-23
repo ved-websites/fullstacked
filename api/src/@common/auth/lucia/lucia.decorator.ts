@@ -1,4 +1,4 @@
-import { getGraphQLResponse } from '$common/utils/contextExtracter';
+import { getGraphQLResponse } from '$utils/contextExtracter';
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 import type { AuthRequest } from 'lucia';
 import type { Auth } from './lucia.factory';

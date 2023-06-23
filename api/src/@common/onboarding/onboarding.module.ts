@@ -1,5 +1,5 @@
-import { AuthModule } from '$common/auth/auth.module';
-import { PrismaModule } from '$common/prisma/prisma.module';
+import { AuthModule } from '$auth/auth.module';
+import { PrismaModule } from '$prisma/prisma.module';
 import { Module } from '@nestjs/common';
 import { OnboardingController } from './onboarding.controller';
 

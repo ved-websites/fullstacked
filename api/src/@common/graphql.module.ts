@@ -1,4 +1,4 @@
-import { Environment, EnvironmentConfig } from '$common/configs/env.validation';
+import { Environment, EnvironmentConfig } from '$configs/env.validation';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';

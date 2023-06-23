@@ -1,4 +1,4 @@
-import { getGraphQLRequest } from '$common/utils/contextExtracter';
+import { getGraphQLRequest } from '$utils/contextExtracter';
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 
 export const AuthSession = createParamDecorator(async (_data, context: ExecutionContext) => {

@@ -1,4 +1,4 @@
-import { Public } from '$common/auth/auth.guard';
+import { Public } from '$auth/auth.guard';
 import { Controller, Get } from '@nestjs/common';
 
 @Controller()

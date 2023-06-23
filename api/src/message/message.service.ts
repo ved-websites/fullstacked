@@ -1,9 +1,9 @@
-import { PrismaSelector, PrismaService } from '$common/prisma/prisma.service';
 import type {
 	MessageCreateWithoutUserInput,
 	MessageUpdateWithWhereUniqueWithoutUserInput,
 	MessageWhereInput,
 } from '$prisma-graphql/message';
+import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import type { User } from 'lucia';
 import { MESSAGE_ADDED, MESSAGE_UPDATED } from './constants/triggers';

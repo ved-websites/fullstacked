@@ -1,4 +1,4 @@
-import { getGraphQLRequest } from '$common/utils/contextExtracter';
+import { getGraphQLRequest } from '$utils/contextExtracter';
 import { CanActivate, ExecutionContext, Injectable, SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 

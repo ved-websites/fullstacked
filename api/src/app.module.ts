@@ -1,8 +1,8 @@
-import { ConfigModule } from '$common/configs/config.module';
-import { GraphQLModule } from '$common/graphql.module';
-import { OnboardingController } from '$common/onboarding/onboarding.controller';
-import { OnboardingModule } from '$common/onboarding/onboarding.module';
-import { PrismaModule } from '$common/prisma/prisma.module';
+import { ConfigModule } from '$configs/config.module';
+import { GraphQLModule } from '$graphql.module';
+import { OnboardingController } from '$onboarding/onboarding.controller';
+import { OnboardingModule } from '$onboarding/onboarding.module';
+import { PrismaModule } from '$prisma/prisma.module';
 import { Module, type ModuleMetadata } from '@nestjs/common';
 import { AuthModule } from './@common/auth/auth.module';
 import { AppController } from './app.controller';

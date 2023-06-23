@@ -1,4 +1,4 @@
-import type { EnvironmentConfig } from '$common/configs/env.validation';
+import type { EnvironmentConfig } from '$configs/env.validation';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { MinioService } from 'nestjs-minio-client';

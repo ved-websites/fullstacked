@@ -1,6 +1,6 @@
-import { Public } from '$common/auth/auth.guard';
-import { AuthService } from '$common/auth/auth.service';
-import { PrismaService } from '$common/prisma/prisma.service';
+import { Public } from '$auth/auth.guard';
+import { AuthService } from '$auth/auth.service';
+import { PrismaService } from '$prisma/prisma.service';
 import { Body, Controller, Get, Inject, Next, Post, Redirect, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import type { NextFunction, Response } from 'express';
 import { join } from 'path';

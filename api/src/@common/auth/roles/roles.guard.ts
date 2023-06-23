@@ -1,5 +1,5 @@
-import { PrismaService } from '$common/prisma/prisma.service';
-import { getGraphQLRequest } from '$common/utils/contextExtracter';
+import { PrismaService } from '$prisma/prisma.service';
+import { getGraphQLRequest } from '$utils/contextExtracter';
 import { CanActivate, ExecutionContext, Inject, Injectable, SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 

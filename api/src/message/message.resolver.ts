@@ -1,12 +1,12 @@
-import { AuthSession } from '$common/auth/session.decorator';
-import type { PrismaSelector } from '$common/prisma/prisma.service';
-import { SelectQL } from '$common/prisma/select-ql.decorator';
+import { AuthSession } from '$auth/session.decorator';
 import {
 	Message,
 	MessageCreateWithoutUserInput,
 	MessageUpdateWithWhereUniqueWithoutUserInput,
 	MessageWhereInput,
 } from '$prisma-graphql/message';
+import type { PrismaSelector } from '$prisma/prisma.service';
+import { SelectQL } from '$prisma/select-ql.decorator';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import type { Session } from 'lucia';
 import { MESSAGE_ADDED } from './constants/triggers';

@@ -1,4 +1,4 @@
-import type { BufferedFile } from '$common/minio/file.model';
+import type { BufferedFile } from '$minio/file.model';
 import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import type { ImagesService } from './images.service';
