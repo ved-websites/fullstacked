@@ -13,9 +13,6 @@ export async function luciaFactory(prisma: PrismaService, env: EnvironmentConfig
 		adapter: prismaAdapter(prisma),
 		env: env.NODE_ENV == Environment.Development ? 'DEV' : 'PROD',
 		middleware: express(),
-		sessionCookie: {
-			name: 'auth_session',
-		},
 		getUserAttributes: (dbUser) => {
 			return dbUser;
 		},

@@ -34,6 +34,8 @@ model User {
   firstName String?   @map("first_name")
   lastName  String?   @map("last_name")
   messages  Message[]
+
+  @@map("users")
 }
 
 model Session {
@@ -41,20 +43,22 @@ model Session {
   user_id        String
   active_expires BigInt
   idle_expires   BigInt
-  // pass this key to `userRelationKey`
-  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  user User @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
+  @@map("sessions")
 }
 
 model Key {
   id              String  @id @unique
   hashed_password String?
-  user_id         String
-  // pass this key to `userRelationKey`
-  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user_id String
 
   @@index([user_id])
+  @@map("keys")
 }
 
 // ===========
