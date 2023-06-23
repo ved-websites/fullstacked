@@ -29,14 +29,14 @@ async function setupAPI() {
 async function setupClient() {
 	const folder = './client';
 
+	if (!fs.existsSync(`${folder}/.env.local`)) {
+		return false;
+	}
 	if (fs.existsSync(`${folder}/.env`)) {
 		return false;
 	}
-	if (!fs.existsSync(`${folder}/.env.example`)) {
-		return false;
-	}
 
-	await copyFile(`${folder}/.env.example`, `${folder}/.env`);
+	await copyFile(`${folder}/.env`, `${folder}/.env.local`);
 
 	return true;
 }
