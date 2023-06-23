@@ -1,6 +1,6 @@
+import { getGraphQLRequest } from '$common/utils/contextExtracter';
 import { CanActivate, ExecutionContext, Injectable, SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { getLuciaAuthFromContext } from './lucia/lucia.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -13,9 +13,7 @@ export class AuthGuard implements CanActivate {
 			return true;
 		}
 
-		const auth = getLuciaAuthFromContext(context);
-
-		const session = await auth.validateBearerToken();
+		const { session } = getGraphQLRequest(context);
 
 		return session != null;
 	}

@@ -1,19 +1,16 @@
+import { getGraphQLResponse } from '$common/utils/contextExtracter';
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
-import { GqlExecutionContext } from '@nestjs/graphql';
-import type { Response } from 'express';
 import type { AuthRequest } from 'lucia';
 import type { Auth } from './lucia.factory';
 
-export function getLuciaAuthFromContext(ctx: ExecutionContext) {
-	const gqlContext = GqlExecutionContext.create(ctx);
-
-	const response = gqlContext.getContext().req.res as Response;
+export function getLuciaAuthFromContext(context: ExecutionContext) {
+	const response = getGraphQLResponse(context);
 
 	return response.locals.auth;
 }
 
-export const LuciaAuth = createParamDecorator((_data, ctx: ExecutionContext) => {
-	return getLuciaAuthFromContext(ctx);
+export const LuciaAuth = createParamDecorator((_data, context: ExecutionContext) => {
+	return getLuciaAuthFromContext(context);
 });
 
 export type LuciaAuthRequest = AuthRequest<Auth>;

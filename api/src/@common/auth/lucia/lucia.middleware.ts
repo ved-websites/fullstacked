@@ -8,7 +8,7 @@ export const COOKIE_NAME = 'auth_session';
 export class LuciaMiddleware implements NestMiddleware {
 	constructor(@Inject(forwardRef(() => LuciaFactory)) private readonly auth: Auth) {}
 
-	use(request: Request, response: Response, next: NextFunction) {
+	async use(request: Request, response: Response, next: NextFunction) {
 		const authSessionCookie = request.cookies[COOKIE_NAME] as string | undefined;
 		const authSessionHeader = request.headers.authorization;
 
@@ -19,6 +19,8 @@ export class LuciaMiddleware implements NestMiddleware {
 		const requestAuth = this.auth.handleRequest(request, response);
 
 		response.locals.auth = requestAuth;
+
+		request.session = await response.locals.auth.validateBearerToken();
 
 		next();
 	}

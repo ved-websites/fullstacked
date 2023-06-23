@@ -1,10 +1,8 @@
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
-import { getLuciaAuthFromContext } from './lucia/lucia.decorator';
+import type { Request } from 'express';
 
-export const AuthSession = createParamDecorator(async (_data, ctx: ExecutionContext) => {
-	const auth = getLuciaAuthFromContext(ctx);
-
-	const session = await auth.validate();
+export const AuthSession = createParamDecorator(async (_data, context: ExecutionContext) => {
+	const { session } = context.switchToHttp().getRequest() as Request;
 
 	return session;
 });

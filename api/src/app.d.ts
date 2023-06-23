@@ -1,5 +1,5 @@
 import type { Auth as ApiAuth } from '$common/auth/lucia/lucia.factory';
-import type { AuthRequest } from 'lucia';
+import type { AuthRequest, Session } from 'lucia';
 
 declare global {
 	declare namespace Lucia {
@@ -16,6 +16,10 @@ declare global {
 	declare namespace Express {
 		interface Locals {
 			auth: AuthRequest<ApiAuth>;
+		}
+
+		interface Request {
+			session: Session | null;
 		}
 	}
 }

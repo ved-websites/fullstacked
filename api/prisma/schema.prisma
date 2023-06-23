@@ -21,7 +21,7 @@ generator nestgraphql {
 }
 
 // ===========
-//     AUTH
+//    AUTH
 // ===========
 
 model User {
@@ -30,10 +30,13 @@ model User {
   auth_session Session[]
   auth_key     Key[]
 
-  email     String    @unique
-  firstName String?   @map("first_name")
-  lastName  String?   @map("last_name")
-  messages  Message[]
+  email     String  @unique
+  firstName String? @map("first_name")
+  lastName  String? @map("last_name")
+
+  roles Role[]
+
+  messages Message[]
 
   @@map("users")
 }
@@ -63,6 +66,28 @@ model Key {
 
 // ===========
 //  END AUTH
+// ===========
+
+// ===========
+//    ROLES
+// ===========
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  /// @Validator.IsNotEmpty()
+  text String @unique
+
+  users User[]
+
+  @@map("roles")
+}
+
+// ===========
+//  END AUTH
+// ===========
+
+// ===========
+//    APP
 // ===========
 
 model Message {

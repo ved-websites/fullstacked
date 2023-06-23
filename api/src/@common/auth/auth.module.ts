@@ -4,9 +4,10 @@ import { AuthGuard } from './auth.guard';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { LuciaModule } from './lucia/lucia.module';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
-	imports: [LuciaModule],
+	imports: [LuciaModule, RolesModule],
 	providers: [
 		AuthResolver,
 		AuthService,
