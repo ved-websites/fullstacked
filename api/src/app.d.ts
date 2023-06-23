@@ -7,6 +7,8 @@ declare global {
 
 		type DatabaseUserAttributes = {
 			email: string;
+			firstName?: string;
+			lastName?: string;
 		};
 		// type DatabaseSessionAttributes = {};
 	}

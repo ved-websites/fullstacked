@@ -7,7 +7,7 @@ import { message, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
-const PASSWORD_MIN_LENGTH = 6;
+const PASSWORD_MIN_LENGTH = 4;
 
 const schema = z.object({
 	email: z.string().email(),

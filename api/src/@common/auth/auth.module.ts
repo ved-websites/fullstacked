@@ -15,5 +15,6 @@ import { AuthService } from './auth.service';
 			useClass: AuthGuard,
 		},
 	],
+	exports: [AuthService],
 })
 export class AuthModule {}

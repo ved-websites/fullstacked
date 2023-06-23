@@ -1,8 +1,8 @@
 import { Environment, type EnvironmentConfig } from '$common/configs/env.validation';
-import type { PrismaService } from '$common/prisma/prisma.service';
+import type { PrismaClient } from '$prisma-client';
 import { luciaCryptoNode18, luciaMiddleware, luciaModule, prismaAdapterModule } from './modules-compat';
 
-export async function luciaFactory(prisma: PrismaService, env: EnvironmentConfig) {
+export async function luciaFactory(prisma: PrismaClient, env: EnvironmentConfig) {
 	await luciaCryptoNode18();
 
 	const { lucia } = await luciaModule();

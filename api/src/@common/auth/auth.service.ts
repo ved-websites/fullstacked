@@ -1,11 +1,12 @@
 import { Auth, LuciaFactory } from '$common/lucia/lucia.factory';
 import { Inject, Injectable } from '@nestjs/common';
+import type { GlobalDatabaseUserAttributes } from 'lucia';
 
 @Injectable()
 export class AuthService {
 	constructor(@Inject(LuciaFactory) private readonly auth: Auth) {}
 
-	async register(email: string, password: string) {
+	async register(email: string, password: string, attributes?: Omit<GlobalDatabaseUserAttributes, 'email'>) {
 		const user = await this.auth.createUser({
 			key: {
 				providerId: 'email',
@@ -14,6 +15,7 @@ export class AuthService {
 			},
 			attributes: {
 				email,
+				...attributes,
 			},
 		});
 
