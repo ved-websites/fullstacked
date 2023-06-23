@@ -13,7 +13,6 @@ const e2eConfigs = defineVitestConfig({
 	test: {
 		include: ['**/*.e2e-spec.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
 		threads: false,
-		isolate: false,
 	},
 } satisfies UserConfig);
 

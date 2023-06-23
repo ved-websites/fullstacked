@@ -55,7 +55,7 @@ jobs:
         uses: anuraag016/Jest-Coverage-Diff@master
         with:
           accessToken: '${{ secrets.GH_BOT_TOKEN }}'
-          runCommand: 'pnpm run --filter ./api test --coverage'
+          runCommand: 'pnpm run --filter ./api coverage'
           # delta: 0.5 # Delta of % changed that would make this job fail
           afterSwitchCommand: 'pnpm i'
           useSameComment: true

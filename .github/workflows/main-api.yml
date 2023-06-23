@@ -101,7 +101,7 @@ jobs:
         run: pnpm run --filter ./api build
 
   test:
-    name: Test and Coverage
+    name: Test
     runs-on: ubuntu-latest
     needs: [cache-modules]
 

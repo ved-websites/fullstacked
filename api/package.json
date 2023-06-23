@@ -28,7 +28,7 @@
     "test": "vitest --config tests/.vitest/vitest.config.all.ts",
     "test:specs": "vitest --config tests/.vitest/vitest.config.specs.ts",
     "test:e2e": "vitest --config tests/.vitest/vitest.config.e2e.ts",
-    "test:cov": "pnpm test --coverage",
+    "coverage": "pnpm run test --coverage",
     "seed": "gulp seed",
     "studio": "prisma studio"
   },
