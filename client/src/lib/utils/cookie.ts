@@ -22,7 +22,7 @@ export function updateCookie(key: string, value?: string | null) {
 	}
 
 	if (value) {
-		document.cookie = `${key}=${value}; expires=31 Dec 9999 12:00:00 UTC; SameSite=Lax; path=/`;
+		document.cookie = `${key}=${value}; SameSite=Lax; path=/`;
 	} else {
 		document.cookie = `${key}=; expires=01 Jan 1970 00:00:01 UTC; path=/`;
 	}

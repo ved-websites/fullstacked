@@ -1,11 +1,13 @@
-import type { Actions, PageServerLoad } from './$types';
-import { z } from 'zod';
-// import { message, setError, superValidate } from 'sveltekit-superforms/server';
-import { superValidate } from 'sveltekit-superforms/server';
+import type { LoginMutation, LoginMutationVariables } from '$/graphql/@generated';
+import { AUTH_COOKIE_NAME } from '$/lib/utils/auth';
 import { redirect } from '@sveltejs/kit';
+import { gql } from '@urql/svelte';
 import { StatusCodes } from 'http-status-codes';
+import { message, superValidate } from 'sveltekit-superforms/server';
+import { z } from 'zod';
+import type { Actions, PageServerLoad } from './$types';
 
-const PASSWORD_MIN_LENGTH = 6;
+const PASSWORD_MIN_LENGTH = 4;
 
 const schema = z.object({
 	email: z.string().email(),
@@ -19,26 +21,41 @@ export const load = (async () => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	// default: async ({ request, url }) => {
-	default: async ({ request }) => {
-		const form = await superValidate(request, schema);
+	default: async (event) => {
+		const form = await superValidate(event.request, schema);
 
 		if (!form.valid) return { form };
 
-		// const { email, password } = form.data;
+		const { email, password } = form.data;
 
-		// const { error: sbError } = await supabase.auth.signInWithPassword({ email, password });
+		const client = event.locals.getClient(event);
 
-		// if (sbError) {
-		// 	return message(form, 'Server error. Try again later.');
-		// }
+		// Sending this on the server makes the cookies unhandled
+		const { data, error } = await client
+			.mutation(
+				gql<LoginMutation, LoginMutationVariables>`
+					mutation Login($email: String!, $password: String!) {
+						login(data: { email: $email, password: $password }) {
+							accessToken
+						}
+					}
+				`,
+				{ email, password },
+			)
+			.toPromise();
 
-		// const redirectTo = url.searchParams.get('redirectTo');
+		if (error || !data) {
+			return message(form, error?.message);
+		}
 
-		// if (redirectTo) {
-		// 	// Successful login, go to redirectedTo Page
-		// 	throw redirect(StatusCodes.SEE_OTHER, `/${redirectTo.slice(1)}`);
-		// }
+		event.cookies.set(AUTH_COOKIE_NAME, data.login.accessToken);
+
+		const redirectTo = event.url.searchParams.get('redirectTo');
+
+		if (redirectTo) {
+			// Successful login, go to redirectedTo Page
+			throw redirect(StatusCodes.SEE_OTHER, `/${redirectTo.slice(1)}`);
+		}
 
 		// Successful login, go to Home Page
 		throw redirect(StatusCodes.SEE_OTHER, '/');

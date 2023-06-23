@@ -10,6 +10,6 @@ import { PrismaService } from './prisma.service';
 			useValue: new PubSub(),
 		},
 	],
-	exports: [PrismaService],
+	exports: [PrismaService, 'PUB_SUB'],
 })
 export class PrismaModule {}

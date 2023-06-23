@@ -31,12 +31,12 @@ const codegen: Types.Config = {
 			],
 		},
 	},
-	watch: 'client/src/**/*',
+	watch: ['client/src/**/*', '!client/src/graphql/@generated/**/*'],
 };
 
 const config: IGraphQLConfig = {
 	schema: `http://localhost:3000/graphql`,
-	documents: ['client/src/**/*.graphql', 'client/src/**/*.svelte'],
+	documents: ['client/src/**/*.graphql', 'client/src/**/*.svelte', 'client/src/**/*.server.ts', 'client/src/lib/urql.ts'],
 	extensions: {
 		codegen,
 	},

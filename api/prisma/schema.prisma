@@ -20,15 +20,75 @@ generator nestgraphql {
   fields_Validator_input = "true"
 }
 
+// ===========
+//    AUTH
+// ===========
+
 model User {
-  id        Int       @id @default(autoincrement())
-  username  String    @unique
-  firstName String?   @map("first_name")
-  lastName  String?   @map("last_name")
-  messages  Message[]
+  id String @id @unique
+
+  auth_session Session[]
+  auth_key     Key[]
+
+  email     String  @unique
+  firstName String? @map("first_name")
+  lastName  String? @map("last_name")
+
+  roles Role[]
+
+  messages Message[]
 
   @@map("users")
 }
+
+model Session {
+  id             String @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+
+  user User @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("sessions")
+}
+
+model Key {
+  id              String  @id @unique
+  hashed_password String?
+
+  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user_id String
+
+  @@index([user_id])
+  @@map("keys")
+}
+
+// ===========
+//  END AUTH
+// ===========
+
+// ===========
+//    ROLES
+// ===========
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  /// @Validator.IsNotEmpty()
+  text String @unique
+
+  users User[]
+
+  @@map("roles")
+}
+
+// ===========
+//  END AUTH
+// ===========
+
+// ===========
+//    APP
+// ===========
 
 model Message {
   id   Int      @id @default(autoincrement())
@@ -36,10 +96,10 @@ model Message {
   text String
   /// @HideField({ output: false, input: true })
   time DateTime @default(now())
-  user User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   /// @HideField({ output: true, input: true })
-  userId Int
+  userId String
 
   @@map("messages")
 }

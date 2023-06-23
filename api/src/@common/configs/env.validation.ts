@@ -1,5 +1,14 @@
-import { Type } from 'class-transformer';
-import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
+/* eslint-disable camelcase */
+
+import { Transform, Type } from 'class-transformer';
+import { IsEnum, IsInt, IsOptional, IsString, Matches } from 'class-validator';
+
+export function splitIntoArray(value: string) {
+	return value
+		.split(',')
+		.filter((s) => !!s)
+		.map((s) => s.trim());
+}
 
 export enum Environment {
 	Development = 'development',
@@ -20,6 +29,13 @@ export class EnvironmentConfig {
 	@Type(() => Number)
 	@IsInt()
 	readonly PORT: number = DEFAULT_PORT;
+
+	@Matches(/^https?:\/\/[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*(:\d+)?$/, {
+		message: `CORS_LINKS must be a string of URLs with a port, separated by commas (spaces between are allowed)`,
+		each: true,
+	})
+	@Transform(({ value }) => splitIntoArray(value))
+	readonly CORS_LINKS!: string[];
 
 	@Type(() => Number)
 	@IsInt()

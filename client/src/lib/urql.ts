@@ -1,14 +1,19 @@
+import type { RenewBearerTokenMutation, RenewBearerTokenMutationVariables } from '$/graphql/@generated';
 import { browser } from '$app/environment';
+import type { MaybePromise } from '@sveltejs/kit';
+import { authExchange } from '@urql/exchange-auth';
 import {
 	Client,
 	cacheExchange,
 	createClient as createURQLClient,
 	fetchExchange,
 	getContextClient,
+	gql,
 	subscriptionExchange,
 	mutationStore as urqlMutationStore,
 	queryStore as urqlQueryStore,
 	type AnyVariables,
+	type DocumentInput,
 	type OperationResult,
 	type OperationResultState,
 	type TypedDocumentNode,
@@ -21,7 +26,7 @@ import { getApiUrl } from './utils';
 
 export type ClientOptions = {
 	fetch?: typeof fetch;
-	token?: string;
+	requestToken?: string | null | (() => MaybePromise<string | undefined | null>);
 	ws?: unknown;
 };
 
@@ -39,6 +44,32 @@ export function createClient(options?: ClientOptions) {
 		url: `${apiUrl.origin}/graphql`,
 		exchanges: [
 			cacheExchange,
+			authExchange(async (utils) => {
+				return {
+					addAuthToOperation(operation) {
+						return operation;
+					},
+					didAuthError(error, _operation) {
+						return error.graphQLErrors.some((e) => e.extensions?.code === 'FORBIDDEN');
+					},
+					async refreshAuth() {
+						try {
+							await utils.mutate(
+								gql<RenewBearerTokenMutation, RenewBearerTokenMutationVariables>`
+									mutation RenewBearerToken {
+										renewSession {
+											accessToken
+										}
+									}
+								`,
+								{},
+							);
+						} catch (error) {
+							// Renew token failed, ah well
+						}
+					},
+				};
+			}),
 			fetchExchange,
 			subscriptionExchange({
 				forwardSubscription(request) {
@@ -55,12 +86,8 @@ export function createClient(options?: ClientOptions) {
 			}),
 		],
 		fetch: options?.fetch,
-		fetchOptions: () => {
-			return {
-				headers: {
-					authorization: options?.token ? `Bearer ${options.token}` : '',
-				},
-			};
+		fetchOptions: {
+			credentials: 'include',
 		},
 	});
 
@@ -86,21 +113,45 @@ export function queryStore<Data = unknown, Variables extends AnyVariables = AnyV
 	}) as Readable<OperationResultState<Data, Variables> & { isServer?: boolean }>;
 }
 
-export function mutationStore<Data = unknown, Variables extends AnyVariables = AnyVariables>(
-	args: Optional<Parameters<typeof urqlMutationStore<Data, Variables>>[0], 'client'>,
+export function mutation<Data = unknown, Variables extends AnyVariables = AnyVariables>(
+	query: DocumentInput<Data, Variables>,
+	context?: Parameters<ReturnType<typeof getContextClient>['mutation']>[2] & { client?: ReturnType<typeof getContextClient> },
 ) {
 	if (!browser) {
-		return readable({
-			fetching: true,
-			isServer: true,
-		}) as Readable<OperationResultState<Data, Variables> & { isServer: true }>;
+		return () => {
+			return;
+		};
 	}
 
-	// @ts-expect-error Typing issues
-	return urqlMutationStore({
-		client: args.client ?? getContextClient(),
-		...args,
-	}) as Readable<OperationResultState<Data, Variables> & { isServer?: boolean }>;
+	const client = context?.client ?? getContextClient();
+
+	return (variables: Variables, requestContext?: typeof context) => {
+		return client.mutation<Data, Variables>(query, variables, requestContext ?? context).toPromise();
+	};
+}
+
+export function mutationStore<Data = unknown, Variables extends AnyVariables = AnyVariables>(
+	args: Omit<Optional<Parameters<typeof urqlMutationStore<Data, Variables>>[0], 'client'>, 'variables'>,
+) {
+	if (!browser) {
+		return () => {
+			return readable({
+				fetching: true,
+				isServer: true,
+			}) as Readable<OperationResultState<Data, Variables> & { isServer: true }>;
+		};
+	}
+
+	const client = args.client ?? getContextClient();
+
+	return (variables: Parameters<typeof urqlMutationStore<Data, Variables>>[0]['variables']) => {
+		// @ts-expect-error Typing issues
+		return urqlMutationStore({
+			client,
+			variables,
+			...args,
+		}) as Readable<OperationResultState<Data, Variables> & { isServer?: boolean }>;
+	};
 }
 
 export type SubscribeOptions = Partial<{ client: Client }>;

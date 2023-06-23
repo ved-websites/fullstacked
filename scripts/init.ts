@@ -42,6 +42,13 @@ if (!args.some((arg) => arg == '--no-api')) {
 
 	console.log(' Done!');
 }
+if (!args.some((arg) => arg == '--no-client')) {
+	process.stdout.write('Setting up client...');
+
+	await exec('pnpm run --filter ./client build');
+
+	console.log(' Done!');
+}
 
 // No need to setup project name in CI
 if (!process.env.CI) {

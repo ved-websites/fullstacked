@@ -1,0 +1,42 @@
+import { Public } from '$common/auth/auth.guard';
+import { AuthService } from '$common/auth/auth.service';
+import { PrismaService } from '$common/prisma/prisma.service';
+import { Body, Controller, Get, Inject, Next, Post, Redirect, Res, UsePipes, ValidationPipe } from '@nestjs/common';
+import type { NextFunction, Response } from 'express';
+import { join } from 'path';
+import type { OnboardingDto } from './onboarding.dto';
+
+@Controller()
+export class OnboardingController {
+	constructor(@Inject(PrismaService) private readonly prisma: PrismaService, @Inject(AuthService) private readonly auth: AuthService) {}
+
+	@Public()
+	@Get()
+	async onboarding(@Res() response: Response, @Next() next: NextFunction) {
+		const userCount = await this.prisma.user.count();
+
+		if (userCount !== 0) {
+			next();
+			return;
+		}
+
+		response.sendFile(join(__dirname, 'onboarding.html'));
+	}
+
+	@Public()
+	@Post()
+	@UsePipes(new ValidationPipe({ transform: true }))
+	@Redirect('/')
+	async createInitialUser(@Next() next: NextFunction, @Body() onboardingDto: OnboardingDto) {
+		const userCount = await this.prisma.user.count();
+
+		if (userCount !== 0) {
+			next();
+			return;
+		}
+
+		const { firstName, lastName, email, password } = onboardingDto;
+
+		await this.auth.register(email, password, { firstName, lastName });
+	}
+}

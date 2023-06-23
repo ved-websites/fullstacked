@@ -9,19 +9,21 @@ export default class UserFixture extends Fixture<User> {
 		f.seed(123456789);
 
 		const users = await upsertRange(prisma.user.upsert, 5, () => {
-			const username = f.internet.userName();
+			const id = f.string.alphanumeric({ length: 15 });
+			const email = f.internet.email();
 			const firstName = f.person.firstName();
 			const lastName = f.person.lastName();
 
 			return {
 				create: {
-					username,
+					id,
+					email,
 					firstName,
 					lastName,
 				},
 				update: {},
 				where: {
-					username,
+					email,
 				},
 			};
 		});

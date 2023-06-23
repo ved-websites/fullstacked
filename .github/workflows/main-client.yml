@@ -95,7 +95,7 @@ jobs:
         run: pnpm install
 
       - name: Init
-        run: pnpm run init --no-api
+        run: pnpm run init --no-api --no-client
 
       - name: Build
         run: pnpm run --filter ./client build
@@ -133,7 +133,7 @@ jobs:
         run: pnpm install
 
       - name: Init
-        run: pnpm run init --no-api
+        run: pnpm run init --no-api --no-client
 
       - name: Fetch Cached Build Folders
         uses: actions/cache@v3

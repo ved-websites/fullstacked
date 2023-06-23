@@ -8,6 +8,7 @@ const allConfigs = defineVitestConfig({
 	plugins: [...e2eConfigs.plugins, ...specsConfigs.plugins],
 	ssr: e2eConfigs.ssr,
 	test: {
+		...e2eConfigs.test,
 		include: [...e2eConfigs.test.include, ...specsConfigs.test.include],
 	},
 } satisfies UserConfig);

@@ -12,7 +12,7 @@ export default class MessageFixture extends Fixture<Message> {
 		// 		text: 'First messages',
 		// 		user: {
 		// 			connect: {
-		// 				username: 'V-ed',
+		// 				email: 'email@mail.com',
 		// 			},
 		// 		},
 		// 	},
