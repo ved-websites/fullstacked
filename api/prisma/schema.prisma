@@ -8,11 +8,11 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
-  output   = "_generated/.prisma/client"
+  output   = "../src/_generated/prisma/client"
 }
 
 generator nestgraphql {
-  provider = "node prisma/generators/prisma-nestjs-graphql.js"
+  provider = "node prisma/utils/generators/prisma-nestjs-graphql.js"
   output   = "../src/_generated/prisma-nestjs-graphql"
   reExport = "Directories"
 

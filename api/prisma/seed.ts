@@ -1,4 +1,4 @@
-import { seed } from './functions';
+import { seed } from './utils/functions';
 
 async function runCliSeeds() {
 	const seedData = await seed();

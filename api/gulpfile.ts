@@ -4,7 +4,7 @@ import fs from 'fs';
 import gulp, { type TaskFunction } from 'gulp';
 import ts from 'gulp-typescript';
 import util from 'util';
-import { generate as generatePrisma, pushDb, seedDb } from './prisma/functions';
+import { generate as generatePrisma, pushDb, seedDb } from './prisma/utils/functions';
 
 const exec = util.promisify(execNoPromise);
 
