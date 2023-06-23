@@ -8,7 +8,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import assert from 'assert';
 import gql from 'graphql-tag';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { prepareTestDb } from '../prisma/functions';
+import { prepareTestDb } from '../prisma/utils/functions';
 
 beforeAll(async () => {
 	await prepareTestDb();
