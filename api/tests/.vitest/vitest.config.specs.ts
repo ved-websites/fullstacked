@@ -1,4 +1,4 @@
-import { UserConfig, configDefaults } from 'vitest/config';
+import { configDefaults, type UserConfig } from 'vitest/config';
 import { defineVitestConfig } from './base';
 
 const specsConfigs = defineVitestConfig({

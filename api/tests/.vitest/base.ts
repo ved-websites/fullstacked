@@ -1,7 +1,7 @@
 import deepmerge from 'deepmerge';
 import VitePluginTsConfigPaths from 'vite-tsconfig-paths';
 import type { CoverageC8Options } from 'vitest';
-import { UserConfig } from 'vitest/config';
+import type { UserConfig } from 'vitest/config';
 import { env } from '../../src/@common/configs';
 
 const dbURL = process.env.TEST_DATABASE_URL ?? env.TEST_DATABASE_URL;

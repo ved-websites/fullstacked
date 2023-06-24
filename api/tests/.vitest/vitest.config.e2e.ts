@@ -1,5 +1,5 @@
 import swc from 'unplugin-swc';
-import { UserConfig } from 'vitest/config';
+import type { UserConfig } from 'vitest/config';
 import { defineVitestConfig } from './base';
 
 const e2eConfigs = defineVitestConfig({

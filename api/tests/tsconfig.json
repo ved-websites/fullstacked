@@ -2,6 +2,7 @@
 	"extends": "../tsconfig.json",
 	"include": [
 		"**/*.ts",
+		".vitest/**/*.ts",
 	],
 	"exclude": [
 		"node_modules"

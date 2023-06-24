@@ -1,4 +1,4 @@
-import { UserConfig } from 'vitest/config';
+import type { UserConfig } from 'vitest/config';
 import { defineVitestConfig } from './base';
 import e2eConfigs from './vitest.config.e2e';
 import specsConfigs from './vitest.config.specs';
