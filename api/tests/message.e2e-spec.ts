@@ -1,4 +1,5 @@
-import { AppModule } from '$/app.module';
+import { BaseModules } from '$/app.helpers';
+import { MessageModule } from '$/message/message.module';
 import type { Message } from '$prisma-graphql/message';
 import type { ApolloServer } from '@apollo/server';
 import type { ApolloDriver } from '@nestjs/apollo';
@@ -20,7 +21,7 @@ describe('MessageController (e2e)', () => {
 
 	beforeEach(async () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
-			imports: [AppModule],
+			imports: [...BaseModules, MessageModule],
 		}).compile();
 
 		app = moduleFixture.createNestApplication();

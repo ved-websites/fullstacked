@@ -1,18 +1,15 @@
-import { AuthModule } from '$auth/auth.module';
-import { ConfigModule } from '$configs/config.module';
-import { GraphQLModule } from '$graphql.module';
 import { OnboardingController } from '$onboarding/onboarding.controller';
 import { OnboardingModule } from '$onboarding/onboarding.module';
-import { PrismaModule } from '$prisma/prisma.module';
 import { Module, type ModuleMetadata } from '@nestjs/common';
 import { AppController } from './app.controller';
+import { BaseModules } from './app.helpers';
 import { MessageModule } from './message/message.module';
 import { UsersModule } from './users/users.module';
 
-const AppImports: ModuleMetadata['imports'] = [MessageModule, UsersModule];
+const AppImports = [MessageModule, UsersModule] satisfies ModuleMetadata['imports'];
 
 @Module({
-	imports: [ConfigModule, PrismaModule, OnboardingModule, GraphQLModule, AuthModule, ...AppImports],
+	imports: [...BaseModules, OnboardingModule, ...AppImports],
 	providers: [],
 	controllers: [OnboardingController, AppController],
 })
