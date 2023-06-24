@@ -1,5 +1,5 @@
 import type { NavElement } from '$lib/components/nav/nav-elements';
-import { mdiAbacus, mdiHome, mdiInformation, mdiSpiritLevel } from '@mdi/js';
+import { mdiAbacus, mdiAccountDetails, mdiChat, mdiHome, mdiInformation, mdiSpiritLevel } from '@mdi/js';
 
 export const navElements: NavElement[] = [
 	{
@@ -15,7 +15,12 @@ export const navElements: NavElement[] = [
 		drawerIconPath: mdiInformation,
 	},
 	{
-		title: 'Data Driven',
+		title: 'Chat',
+		url: '/chat',
+		drawerIconPath: mdiChat,
+	},
+	{
+		title: 'Multi Level',
 		id: 'test',
 		drawerIconPath: mdiSpiritLevel,
 		elements: [
@@ -24,23 +29,12 @@ export const navElements: NavElement[] = [
 				url: '/data',
 				drawerIconPath: mdiAbacus,
 			},
-			{
-				title: 'Chat',
-				url: '/chat',
-				drawerIconPath: mdiAbacus,
-			},
 		],
 	},
 	{
-		title: 'Services',
-		url: '/services',
-	},
-	{
-		title: 'Pricing',
-		url: '/pricing',
-	},
-	{
-		title: 'Contact',
-		url: '/contact',
+		title: 'User Management',
+		url: '/users',
+		drawerIconPath: mdiAccountDetails,
+		roles: ['admin'],
 	},
 ];

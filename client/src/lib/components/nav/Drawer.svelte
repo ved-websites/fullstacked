@@ -1,18 +1,22 @@
 <script lang="ts">
+	import type { ClientUser } from '$/lib/utils/hooks-helper.server';
+	import { navElements } from '$/navigation';
 	import { page } from '$app/stores';
 	import { isDrawerHidden } from '$lib/stores';
+	import { mdiChevronDown, mdiChevronUp, mdiInformation } from '@mdi/js';
 	import { CloseButton, Drawer, Sidebar, SidebarDropdownWrapper, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
 	import DarkMode from '../DarkMode.svelte';
 	import Icon from '../Icon.svelte';
-	import { navElements } from '$/navigation';
-	import { mdiChevronDown, mdiChevronUp, mdiInformation } from '@mdi/js';
+	import { isNavElemVisible } from './utils';
 
 	let transitionParams = {
 		x: -320,
 		duration: 200,
 		easing: sineIn,
 	};
+
+	export let user: ClientUser;
 </script>
 
 <Drawer transitionType="fly" {transitionParams} bind:hidden={$isDrawerHidden} id="main-drawer">
@@ -26,7 +30,7 @@
 	<Sidebar>
 		<SidebarWrapper>
 			<SidebarGroup>
-				{#each navElements.filter((navElement) => navElement.isPublic) as navElement}
+				{#each navElements.filter((navElement) => isNavElemVisible(navElement, user)) as navElement}
 					{#if 'url' in navElement}
 						<SidebarItem
 							label={navElement.title}
@@ -56,7 +60,7 @@
 							<svelte:fragment slot="arrowdown">
 								<Icon path={mdiChevronDown} />
 							</svelte:fragment>
-							{#each navElement.elements.filter((navSubElement) => navSubElement.isPublic) as navSubElement}
+							{#each navElement.elements.filter((navSubElement) => navSubElement.isPublic || user) as navSubElement}
 								<SidebarItem
 									label={navSubElement.title}
 									active={$page.url.pathname == navSubElement.url}

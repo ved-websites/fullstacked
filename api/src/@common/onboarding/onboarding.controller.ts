@@ -2,9 +2,9 @@ import { Public } from '$auth/auth.guard';
 import { AuthService } from '$auth/auth.service';
 import { PrismaService } from '$prisma/prisma.service';
 import { Body, Controller, Get, Next, Post, Redirect, Res, UsePipes, ValidationPipe } from '@nestjs/common';
-import type { NextFunction, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { join } from 'path';
-import type { OnboardingDto } from './onboarding.dto';
+import { OnboardingDto } from './onboarding.dto';
 
 @Controller()
 export class OnboardingController {

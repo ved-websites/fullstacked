@@ -1,3 +1,4 @@
+import { PrismaModule } from '$prisma/prisma.module';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
@@ -7,7 +8,7 @@ import { LuciaModule } from './lucia/lucia.module';
 import { RolesModule } from './roles/roles.module';
 
 @Module({
-	imports: [LuciaModule, RolesModule],
+	imports: [PrismaModule, LuciaModule, RolesModule],
 	providers: [
 		AuthResolver,
 		AuthService,

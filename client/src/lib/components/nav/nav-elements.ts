@@ -2,6 +2,7 @@ export type BaseNavElement = {
 	title: string;
 	isPublic?: boolean;
 	drawerIconPath?: string;
+	roles?: string[];
 };
 
 export type LinkNavElement = BaseNavElement & {

@@ -28,5 +28,3 @@
 		<P>{message.user.email} : {message.text}</P>
 	{/each}
 {/if}
-
-<P>Sup :)</P>

@@ -1,4 +1,6 @@
 import { User } from '$prisma-graphql/user';
+import { PrismaSelector } from '$prisma/prisma.service';
+import { SelectQL } from '$prisma/select-ql.decorator';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import type { Session } from 'lucia';
 import { Public } from './auth.guard';
@@ -17,8 +19,10 @@ export class AuthResolver {
 	constructor(private readonly authService: AuthService) {}
 
 	@Query(() => User)
-	async getUser(@AuthSession() { user }: Session) {
-		return user;
+	async getUser(@AuthSession() { user }: Session, @SelectQL() select: PrismaSelector) {
+		const authUser = this.authService.getAuthUser(user.email, select);
+
+		return authUser;
 	}
 
 	@Mutation(() => RegisterOutput)
@@ -46,7 +50,7 @@ export class AuthResolver {
 
 	@Mutation(() => LogoutOutput)
 	async logout(@LuciaAuth() auth: LuciaAuthRequest) {
-		const session = await auth.validate();
+		const session = await auth.validateBearerToken();
 
 		if (session) {
 			await this.authService.logout(session.sessionId);

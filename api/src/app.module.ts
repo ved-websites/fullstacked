@@ -7,8 +7,9 @@ import { PrismaModule } from '$prisma/prisma.module';
 import { Module, type ModuleMetadata } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { MessageModule } from './message/message.module';
+import { UsersModule } from './users/users.module';
 
-const AppImports: ModuleMetadata['imports'] = [MessageModule];
+const AppImports: ModuleMetadata['imports'] = [MessageModule, UsersModule];
 
 @Module({
 	imports: [ConfigModule, PrismaModule, OnboardingModule, GraphQLModule, AuthModule, ...AppImports],

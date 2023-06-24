@@ -3,6 +3,7 @@
 	import { navElements } from '$/navigation';
 	import { page } from '$app/stores';
 	import { isDrawerHidden } from '$lib/stores';
+	import { mdiLogout } from '@mdi/js';
 	import {
 		Avatar,
 		Button,
@@ -18,7 +19,9 @@
 		Navbar,
 	} from 'flowbite-svelte';
 	import DarkMode from '../DarkMode.svelte';
+	import Icon from '../Icon.svelte';
 	import Drawer from './Drawer.svelte';
+	import { isNavElemVisible } from './utils';
 
 	export let user: ClientUser;
 </script>
@@ -32,7 +35,13 @@
 	<div class="flex items-center md:order-2">
 		<DarkMode class="mr-3 hidden md:flex" />
 		{#if user}
-			<Avatar id="avatar-menu" src="https://static-00.iconduck.com/assets.00/user-icon-2048x2048-ihoxz4vq.png" />
+			<Avatar class="cursor-pointer" id="avatar-menu" src="https://static-00.iconduck.com/assets.00/user-icon-2048x2048-ihoxz4vq.png" />
+
+			<form method="POST" action="/?/logout">
+				<Button type="submit" outline={true} class="!p-2 ml-3" size="lg">
+					<Icon path={mdiLogout} />
+				</Button>
+			</form>
 		{:else}
 			<Button href="/login" class={user ? 'hidden' : ''}>Login</Button>
 		{/if}
@@ -41,22 +50,17 @@
 		<Dropdown placement="bottom" triggeredBy="#avatar-menu">
 			<DropdownHeader>
 				<span class="block text-sm">{user.firstName} {user.lastName}</span>
-				<span class="block truncate text-sm font-medium"> {user.email} </span>
+				<span class="block truncate text-sm font-light"> {user.email} </span>
 			</DropdownHeader>
 			<DropdownItem>Dashboard</DropdownItem>
-			<DropdownItem>Settings</DropdownItem>
 			<DropdownItem>Earnings</DropdownItem>
 			<DropdownDivider />
-			<DropdownItem>
-				<form method="POST" action="/?/logout">
-					<input type="submit" value="Logout" class="w-100 h-100" />
-				</form>
-			</DropdownItem>
+			<DropdownItem>Settings</DropdownItem>
 		</Dropdown>
 	{/if}
 	<NavUl {hidden}>
 		{#each navElements as navElement}
-			{#if navElement.isPublic || user}
+			{#if isNavElemVisible(navElement, user)}
 				{#if 'url' in navElement}
 					<NavLi href={navElement.url} active={$page.url.pathname == navElement.url}>
 						{navElement.title}
@@ -80,4 +84,4 @@
 	</NavUl>
 </Navbar>
 
-<Drawer />
+<Drawer {user} />
