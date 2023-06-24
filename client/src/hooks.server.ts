@@ -35,7 +35,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		ws,
 	});
 
-	event.locals.user = getUser(event.locals.client);
+	event.locals.user = await getUser(event.locals.client);
 
 	return resolve(event);
 };

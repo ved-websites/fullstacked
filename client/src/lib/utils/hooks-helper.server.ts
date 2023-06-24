@@ -1,8 +1,7 @@
 import type { GetUserFromSessionQuery } from '$/graphql/@generated';
-import type { createClient } from '$lib/urql';
-import { gql } from '@urql/svelte';
+import { Client, gql } from '@urql/svelte';
 
-export async function getUser(client: ReturnType<typeof createClient>) {
+export async function getUser(client: Client) {
 	const result = await client
 		.query(
 			gql<GetUserFromSessionQuery>`
@@ -11,6 +10,9 @@ export async function getUser(client: ReturnType<typeof createClient>) {
 						email
 						firstName
 						lastName
+						roles {
+							text
+						}
 					}
 				}
 			`,
@@ -23,9 +25,7 @@ export async function getUser(client: ReturnType<typeof createClient>) {
 	}
 
 	return {
-		email: result.data.getUser.email,
-		firstName: result.data.getUser.firstName,
-		lastName: result.data.getUser.lastName,
+		...result.data.getUser,
 	};
 }
 

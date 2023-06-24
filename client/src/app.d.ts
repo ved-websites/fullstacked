@@ -7,7 +7,7 @@ declare global {
 	namespace App {
 		interface Locals {
 			client: Client;
-			user: ReturnType<typeof getUser>;
+			user: Awaited<ReturnType<typeof getUser>>;
 		}
 		// interface PageData {}
 		// interface Error {}

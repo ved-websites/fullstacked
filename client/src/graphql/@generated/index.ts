@@ -39,7 +39,6 @@ export type IntFilter = {
 };
 
 export type Key = {
-  __typename?: 'Key';
   hashed_password?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   user: User;
@@ -63,7 +62,6 @@ export type KeyWhereInput = {
 };
 
 export type LoggedUserOutput = {
-  __typename?: 'LoggedUserOutput';
   /** Generated accessToken of the user */
   accessToken: Scalars['String']['output'];
 };
@@ -76,13 +74,11 @@ export type LoginUserInput = {
 };
 
 export type LogoutOutput = {
-  __typename?: 'LogoutOutput';
   /** if the user was logged out or not */
   loggedOut: Scalars['Boolean']['output'];
 };
 
 export type Message = {
-  __typename?: 'Message';
   id: Scalars['ID']['output'];
   text: Scalars['String']['output'];
   time: Scalars['DateTime']['output'];
@@ -90,12 +86,10 @@ export type Message = {
 };
 
 export type MessageAvgAggregate = {
-  __typename?: 'MessageAvgAggregate';
   id?: Maybe<Scalars['Float']['output']>;
 };
 
 export type MessageCountAggregate = {
-  __typename?: 'MessageCountAggregate';
   _all: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
   text: Scalars['Int']['output'];
@@ -113,21 +107,18 @@ export type MessageListRelationFilter = {
 };
 
 export type MessageMaxAggregate = {
-  __typename?: 'MessageMaxAggregate';
   id?: Maybe<Scalars['Int']['output']>;
   text?: Maybe<Scalars['String']['output']>;
   time?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type MessageMinAggregate = {
-  __typename?: 'MessageMinAggregate';
   id?: Maybe<Scalars['Int']['output']>;
   text?: Maybe<Scalars['String']['output']>;
   time?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type MessageSumAggregate = {
-  __typename?: 'MessageSumAggregate';
   id?: Maybe<Scalars['Int']['output']>;
 };
 
@@ -154,7 +145,6 @@ export type MessageWhereUniqueInput = {
 };
 
 export type Mutation = {
-  __typename?: 'Mutation';
   addMessage?: Maybe<Message>;
   login: LoggedUserOutput;
   logout: LogoutOutput;
@@ -234,7 +224,6 @@ export type NestedStringNullableFilter = {
 };
 
 export type Query = {
-  __typename?: 'Query';
   getUser: User;
   messages: Array<Message>;
 };
@@ -257,19 +246,16 @@ export type RegisterInput = {
 };
 
 export type RegisterOutput = {
-  __typename?: 'RegisterOutput';
   /** Generated accessToken of the user */
   accessToken: Scalars['String']['output'];
 };
 
 export type RenewedSessionOutput = {
-  __typename?: 'RenewedSessionOutput';
   /** Regenerated accessToken of the user */
   accessToken: Scalars['String']['output'];
 };
 
 export type Role = {
-  __typename?: 'Role';
   _count: RoleCount;
   id: Scalars['ID']['output'];
   text: Scalars['String']['output'];
@@ -277,7 +263,6 @@ export type Role = {
 };
 
 export type RoleCount = {
-  __typename?: 'RoleCount';
   users: Scalars['Int']['output'];
 };
 
@@ -297,7 +282,6 @@ export type RoleWhereInput = {
 };
 
 export type Session = {
-  __typename?: 'Session';
   active_expires: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   idle_expires: Scalars['String']['output'];
@@ -357,7 +341,6 @@ export type StringNullableFilter = {
 };
 
 export type Subscription = {
-  __typename?: 'Subscription';
   messageAdded: Message;
 };
 
@@ -367,7 +350,6 @@ export type SubscriptionMessageAddedArgs = {
 };
 
 export type User = {
-  __typename?: 'User';
   _count: UserCount;
   auth_key?: Maybe<Array<Key>>;
   auth_session?: Maybe<Array<Session>>;
@@ -380,7 +362,6 @@ export type User = {
 };
 
 export type UserCount = {
-  __typename?: 'UserCount';
   auth_key: Scalars['Int']['output'];
   auth_session: Scalars['Int']['output'];
   messages: Scalars['Int']['output'];
@@ -388,7 +369,6 @@ export type UserCount = {
 };
 
 export type UserCountAggregate = {
-  __typename?: 'UserCountAggregate';
   _all: Scalars['Int']['output'];
   email: Scalars['Int']['output'];
   firstName: Scalars['Int']['output'];
@@ -403,7 +383,6 @@ export type UserListRelationFilter = {
 };
 
 export type UserMaxAggregate = {
-  __typename?: 'UserMaxAggregate';
   email?: Maybe<Scalars['String']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
@@ -411,7 +390,6 @@ export type UserMaxAggregate = {
 };
 
 export type UserMinAggregate = {
-  __typename?: 'UserMinAggregate';
   email?: Maybe<Scalars['String']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
@@ -440,34 +418,34 @@ export type UserWhereInput = {
 export type RenewBearerTokenMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RenewBearerTokenMutation = { __typename?: 'Mutation', renewSession?: { __typename?: 'RenewedSessionOutput', accessToken: string } | null };
+export type RenewBearerTokenMutation = { renewSession?: { accessToken: string } | null };
 
 export type GetUserFromSessionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserFromSessionQuery = { __typename?: 'Query', getUser: { __typename?: 'User', email: string, firstName?: string | null, lastName?: string | null } };
+export type GetUserFromSessionQuery = { getUser: { email: string, firstName?: string | null, lastName?: string | null, roles?: Array<{ text: string }> | null } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LogoutMutation = { __typename?: 'Mutation', logout: { __typename?: 'LogoutOutput', loggedOut: boolean } };
+export type LogoutMutation = { logout: { loggedOut: boolean } };
 
 export type GetChatMessagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetChatMessagesQuery = { __typename?: 'Query', messages: Array<{ __typename?: 'Message', text: string, user: { __typename?: 'User', email: string } }> };
+export type GetChatMessagesQuery = { messages: Array<{ text: string, user: { email: string } }> };
 
 export type SendMessageMutationVariables = Exact<{
   message: Scalars['String']['input'];
 }>;
 
 
-export type SendMessageMutation = { __typename?: 'Mutation', addMessage?: { __typename?: 'Message', text: string } | null };
+export type SendMessageMutation = { addMessage?: { text: string } | null };
 
 export type GetInitialMessagesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetInitialMessagesQuery = { __typename?: 'Query', messages: Array<{ __typename?: 'Message', text: string, user: { __typename?: 'User', email: string } }> };
+export type GetInitialMessagesQuery = { messages: Array<{ text: string, user: { email: string } }> };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -475,11 +453,11 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoggedUserOutput', accessToken: string } };
+export type LoginMutation = { login: { accessToken: string } };
 
 
 export const RenewBearerTokenDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RenewBearerToken"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"renewSession"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}}]}}]}}]} as unknown as DocumentNode<RenewBearerTokenMutation, RenewBearerTokenMutationVariables>;
-export const GetUserFromSessionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserFromSession"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}}]}}]} as unknown as DocumentNode<GetUserFromSessionQuery, GetUserFromSessionQueryVariables>;
+export const GetUserFromSessionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserFromSession"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]}}]} as unknown as DocumentNode<GetUserFromSessionQuery, GetUserFromSessionQueryVariables>;
 export const LogoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Logout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"logout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"loggedOut"}}]}}]}}]} as unknown as DocumentNode<LogoutMutation, LogoutMutationVariables>;
 export const GetChatMessagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetChatMessages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]}}]} as unknown as DocumentNode<GetChatMessagesQuery, GetChatMessagesQueryVariables>;
 export const SendMessageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SendMessage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"message"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addMessage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"text"},"value":{"kind":"Variable","name":{"kind":"Name","value":"message"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]} as unknown as DocumentNode<SendMessageMutation, SendMessageMutationVariables>;

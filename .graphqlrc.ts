@@ -7,6 +7,7 @@ import type { IGraphQLConfig } from 'graphql-config';
 
 const tsCommonConfig: RawTypesConfig = {
 	useTypeImports: true,
+	skipTypename: true,
 };
 
 const codegen: Types.Config = {
