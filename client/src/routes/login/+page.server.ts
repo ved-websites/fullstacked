@@ -21,14 +21,12 @@ export const load = (async () => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async (event) => {
-		const form = await superValidate(event.request, schema);
+	default: async ({ request, cookies, url, locals: { client } }) => {
+		const form = await superValidate(request, schema);
 
 		if (!form.valid) return { form };
 
 		const { email, password } = form.data;
-
-		const client = event.locals.getClient(event);
 
 		// Sending this on the server makes the cookies unhandled
 		const { data, error } = await client
@@ -48,9 +46,9 @@ export const actions = {
 			return message(form, error?.message);
 		}
 
-		event.cookies.set(AUTH_COOKIE_NAME, data.login.accessToken);
+		cookies.set(AUTH_COOKIE_NAME, data.login.accessToken);
 
-		const redirectTo = event.url.searchParams.get('redirectTo');
+		const redirectTo = url.searchParams.get('redirectTo');
 
 		if (redirectTo) {
 			// Successful login, go to redirectedTo Page

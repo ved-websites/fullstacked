@@ -5,9 +5,7 @@ import { gql } from '@urql/svelte';
 import { StatusCodes } from 'http-status-codes';
 
 export const actions = {
-	async logout(event) {
-		const client = event.locals.getClient(event);
-
+	async logout({ cookies, locals: { client } }) {
 		const { data, error } = await client
 			.mutation(
 				gql<LogoutMutation>`
@@ -25,7 +23,7 @@ export const actions = {
 			return;
 		}
 
-		event.cookies.delete(AUTH_COOKIE_NAME);
+		cookies.delete(AUTH_COOKIE_NAME);
 
 		throw redirect(StatusCodes.SEE_OTHER, '/login');
 	},

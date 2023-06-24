@@ -6,20 +6,13 @@ import ws from 'ws';
 import { AUTH_COOKIE_NAME } from './lib/utils/auth';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	event.locals.getClient = (clientEvent, options) => {
-		return createClient({
-			fetch: clientEvent.fetch,
-			requestToken: clientEvent.cookies.get(AUTH_COOKIE_NAME),
-			ws,
-			...options,
-		});
-	};
+	event.locals.client = createClient({
+		fetch: event.fetch,
+		requestToken: event.cookies.get(AUTH_COOKIE_NAME),
+		ws,
+	});
 
-	event.locals.getUser = async (userEvent) => {
-		const functionEvent = userEvent ?? event;
-
-		return getUser(functionEvent.locals.getClient(functionEvent));
-	};
+	event.locals.user = getUser(event.locals.client);
 
 	return resolve(event);
 };
@@ -31,12 +24,6 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 		if (cookieHeader) {
 			request.headers.set('cookie', cookieHeader);
 		}
-
-		// const authHeader = event.request.headers.get('authorization');
-
-		// if (authHeader) {
-		// 	request.headers.set('authorization', authHeader);
-		// }
 	}
 
 	return fetch(request);

@@ -268,6 +268,34 @@ export type RenewedSessionOutput = {
   accessToken: Scalars['String']['output'];
 };
 
+export type Role = {
+  __typename?: 'Role';
+  _count: RoleCount;
+  id: Scalars['ID']['output'];
+  text: Scalars['String']['output'];
+  users?: Maybe<Array<User>>;
+};
+
+export type RoleCount = {
+  __typename?: 'RoleCount';
+  users: Scalars['Int']['output'];
+};
+
+export type RoleListRelationFilter = {
+  every?: InputMaybe<RoleWhereInput>;
+  none?: InputMaybe<RoleWhereInput>;
+  some?: InputMaybe<RoleWhereInput>;
+};
+
+export type RoleWhereInput = {
+  AND?: InputMaybe<Array<RoleWhereInput>>;
+  NOT?: InputMaybe<Array<RoleWhereInput>>;
+  OR?: InputMaybe<Array<RoleWhereInput>>;
+  id?: InputMaybe<IntFilter>;
+  text?: InputMaybe<StringFilter>;
+  users?: InputMaybe<UserListRelationFilter>;
+};
+
 export type Session = {
   __typename?: 'Session';
   active_expires: Scalars['String']['output'];
@@ -348,6 +376,7 @@ export type User = {
   id: Scalars['ID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
   messages?: Maybe<Array<Message>>;
+  roles?: Maybe<Array<Role>>;
 };
 
 export type UserCount = {
@@ -355,6 +384,7 @@ export type UserCount = {
   auth_key: Scalars['Int']['output'];
   auth_session: Scalars['Int']['output'];
   messages: Scalars['Int']['output'];
+  roles: Scalars['Int']['output'];
 };
 
 export type UserCountAggregate = {
@@ -364,6 +394,12 @@ export type UserCountAggregate = {
   firstName: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
   lastName: Scalars['Int']['output'];
+};
+
+export type UserListRelationFilter = {
+  every?: InputMaybe<UserWhereInput>;
+  none?: InputMaybe<UserWhereInput>;
+  some?: InputMaybe<UserWhereInput>;
 };
 
 export type UserMaxAggregate = {
@@ -398,6 +434,7 @@ export type UserWhereInput = {
   id?: InputMaybe<StringFilter>;
   lastName?: InputMaybe<StringNullableFilter>;
   messages?: InputMaybe<MessageListRelationFilter>;
+  roles?: InputMaybe<RoleListRelationFilter>;
 };
 
 export type RenewBearerTokenMutationVariables = Exact<{ [key: string]: never; }>;
