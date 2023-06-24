@@ -26,7 +26,8 @@
     
     "declaration": false,
     
-    "importsNotUsedAsValues": "error",
+    "importsNotUsedAsValues": "remove",
+    "verbatimModuleSyntax": false,
   },
   "include": [
     "src/**/*.ts",
