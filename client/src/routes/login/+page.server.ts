@@ -1,5 +1,4 @@
 import type { LoginMutation, LoginMutationVariables } from '$/graphql/@generated';
-import { AUTH_COOKIE_NAME } from '$/lib/utils/auth';
 import { redirect } from '@sveltejs/kit';
 import { gql } from '@urql/svelte';
 import { StatusCodes } from 'http-status-codes';
@@ -21,7 +20,7 @@ export const load = (async () => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, cookies, url, locals: { client } }) => {
+	default: async ({ request, url, locals: { client } }) => {
 		const form = await superValidate(request, schema);
 
 		if (!form.valid) return { form };
@@ -45,8 +44,6 @@ export const actions = {
 		if (error || !data) {
 			return message(form, error?.message);
 		}
-
-		cookies.set(AUTH_COOKIE_NAME, data.login.accessToken);
 
 		const redirectTo = url.searchParams.get('redirectTo');
 

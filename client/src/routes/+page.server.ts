@@ -1,11 +1,10 @@
 import type { LogoutMutation } from '$/graphql/@generated';
-import { AUTH_COOKIE_NAME } from '$/lib/utils/auth';
 import { redirect, type Actions } from '@sveltejs/kit';
 import { gql } from '@urql/svelte';
 import { StatusCodes } from 'http-status-codes';
 
 export const actions = {
-	async logout({ cookies, locals: { client } }) {
+	async logout({ locals: { client } }) {
 		const { data, error } = await client
 			.mutation(
 				gql<LogoutMutation>`
@@ -22,8 +21,6 @@ export const actions = {
 		if (error || !data) {
 			return;
 		}
-
-		cookies.delete(AUTH_COOKIE_NAME);
 
 		throw redirect(StatusCodes.SEE_OTHER, '/login');
 	},
