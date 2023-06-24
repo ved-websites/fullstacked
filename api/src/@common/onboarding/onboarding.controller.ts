@@ -1,14 +1,14 @@
 import { Public } from '$auth/auth.guard';
 import { AuthService } from '$auth/auth.service';
 import { PrismaService } from '$prisma/prisma.service';
-import { Body, Controller, Get, Inject, Next, Post, Redirect, Res, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Next, Post, Redirect, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import type { NextFunction, Response } from 'express';
 import { join } from 'path';
 import type { OnboardingDto } from './onboarding.dto';
 
 @Controller()
 export class OnboardingController {
-	constructor(@Inject(PrismaService) private readonly prisma: PrismaService, @Inject(AuthService) private readonly auth: AuthService) {}
+	constructor(private readonly prisma: PrismaService, private readonly auth: AuthService) {}
 
 	@Public()
 	@Get()

@@ -1,11 +1,11 @@
 import { PrismaService } from '$prisma/prisma.service';
 import { getGraphQLRequest } from '$utils/contextExtracter';
-import { CanActivate, ExecutionContext, Inject, Injectable, SetMetadata } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-	constructor(private reflector: Reflector, @Inject(PrismaService) private readonly prisma: PrismaService) {}
+	constructor(private reflector: Reflector, private readonly prisma: PrismaService) {}
 
 	async canActivate(context: ExecutionContext) {
 		const definedRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [context.getHandler(), context.getClass()]);
