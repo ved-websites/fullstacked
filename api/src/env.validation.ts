@@ -23,8 +23,9 @@ export const DEFAULT_GRAPHQL_DEPTH_LIMIT = 10;
 export const DEFAULT_MINIO_PORT = 9000;
 
 export class EnvironmentConfig {
+	@IsOptional()
 	@IsEnum(Environment)
-	readonly NODE_ENV: Environment = Environment.Development;
+	readonly NODE_ENV?: Environment;
 
 	@Type(() => Number)
 	@IsInt()

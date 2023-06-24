@@ -9,7 +9,7 @@ export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>(
 	driver: ApolloDriver,
 	imports: [ConfigModule],
 	useFactory: (env: EnvironmentConfig) => {
-		const isProd = env.NODE_ENV == Environment.Production;
+		const isDev = env.NODE_ENV == Environment.Development;
 
 		return {
 			autoSchemaFile: true,
@@ -17,9 +17,9 @@ export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>(
 			subscriptions: {
 				'graphql-ws': true,
 			},
-			debug: !isProd,
+			debug: isDev,
 			playground: false,
-			plugins: [ApolloServerPluginLandingPageLocalDefault()],
+			plugins: isDev ? [ApolloServerPluginLandingPageLocalDefault()] : undefined,
 			validationRules: [depthLimit(env.GRAPHQL_DEPTH_LIMIT)],
 		};
 	},
