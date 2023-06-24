@@ -8,6 +8,7 @@ export function createConfigModule(options?: DotenvLoaderOptions) {
 		schema: EnvironmentConfig,
 		load: dotenvLoader({
 			expandVariables: true,
+			envFilePath: '.env.local',
 			...options,
 		}),
 	});

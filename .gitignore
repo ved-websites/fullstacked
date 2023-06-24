@@ -119,7 +119,6 @@
 **/_generated
 
 # dotenv environment variables file
-api/.env
 .env.local
 .env.*.local
 

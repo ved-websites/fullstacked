@@ -38,7 +38,7 @@ function buildOnboarding() {
 // Creation Tasks
 
 function setupEnv() {
-	const devEnvName = '.env';
+	const devEnvName = '.env.local';
 
 	if (!fs.existsSync(devEnvName)) {
 		throw `Project not initialized! Make sure to run "pnpm run init" in the project's folder root.`;
@@ -105,4 +105,4 @@ export const cleanSeed: TaskFunction = gulp.series(cleanDb, seedDatabase);
 
 // Useful commands
 
-export { deleteDist };
+export { deleteDist, setupEnv };

@@ -8,17 +8,17 @@ const { replaceInFile } = replace;
 async function setupAPI() {
 	const folder = './api';
 
-	if (fs.existsSync(`${folder}/.env`)) {
+	if (fs.existsSync(`${folder}/.env.local`)) {
 		return false;
 	}
-	if (!fs.existsSync(`${folder}/.env.example`)) {
+	if (!fs.existsSync(`${folder}/.env`)) {
 		return false;
 	}
 
-	await copyFile(`${folder}/.env.example`, `${folder}/.env`);
+	await copyFile(`${folder}/.env`, `${folder}/.env.local`);
 
 	await replaceInFile({
-		files: ['./api/.env'],
+		files: ['./api/.env.local'],
 		from: 'MY_RANDOM_KEY',
 		to: generateGuid(),
 	});
@@ -29,10 +29,10 @@ async function setupAPI() {
 async function setupClient() {
 	const folder = './client';
 
-	if (!fs.existsSync(`${folder}/.env.local`)) {
+	if (fs.existsSync(`${folder}/.env.local`)) {
 		return false;
 	}
-	if (fs.existsSync(`${folder}/.env`)) {
+	if (!fs.existsSync(`${folder}/.env`)) {
 		return false;
 	}
 
