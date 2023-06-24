@@ -20,12 +20,16 @@
 	<div class="gap-6 mb-6 md:grid-cols-2">
 		<div>
 			<Label for="email" class="mb-2">Email</Label>
-			<Input type="email" name="email" placeholder="example@example.com" bind:value={$form.email} {...$constraints.email} />
+			<Input let:props>
+				<input {...props} type="email" name="email" placeholder="example@example.com" bind:value={$form.email} {...$constraints.email} />
+			</Input>
 			{#if $errors.email}<Helper color="red">{$errors.email}</Helper>{/if}
 		</div>
 		<div>
 			<Label for="password" class="mb-2">Password</Label>
-			<Input type="password" name="password" bind:value={$form.password} {...$constraints.password} />
+			<Input let:props>
+				<input {...props} type="password" name="password" bind:value={$form.password} {...$constraints.password} />
+			</Input>
 			{#if $errors.password}<Helper color="red">{$errors.password}</Helper>{/if}
 		</div>
 
