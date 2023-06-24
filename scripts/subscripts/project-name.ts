@@ -87,7 +87,12 @@ export async function replaceProjectNames() {
 		});
 
 		await replaceInFile({
-			files: ['./README.md', './{api,client}/README.md', `${oldProjectName}.code-workspace`],
+			files: [
+				'./README.md',
+				'./{api,client}/README.md',
+				`${oldProjectName}.code-workspace`,
+				'./api/src/@common/onboarding/onboarding.html',
+			],
 			from: new RegExp(capitalize(oldProjectName), 'g'),
 			to: capitalize(projectName),
 			allowEmptyPaths: true,
