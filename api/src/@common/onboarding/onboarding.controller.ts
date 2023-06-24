@@ -38,5 +38,16 @@ export class OnboardingController {
 		const { firstName, lastName, email, password } = onboardingDto;
 
 		await this.auth.register(email, password, { firstName, lastName });
+
+		await this.prisma.role.create({
+			data: {
+				text: 'admin',
+				users: {
+					connect: {
+						email,
+					},
+				},
+			},
+		});
 	}
 }
