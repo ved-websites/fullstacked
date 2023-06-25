@@ -1,5 +1,15 @@
 import type { Client } from '@urql/svelte';
-import type { getUser } from './lib/utils/hooks-helper.server';
+import type { ClientUser } from './lib/utils/hooks-helper.server';
+
+export type LayoutAlertLevel = 'info' | 'warning' | 'error';
+
+export type LayoutAlert = {
+	text: string;
+	/** The Alert behavior. Defaults to 'info'. */
+	level?: LayoutAlertLevel;
+	/** The icon path to use from `@mdj/js`. Defaults to level aware icon. */
+	icon?: string;
+};
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -7,9 +17,12 @@ declare global {
 	namespace App {
 		interface Locals {
 			client: Client;
-			user: ReturnType<typeof getUser>;
+			user: ClientUser;
 		}
-		// interface PageData {}
+		interface PageData {
+			user: ClientUser;
+			layoutAlert: LayoutAlert | undefined;
+		}
 		// interface Error {}
 		// interface Platform {}
 	}
