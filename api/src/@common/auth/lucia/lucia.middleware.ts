@@ -9,18 +9,25 @@ export class LuciaMiddleware implements NestMiddleware {
 	constructor(@Inject(forwardRef(() => LuciaFactory)) private readonly auth: Auth) {}
 
 	async use(request: Request, response: Response, next: NextFunction) {
-		const authSessionCookie = request.cookies[COOKIE_NAME] as string | undefined;
+		const authSessionCookieToken = request.cookies[COOKIE_NAME] as string | undefined;
 		const authSessionHeader = request.headers.authorization;
 
-		if (authSessionCookie && !authSessionHeader) {
-			request.headers.authorization = `Bearer ${authSessionCookie}`;
+		if (authSessionCookieToken && !authSessionHeader) {
+			request.headers.authorization = `Bearer ${authSessionCookieToken}`;
 		}
 
 		const requestAuth = this.auth.handleRequest(request, response);
 
 		response.locals.auth = requestAuth;
 
-		request.session = await response.locals.auth.validateBearerToken();
+		request.sessionId = this.auth.readBearerToken(request.headers.authorization);
+
+		try {
+			request.session = request.sessionId ? await this.auth.getSession(request.sessionId) : null;
+		} catch (error) {
+			// invalid session
+			request.session = null;
+		}
 
 		next();
 	}

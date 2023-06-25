@@ -1,6 +1,6 @@
 import { PrismaService } from '$prisma/prisma.service';
 import { getGraphQLRequest } from '$utils/contextExtracter';
-import { CanActivate, ExecutionContext, Injectable, SetMetadata } from '@nestjs/common';
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable, SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 @Injectable()
@@ -30,7 +30,13 @@ export class RolesGuard implements CanActivate {
 			},
 		});
 
-		return definedRoles.some((definedRole) => roles.some((role) => role.text === definedRole));
+		const hasRole = definedRoles.some((definedRole) => roles.some((role) => role.text === definedRole));
+
+		if (!hasRole) {
+			throw new ForbiddenException('User does not have an appropriate role to access this resource.');
+		}
+
+		return true;
 	}
 }
 

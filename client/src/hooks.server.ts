@@ -1,6 +1,6 @@
 import { PUBLIC_API_ADDR } from '$env/static/public';
 import { createClient } from '$lib/urql';
-import { getUser } from '$lib/utils/hooks-helper.server';
+import { getAuthUser } from '$lib/utils/hooks-helper.server';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 import { parseString } from 'set-cookie-parser';
 import ws from 'ws';
@@ -36,7 +36,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		ws,
 	});
 
-	event.locals.user = getUser(event.locals.client);
+	event.locals.user = await getAuthUser(event.locals.client);
 
 	return resolve(event);
 };

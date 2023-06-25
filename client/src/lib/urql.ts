@@ -50,7 +50,7 @@ export function createClient(options?: ClientOptions) {
 						return operation;
 					},
 					didAuthError(error, _operation) {
-						return error.graphQLErrors.some((e) => e.extensions?.code === 'FORBIDDEN');
+						return error.graphQLErrors.some((e) => e.extensions?.code === 'UNAUTHENTICATED');
 					},
 					async refreshAuth() {
 						try {

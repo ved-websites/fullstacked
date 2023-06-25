@@ -19,7 +19,7 @@ export class AuthResolver {
 	constructor(private readonly authService: AuthService) {}
 
 	@Query(() => User)
-	async getUser(@AuthSession() { user }: Session, @SelectQL() select: PrismaSelector) {
+	async getSessionUser(@AuthSession() { user }: Session, @SelectQL() select: PrismaSelector) {
 		const authUser = this.authService.getAuthUser(user.email, select);
 
 		return authUser;
@@ -49,9 +49,7 @@ export class AuthResolver {
 	}
 
 	@Mutation(() => LogoutOutput)
-	async logout(@LuciaAuth() auth: LuciaAuthRequest) {
-		const session = await auth.validateBearerToken();
-
+	async logout(@LuciaAuth() auth: LuciaAuthRequest, @AuthSession() session: Session | null) {
 		if (session) {
 			await this.authService.logout(session.sessionId);
 

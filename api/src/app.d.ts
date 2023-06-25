@@ -20,6 +20,7 @@ declare global {
 
 		interface Request {
 			session: Session | null;
+			sessionId: string | null;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 import { getGraphQLRequest } from '$utils/contextExtracter';
-import { CanActivate, ExecutionContext, Injectable, SetMetadata } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, SetMetadata, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 @Injectable()
@@ -15,7 +15,16 @@ export class AuthGuard implements CanActivate {
 
 		const { session } = getGraphQLRequest(context);
 
-		return session != null;
+		if (!session) {
+			// Unauthorized == Unauthenticated
+			throw new UnauthorizedException();
+		}
+
+		if (session.state !== 'active') {
+			throw new UnauthorizedException('Session is not active anymore!');
+		}
+
+		return true;
 	}
 }
 

@@ -11,7 +11,7 @@
 </script>
 
 {#if $message || isRedirected}
-	<Alert color="red">
+	<Alert color="red" class="mb-5">
 		{$message || (isRedirected && 'Vous devez être connecté pour accéder à cette ressource!')}
 	</Alert>
 {/if}
@@ -33,6 +33,6 @@
 			{#if $errors.password}<Helper color="red">{$errors.password}</Helper>{/if}
 		</div>
 
-		<Button type="submit">Submit</Button>
+		<Button type="submit" class="mt-5">Submit</Button>
 	</div>
 </form>

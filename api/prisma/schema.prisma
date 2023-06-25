@@ -25,9 +25,12 @@ generator nestgraphql {
 // ===========
 
 model User {
+  /// @HideField({ output: false, input: true })
   id String @id @unique
 
+  /// @HideField({ output: true, input: true })
   auth_session Session[]
+  /// @HideField({ output: true, input: true })
   auth_key     Key[]
 
   email     String  @unique
@@ -41,6 +44,7 @@ model User {
   @@map("users")
 }
 
+/// @ObjectType({ isAbstract: true })
 model Session {
   id             String @id @unique
   user_id        String
@@ -53,6 +57,7 @@ model Session {
   @@map("sessions")
 }
 
+/// @ObjectType({ isAbstract: true })
 model Key {
   id              String  @id @unique
   hashed_password String?

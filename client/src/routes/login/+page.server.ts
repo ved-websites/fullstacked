@@ -27,7 +27,6 @@ export const actions = {
 
 		const { email, password } = form.data;
 
-		// Sending this on the server makes the cookies unhandled
 		const { data, error } = await client
 			.mutation(
 				gql<LoginMutation, LoginMutationVariables>`

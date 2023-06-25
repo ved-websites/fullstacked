@@ -54,9 +54,9 @@
 
 <main class="container mx-auto mt-20 py-3 px-5">
 	{#if layoutAlert}
-		<Alert color={alertColorMapping[layoutAlert.level]} class="mb-5">
+		<Alert color={alertColorMapping[layoutAlert.level]} class="mb-5 flex items-center">
 			<Icon path={layoutAlert.icon} />
-			{layoutAlert.text}
+			<span>{layoutAlert.text}</span>
 		</Alert>
 	{/if}
 	<slot />

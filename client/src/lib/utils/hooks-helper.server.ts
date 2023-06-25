@@ -1,12 +1,12 @@
 import type { GetUserFromSessionQuery } from '$/graphql/@generated';
 import { Client, gql } from '@urql/svelte';
 
-export async function getUser(client: Client) {
+export async function getAuthUser(client: Client) {
 	const result = await client
 		.query(
 			gql<GetUserFromSessionQuery>`
 				query GetUserFromSession {
-					getUser {
+					getSessionUser {
 						email
 						firstName
 						lastName
@@ -25,8 +25,8 @@ export async function getUser(client: Client) {
 	}
 
 	return {
-		...result.data.getUser,
+		...result.data.getSessionUser,
 	};
 }
 
-export type ClientUser = Awaited<ReturnType<typeof getUser>>;
+export type ClientUser = Awaited<ReturnType<typeof getAuthUser>>;
