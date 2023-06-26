@@ -41,6 +41,11 @@ model User {
 
   messages Message[]
 
+  /// @HideField({ output: false, input: true })
+  createdAt DateTime @default(now())
+  /// @HideField({ output: false, input: true })
+  updatedAt DateTime @updatedAt
+
   @@map("users")
 }
 
@@ -83,6 +88,9 @@ model Role {
   text String @unique
 
   users User[]
+
+  /// @HideField({ output: false, input: true })
+  createdAt DateTime @default(now())
 
   @@map("roles")
 }

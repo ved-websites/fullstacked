@@ -16,6 +16,9 @@ export class UsersService {
 		const users = await this.prisma.user.findMany({
 			where,
 			...select,
+			orderBy: {
+				createdAt: 'asc',
+			},
 		});
 
 		return users;
