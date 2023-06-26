@@ -3,6 +3,7 @@ import { Roles } from '$auth/roles/roles.guard';
 import { User, UserUpdateWithoutMessagesInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
+import { ForbiddenException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GetUserOutput } from './dtos/getUser.output';
 import { UsersService } from './users.service';
@@ -34,8 +35,14 @@ export class UsersResolver {
 		@Args('where') where: UserWhereUniqueInput,
 		@Args('data') data: UserUpdateWithoutMessagesInput,
 	) {
-		const user = await this.usersService.editUser(where, select, data);
+		try {
+			const user = await this.usersService.editUser(where, select, data);
 
-		return user;
+			return user;
+		} catch (error) {
+			const message = error instanceof Error ? error.message : 'Unhandled exception.';
+
+			throw new ForbiddenException(message);
+		}
 	}
 }

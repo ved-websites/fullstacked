@@ -108,7 +108,7 @@ export const actions = {
 			.toPromise();
 
 		if (error || !data) {
-			return message(form, error?.message);
+			return message(form, error?.graphQLErrors.at(0)?.message);
 		}
 
 		throw redirect(StatusCodes.SEE_OTHER, '/users');
