@@ -16,7 +16,7 @@
 		easing: sineIn,
 	};
 
-	export let user: ClientUser;
+	export let sessionUser: ClientUser;
 </script>
 
 <Drawer transitionType="fly" {transitionParams} bind:hidden={$isDrawerHidden} id="main-drawer">
@@ -30,7 +30,7 @@
 	<Sidebar>
 		<SidebarWrapper>
 			<SidebarGroup>
-				{#each navElements.filter((navElement) => isNavElemVisible(navElement, user)) as navElement}
+				{#each navElements.filter((navElement) => isNavElemVisible(navElement, sessionUser)) as navElement}
 					{#if 'url' in navElement}
 						<SidebarItem
 							label={navElement.title}
@@ -60,7 +60,7 @@
 							<svelte:fragment slot="arrowdown">
 								<Icon path={mdiChevronDown} />
 							</svelte:fragment>
-							{#each navElement.elements.filter((navSubElement) => navSubElement.isPublic || user) as navSubElement}
+							{#each navElement.elements.filter((navSubElement) => navSubElement.isPublic || sessionUser) as navSubElement}
 								<SidebarItem
 									label={navSubElement.title}
 									active={$page.url.pathname == navSubElement.url}

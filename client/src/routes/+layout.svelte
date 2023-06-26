@@ -50,7 +50,7 @@
 
 <InitialTheme />
 
-<Navbar user={data.user} />
+<Navbar sessionUser={data.sessionUser} />
 
 <main class="container mx-auto mt-20 py-3 px-5">
 	{#if layoutAlert}

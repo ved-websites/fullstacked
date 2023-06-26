@@ -23,7 +23,7 @@
 	import Drawer from './Drawer.svelte';
 	import { isNavElemVisible } from './utils';
 
-	export let user: ClientUser;
+	export let sessionUser: ClientUser;
 </script>
 
 <Navbar let:hidden navClass="px-2 sm:px-4 py-2.5 fixed w-full z-20 top-0 left-0 border-b">
@@ -34,7 +34,7 @@
 	</NavBrand>
 	<div class="flex items-center md:order-2">
 		<DarkMode class="mr-3 hidden md:flex" />
-		{#if user}
+		{#if sessionUser}
 			<Avatar class="cursor-pointer" id="avatar-menu" src="https://static-00.iconduck.com/assets.00/user-icon-2048x2048-ihoxz4vq.png" />
 
 			<form method="POST" action="/?/logout">
@@ -43,14 +43,14 @@
 				</Button>
 			</form>
 		{:else}
-			<Button href="/login" class={user ? 'hidden' : ''}>Login</Button>
+			<Button href="/login" class={sessionUser ? 'hidden' : ''}>Login</Button>
 		{/if}
 	</div>
-	{#if user}
+	{#if sessionUser}
 		<Dropdown placement="bottom" triggeredBy="#avatar-menu">
 			<DropdownHeader>
-				<span class="block text-sm">{user.firstName} {user.lastName}</span>
-				<span class="block truncate text-sm font-light"> {user.email} </span>
+				<span class="block text-sm">{sessionUser.firstName} {sessionUser.lastName}</span>
+				<span class="block truncate text-sm font-light"> {sessionUser.email} </span>
 			</DropdownHeader>
 			<DropdownItem>Dashboard</DropdownItem>
 			<DropdownItem>Earnings</DropdownItem>
@@ -60,7 +60,7 @@
 	{/if}
 	<NavUl {hidden}>
 		{#each navElements as navElement}
-			{#if isNavElemVisible(navElement, user)}
+			{#if isNavElemVisible(navElement, sessionUser)}
 				{#if 'url' in navElement}
 					<NavLi href={navElement.url} active={$page.url.pathname == navElement.url}>
 						{navElement.title}
@@ -84,4 +84,4 @@
 	</NavUl>
 </Navbar>
 
-<Drawer {user} />
+<Drawer {sessionUser} />

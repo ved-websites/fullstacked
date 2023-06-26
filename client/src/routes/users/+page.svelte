@@ -4,9 +4,9 @@
 
 	export let data;
 
-	$: ({ users, user: authUser } = data);
+	$: ({ users, sessionUser } = data);
 
-	$: canActions = userHasRole(authUser, 'admin');
+	$: canActions = userHasRole(sessionUser, 'admin');
 </script>
 
 <Heading tag="h2">This is the users list</Heading>

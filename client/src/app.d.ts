@@ -20,10 +20,10 @@ declare global {
 	namespace App {
 		interface Locals {
 			client: Client;
-			user: ClientUser;
+			sessionUser: ClientUser;
 		}
 		interface PageData {
-			user: ClientUser;
+			sessionUser: ClientUser;
 			layoutAlert: LayoutAlert | undefined;
 		}
 		// interface Error {}

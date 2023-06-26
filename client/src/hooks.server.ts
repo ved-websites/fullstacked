@@ -49,7 +49,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		ws,
 	});
 
-	event.locals.user = await getAuthUser(event.locals.client);
+	event.locals.sessionUser = await getAuthUser(event.locals.client);
 
 	return resolve(event);
 };
