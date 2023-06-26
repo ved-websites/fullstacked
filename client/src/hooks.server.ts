@@ -1,10 +1,23 @@
 import { PUBLIC_API_ADDR } from '$env/static/public';
 import { createClient } from '$lib/urql';
-import { getAuthUser } from '$lib/utils/hooks-helper.server';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
+import type { Client } from '@urql/svelte';
 import { parseString } from 'set-cookie-parser';
 import ws from 'ws';
+import { GetUserFromSessionDocument } from './graphql/@generated';
 import { AUTH_COOKIE_NAME } from './lib/utils/auth';
+
+export async function getAuthUser(client: Client) {
+	const result = await client.query(GetUserFromSessionDocument, {}).toPromise();
+
+	if (!result.data) {
+		return null;
+	}
+
+	return {
+		...result.data.getSessionUser,
+	};
+}
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.client = createClient({

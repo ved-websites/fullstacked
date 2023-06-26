@@ -1,5 +1,8 @@
 import type { Client } from '@urql/svelte';
+import type { getAuthUser } from './hooks.server';
 import type { ClientUser } from './lib/utils/hooks-helper.server';
+
+export type ClientUser = Awaited<ReturnType<typeof getAuthUser>>;
 
 export type LayoutAlertLevel = 'info' | 'warning' | 'error';
 

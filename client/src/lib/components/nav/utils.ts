@@ -1,4 +1,4 @@
-import type { ClientUser } from '$/lib/utils/hooks-helper.server';
+import type { ClientUser } from '$/app';
 import type { NavElement } from './nav-elements';
 
 export function userHasRole(user: ClientUser, ...roles: string[]) {

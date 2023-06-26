@@ -1,0 +1,10 @@
+query GetUserFromSession {
+	getSessionUser {
+		email
+		firstName
+		lastName
+		roles {
+			text
+		}
+	}
+}
