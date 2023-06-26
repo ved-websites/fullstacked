@@ -28,8 +28,8 @@
 		{#each users as user}
 			<TableBodyRow>
 				<TableBodyCell>{user.email}</TableBodyCell>
-				<TableBodyCell>{user.firstName}</TableBodyCell>
-				<TableBodyCell>{user.lastName}</TableBodyCell>
+				<TableBodyCell>{user.firstName ?? '-'}</TableBodyCell>
+				<TableBodyCell>{user.lastName ?? '-'}</TableBodyCell>
 				<TableBodyCell>
 					{#if user.roles}
 						{#each user.roles as role}
