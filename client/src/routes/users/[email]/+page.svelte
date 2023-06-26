@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Heading, Helper, Input, Label, MultiSelect } from 'flowbite-svelte';
+	import { Alert, Button, Heading, Helper, Input, Label, MultiSelect } from 'flowbite-svelte';
 	import type { SelectOptionType } from 'flowbite-svelte/dist/types.js';
 	import { superForm } from 'sveltekit-superforms/client';
 
@@ -12,6 +12,12 @@
 		value: role.id,
 	}));
 </script>
+
+{#if $message}
+	<Alert color="red" class="mb-5">
+		{$message}
+	</Alert>
+{/if}
 
 <Heading tag="h2">Editing user {data.editableUser?.email}</Heading>
 
