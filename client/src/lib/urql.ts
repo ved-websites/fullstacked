@@ -50,7 +50,9 @@ export function createClient(options?: ClientOptions) {
 						return operation;
 					},
 					didAuthError(error, _operation) {
-						return error.graphQLErrors.some((e) => e.extensions?.code === 'UNAUTHENTICATED');
+						return error.graphQLErrors.some(
+							(e) => e.extensions?.code === 'UNAUTHENTICATED' && e.message == 'Session is not active anymore!',
+						);
 					},
 					async refreshAuth() {
 						try {
