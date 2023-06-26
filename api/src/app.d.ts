@@ -9,6 +9,7 @@ declare global {
 			email: string;
 			firstName?: string;
 			lastName?: string;
+			registerToken?: string | null;
 		};
 		// type DatabaseSessionAttributes = {};
 	}

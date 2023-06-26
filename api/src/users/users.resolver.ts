@@ -1,11 +1,15 @@
 import { ADMIN } from '$/@utils/roles';
+import { Public } from '$auth/auth.guard';
 import { Roles } from '$auth/roles/roles.guard';
+import { Session } from '$prisma-graphql/session';
 import { User, UserCreateInput, UserUpdateWithoutMessagesInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
 import { ForbiddenException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GetUserOutput } from './dtos/getUser.output';
+import { RegisterInput } from './dtos/register.input';
+import { UnregisteredUserOutput } from './dtos/unregistered-user.output';
 import { UsersService } from './users.service';
 
 @Resolver()
@@ -52,5 +56,21 @@ export class UsersResolver {
 
 			throw new ForbiddenException(message);
 		}
+	}
+
+	@Public()
+	@Mutation(() => Session)
+	async register(@Args('data') data: RegisterInput) {
+		const session = await this.usersService.register(data);
+
+		return session;
+	}
+
+	@Public()
+	@Query(() => UnregisteredUserOutput)
+	async getUnregisteredUser(@Args('registerToken') registerToken: string) {
+		const user = await this.usersService.getUnregisteredUser(registerToken);
+
+		return user;
 	}
 }

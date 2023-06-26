@@ -1,8 +1,9 @@
+import { emailSchema, firstNameSchema, lastNameSchema } from '$/lib/schemas/auth';
 import { z } from 'zod';
 
 export const userFormSchema = z.object({
-	email: z.string().email(),
-	firstName: z.nullable(z.string()),
-	lastName: z.nullable(z.string()),
+	email: emailSchema,
+	firstName: firstNameSchema,
+	lastName: lastNameSchema,
 	roles: z.array(z.object({ value: z.string(), name: z.string() })),
 });

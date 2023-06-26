@@ -18,12 +18,14 @@ export type Scalars = {
 
 export type GetUserOutput = {
   _count: UserCount;
+  createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
   messages?: Maybe<Array<Message>>;
   roles: Array<Role>;
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type IntFilter = {
@@ -148,6 +150,7 @@ export type Mutation = {
   editUser: User;
   login: LoggedUserOutput;
   logout: LogoutOutput;
+  register: Session;
   renewSession?: Maybe<RenewedSessionOutput>;
   updateMessage: Message;
 };
@@ -171,6 +174,11 @@ export type MutationEditUserArgs = {
 
 export type MutationLoginArgs = {
   data: LoginUserInput;
+};
+
+
+export type MutationRegisterArgs = {
+  data: RegisterInput;
 };
 
 
@@ -224,6 +232,7 @@ export type NullableStringFieldUpdateOperationsInput = {
 export type Query = {
   getRoles: Array<Role>;
   getSessionUser: User;
+  getUnregisteredUser: UnregisteredUserOutput;
   getUser?: Maybe<GetUserOutput>;
   getUsers: Array<User>;
   messages: Array<Message>;
@@ -232,6 +241,11 @@ export type Query = {
 
 export type QueryGetRolesArgs = {
   where?: InputMaybe<RoleWhereInput>;
+};
+
+
+export type QueryGetUnregisteredUserArgs = {
+  registerToken: Scalars['String']['input'];
 };
 
 
@@ -254,6 +268,17 @@ export enum QueryMode {
   Insensitive = 'insensitive'
 }
 
+export type RegisterInput = {
+  /** First name of the user */
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  /** Last Name of the user */
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  /** Password of the user */
+  password: Scalars['String']['input'];
+  /** The register token provided in the registration link. */
+  registerToken: Scalars['String']['input'];
+};
+
 export type RenewedSessionOutput = {
   /** Regenerated accessToken of the user */
   accessToken: Scalars['String']['output'];
@@ -261,6 +286,7 @@ export type RenewedSessionOutput = {
 
 export type Role = {
   _count: RoleCount;
+  createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
   text: Scalars['String']['output'];
   users?: Maybe<Array<User>>;
@@ -276,6 +302,7 @@ export type RoleCount = {
 
 export type RoleCountAggregate = {
   _all: Scalars['Int']['output'];
+  createdAt: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
   text: Scalars['Int']['output'];
 };
@@ -302,11 +329,13 @@ export type RoleListRelationFilter = {
 };
 
 export type RoleMaxAggregate = {
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
   text?: Maybe<Scalars['String']['output']>;
 };
 
 export type RoleMinAggregate = {
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
   text?: Maybe<Scalars['String']['output']>;
 };
@@ -374,6 +403,46 @@ export type RoleWhereUniqueInput = {
   text?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type Session = {
+  active_expires: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  idle_expires: Scalars['String']['output'];
+  user: User;
+  user_id: Scalars['String']['output'];
+};
+
+export type SessionAvgAggregate = {
+  active_expires?: Maybe<Scalars['Float']['output']>;
+  idle_expires?: Maybe<Scalars['Float']['output']>;
+};
+
+export type SessionCountAggregate = {
+  _all: Scalars['Int']['output'];
+  active_expires: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  idle_expires: Scalars['Int']['output'];
+  user_id: Scalars['Int']['output'];
+};
+
+export type SessionMaxAggregate = {
+  active_expires?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  idle_expires?: Maybe<Scalars['String']['output']>;
+  user_id?: Maybe<Scalars['String']['output']>;
+};
+
+export type SessionMinAggregate = {
+  active_expires?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  idle_expires?: Maybe<Scalars['String']['output']>;
+  user_id?: Maybe<Scalars['String']['output']>;
+};
+
+export type SessionSumAggregate = {
+  active_expires?: Maybe<Scalars['String']['output']>;
+  idle_expires?: Maybe<Scalars['String']['output']>;
+};
+
 export type StringFieldUpdateOperationsInput = {
   set?: InputMaybe<Scalars['String']['input']>;
 };
@@ -417,14 +486,25 @@ export type SubscriptionMessageAddedArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
+export type UnregisteredUserOutput = {
+  /** Email of the unregistered user */
+  email: Scalars['String']['output'];
+  /** First name of the unregistered user */
+  firstName?: Maybe<Scalars['String']['output']>;
+  /** Last name of the unregistered user */
+  lastName?: Maybe<Scalars['String']['output']>;
+};
+
 export type User = {
   _count: UserCount;
+  createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
   messages?: Maybe<Array<Message>>;
   roles?: Maybe<Array<Role>>;
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type UserCount = {
@@ -436,10 +516,12 @@ export type UserCount = {
 
 export type UserCountAggregate = {
   _all: Scalars['Int']['output'];
+  createdAt: Scalars['Int']['output'];
   email: Scalars['Int']['output'];
   firstName: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
   lastName: Scalars['Int']['output'];
+  updatedAt: Scalars['Int']['output'];
 };
 
 export type UserCreateInput = {
@@ -447,6 +529,7 @@ export type UserCreateInput = {
   firstName?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutUserInput>;
+  registerToken?: InputMaybe<Scalars['String']['input']>;
   roles?: InputMaybe<RoleCreateNestedManyWithoutUsersInput>;
 };
 
@@ -457,17 +540,21 @@ export type UserListRelationFilter = {
 };
 
 export type UserMaxAggregate = {
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type UserMinAggregate = {
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type UserRelationFilter = {
@@ -479,6 +566,7 @@ export type UserUpdateWithoutMessagesInput = {
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   firstName?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   lastName?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  registerToken?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   roles?: InputMaybe<RoleUpdateManyWithoutUsersNestedInput>;
 };
 
@@ -490,11 +578,13 @@ export type UserWhereInput = {
   firstName?: InputMaybe<StringNullableFilter>;
   lastName?: InputMaybe<StringNullableFilter>;
   messages?: InputMaybe<MessageListRelationFilter>;
+  registerToken?: InputMaybe<StringNullableFilter>;
   roles?: InputMaybe<RoleListRelationFilter>;
 };
 
 export type UserWhereUniqueInput = {
   email?: InputMaybe<Scalars['String']['input']>;
+  registerToken?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type GetUserFromSessionQueryVariables = Exact<{ [key: string]: never; }>;
@@ -536,6 +626,20 @@ export type LoginMutationVariables = Exact<{
 
 
 export type LoginMutation = { login: { accessToken: string } };
+
+export type GetUnregisteredUserQueryVariables = Exact<{
+  registerToken: Scalars['String']['input'];
+}>;
+
+
+export type GetUnregisteredUserQuery = { getUnregisteredUser: { email: string, firstName?: string | null, lastName?: string | null } };
+
+export type RegisterNewUserMutationVariables = Exact<{
+  data: RegisterInput;
+}>;
+
+
+export type RegisterNewUserMutation = { register: { user: { email: string } } };
 
 export type ManageGetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -583,6 +687,8 @@ export const GetChatMessagesDocument = {"kind":"Document","definitions":[{"kind"
 export const SendMessageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SendMessage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"message"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addMessage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"text"},"value":{"kind":"Variable","name":{"kind":"Name","value":"message"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]} as unknown as DocumentNode<SendMessageMutation, SendMessageMutationVariables>;
 export const GetInitialMessagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetInitialMessages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]}}]} as unknown as DocumentNode<GetInitialMessagesQuery, GetInitialMessagesQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
+export const GetUnregisteredUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUnregisteredUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"registerToken"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getUnregisteredUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"registerToken"},"value":{"kind":"Variable","name":{"kind":"Name","value":"registerToken"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}}]}}]} as unknown as DocumentNode<GetUnregisteredUserQuery, GetUnregisteredUserQueryVariables>;
+export const RegisterNewUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RegisterNewUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RegisterInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"register"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]}}]} as unknown as DocumentNode<RegisterNewUserMutation, RegisterNewUserMutationVariables>;
 export const ManageGetUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ManageGetUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]}}]} as unknown as DocumentNode<ManageGetUsersQuery, ManageGetUsersQueryVariables>;
 export const GetEditableUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEditableUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"equals"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"value"},"name":{"kind":"Name","value":"id"}},{"kind":"Field","alias":{"kind":"Name","value":"name"},"name":{"kind":"Name","value":"text"}}]}}]}}]}}]} as unknown as DocumentNode<GetEditableUserQuery, GetEditableUserQueryVariables>;
 export const GetRolesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRoles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getRoles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]} as unknown as DocumentNode<GetRolesQuery, GetRolesQueryVariables>;

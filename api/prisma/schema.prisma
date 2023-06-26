@@ -37,6 +37,9 @@ model User {
   firstName String? @map("first_name")
   lastName  String? @map("last_name")
 
+  /// @HideField({ output: true, input: false })
+  registerToken String? @unique @map("register_token")
+
   roles Role[]
 
   messages Message[]

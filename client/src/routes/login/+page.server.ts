@@ -1,4 +1,5 @@
 import type { LoginMutation, LoginMutationVariables } from '$/graphql/@generated';
+import { emailSchema, passwordSchema } from '$/lib/schemas/auth';
 import { redirect } from '@sveltejs/kit';
 import { gql } from '@urql/svelte';
 import { StatusCodes } from 'http-status-codes';
@@ -6,11 +7,9 @@ import { message, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
-const PASSWORD_MIN_LENGTH = 4;
-
 const schema = z.object({
-	email: z.string().email(),
-	password: z.string().min(PASSWORD_MIN_LENGTH, `Password must be at least ${PASSWORD_MIN_LENGTH} chars!`),
+	email: emailSchema,
+	password: passwordSchema,
 });
 
 export const load = (async () => {

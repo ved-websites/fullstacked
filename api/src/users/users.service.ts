@@ -3,6 +3,7 @@ import { RolesService } from '$auth/roles/roles.service';
 import { UserCreateInput, UserUpdateWithoutMessagesInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
+import { RegisterInput } from './dtos/register.input';
 
 @Injectable()
 export class UsersService {
@@ -76,5 +77,30 @@ export class UsersService {
 		});
 
 		return updatedUser;
+	}
+
+	async register({ registerToken, password, ...attributes }: RegisterInput) {
+		const session = await this.authService.register(registerToken, password, attributes);
+
+		return session;
+	}
+
+	async getUnregisteredUser(registerToken: string) {
+		const user = await this.prisma.user.findUnique({
+			where: {
+				registerToken,
+			},
+			select: {
+				email: true,
+				firstName: true,
+				lastName: true,
+			},
+		});
+
+		if (!user) {
+			throw new Error('Invalid registration token!');
+		}
+
+		return user;
 	}
 }

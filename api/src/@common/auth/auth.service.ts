@@ -1,3 +1,4 @@
+import { luciaUtils } from '$auth/lucia/modules-compat';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes } from 'lucia';
@@ -19,14 +20,20 @@ export class AuthService {
 	}
 
 	async createUser(email: string, password: string | null, attributes?: Omit<GlobalDatabaseUserAttributes, 'email'>) {
+		const registerTokenLength = 16;
+		const registerToken = password ? undefined : (await luciaUtils).generateRandomString(registerTokenLength);
+
 		const user = await this.auth.createUser({
-			key: {
-				providerId: 'email',
-				providerUserId: email,
-				password,
-			},
+			key: password
+				? {
+						providerId: 'email',
+						providerUserId: email,
+						password,
+				  }
+				: null,
 			attributes: {
 				email,
+				registerToken,
 				...attributes,
 			},
 		});
@@ -34,10 +41,33 @@ export class AuthService {
 		return user;
 	}
 
-	async register(...args: Parameters<typeof this.createUser>) {
-		const user = await this.createUser(...args);
+	async register(registerToken: string, password: string, attributes: Omit<GlobalDatabaseUserAttributes, 'email'>) {
+		const user = await this.prisma.user.findFirst({
+			where: {
+				registerToken,
+			},
+			select: {
+				id: true,
+				email: true,
+			},
+		});
 
-		return this.loginUser(user.userId);
+		if (!user) {
+			throw new Error('Invalid userId!');
+		}
+
+		const key = await this.auth.createKey(user.id, {
+			providerId: 'email',
+			providerUserId: user.email,
+			password,
+		});
+
+		await this.auth.updateUserAttributes(key.userId, {
+			...attributes,
+			registerToken: null,
+		});
+
+		return this.loginUser(key.userId);
 	}
 
 	async login(email: string, password: string) {
