@@ -18,7 +18,7 @@ export class AuthService {
 		return user;
 	}
 
-	async register(email: string, password: string, attributes?: Omit<GlobalDatabaseUserAttributes, 'email'>) {
+	async createUser(email: string, password: string | null, attributes?: Omit<GlobalDatabaseUserAttributes, 'email'>) {
 		const user = await this.auth.createUser({
 			key: {
 				providerId: 'email',
@@ -31,15 +31,23 @@ export class AuthService {
 			},
 		});
 
-		const session = await this.auth.createSession(user.id);
+		return user;
+	}
 
-		return session;
+	async register(...args: Parameters<typeof this.createUser>) {
+		const user = await this.createUser(...args);
+
+		return this.loginUser(user.userId);
 	}
 
 	async login(email: string, password: string) {
 		const key = await this.auth.useKey('email', email, password);
 
-		const session = await this.auth.createSession(key.userId);
+		return this.loginUser(key.userId);
+	}
+
+	async loginUser(userId: string) {
+		const session = await this.auth.createSession(userId);
 
 		return session;
 	}

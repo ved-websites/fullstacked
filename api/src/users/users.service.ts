@@ -1,10 +1,16 @@
-import { UserUpdateWithoutMessagesInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
+import { AuthService } from '$auth/auth.service';
+import { RolesService } from '$auth/roles/roles.service';
+import { UserCreateInput, UserUpdateWithoutMessagesInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly authService: AuthService,
+		private readonly rolesService: RolesService,
+	) {}
 
 	async getUsers(select: PrismaSelector, where?: UserWhereInput) {
 		const users = await this.prisma.user.findMany({
@@ -22,6 +28,21 @@ export class UsersService {
 		});
 
 		return users;
+	}
+
+	async createUser(data: UserCreateInput) {
+		const { email, firstName, lastName, roles } = data;
+
+		const user = await this.authService.createUser(email, null, {
+			firstName,
+			lastName,
+		});
+
+		if (roles) {
+			await this.rolesService.setUserRoles(user, roles);
+		}
+
+		return user;
 	}
 
 	async editUser(where: UserWhereUniqueInput, select: PrismaSelector, data: UserUpdateWithoutMessagesInput) {

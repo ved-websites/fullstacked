@@ -1,6 +1,7 @@
-import { RoleWhereInput } from '$prisma-graphql/role';
+import { RoleCreateNestedManyWithoutUsersInput, RoleWhereInput } from '$prisma-graphql/role';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
+import { User } from 'lucia';
 
 @Injectable()
 export class RolesService {
@@ -13,5 +14,20 @@ export class RolesService {
 		});
 
 		return roles;
+	}
+
+	async setUserRoles(user: User, roles: RoleCreateNestedManyWithoutUsersInput) {
+		const updatedUser = await this.prisma.mutate('USER_ROLE', {}, () => {
+			return this.prisma.user.update({
+				where: {
+					email: user.email,
+				},
+				data: {
+					roles,
+				},
+			});
+		});
+
+		return updatedUser;
 	}
 }

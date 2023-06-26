@@ -1,6 +1,6 @@
 import { ADMIN } from '$/@utils/roles';
 import { Roles } from '$auth/roles/roles.guard';
-import { User, UserUpdateWithoutMessagesInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
+import { User, UserCreateInput, UserUpdateWithoutMessagesInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
 import { ForbiddenException } from '@nestjs/common';
@@ -24,6 +24,14 @@ export class UsersResolver {
 	@Query(() => GetUserOutput, { nullable: true })
 	async getUser(@SelectQL() select: PrismaSelector, @Args('where') where: UserWhereInput) {
 		const user = await this.usersService.getUser(select, where);
+
+		return user;
+	}
+
+	@Roles(ADMIN)
+	@Mutation(() => User)
+	async createUser(@Args('data') data: UserCreateInput) {
+		const user = await this.usersService.createUser(data);
 
 		return user;
 	}

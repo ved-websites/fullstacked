@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { userHasRole } from '$/lib/components/nav/utils.js';
-	import { Badge, Heading, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
+	import { Badge, Button, Heading, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 
 	export let data;
 
@@ -9,9 +9,12 @@
 	$: canActions = userHasRole(sessionUser, 'admin');
 </script>
 
-<Heading tag="h2">This is the users list</Heading>
+<Heading tag="h2" class="mb-5">This is the users list</Heading>
+<div class="flex mb-5 place-content-center">
+	<Button href="/users/new">Create New User</Button>
+</div>
 
-<Table divClass="mt-10 relative overflow-x-auto">
+<Table>
 	<TableHead>
 		<TableHeadCell>Email</TableHeadCell>
 		<TableHeadCell>First Name</TableHeadCell>

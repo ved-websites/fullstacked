@@ -11,15 +11,8 @@ import { redirect } from '@sveltejs/kit';
 import { gql } from '@urql/svelte';
 import { StatusCodes } from 'http-status-codes';
 import { message, superValidate } from 'sveltekit-superforms/server';
-import { z } from 'zod';
+import { userFormSchema } from '../components/userform.schema';
 import type { Actions, PageServerLoad } from './$types';
-
-const schema = z.object({
-	email: z.string().email(),
-	firstName: z.nullable(z.string()),
-	lastName: z.nullable(z.string()),
-	roles: z.array(z.object({ value: z.string(), name: z.string() })),
-});
 
 export const load = (async (event) => {
 	const { email } = event.params;
@@ -59,7 +52,7 @@ export const load = (async (event) => {
 
 	const { getUser: editableUser } = editableUserQuery;
 
-	const form = await superValidate(editableUser, schema);
+	const form = await superValidate(editableUser, userFormSchema);
 
 	return {
 		editableUser,
@@ -70,7 +63,7 @@ export const load = (async (event) => {
 
 export const actions = {
 	default: async ({ request, locals: { client }, params: { email: editableUserEmail } }) => {
-		const form = await superValidate(request, schema);
+		const form = await superValidate(request, userFormSchema);
 
 		if (!form.valid) return { form };
 

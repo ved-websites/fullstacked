@@ -8,8 +8,6 @@ import { AuthService } from './auth.service';
 import { LoggedUserOutput } from './dtos/logged-user.output';
 import { LoginUserInput } from './dtos/login-user.input';
 import { LogoutOutput } from './dtos/logout.output';
-import { RegisterInput } from './dtos/register.input';
-import { RegisterOutput } from './dtos/register.output';
 import { RenewedSessionOutput } from './dtos/renewed-session.output';
 import { LuciaAuth, LuciaAuthRequest } from './lucia/lucia.decorator';
 import { AuthSession } from './session.decorator';
@@ -25,16 +23,16 @@ export class AuthResolver {
 		return authUser;
 	}
 
-	@Mutation(() => RegisterOutput)
-	async register(@LuciaAuth() auth: LuciaAuthRequest, @Args('data') { email, password }: RegisterInput) {
-		const session = await this.authService.register(email, password);
+	// @Mutation(() => RegisterOutput)
+	// async register(@LuciaAuth() auth: LuciaAuthRequest, @Args('data') { email, password }: RegisterInput) {
+	// 	const session = await this.authService.register(email, password);
 
-		auth.setSession(session);
+	// 	auth.setSession(session);
 
-		return {
-			accessToken: session.sessionId,
-		} as RegisterOutput;
-	}
+	// 	return {
+	// 		accessToken: session.sessionId,
+	// 	} as RegisterOutput;
+	// }
 
 	@Public()
 	@Mutation(() => LoggedUserOutput)
