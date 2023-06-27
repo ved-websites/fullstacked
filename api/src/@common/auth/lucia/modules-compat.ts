@@ -28,8 +28,3 @@ export async function loadLuciaCryptoNode18() {
 
 	return module;
 }
-
-export const luciaModule = loadLuciaModule();
-export const luciaUtils = loadLuciaUtils();
-export const prismaAdapterModule = loadPrismaAdapterModule();
-export const luciaMiddleware = loadLuciaMiddleware();

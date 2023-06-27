@@ -1,13 +1,13 @@
 import { Environment, type EnvironmentConfig } from '$/env.validation';
+import { loadLuciaCryptoNode18, loadLuciaMiddleware, loadLuciaModule, loadPrismaAdapterModule } from '$auth/lucia/modules-compat';
 import type { PrismaClient } from '$prisma-client';
-import { loadLuciaCryptoNode18, luciaMiddleware, luciaModule, prismaAdapterModule } from './modules-compat';
 
 export async function luciaFactory(prisma: PrismaClient, env: EnvironmentConfig) {
 	await loadLuciaCryptoNode18();
 
-	const { lucia } = await luciaModule;
-	const { prisma: prismaAdapter } = await prismaAdapterModule;
-	const { express } = await luciaMiddleware;
+	const { lucia } = await loadLuciaModule();
+	const { prisma: prismaAdapter } = await loadPrismaAdapterModule();
+	const { express } = await loadLuciaMiddleware();
 
 	return lucia({
 		adapter: prismaAdapter(prisma),

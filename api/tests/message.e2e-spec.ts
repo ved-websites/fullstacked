@@ -1,66 +1,85 @@
-import { BaseModules } from '$/app.helpers';
-import { MessageModule } from '$/message/message.module';
-import type { Message } from '$prisma-graphql/message';
-import type { ApolloServer } from '@apollo/server';
-import type { ApolloDriver } from '@nestjs/apollo';
-import type { INestApplication } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
-import { Test, TestingModule } from '@nestjs/testing';
 import assert from 'assert';
 import gql from 'graphql-tag';
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { prepareTestDb } from '../prisma/utils/functions';
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { GetEmptyMessagesQuery } from './@generated/graphql';
+import { TestManager, users } from './utils/TestManager';
 
-beforeAll(async () => {
-	await prepareTestDb();
-});
+vi.mock('$auth/lucia/modules-compat');
 
-describe('MessageController (e2e)', () => {
-	let app: INestApplication;
-	let apolloServer: ApolloServer;
+describe('MessageModule (e2e)', () => {
+	const manager = new TestManager();
 
-	beforeEach(async () => {
-		const moduleFixture: TestingModule = await Test.createTestingModule({
-			imports: [...BaseModules, MessageModule],
-		}).compile();
-
-		app = moduleFixture.createNestApplication();
-		await app.init();
-
-		const module = moduleFixture.get<GraphQLModule<ApolloDriver>>(GraphQLModule);
-
-		apolloServer = module.graphQlAdapter.instance;
+	beforeAll(async () => {
+		await manager.beforeAll();
 	});
-
 	afterAll(async () => {
-		await app.close();
+		await manager.afterAll();
+	});
+	beforeEach(async () => {
+		await manager.beforeEach();
 	});
 
-	it('/ (GET)', async () => {
-		const result = await apolloServer.executeOperation<{ messages: Message[] }>({
-			query: gql`
-				query {
-					messages {
-						text
-						time
+	it('return no messages', async () => {
+		const response = await manager
+			.gql<GetEmptyMessagesQuery>()
+			.query(
+				gql`
+					query GetEmptyMessages {
+						messages {
+							text
+							time
+						}
 					}
-				}
-			`,
-			// variables: {},
-		});
+				`,
+			)
+			.expectNoErrors();
 
-		const data = (function () {
-			if (result.body.kind == 'single') {
-				return result.body.singleResult.data;
-			}
-		})();
+		const { data } = response;
 
 		assert(data);
 
 		expect(Array.isArray(data.messages)).toBe(true);
-		expect(data.messages.length).toBe(3);
+		expect(data.messages.length).toBe(0);
+	});
 
-		data.messages.forEach((message: any) => {
+	it('return no messages', async () => {
+		const user = users['admin'];
+
+		await manager.prisma.message.createMany({
+			data: [
+				{
+					text: 'Hellow World!',
+					userId: user.instance!.id,
+				},
+				{
+					text: 'Hellow World 2!',
+					userId: user.instance!.id,
+				},
+			],
+		});
+
+		const response = await manager
+			.gql<GetEmptyMessagesQuery>()
+			.query(
+				gql`
+					query GetEmptyMessages {
+						messages {
+							text
+							time
+						}
+					}
+				`,
+			)
+			.expectNoErrors();
+
+		const { data } = response;
+
+		assert(data);
+
+		expect(Array.isArray(data.messages)).toBe(true);
+		expect(data.messages.length).toBe(2);
+
+		data.messages.forEach((message) => {
 			expect(message).toEqual({
 				text: expect.any(String),
 				time: expect.any(String),

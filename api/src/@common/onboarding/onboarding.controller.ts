@@ -2,7 +2,7 @@ import { Public } from '$auth/auth.guard';
 import { AuthService } from '$auth/auth.service';
 import { PrismaService } from '$prisma/prisma.service';
 import { Body, Controller, Get, Next, Post, Redirect, Res, UsePipes, ValidationPipe } from '@nestjs/common';
-import { NextFunction, Response } from 'express';
+import type { NextFunction, Response } from 'express';
 import { join } from 'path';
 import { OnboardingDto } from './onboarding.dto';
 
@@ -39,14 +39,18 @@ export class OnboardingController {
 
 		await this.auth.createUser(email, password, { firstName, lastName });
 
-		await this.prisma.role.create({
-			data: {
+		await this.prisma.role.upsert({
+			create: {
 				text: 'admin',
 				users: {
 					connect: {
 						email,
 					},
 				},
+			},
+			update: {},
+			where: {
+				text: 'admin',
 			},
 		});
 	}

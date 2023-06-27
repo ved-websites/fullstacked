@@ -1,10 +1,13 @@
-import { configDefaults, type UserConfig } from 'vitest/config';
-import { defineVitestConfig } from './base';
+import { configDefaults, defineConfig, mergeConfig } from 'vitest/config';
+import vitestBaseConfig from './base';
 
-const specsConfigs = defineVitestConfig({
-	test: {
-		include: [...configDefaults.include],
-	},
-} satisfies UserConfig);
+const specsConfigs = mergeConfig(
+	vitestBaseConfig,
+	defineConfig({
+		test: {
+			include: [...configDefaults.include],
+		},
+	}),
+);
 
 export default specsConfigs;

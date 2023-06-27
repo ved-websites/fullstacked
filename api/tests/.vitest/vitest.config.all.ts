@@ -1,16 +1,8 @@
-import type { UserConfig } from 'vitest/config';
-import { defineVitestConfig } from './base';
+import { mergeConfig } from 'vitest/config';
+import vitestBaseConfig from './base';
 import e2eConfigs from './vitest.config.e2e';
 import specsConfigs from './vitest.config.specs';
 
-const allConfigs = defineVitestConfig({
-	// @ts-ignore
-	plugins: [...e2eConfigs.plugins, ...specsConfigs.plugins],
-	ssr: e2eConfigs.ssr,
-	test: {
-		...e2eConfigs.test,
-		include: [...e2eConfigs.test.include, ...specsConfigs.test.include],
-	},
-} satisfies UserConfig);
+const allConfigs = mergeConfig(vitestBaseConfig, mergeConfig(specsConfigs, e2eConfigs));
 
 export default allConfigs;

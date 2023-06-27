@@ -1,30 +1,30 @@
 import type { Message, PrismaClient } from '$prisma-client';
-import { faker as f } from '@faker-js/faker';
-import { Fixture, LinkMethod, LinkMode, upsertRange } from 'prisma-fixtures';
+import { Fixture, LinkMethod } from 'prisma-fixtures';
 import UserFixture from './Users';
 
 export default class MessageFixture extends Fixture<Message> {
 	override dependencies = [UserFixture];
 
-	override async seed(prisma: PrismaClient, link: LinkMethod<this>): Promise<Message[]> {
-		f.seed(123456789);
+	override async seed(_prisma: PrismaClient, _link: LinkMethod<this>): Promise<Message[]> {
+		// f.seed(123456789);
 
-		const messages = await upsertRange(prisma.message.upsert, 3, (current) => {
-			const text = f.word.words(4);
-			const userId = link(UserFixture, LinkMode.RANDOM).id;
+		// const messages = await upsertRange(prisma.message.upsert, 3, (current) => {
+		// 	const text = f.word.words(4);
+		// 	const userId = link(UserFixture, LinkMode.RANDOM).id;
 
-			return {
-				create: {
-					text,
-					userId,
-				},
-				update: {},
-				where: {
-					id: current,
-				},
-			};
-		});
+		// 	return {
+		// 		create: {
+		// 			text,
+		// 			userId,
+		// 		},
+		// 		update: {},
+		// 		where: {
+		// 			id: current,
+		// 		},
+		// 	};
+		// });
 
-		return messages;
+		// return messages;
+		return [];
 	}
 }

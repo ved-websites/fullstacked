@@ -3,7 +3,10 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';
 import depthLimit from 'graphql-depth-limit';
+import { join } from 'path';
 import { ConfigModule } from './configs/config.module';
+
+export const schemaPath = join(process.cwd(), 'src/_generated/nestjs-graphql/schema.gql');
 
 export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>({
 	driver: ApolloDriver,
@@ -12,7 +15,7 @@ export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>(
 		const isDev = env.NODE_ENV == Environment.Development;
 
 		return {
-			autoSchemaFile: true,
+			autoSchemaFile: schemaPath,
 			installSubscriptionHandlers: true,
 			subscriptions: {
 				'graphql-ws': true,

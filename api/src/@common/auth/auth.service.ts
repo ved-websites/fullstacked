@@ -1,4 +1,4 @@
-import { luciaUtils } from '$auth/lucia/modules-compat';
+import { loadLuciaUtils } from '$auth/lucia/modules-compat';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes } from 'lucia';
@@ -7,6 +7,14 @@ import { Auth, LuciaFactory } from './lucia/lucia.factory';
 @Injectable()
 export class AuthService {
 	constructor(@Inject(LuciaFactory) private readonly auth: Auth, private readonly prisma: PrismaService) {}
+
+	protected defineEmailKey(email: string, password: string | null) {
+		return {
+			providerId: 'email',
+			providerUserId: email,
+			password,
+		} as Parameters<typeof this.auth.createKey>[1];
+	}
 
 	async getAuthUser(email: string, select: PrismaSelector) {
 		const user = await this.prisma.user.findUnique({
@@ -20,17 +28,21 @@ export class AuthService {
 	}
 
 	async createUser(email: string, password: string | null, attributes?: Omit<GlobalDatabaseUserAttributes, 'email'>) {
+		const userWithEmail = await this.prisma.user.count({
+			where: {
+				email,
+			},
+		});
+
+		if (userWithEmail !== 0) {
+			throw new Error('A user with this email already exists!');
+		}
+
 		const registerTokenLength = 16;
-		const registerToken = password ? undefined : (await luciaUtils).generateRandomString(registerTokenLength);
+		const registerToken = password ? undefined : (await loadLuciaUtils()).generateRandomString(registerTokenLength);
 
 		const user = await this.auth.createUser({
-			key: password
-				? {
-						providerId: 'email',
-						providerUserId: email,
-						password,
-				  }
-				: null,
+			key: password ? this.defineEmailKey(email, password) : null,
 			attributes: {
 				email,
 				registerToken,
@@ -56,11 +68,7 @@ export class AuthService {
 			throw new Error('Invalid userId!');
 		}
 
-		const key = await this.auth.createKey(user.id, {
-			providerId: 'email',
-			providerUserId: user.email,
-			password,
-		});
+		const key = await this.auth.createKey(user.id, this.defineEmailKey(user.email, password));
 
 		await this.auth.updateUserAttributes(key.userId, {
 			...attributes,

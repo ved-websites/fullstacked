@@ -1,4 +1,5 @@
 import { ConfigModule } from '$configs/config.module';
+import { PrismaModule } from '$prisma/prisma.module';
 import { Test, TestingModule } from '@nestjs/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { AuthService } from './auth.service';
@@ -9,7 +10,7 @@ describe('AuthService', () => {
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			imports: [ConfigModule],
+			imports: [ConfigModule, PrismaModule],
 			providers: [AuthService, { provide: LuciaFactory, useValue: {} }],
 		}).compile();
 

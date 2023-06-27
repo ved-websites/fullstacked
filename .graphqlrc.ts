@@ -13,6 +13,27 @@ const tsCommonConfig: RawTypesConfig = {
 const codegen: Types.Config = {
 	generates: {
 		'client/src/graphql/@generated/index.ts': {
+			documents: ['client/src/**/*.graphql', 'client/src/**/*.svelte', 'client/src/**/*.server.ts', 'client/src/lib/urql.ts'],
+			plugins: [
+				{
+					typescript: {
+						...tsCommonConfig,
+					} as TypeScriptPluginConfig,
+				},
+				{
+					'typescript-operations': {
+						...tsCommonConfig,
+					} as TypeScriptDocumentsPluginConfig,
+				},
+				{
+					'typed-document-node': {
+						...tsCommonConfig,
+					} as TypeScriptTypedDocumentNodesConfig,
+				},
+			],
+		},
+		'api/tests/@generated/graphql/index.ts': {
+			documents: ['api/tests/**/*.ts'],
 			plugins: [
 				{
 					typescript: {
@@ -32,12 +53,10 @@ const codegen: Types.Config = {
 			],
 		},
 	},
-	watch: ['client/src/**/*', '!client/src/graphql/@generated/**/*'],
 };
 
 const config: IGraphQLConfig = {
 	schema: `http://localhost:3000/graphql`,
-	documents: ['client/src/**/*.graphql', 'client/src/**/*.svelte', 'client/src/**/*.server.ts', 'client/src/lib/urql.ts'],
 	extensions: {
 		codegen,
 	},
