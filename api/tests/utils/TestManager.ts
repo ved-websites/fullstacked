@@ -15,7 +15,7 @@ import { User } from 'lucia';
 import supertest from 'supertest';
 import supertestGQL, { Variables } from 'supertest-graphql';
 import { prepareTestDb } from '../../prisma/utils/functions';
-import { TestGraphqlModule } from '../mocks/graphql/graphql.module';
+import { TestGraphqlModule } from '../mocks/graphql.module';
 
 type TestUser = {
 	email: string;
