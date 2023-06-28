@@ -16,6 +16,22 @@ import { UsersService } from './users.service';
 export class UsersResolver {
 	constructor(private readonly usersService: UsersService) {}
 
+	@Public()
+	@Mutation(() => Session)
+	async register(@Args('data') data: RegisterInput) {
+		const session = await this.usersService.register(data);
+
+		return session;
+	}
+
+	@Public()
+	@Query(() => UnregisteredUserOutput)
+	async getUnregisteredUser(@Args('registerToken') registerToken: string) {
+		const user = await this.usersService.getUnregisteredUser(registerToken);
+
+		return user;
+	}
+
 	@Roles(ADMIN)
 	@Query(() => [User])
 	async getUsers(@SelectQL() select: PrismaSelector, @Args('where', { nullable: true }) where?: UserWhereInput) {
@@ -48,7 +64,7 @@ export class UsersResolver {
 		@Args('data') data: UserUpdateWithoutMessagesInput,
 	) {
 		try {
-			const user = await this.usersService.editUser(where, select, data);
+			const user = await this.usersService.editUser(select, where, data);
 
 			return user;
 		} catch (error) {
@@ -58,18 +74,10 @@ export class UsersResolver {
 		}
 	}
 
-	@Public()
-	@Mutation(() => Session)
-	async register(@Args('data') data: RegisterInput) {
-		const session = await this.usersService.register(data);
-
-		return session;
-	}
-
-	@Public()
-	@Query(() => UnregisteredUserOutput)
-	async getUnregisteredUser(@Args('registerToken') registerToken: string) {
-		const user = await this.usersService.getUnregisteredUser(registerToken);
+	@Roles(ADMIN)
+	@Mutation(() => GetUserOutput, { nullable: true })
+	async deleteUser(@SelectQL() select: PrismaSelector, @Args('where') where: UserWhereUniqueInput) {
+		const user = await this.usersService.deleteUser(select, where);
 
 		return user;
 	}

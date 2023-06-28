@@ -147,6 +147,7 @@ export type MessageWhereUniqueInput = {
 export type Mutation = {
   addMessage?: Maybe<Message>;
   createUser: User;
+  deleteUser?: Maybe<GetUserOutput>;
   editUser: User;
   login: LoggedUserOutput;
   logout: LogoutOutput;
@@ -163,6 +164,11 @@ export type MutationAddMessageArgs = {
 
 export type MutationCreateUserArgs = {
   data: UserCreateInput;
+};
+
+
+export type MutationDeleteUserArgs = {
+  where: UserWhereUniqueInput;
 };
 
 

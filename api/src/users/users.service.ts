@@ -13,6 +13,31 @@ export class UsersService {
 		private readonly rolesService: RolesService,
 	) {}
 
+	async register({ registerToken, password, ...attributes }: RegisterInput) {
+		const session = await this.authService.register(registerToken, password, attributes);
+
+		return session;
+	}
+
+	async getUnregisteredUser(registerToken: string) {
+		const user = await this.prisma.user.findUnique({
+			where: {
+				registerToken,
+			},
+			select: {
+				email: true,
+				firstName: true,
+				lastName: true,
+			},
+		});
+
+		if (!user) {
+			throw new Error('Invalid registration token!');
+		}
+
+		return user;
+	}
+
 	async getUsers(select: PrismaSelector, where?: UserWhereInput) {
 		const users = await this.prisma.user.findMany({
 			where,
@@ -49,7 +74,7 @@ export class UsersService {
 		return user;
 	}
 
-	async editUser(where: UserWhereUniqueInput, select: PrismaSelector, data: UserUpdateWithoutMessagesInput) {
+	async editUser(select: PrismaSelector, where: UserWhereUniqueInput, data: UserUpdateWithoutMessagesInput) {
 		if (data.roles?.set?.every((role) => role.text != 'admin')) {
 			// if no role has admin, check if at least one admin would remain
 			const otherAdminsCount = await this.prisma.user.count({
@@ -79,28 +104,31 @@ export class UsersService {
 		return updatedUser;
 	}
 
-	async register({ registerToken, password, ...attributes }: RegisterInput) {
-		const session = await this.authService.register(registerToken, password, attributes);
-
-		return session;
-	}
-
-	async getUnregisteredUser(registerToken: string) {
-		const user = await this.prisma.user.findUnique({
+	async deleteUser(select: PrismaSelector, where: UserWhereUniqueInput) {
+		const otherAdminsCount = await this.prisma.user.count({
 			where: {
-				registerToken,
-			},
-			select: {
-				email: true,
-				firstName: true,
-				lastName: true,
+				email: {
+					not: where.email,
+				},
+				roles: {
+					some: {
+						text: {
+							equals: 'admin',
+						},
+					},
+				},
 			},
 		});
 
-		if (!user) {
-			throw new Error('Invalid registration token!');
+		if (!otherAdminsCount) {
+			throw new Error('Cannot delete the last admin user, make sure to define another user with the admin role first!');
 		}
 
-		return user;
+		const deletedUser = await this.prisma.user.delete({
+			where,
+			...select,
+		});
+
+		return deletedUser;
 	}
 }
