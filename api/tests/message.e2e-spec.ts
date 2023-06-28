@@ -42,7 +42,7 @@ describe('MessageModule (e2e)', () => {
 		expect(data.messages.length).toBe(0);
 	});
 
-	it('return no messages', async () => {
+	it('return all messages', async () => {
 		const user = users['admin'];
 
 		await manager.prisma.message.createMany({
