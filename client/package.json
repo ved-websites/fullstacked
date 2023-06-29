@@ -41,7 +41,9 @@
 		"graphql-ws": "^5.13.1",
 		"http-status-codes": "^2.2.0",
 		"set-cookie-parser": "2.6.0",
+		"svelte-email": "0.0.4",
 		"sveltekit-superforms": "1.1.2",
+		"vercel-email": "0.0.6",
 		"wonka": "^6.3.2",
 		"ws": "8.13.0",
 		"zod": "3.21.4"

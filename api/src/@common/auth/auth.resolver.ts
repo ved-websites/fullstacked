@@ -5,6 +5,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import type { Session } from 'lucia';
 import { Public } from './auth.guard';
 import { AuthService } from './auth.service';
+import { CanSendEmailOutput } from './dtos/can-send-email.output';
 import { LoggedUserOutput } from './dtos/logged-user.output';
 import { LoginUserInput } from './dtos/login-user.input';
 import { LogoutOutput } from './dtos/logout.output';
@@ -76,5 +77,14 @@ export class AuthResolver {
 		return {
 			accessToken: session.sessionId,
 		} as RenewedSessionOutput;
+	}
+
+	@Query(() => CanSendEmailOutput)
+	async canSendEmail(@AuthSession() { user }: Session) {
+		const canSendEmail = await this.authService.userCanSendEmail(user);
+
+		return {
+			value: canSendEmail,
+		} satisfies CanSendEmailOutput;
 	}
 }

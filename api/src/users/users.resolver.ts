@@ -7,6 +7,7 @@ import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
 import { ForbiddenException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CreateUserOutput } from './dtos/create-user.output';
 import { GetUserOutput } from './dtos/getUser.output';
 import { RegisterInput } from './dtos/register.input';
 import { UnregisteredUserOutput } from './dtos/unregistered-user.output';
@@ -49,7 +50,7 @@ export class UsersResolver {
 	}
 
 	@Roles(ADMIN)
-	@Mutation(() => User)
+	@Mutation(() => CreateUserOutput)
 	async createUser(@Args('data') data: UserCreateInput) {
 		const user = await this.usersService.createUser(data);
 

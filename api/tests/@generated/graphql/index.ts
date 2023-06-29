@@ -16,6 +16,22 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type CanSendEmailOutput = {
+  /** Whether the connected user can send emails or not */
+  value: Scalars['Boolean']['output'];
+};
+
+export type CreateUserOutput = {
+  /** Email of the created user */
+  email: Scalars['String']['output'];
+  /** First name of the user */
+  firstName: Scalars['String']['output'];
+  /** Last name of the user */
+  lastName: Scalars['String']['output'];
+  /** Generated registerToken of the created user */
+  registerToken: Scalars['String']['output'];
+};
+
 export type GetUserOutput = {
   _count: UserCount;
   createdAt: Scalars['DateTime']['output'];
@@ -146,7 +162,7 @@ export type MessageWhereUniqueInput = {
 
 export type Mutation = {
   addMessage?: Maybe<Message>;
-  createUser: User;
+  createUser: CreateUserOutput;
   deleteUser?: Maybe<GetUserOutput>;
   editUser: User;
   login: LoggedUserOutput;
@@ -236,6 +252,7 @@ export type NullableStringFieldUpdateOperationsInput = {
 };
 
 export type Query = {
+  canSendEmail: CanSendEmailOutput;
   getRoles: Array<Role>;
   getSessionUser: User;
   getUnregisteredUser: UnregisteredUserOutput;

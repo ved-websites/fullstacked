@@ -18,7 +18,7 @@ ENV SHELL="bash"
 RUN mkdir -p ${DEV_HOME_DIR}/.vscode-server/extensions \
   && chown -R node ${DEV_HOME_DIR}/.vscode-server \
   && mkdir -p ${DEV_HOME_DIR}/.local/share/pnpm/store \
-  && chown -R node:node ${DEV_HOME_DIR}/.local/share/pnpm
+  && chown -R node:node ${DEV_HOME_DIR}/.local/share
 
 USER node
 

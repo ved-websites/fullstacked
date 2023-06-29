@@ -1,7 +1,8 @@
+import { ADMIN } from '$/@utils/roles';
 import { loadLuciaUtils } from '$auth/lucia/modules-compat';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { Inject, Injectable } from '@nestjs/common';
-import type { GlobalDatabaseUserAttributes } from 'lucia';
+import type { GlobalDatabaseUserAttributes, User } from 'lucia';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';
 
 @Injectable()
@@ -96,5 +97,26 @@ export class AuthService {
 
 	async renewSession(sessionId: string) {
 		return await this.auth.renewSession(sessionId);
+	}
+
+	async userCanSendEmail(user: User) {
+		const rolesCanSendEmail = [ADMIN];
+
+		const userRoles = (
+			await this.prisma.role.findMany({
+				where: {
+					users: {
+						every: {
+							email: user.email,
+						},
+					},
+				},
+				select: {
+					text: true,
+				},
+			})
+		).map((userRole) => userRole.text);
+
+		return rolesCanSendEmail.some((role) => userRoles.some((userRole) => userRole === role));
 	}
 }
