@@ -62,14 +62,14 @@ export const load = (async (event) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals: { client }, params: { email: editableUserEmail } }) => {
+	default: async ({ request, locals: { urql }, params: { email: editableUserEmail } }) => {
 		const form = await superValidate(request, userFormSchema);
 
 		if (!form.valid) return { form };
 
 		const { email, firstName, lastName, roles } = form.data;
 
-		const { data, error } = await client
+		const { data, error } = await urql
 			.mutation(
 				gql<EditOtherUserInfoMutation, EditOtherUserInfoMutationVariables>`
 					mutation EditOtherUserInfo(

@@ -56,12 +56,12 @@ export const load = (async (event) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals: { client } }) => {
+	default: async ({ request, locals: { urql } }) => {
 		const form = await superValidate(request, schema);
 
 		if (!form.valid) return { form };
 
-		const { data, error } = await client
+		const { data, error } = await urql
 			.mutation(
 				gql<RegisterNewUserMutation, RegisterNewUserMutationVariables>`
 					mutation RegisterNewUser($data: RegisterInput!) {

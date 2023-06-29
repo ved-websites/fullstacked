@@ -40,7 +40,7 @@ export function createClient(options?: ClientOptions) {
 		webSocketImpl: options?.ws,
 	});
 
-	const client = createURQLClient({
+	const urql = createURQLClient({
 		url: `${apiUrl.origin}/graphql`,
 		exchanges: [
 			cacheExchange,
@@ -93,7 +93,7 @@ export function createClient(options?: ClientOptions) {
 		},
 	});
 
-	return client;
+	return urql;
 }
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
@@ -108,16 +108,18 @@ export function queryStore<Data = unknown, Variables extends AnyVariables = AnyV
 		}) as Readable<OperationResultState<Data, Variables> & { isServer: true }>;
 	}
 
+	const urql = args.client ?? getContextClient();
+
 	// @ts-expect-error Typing issues
 	return urqlQueryStore({
-		client: args.client ?? getContextClient(),
+		client: urql,
 		...args,
 	}) as Readable<OperationResultState<Data, Variables> & { isServer?: boolean }>;
 }
 
 export function mutation<Data = unknown, Variables extends AnyVariables = AnyVariables>(
 	query: DocumentInput<Data, Variables>,
-	context?: Parameters<ReturnType<typeof getContextClient>['mutation']>[2] & { client?: ReturnType<typeof getContextClient> },
+	context?: Parameters<ReturnType<typeof getContextClient>['mutation']>[2] & { urql?: ReturnType<typeof getContextClient> },
 ) {
 	if (!browser) {
 		return () => {
@@ -125,10 +127,10 @@ export function mutation<Data = unknown, Variables extends AnyVariables = AnyVar
 		};
 	}
 
-	const client = context?.client ?? getContextClient();
+	const urql = context?.urql ?? getContextClient();
 
 	return (variables: Variables, requestContext?: typeof context) => {
-		return client.mutation<Data, Variables>(query, variables, requestContext ?? context).toPromise();
+		return urql.mutation<Data, Variables>(query, variables, requestContext ?? context).toPromise();
 	};
 }
 
@@ -144,19 +146,19 @@ export function mutationStore<Data = unknown, Variables extends AnyVariables = A
 		};
 	}
 
-	const client = args.client ?? getContextClient();
+	const urql = args.client ?? getContextClient();
 
 	return (variables: Parameters<typeof urqlMutationStore<Data, Variables>>[0]['variables']) => {
 		// @ts-expect-error Typing issues
 		return urqlMutationStore({
-			client,
+			client: urql,
 			variables,
 			...args,
 		}) as Readable<OperationResultState<Data, Variables> & { isServer?: boolean }>;
 	};
 }
 
-export type SubscribeOptions = Partial<{ client: Client }>;
+export type SubscribeOptions = Partial<{ urql: Client }>;
 
 export function subscribe<Result, Variables extends AnyVariables>(
 	params: TypedDocumentNode<Result, { [key: string]: never }> | [TypedDocumentNode<Result, Variables>, Variables],
@@ -167,11 +169,11 @@ export function subscribe<Result, Variables extends AnyVariables>(
 		return;
 	}
 
-	const client = options?.client ?? getContextClient();
+	const urql = options?.urql ?? getContextClient();
 
 	const subArgs = Array.isArray(params) ? params : ([params, undefined] as [TypedDocumentNode<Result, Variables>, Variables]);
 
-	const { unsubscribe } = pipe(client.subscription(...subArgs), wonkaSubscribe(handler));
+	const { unsubscribe } = pipe(urql.subscription(...subArgs), wonkaSubscribe(handler));
 
 	onDestroy(unsubscribe);
 }

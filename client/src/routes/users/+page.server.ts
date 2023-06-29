@@ -6,8 +6,8 @@ import { StatusCodes } from 'http-status-codes';
 import type { Actions } from '../$types';
 import type { PageServerLoad } from './$types';
 
-export const load = (async ({ locals: { client } }) => {
-	const usersQuery = await client.query(
+export const load = (async ({ locals: { urql } }) => {
+	const usersQuery = await urql.query(
 		gql<ManageGetUsersQuery>`
 			query ManageGetUsers {
 				getUsers {
@@ -35,14 +35,14 @@ export const load = (async ({ locals: { client } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	delete: async ({ request, locals: { client } }) => {
+	delete: async ({ request, locals: { urql } }) => {
 		const formdata = await request.formData();
 
 		const email = await emailSchema.parseAsync(formdata.get('email')).catch(() => {
 			throw redirect(StatusCodes.SEE_OTHER, '/users?error=Missing email!');
 		});
 
-		const { data, error } = await client
+		const { data, error } = await urql
 			.mutation(
 				gql<DeleteSpecificUserMutation, DeleteSpecificUserMutationVariables>`
 					mutation DeleteSpecificUser($email: String!) {

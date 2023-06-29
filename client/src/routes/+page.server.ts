@@ -4,8 +4,8 @@ import { gql } from '@urql/svelte';
 import { StatusCodes } from 'http-status-codes';
 
 export const actions = {
-	async logout({ locals: { client } }) {
-		const { data, error } = await client
+	async logout({ locals: { urql } }) {
+		const { data, error } = await urql
 			.mutation(
 				gql<LogoutMutation>`
 					mutation Logout {

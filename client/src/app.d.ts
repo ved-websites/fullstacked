@@ -19,7 +19,7 @@ export type LayoutAlert = {
 declare global {
 	namespace App {
 		interface Locals {
-			client: Client;
+			urql: Client;
 			sessionUser: ClientUser;
 		}
 		interface PageData {

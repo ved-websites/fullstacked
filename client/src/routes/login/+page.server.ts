@@ -19,14 +19,14 @@ export const load = (async () => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, url, locals: { client } }) => {
+	default: async ({ request, url, locals: { urql } }) => {
 		const form = await superValidate(request, schema);
 
 		if (!form.valid) return { form };
 
 		const { email, password } = form.data;
 
-		const { data, error } = await client
+		const { data, error } = await urql
 			.mutation(
 				gql<LoginMutation, LoginMutationVariables>`
 					mutation Login($email: String!, $password: String!) {

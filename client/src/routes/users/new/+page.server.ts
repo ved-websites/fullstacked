@@ -30,14 +30,14 @@ export const load = (async (event) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals: { client } }) => {
+	default: async ({ request, locals: { urql } }) => {
 		const form = await superValidate(request, userFormSchema);
 
 		if (!form.valid) return { form };
 
 		const { email, firstName, lastName, roles } = form.data;
 
-		const { data, error } = await client
+		const { data, error } = await urql
 			.mutation(
 				gql<CreateNewUserMutation, CreateNewUserMutationVariables>`
 					mutation CreateNewUser($email: String!, $firstName: String, $lastName: String, $roles: RoleCreateNestedManyWithoutUsersInput) {

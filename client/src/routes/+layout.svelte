@@ -15,9 +15,9 @@
 	export let data;
 
 	if (browser) {
-		const client = createClient();
+		const urql = createClient();
 
-		setContextClient(client);
+		setContextClient(urql);
 	}
 
 	let layoutAlert: Required<LayoutAlert> | undefined;

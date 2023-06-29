@@ -7,9 +7,9 @@ export const AUTH_COOKIE_NAME = 'auth_session';
 
 export async function simpleQuery<Data, Variables extends AnyVariables = AnyVariables>(
 	event: RequestEvent,
-	...args: Parameters<typeof event.locals.client.query<Data, Variables>>
+	...args: Parameters<typeof event.locals.urql.query<Data, Variables>>
 ) {
-	const simpleQueryResult = await event.locals.client.query(...args).toPromise();
+	const simpleQueryResult = await event.locals.urql.query(...args).toPromise();
 
 	const { data, error } = simpleQueryResult;
 

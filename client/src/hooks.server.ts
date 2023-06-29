@@ -7,8 +7,8 @@ import ws from 'ws';
 import { GetUserFromSessionDocument } from './graphql/@generated';
 import { AUTH_COOKIE_NAME } from './lib/utils/auth';
 
-export async function getAuthUser(client: Client) {
-	const result = await client.query(GetUserFromSessionDocument, {}).toPromise();
+export async function getAuthUser(urql: Client) {
+	const result = await urql.query(GetUserFromSessionDocument, {}).toPromise();
 
 	if (!result.data) {
 		return null;
@@ -20,7 +20,7 @@ export async function getAuthUser(client: Client) {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-	event.locals.client = createClient({
+	event.locals.urql = createClient({
 		fetch: async (...args) => {
 			const response = await event.fetch(...args);
 
@@ -49,7 +49,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		ws,
 	});
 
-	event.locals.sessionUser = await getAuthUser(event.locals.client);
+	event.locals.sessionUser = await getAuthUser(event.locals.urql);
 
 	return resolve(event);
 };
