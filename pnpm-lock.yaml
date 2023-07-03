@@ -185,8 +185,8 @@ importers:
         specifier: 1.1.3
         version: 1.1.3
       '@types/gulp':
-        specifier: 4.0.11
-        version: 4.0.11
+        specifier: 4.0.13
+        version: 4.0.13
       '@types/minio':
         specifier: 7.1.0
         version: 7.1.0
@@ -3090,8 +3090,8 @@ packages:
       graphql: 14.7.0
     dev: true
 
-  /@types/gulp@4.0.11:
-    resolution: {integrity: sha512-jy0nfcsjiGqO1prNsYMK/bHkTblIBgG04sL2nxPpnP9MyNicHp1SUblomjOla6JoW1qkR67HjFHqIibpPoShNQ==}
+  /@types/gulp@4.0.13:
+    resolution: {integrity: sha512-Ms20Q2tZ3MpThZGn4Ag6e7ifz/oQJFxsuiopqz5oHmhE6q2ohnELgafi5K/pKX/4ntlpidS61v/TXAguYsVcaA==}
     dependencies:
       '@types/undertaker': 1.2.8
       '@types/vinyl-fs': 3.0.2
