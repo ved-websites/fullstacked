@@ -106,7 +106,7 @@ export class AuthService {
 			await this.prisma.role.findMany({
 				where: {
 					users: {
-						every: {
+						some: {
 							email: user.email,
 						},
 					},
