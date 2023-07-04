@@ -20,15 +20,21 @@ export class LuciaMiddleware implements NestMiddleware {
 
 		response.locals.auth = requestAuth;
 
-		request.sessionId = this.auth.readBearerToken(request.headers.authorization);
-
-		try {
-			request.session = request.sessionId ? await this.auth.getSession(request.sessionId) : null;
-		} catch (error) {
-			// invalid session
-			request.session = null;
-		}
+		await setupRequest(request, this.auth);
 
 		next();
 	}
+}
+
+export async function setupRequest(request: Request, auth: Auth) {
+	request.sessionId = auth.readBearerToken(request.headers.authorization);
+
+	try {
+		request.session = request.sessionId ? await auth.getSession(request.sessionId) : null;
+	} catch (error) {
+		// invalid session
+		request.session = null;
+	}
+
+	return request.session;
 }

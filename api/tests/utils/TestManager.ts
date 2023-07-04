@@ -4,7 +4,7 @@ import { AppModule } from '$/app.module';
 import { AuthModule } from '$auth/auth.module';
 import { AuthService } from '$auth/auth.service';
 import { ConfigModule } from '$configs/config.module';
-import { GraphQLModule, schemaPath } from '$graphql.module';
+import { GraphQLModule, schemaPath } from '$graphql/graphql.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { PrismaService } from '$prisma/prisma.service';
 import { INestApplication, ValidationPipe, type ModuleMetadata } from '@nestjs/common';

@@ -1,4 +1,4 @@
-import { schemaPath } from '$graphql.module';
+import { schemaPath } from '$graphql/graphql.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';
 import depthLimit from 'graphql-depth-limit';

@@ -1,6 +1,6 @@
 import { AuthModule } from '$auth/auth.module';
 import { ConfigModule } from '$configs/config.module';
-import { GraphQLModule } from '$graphql.module';
+import { GraphQLModule } from '$graphql/graphql.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { ModuleMetadata } from '@nestjs/common';
 
