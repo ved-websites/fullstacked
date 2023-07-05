@@ -5,5 +5,5 @@ export const userFormSchema = z.object({
 	email: emailSchema,
 	firstName: firstNameSchema,
 	lastName: lastNameSchema,
-	roles: z.array(z.object({ value: z.string(), name: z.string() })),
+	roles: z.array(z.string()),
 });

@@ -26,8 +26,7 @@ export const load = (async (event) => {
 					firstName
 					lastName
 					roles {
-						value: id
-						name: text
+						value: text
 					}
 				}
 			}
@@ -52,7 +51,13 @@ export const load = (async (event) => {
 
 	const { getUser: editableUser } = editableUserQuery;
 
-	const form = await superValidate(editableUser, userFormSchema);
+	const formattedEditableUser = editableUser as unknown as (Omit<typeof editableUser, 'roles'> & { roles: string[] }) | null | undefined;
+
+	if (formattedEditableUser) {
+		formattedEditableUser.roles = editableUser!.roles.map((role) => role.value);
+	}
+
+	const form = await superValidate(formattedEditableUser, userFormSchema);
 
 	return {
 		editableUser,
@@ -94,7 +99,7 @@ export const actions = {
 					firstName,
 					lastName,
 					roles: roles.map((role) => ({
-						text: role.name,
+						text: role,
 					})),
 				},
 			)

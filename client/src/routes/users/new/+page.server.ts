@@ -58,7 +58,7 @@ export const actions = {
 					lastName,
 					roles: {
 						connect: roles.map((role) => ({
-							text: role.name,
+							text: role,
 						})),
 					},
 				},

@@ -13,7 +13,7 @@
 
 	let availableRoles: SelectOptionType[] = roles.map((role) => ({
 		name: role.text,
-		value: role.id,
+		value: role.text,
 	}));
 </script>
 
