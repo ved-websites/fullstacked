@@ -1,0 +1,10 @@
+fragment ChatMessage on Message {
+	id
+	text
+	time
+	user {
+		email
+		firstName
+		lastName
+	}
+}

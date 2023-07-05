@@ -45,6 +45,9 @@
 		"5432": {
 			"label": "Postgres Port"
 		},
+		"5555": {
+			"label": "Prisma Studio"
+		},
 		"9000": {
 			"label": "Minio Buckets"
 		},

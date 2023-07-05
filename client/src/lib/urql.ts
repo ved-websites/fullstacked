@@ -123,7 +123,7 @@ export function mutation<Data = unknown, Variables extends AnyVariables = AnyVar
 ) {
 	if (!browser) {
 		return () => {
-			return;
+			throw new Error('INTERNAL ERROR : Do not use mutation function on the server!');
 		};
 	}
 

@@ -10,10 +10,14 @@ const tsCommonConfig: RawTypesConfig = {
 	skipTypename: true,
 };
 
+const clientDocuments = ['client/src/**/*.graphql', 'client/src/**/*.svelte', 'client/src/**/*.server.ts', 'client/src/lib/urql.ts'];
+const apiDocuments = ['api/tests/**/*.ts'];
+
 const codegen: Types.Config = {
+	ignoreNoDocuments: true,
 	generates: {
 		'client/src/graphql/@generated/index.ts': {
-			documents: ['client/src/**/*.graphql', 'client/src/**/*.svelte', 'client/src/**/*.server.ts', 'client/src/lib/urql.ts'],
+			documents: clientDocuments,
 			plugins: [
 				{
 					typescript: {
@@ -33,7 +37,7 @@ const codegen: Types.Config = {
 			],
 		},
 		'api/tests/@generated/graphql/index.ts': {
-			documents: ['api/tests/**/*.ts'],
+			documents: apiDocuments,
 			plugins: [
 				{
 					typescript: {
@@ -57,6 +61,7 @@ const codegen: Types.Config = {
 
 const config: IGraphQLConfig = {
 	schema: `http://localhost:3000/graphql`,
+	documents: [...clientDocuments, ...apiDocuments],
 	extensions: {
 		codegen,
 	},
