@@ -9,12 +9,14 @@ import { Auth, LuciaFactory } from './lucia/lucia.factory';
 export class AuthService {
 	constructor(@Inject(LuciaFactory) private readonly auth: Auth, private readonly prisma: PrismaService) {}
 
+	readonly providerId = 'email';
+
 	protected defineEmailKey(email: string, password: string | null) {
 		return {
-			providerId: 'email',
+			providerId: this.providerId,
 			providerUserId: email,
 			password,
-		} as Parameters<typeof this.auth.createKey>[1];
+		} as Parameters<typeof this.auth.createKey>[0];
 	}
 
 	async getAuthUser(email: string, select: PrismaSelector) {
@@ -69,7 +71,7 @@ export class AuthService {
 			throw new Error('Invalid userId!');
 		}
 
-		const key = await this.auth.createKey(user.id, this.defineEmailKey(user.email, password));
+		const key = await this.auth.createKey({ ...this.defineEmailKey(user.email, password), userId: user.id });
 
 		await this.auth.updateUserAttributes(key.userId, {
 			...attributes,
@@ -80,23 +82,19 @@ export class AuthService {
 	}
 
 	async login(email: string, password: string) {
-		const key = await this.auth.useKey('email', email, password);
+		const key = await this.auth.useKey(this.providerId, email, password);
 
 		return this.loginUser(key.userId);
 	}
 
 	async loginUser(userId: string) {
-		const session = await this.auth.createSession(userId);
+		const session = await this.auth.createSession({ userId, attributes: {} });
 
 		return session;
 	}
 
 	async logout(sessionId: string) {
 		return await this.auth.invalidateSession(sessionId);
-	}
-
-	async renewSession(sessionId: string) {
-		return await this.auth.renewSession(sessionId);
 	}
 
 	async userCanSendEmail(user: User) {

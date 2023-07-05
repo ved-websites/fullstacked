@@ -66,7 +66,7 @@ export class AuthResolver {
 
 	@Mutation(() => RenewedSessionOutput, { nullable: true })
 	async renewSession(@LuciaAuth() auth: LuciaAuthRequest) {
-		const session = await auth.renewBearerToken();
+		const session = await auth.validateBearerToken();
 
 		auth.setSession(session);
 
