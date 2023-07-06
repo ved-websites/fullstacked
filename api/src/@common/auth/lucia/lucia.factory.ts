@@ -16,6 +16,7 @@ export async function luciaFactory(prisma: PrismaClient, env: EnvironmentConfig)
 		getUserAttributes: (dbUser) => {
 			return dbUser;
 		},
+		allowedRequestOrigins: env.CORS_LINKS,
 		sessionCookie: {
 			attributes: {
 				sameSite: 'none' as never,
