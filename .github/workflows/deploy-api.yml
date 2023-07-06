@@ -53,6 +53,12 @@ jobs:
           git_push_flags: '--force'
           git_remote_url: 'ssh://dokku@${{ vars.DOKKU_SSH_HOST }}/${{ vars.DOKKU_APPNAME }}'
           ssh_private_key: ${{ secrets.DOKKU_SSH_KEY }}
+          
+      - name: Delete deploy branch
+        uses: dawidd6/action-delete-branch@v3
+        with:
+          github_token: ${{ secrets.GH_BOT_TOKEN }}
+          branches: ${{ env.DEPLOY_BRANCH_NAME }}
 
       - name: Get SHA of HEAD commit for Logging
         id: commit-vars
