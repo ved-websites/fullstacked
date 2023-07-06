@@ -80,7 +80,7 @@ export const actions = {
 				props: {
 					email: data.createUser.email,
 					name: fullname,
-					url: `${url.origin}/register`,
+					url: `${url.origin}/register?token=${data.createUser.registerToken}`,
 				},
 			},
 			{
