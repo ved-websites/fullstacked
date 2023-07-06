@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { ClientUser } from '$/app';
 	import { navElements } from '$/navigation';
+	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import { isDrawerHidden } from '$lib/stores';
 	import { mdiLogout } from '@mdi/js';
@@ -29,7 +30,7 @@
 <Navbar let:hidden navClass="px-2 sm:px-4 py-2.5 fixed w-full z-20 top-0 left-0 border-b">
 	<NavHamburger on:click={isDrawerHidden.toggle} />
 	<NavBrand href="/">
-		<img src="/images/logo.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
+		<img src="/images/logo.svg" width="30px" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
 		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Flowbite</span>
 	</NavBrand>
 	<div class="flex items-center md:order-2">
@@ -42,22 +43,23 @@
 					<Icon path={mdiLogout} />
 				</Button>
 			</form>
+
+			{#if browser}
+				<Dropdown placement="bottom" triggeredBy="#avatar-menu">
+					<DropdownHeader>
+						<span class="block text-sm">{sessionUser.firstName} {sessionUser.lastName}</span>
+						<span class="block truncate text-sm font-light"> {sessionUser.email} </span>
+					</DropdownHeader>
+					<DropdownItem>Dashboard</DropdownItem>
+					<DropdownItem>Earnings</DropdownItem>
+					<DropdownDivider />
+					<DropdownItem>Settings</DropdownItem>
+				</Dropdown>
+			{/if}
 		{:else}
 			<Button href="/login" class={sessionUser ? 'hidden' : ''}>Login</Button>
 		{/if}
 	</div>
-	{#if sessionUser}
-		<Dropdown placement="bottom" triggeredBy="#avatar-menu">
-			<DropdownHeader>
-				<span class="block text-sm">{sessionUser.firstName} {sessionUser.lastName}</span>
-				<span class="block truncate text-sm font-light"> {sessionUser.email} </span>
-			</DropdownHeader>
-			<DropdownItem>Dashboard</DropdownItem>
-			<DropdownItem>Earnings</DropdownItem>
-			<DropdownDivider />
-			<DropdownItem>Settings</DropdownItem>
-		</Dropdown>
-	{/if}
 	<NavUl {hidden}>
 		{#each navElements as navElement}
 			{#if isNavElemVisible(navElement, sessionUser)}
@@ -73,11 +75,13 @@
 					>
 						<Chevron aligned>{navElement.title}</Chevron>
 					</NavLi>
-					<Dropdown triggeredBy="#{navElement.id}" class="w-44 z-20">
-						{#each navElement.elements as navSubElement}
-							<DropdownItem href={navSubElement.url}>{navSubElement.title}</DropdownItem>
-						{/each}
-					</Dropdown>
+					{#if browser}
+						<Dropdown triggeredBy="#{navElement.id}" class="w-44 z-20">
+							{#each navElement.elements as navSubElement}
+								<DropdownItem href={navSubElement.url}>{navSubElement.title}</DropdownItem>
+							{/each}
+						</Dropdown>
+					{/if}
 				{/if}
 			{/if}
 		{/each}
