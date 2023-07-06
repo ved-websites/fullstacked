@@ -16,6 +16,11 @@ export async function luciaFactory(prisma: PrismaClient, env: EnvironmentConfig)
 		getUserAttributes: (dbUser) => {
 			return dbUser;
 		},
+		sessionCookie: {
+			attributes: {
+				sameSite: 'none' as never,
+			},
+		},
 	});
 }
 
