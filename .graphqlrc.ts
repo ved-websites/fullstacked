@@ -17,7 +17,7 @@ const codegen: Types.Config = {
 	ignoreNoDocuments: true,
 	generates: {
 		'client/src/graphql/@generated/index.ts': {
-			documents: clientDocuments,
+			documents: [...clientDocuments, '!api/**/*'],
 			plugins: [
 				{
 					typescript: {
@@ -37,7 +37,7 @@ const codegen: Types.Config = {
 			],
 		},
 		'api/tests/@generated/graphql/index.ts': {
-			documents: apiDocuments,
+			documents: [...apiDocuments, '!client/**/*'],
 			plugins: [
 				{
 					typescript: {
