@@ -6,7 +6,7 @@ import type { Auth } from './lucia.factory';
 export function getLuciaAuthFromContext(context: ExecutionContext) {
 	const response = getGraphQLResponse(context);
 
-	return response.locals.auth;
+	return response.locals.authRequest;
 }
 
 export const LuciaAuth = createParamDecorator((_data, context: ExecutionContext) => {

@@ -1,8 +1,8 @@
-import { EnvironmentConfig } from '$/env.validation';
 import { ConfigModule } from '$configs/config.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { PrismaService } from '$prisma/prisma.service';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { EnvironmentConfig } from '~/env.validation';
 import { LuciaFactory, luciaFactory } from './lucia.factory';
 import { LuciaMiddleware } from './lucia.middleware';
 

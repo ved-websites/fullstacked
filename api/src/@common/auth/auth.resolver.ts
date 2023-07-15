@@ -5,7 +5,6 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import type { Session } from 'lucia';
 import { Public } from './auth.guard';
 import { AuthService } from './auth.service';
-import { CanSendEmailOutput } from './dtos/can-send-email.output';
 import { LoggedUserOutput } from './dtos/logged-user.output';
 import { LoginUserInput } from './dtos/login-user.input';
 import { LogoutOutput } from './dtos/logout.output';
@@ -25,10 +24,10 @@ export class AuthResolver {
 	}
 
 	// @Mutation(() => RegisterOutput)
-	// async register(@LuciaAuth() auth: LuciaAuthRequest, @Args('data') { email, password }: RegisterInput) {
+	// async register(@LuciaAuth() authRequest: LuciaAuthRequest, @Args('data') { email, password }: RegisterInput) {
 	// 	const session = await this.authService.register(email, password);
 
-	// 	auth.setSession(session);
+	// 	authRequest.setSession(session);
 
 	// 	return {
 	// 		accessToken: session.sessionId,
@@ -37,10 +36,10 @@ export class AuthResolver {
 
 	@Public()
 	@Mutation(() => LoggedUserOutput)
-	async login(@LuciaAuth() auth: LuciaAuthRequest, @Args('data') { email, password }: LoginUserInput) {
+	async login(@LuciaAuth() authRequest: LuciaAuthRequest, @Args('data') { email, password }: LoginUserInput) {
 		const session = await this.authService.login(email, password);
 
-		auth.setSession(session);
+		authRequest.setSession(session);
 
 		return {
 			accessToken: session.sessionId,
@@ -48,11 +47,11 @@ export class AuthResolver {
 	}
 
 	@Mutation(() => LogoutOutput)
-	async logout(@LuciaAuth() auth: LuciaAuthRequest, @AuthSession() session: Session | null) {
+	async logout(@LuciaAuth() authRequest: LuciaAuthRequest, @AuthSession() session: Session | null) {
 		if (session) {
 			await this.authService.logout(session.sessionId);
 
-			auth.setSession(null);
+			authRequest.setSession(null);
 
 			return {
 				loggedOut: true,
@@ -65,10 +64,10 @@ export class AuthResolver {
 	}
 
 	@Mutation(() => RenewedSessionOutput, { nullable: true })
-	async renewSession(@LuciaAuth() auth: LuciaAuthRequest) {
-		const session = await auth.validateBearerToken();
+	async renewSession(@LuciaAuth() authRequest: LuciaAuthRequest) {
+		const session = await authRequest.validateBearerToken();
 
-		auth.setSession(session);
+		authRequest.setSession(session);
 
 		if (!session) {
 			return null;
@@ -77,14 +76,5 @@ export class AuthResolver {
 		return {
 			accessToken: session.sessionId,
 		} as RenewedSessionOutput;
-	}
-
-	@Query(() => CanSendEmailOutput)
-	async canSendEmail(@AuthSession() { user }: Session) {
-		const canSendEmail = await this.authService.userCanSendEmail(user);
-
-		return {
-			value: canSendEmail,
-		} satisfies CanSendEmailOutput;
 	}
 }

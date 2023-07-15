@@ -1,12 +1,16 @@
-import { ADMIN } from '$/@utils/roles';
 import { Public } from '$auth/auth.guard';
+import { LuciaAuth, LuciaAuthRequest } from '$auth/lucia/lucia.decorator';
 import { Roles } from '$auth/roles/roles.guard';
+import { AuthSession } from '$auth/session.decorator';
 import { Session } from '$prisma-graphql/session';
 import { User, UserCreateInput, UserUpdateWithoutMessagesInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
+import { Origin } from '$utils/origin.decorator';
 import { ForbiddenException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Session as LuciaSession } from 'lucia';
+import { ADMIN } from '~/@utils/roles';
 import { CreateUserOutput } from './dtos/create-user.output';
 import { GetUserOutput } from './dtos/getUser.output';
 import { RegisterInput } from './dtos/register.input';
@@ -19,8 +23,10 @@ export class UsersResolver {
 
 	@Public()
 	@Mutation(() => Session)
-	async register(@Args('data') data: RegisterInput) {
+	async register(@LuciaAuth() authRequest: LuciaAuthRequest, @Args('data') data: RegisterInput) {
 		const session = await this.usersService.register(data);
+
+		authRequest.setSession(session);
 
 		return session;
 	}
@@ -51,8 +57,8 @@ export class UsersResolver {
 
 	@Roles(ADMIN)
 	@Mutation(() => CreateUserOutput)
-	async createUser(@Args('data') data: UserCreateInput) {
-		const user = await this.usersService.createUser(data);
+	async createUser(@Args('data') data: UserCreateInput, @AuthSession() { user: originUser }: LuciaSession, @Origin() origin: string) {
+		const user = await this.usersService.createUser(data, { origin, originUser });
 
 		return user;
 	}

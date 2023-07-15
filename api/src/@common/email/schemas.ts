@@ -1,5 +1,6 @@
-import { emailSchema } from '$/lib/schemas/auth';
 import { z } from 'zod';
+
+export const emailSchema = z.string().email();
 
 export const simpleSenderSchema = z.union([
 	emailSchema,

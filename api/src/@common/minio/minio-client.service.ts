@@ -1,12 +1,15 @@
-import type { EnvironmentConfig } from '$/env.validation';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { MinioService } from 'nestjs-minio-client';
+import type { EnvironmentConfig } from '~/env.validation';
 import type { BufferedFile } from './file.model';
 
 @Injectable()
 export class MinioClientService {
-	constructor(private readonly minio: MinioService, private readonly env: EnvironmentConfig) {
+	constructor(
+		private readonly minio: MinioService,
+		private readonly env: EnvironmentConfig,
+	) {
 		this.logger = new Logger('MinioService');
 	}
 

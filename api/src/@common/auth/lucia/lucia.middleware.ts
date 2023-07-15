@@ -16,9 +16,9 @@ export class LuciaMiddleware implements NestMiddleware {
 			request.headers.authorization = `Bearer ${authSessionCookieToken}`;
 		}
 
-		const requestAuth = this.auth.handleRequest(request, response);
+		const authRequest = this.auth.handleRequest(request, response);
 
-		response.locals.auth = requestAuth;
+		response.locals.authRequest = authRequest;
 
 		await setupRequest(request, this.auth);
 
@@ -30,7 +30,7 @@ export async function setupRequest(request: Request, auth: Auth) {
 	request.sessionId = auth.readBearerToken(request.headers.authorization);
 
 	try {
-		request.session = request.sessionId ? await auth.getSession(request.sessionId) : null;
+		request.session = request.sessionId ? await auth.validateSession(request.sessionId) : null;
 	} catch (error) {
 		// invalid session
 		request.session = null;

@@ -1,11 +1,3 @@
 {
-	"json.schemas": [
-		{
-			"fileMatch": [
-				"nest-cli.json"
-			],
-			"url": "https://json.schemastore.org/nest-cli"
-		}
-	],
 	"vitest.enable": true,
 }

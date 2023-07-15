@@ -1,6 +1,6 @@
-import { Environment, type EnvironmentConfig } from '$/env.validation';
 import { loadLuciaCryptoNode18, loadLuciaMiddleware, loadLuciaModule, loadPrismaAdapterModule } from '$auth/lucia/modules-compat';
 import type { PrismaClient } from '$prisma-client';
+import { Environment, type EnvironmentConfig } from '~/env.validation';
 
 export async function luciaFactory(prisma: PrismaClient, env: EnvironmentConfig) {
 	await loadLuciaCryptoNode18();
@@ -9,17 +9,22 @@ export async function luciaFactory(prisma: PrismaClient, env: EnvironmentConfig)
 	const { prisma: prismaAdapter } = await loadPrismaAdapterModule();
 	const { express } = await loadLuciaMiddleware();
 
+	const isDev = env.NODE_ENV == Environment.Development;
+
 	return lucia({
 		adapter: prismaAdapter(prisma),
-		env: env.NODE_ENV == Environment.Development ? 'DEV' : 'PROD',
+		env: isDev ? 'DEV' : 'PROD',
 		middleware: express(),
 		getUserAttributes: (dbUser) => {
-			return dbUser;
+			return {
+				fullName: dbUser.firstName && dbUser.lastName ? `${dbUser.firstName} ${dbUser.lastName}` : undefined,
+				...dbUser,
+			};
 		},
 		allowedRequestOrigins: env.CORS_LINKS,
 		sessionCookie: {
 			attributes: {
-				sameSite: 'none' as never,
+				sameSite: isDev ? undefined : ('none' as never),
 			},
 		},
 	});

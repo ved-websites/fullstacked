@@ -5,7 +5,10 @@ import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-	constructor(private reflector: Reflector, private readonly prisma: PrismaService) {}
+	constructor(
+		private reflector: Reflector,
+		private readonly prisma: PrismaService,
+	) {}
 
 	async canActivate(context: ExecutionContext) {
 		const definedRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [context.getHandler(), context.getClass()]);

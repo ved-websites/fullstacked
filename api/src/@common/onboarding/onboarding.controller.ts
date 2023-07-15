@@ -3,12 +3,14 @@ import { AuthService } from '$auth/auth.service';
 import { PrismaService } from '$prisma/prisma.service';
 import { Body, Controller, Get, Next, Post, Redirect, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import type { NextFunction, Response } from 'express';
-import { join } from 'path';
 import { OnboardingDto } from './onboarding.dto';
 
 @Controller()
 export class OnboardingController {
-	constructor(private readonly prisma: PrismaService, private readonly auth: AuthService) {}
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly authService: AuthService,
+	) {}
 
 	@Public()
 	@Get()
@@ -20,7 +22,7 @@ export class OnboardingController {
 			return;
 		}
 
-		response.sendFile(join(__dirname, 'onboarding.html'));
+		return response.render('onboarding', { layout: false });
 	}
 
 	@Public()
@@ -37,7 +39,7 @@ export class OnboardingController {
 
 		const { firstName, lastName, email, password } = onboardingDto;
 
-		await this.auth.createUser(email, password, { firstName, lastName });
+		await this.authService.createUser(email, password, { firstName, lastName });
 
 		await this.prisma.role.upsert({
 			create: {
@@ -48,7 +50,13 @@ export class OnboardingController {
 					},
 				},
 			},
-			update: {},
+			update: {
+				users: {
+					connect: {
+						email,
+					},
+				},
+			},
 			where: {
 				text: 'admin',
 			},

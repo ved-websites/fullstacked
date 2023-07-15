@@ -1,0 +1,27 @@
+{{#> container }}
+
+	{{> preview text="You have been invited to join the Fullstacked Website!" }}
+
+	{{#> text }}
+		Hello, {{name}}!
+	{{/text}}
+
+	{{> hr }}
+
+	{{#> button url=url
+	linkStyles=(object
+		padding="10px 0"
+		backgroundColor=(color "blue")
+		borderRadius="3px"
+		color=(color "white")
+		fontSize="18px"
+		textDecoration="none"
+		textAlign="center"
+		display="block"
+		width="100%"
+	)
+	}}
+		Register now!
+	{{/button}}
+
+{{/container}}

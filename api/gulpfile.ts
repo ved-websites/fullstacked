@@ -31,14 +31,10 @@ function buildPrisma() {
 	return gulp.src(['./prisma/schema.prisma', './prisma/migrations/**/*'], { base: '.' }).pipe(gulp.dest(configs.buildDest));
 }
 
-function buildOnboarding() {
-	return gulp.src(['./src/**/*.html'], { base: './src' }).pipe(gulp.dest(configs.buildDest));
-}
-
 // Creation Tasks
 
 function setupEnv() {
-	const devEnvName = '.env.local';
+	const devEnvName = '.env';
 
 	if (!fs.existsSync(devEnvName)) {
 		throw `Project not initialized! Make sure to run "pnpm run init" in the project's folder root.`;
@@ -87,11 +83,7 @@ export const setupPrisma: TaskFunction = gulp.series(deletePrismaGenerated, gene
 
 export const setupPrismaFull: TaskFunction = gulp.series(setupPrisma, updateDatabaseSchema);
 
-export const build: TaskFunction = gulp.series(
-	gulp.parallel(deleteDist, setupPrisma),
-	buildNest,
-	gulp.parallel(buildPrisma, buildOnboarding),
-);
+export const build: TaskFunction = gulp.series(gulp.parallel(deleteDist, setupPrisma), buildNest, buildPrisma);
 
 export const init: TaskFunction = gulp.series(deleteDist, setupEnv, setupPrismaFull);
 

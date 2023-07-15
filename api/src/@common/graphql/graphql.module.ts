@@ -1,4 +1,3 @@
-import { Environment, EnvironmentConfig } from '$/env.validation';
 import { Auth, LuciaFactory } from '$auth/lucia/lucia.factory';
 import { LuciaModule } from '$auth/lucia/lucia.module';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
@@ -6,6 +5,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';
 import depthLimit from 'graphql-depth-limit';
 import { join } from 'path';
+import { Environment, EnvironmentConfig } from '~/env.validation';
 import { ConfigModule } from '../configs/config.module';
 import { setupContext } from './graphql.helper';
 

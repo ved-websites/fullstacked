@@ -35,12 +35,9 @@ export function setupContext(auth: Auth) {
 			const cookies = parseCookies(request);
 
 			const authSessionCookieToken = cookies[COOKIE_NAME];
+			const authSessionHeader = context.connectionParams?.Authorization as string | undefined;
 
-			if (authSessionCookieToken) {
-				const authSessionHeader = context.connectionParams?.Authorization as string | undefined;
-
-				request.headers.authorization = authSessionHeader || `Bearer ${authSessionCookieToken}`;
-			}
+			request.headers.authorization ??= authSessionHeader ?? (authSessionCookieToken ? `Bearer ${authSessionCookieToken}` : undefined);
 
 			await setupRequest(request, auth);
 

@@ -13,12 +13,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: any; output: any; }
-};
-
-export type CanSendEmailOutput = {
-  /** Whether the connected user can send emails or not */
-  value: Scalars['Boolean']['output'];
 };
 
 export type CreateUserOutput = {
@@ -252,7 +248,6 @@ export type NullableStringFieldUpdateOperationsInput = {
 };
 
 export type Query = {
-  canSendEmail: CanSendEmailOutput;
   getRoles: Array<Role>;
   getSessionUser: User;
   getUnregisteredUser: UnregisteredUserOutput;

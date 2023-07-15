@@ -119,8 +119,9 @@
 **/_generated
 
 # dotenv environment variables file
-.env.local
-.env.*.local
+client/.env.local
+client/.env.*.local
+api/.env
 
 #Vercel
 .vercel

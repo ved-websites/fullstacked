@@ -1,8 +1,12 @@
 import { AuthService } from '$auth/auth.service';
 import { RolesService } from '$auth/roles/roles.service';
+import { EmailService } from '$email/email.service';
 import { UserCreateInput, UserUpdateWithoutMessagesInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
+import { User } from 'lucia';
+import { ADMIN } from '~/@utils/roles';
+import { EnvironmentConfig } from '~/env.validation';
 import { RegisterInput } from './dtos/register.input';
 
 @Injectable()
@@ -11,6 +15,8 @@ export class UsersService {
 		private readonly prisma: PrismaService,
 		private readonly authService: AuthService,
 		private readonly rolesService: RolesService,
+		private readonly email: EmailService,
+		private readonly env: EnvironmentConfig,
 	) {}
 
 	async register({ registerToken, password, ...attributes }: RegisterInput) {
@@ -59,7 +65,7 @@ export class UsersService {
 		return users;
 	}
 
-	async createUser(data: UserCreateInput) {
+	async createUser(data: UserCreateInput, options: { origin: string; originUser: User; waitForEmail?: boolean }) {
 		const { email, firstName, lastName, roles } = data;
 
 		const user = await this.authService.createUser(email, null, {
@@ -71,11 +77,29 @@ export class UsersService {
 			await this.rolesService.setUserRoles(user, roles);
 		}
 
+		if (user.registerToken) {
+			const templateData = {
+				name: user.fullName ?? user.email,
+				url: `${options.origin}/register?token=${user.registerToken}`,
+			};
+
+			const emailer = this.email.renderAndSend(['RegisterEmail.hbs', templateData], {
+				to: { email: user.email, name: user.fullName },
+				from: { email: this.env.EMAIL_FROM, name: options.originUser.fullName },
+				replyTo: { email: options.originUser.email, name: options.originUser.fullName },
+				subject: `You have been invited to join the Fullstacked website!`,
+			});
+
+			if (options.waitForEmail) {
+				await emailer;
+			}
+		}
+
 		return user;
 	}
 
 	async editUser(select: PrismaSelector, where: UserWhereUniqueInput, data: UserUpdateWithoutMessagesInput) {
-		if (data.roles?.set?.every((role) => role.text != 'admin')) {
+		if (data.roles?.set?.every((role) => role.text != ADMIN)) {
 			// if no role has admin, check if at least one admin would remain
 			const otherAdminsCount = await this.prisma.user.count({
 				where: {
@@ -85,7 +109,7 @@ export class UsersService {
 					roles: {
 						some: {
 							text: {
-								equals: 'admin',
+								equals: ADMIN,
 							},
 						},
 					},
@@ -113,7 +137,7 @@ export class UsersService {
 				roles: {
 					some: {
 						text: {
-							equals: 'admin',
+							equals: ADMIN,
 						},
 					},
 				},

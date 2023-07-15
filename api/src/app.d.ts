@@ -16,7 +16,7 @@ declare global {
 
 	declare namespace Express {
 		interface Locals {
-			auth: AuthRequest<ApiAuth>;
+			authRequest: AuthRequest<ApiAuth>;
 		}
 
 		interface Request {

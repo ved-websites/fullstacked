@@ -60,7 +60,7 @@ const codegen: Types.Config = {
 };
 
 const config: IGraphQLConfig = {
-	schema: `http://localhost:3000/graphql`,
+	schema: `./api/src/_generated/nestjs-graphql/schema.gql`,
 	documents: [...clientDocuments, ...apiDocuments],
 	extensions: {
 		codegen,

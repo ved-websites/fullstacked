@@ -3,6 +3,7 @@
 	"include": [
 		"**/*.ts",
 		".vitest/**/*.ts",
+		"../src/**/ts",
 	],
 	"exclude": [
 		"node_modules"

@@ -1,13 +1,16 @@
-import { ADMIN } from '$/@utils/roles';
 import { loadLuciaUtils } from '$auth/lucia/modules-compat';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes, User } from 'lucia';
+import { ADMIN } from '~/@utils/roles';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';
 
 @Injectable()
 export class AuthService {
-	constructor(@Inject(LuciaFactory) private readonly auth: Auth, private readonly prisma: PrismaService) {}
+	constructor(
+		@Inject(LuciaFactory) private readonly auth: Auth,
+		private readonly prisma: PrismaService,
+	) {}
 
 	readonly providerId = 'email';
 

@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
 import { Transform, Type } from 'class-transformer';
-import { IsEnum, IsInt, IsOptional, IsString, Matches } from 'class-validator';
+import { IsEmail, IsEnum, IsInt, IsOptional, IsString, Matches } from 'class-validator';
 
 export function splitIntoArray(value: string) {
 	return value
@@ -23,6 +23,15 @@ export const DEFAULT_GRAPHQL_DEPTH_LIMIT = 10;
 export const DEFAULT_MINIO_PORT = 9000;
 
 export class EnvironmentConfig {
+	@IsEmail()
+	readonly EMAIL_FROM!: string;
+
+	@IsString()
+	readonly EMAIL_ENDPOINT!: string;
+
+	@IsString()
+	readonly EMAIL_AUTH_KEY!: string;
+
 	@IsOptional()
 	@IsEnum(Environment)
 	readonly NODE_ENV?: Environment;
@@ -31,12 +40,13 @@ export class EnvironmentConfig {
 	@IsInt()
 	readonly PORT: number = DEFAULT_PORT;
 
+	@IsOptional()
 	@Matches(/^https?:\/\/[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*(:\d+)?$/, {
 		message: `CORS_LINKS must be a string of URLs with a port, separated by commas (spaces between are allowed)`,
 		each: true,
 	})
 	@Transform(({ value }) => splitIntoArray(value))
-	readonly CORS_LINKS!: string[];
+	readonly CORS_LINKS?: string[];
 
 	@Type(() => Number)
 	@IsInt()

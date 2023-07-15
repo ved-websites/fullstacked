@@ -1,19 +1,22 @@
 import 'lucia/polyfill/node';
 
-import { AppModule } from '$/app.module';
 import { AuthModule } from '$auth/auth.module';
 import { AuthService } from '$auth/auth.service';
 import { ConfigModule } from '$configs/config.module';
 import { GraphQLModule, schemaPath } from '$graphql/graphql.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { PrismaService } from '$prisma/prisma.service';
-import { INestApplication, ValidationPipe, type ModuleMetadata } from '@nestjs/common';
+import { setupViewEngine } from '$utils/setupViewEngine';
+import { ValidationPipe, type ModuleMetadata } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { Test } from '@nestjs/testing';
 import { existsSync } from 'fs';
 import { User } from 'lucia';
 import supertest from 'supertest';
 import supertestGQL, { Variables } from 'supertest-graphql';
+import { ADMIN } from '~/@utils/roles';
+import { AppModule } from '~/app.module';
 import { prepareTestDb } from '../../prisma/utils/functions';
 import { TestGraphqlModule } from '../mocks/graphql.module';
 
@@ -55,7 +58,7 @@ export class TestManager {
 	public httpServer: any;
 	public readonly prisma!: PrismaService;
 
-	private app!: INestApplication;
+	private app!: NestExpressApplication;
 	private authService!: AuthService;
 
 	constructor(private options?: TestOptions) {}
@@ -78,6 +81,8 @@ export class TestManager {
 		this.app = moduleRef.createNestApplication();
 		this.app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
+		setupViewEngine(this.app);
+
 		await this.app.init();
 
 		this.httpServer = this.app.getHttpServer();
@@ -85,7 +90,7 @@ export class TestManager {
 
 		await this.prisma.role.create({
 			data: {
-				text: 'admin',
+				text: ADMIN,
 			},
 		});
 
