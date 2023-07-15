@@ -1,5 +1,6 @@
 import { exec as execNoPromise } from 'child_process';
 import util from 'util';
+import { setupRenovate } from './subscripts/file-changes.js';
 import { setupProjectName } from './subscripts/project-name.js';
 import { setupEnvs } from './subscripts/setup-envs.js';
 import { getCliArgs } from './utils/cli.js';
@@ -7,13 +8,19 @@ import { getCliArgs } from './utils/cli.js';
 const exec = util.promisify(execNoPromise);
 
 // =====================
+//  Setup Generic Files
+// =====================
+
+process.stdout.write('Setting up renovate...');
+await setupRenovate();
+console.log(' Done!');
+
+// =====================
 //       Setup Envs
 // =====================
 
 process.stdout.write('Setting up env vars...');
-
 await setupEnvs();
-
 console.log(' Done!');
 
 // =====================
