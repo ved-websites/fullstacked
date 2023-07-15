@@ -37,7 +37,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 				event.cookies.set(name, value, {
 					...opts,
-					// @ts-expect-error set-cookie-parser has string instead of strict type
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+					// @ts-ignore set-cookie-parser has string instead of strict type
 					sameSite: opts.sameSite,
 				});
 			});
