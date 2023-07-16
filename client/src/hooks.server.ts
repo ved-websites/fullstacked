@@ -21,30 +21,7 @@ export async function getAuthUser(urql: Client) {
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.urql = createClient({
-		fetch: async (...args) => {
-			const response = await event.fetch(...args);
-
-			const headerCookies = response.headers.get('set-cookie');
-
-			if (!headerCookies) {
-				return response;
-			}
-
-			const cookies: string[] = Array.isArray(headerCookies) ? headerCookies : [headerCookies];
-
-			cookies.forEach((cookie) => {
-				const { name, value, ...opts } = parseString(cookie);
-
-				event.cookies.set(name, value, {
-					...opts,
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore set-cookie-parser has string instead of strict type
-					sameSite: opts.sameSite,
-				});
-			});
-
-			return response;
-		},
+		fetch: event.fetch,
 		requestToken: event.cookies.get(AUTH_COOKIE_NAME),
 		ws,
 	});
@@ -63,5 +40,26 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 		}
 	}
 
-	return fetch(request);
+	const response = await fetch(request);
+
+	const headerCookies = response.headers.get('set-cookie');
+
+	if (!headerCookies) {
+		return response;
+	}
+
+	const cookies: string[] = Array.isArray(headerCookies) ? headerCookies : [headerCookies];
+
+	cookies.forEach((cookie) => {
+		const { name, value, ...opts } = parseString(cookie);
+
+		event.cookies.set(name, value, {
+			...opts,
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore set-cookie-parser has string instead of strict type
+			sameSite: opts.sameSite,
+		});
+	});
+
+	return response;
 };
