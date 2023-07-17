@@ -90,6 +90,9 @@ export function createClient(options?: ClientOptions) {
 		fetch: options?.fetch,
 		fetchOptions: {
 			credentials: 'include',
+			headers: {
+				'Access-Control-Request-Headers': 'Content-Type, Cookie',
+			},
 		},
 	});
 
