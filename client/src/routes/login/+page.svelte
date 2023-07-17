@@ -17,7 +17,7 @@
 				
 				if (authSession) {
 					sessionToken.set(authSession);
-					result.location = result.location.replace(/\?accessToken=[^&]+/, '')
+					result.location = result.location.replace(/\?accessToken=[^&]+/, '');
 				}
 			}
 			
