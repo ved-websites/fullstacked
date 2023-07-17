@@ -23,10 +23,11 @@ import { readable, type Readable } from 'svelte/store';
 import { pipe, subscribe as wonkaSubscribe } from 'wonka';
 import { sessionToken } from './stores';
 import { getApiUrl } from './utils';
+import { getValue, type ValueGetter } from './utils/typescript';
 
 export type ClientOptions = {
 	fetch?: typeof fetch;
-	requestToken?: string | null | (() => string | undefined | null);
+	requestToken?: ValueGetter<string | null | undefined>;
 	ws?: unknown;
 };
 
@@ -38,6 +39,17 @@ export function createClient(options?: ClientOptions) {
 	const wsClient = createWSClient({
 		url: `${wsProtocol}://${apiUrl.host}/graphql`,
 		webSocketImpl: options?.ws,
+		connectionParams() {
+			const authToken = getValue(options?.requestToken);
+
+			if (!authToken) {
+				return {};
+			}
+
+			return {
+				Authorization: `Bearer ${authToken}`,
+			};
+		},
 	});
 
 	const urql = createURQLClient({
@@ -47,11 +59,7 @@ export function createClient(options?: ClientOptions) {
 			authExchange(async (utils) => {
 				return {
 					addAuthToOperation(operation) {
-						if (!options?.requestToken) {
-							return operation;
-						}
-
-						const authToken = typeof options.requestToken == 'string' ? options.requestToken : options.requestToken();
+						const authToken = getValue(options?.requestToken);
 
 						if (!authToken) {
 							return operation;
@@ -102,6 +110,9 @@ export function createClient(options?: ClientOptions) {
 			}),
 		],
 		fetch: options?.fetch,
+		fetchOptions: {
+			credentials: 'include',
+		},
 	});
 
 	return urql;
@@ -171,8 +182,11 @@ export function mutationStore<Data = unknown, Variables extends AnyVariables = A
 
 export type SubscribeOptions = Partial<{ urql: Client }>;
 
+declare const subscription: Client['subscription'];
+type SubscriptionParameters<Result, Variables extends AnyVariables> = Parameters<typeof subscription<Result, Variables>>;
+
 export function subscribe<Result, Variables extends AnyVariables>(
-	params: TypedDocumentNode<Result, { [key: string]: never }> | [TypedDocumentNode<Result, Variables>, Variables],
+	params: TypedDocumentNode<Result, { [key: string]: never }> | SubscriptionParameters<Result, Variables>,
 	handler: (result: OperationResult<Result, Variables>) => Promise<unknown> | unknown,
 	options?: SubscribeOptions,
 ) {
@@ -182,7 +196,7 @@ export function subscribe<Result, Variables extends AnyVariables>(
 
 	const urql = options?.urql ?? getContextClient();
 
-	const subArgs = Array.isArray(params) ? params : ([params, undefined] as [TypedDocumentNode<Result, Variables>, Variables]);
+	const subArgs = (Array.isArray(params) ? params : [params, undefined]) as SubscriptionParameters<Result, Variables>;
 
 	const { unsubscribe } = pipe(urql.subscription(...subArgs), wonkaSubscribe(handler));
 
