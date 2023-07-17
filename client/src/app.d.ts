@@ -1,18 +1,9 @@
 import type { Client } from '@urql/svelte';
 import type { getAuthUser } from './hooks.server';
 import type { ClientUser } from './lib/utils/hooks-helper.server';
+import type { LayoutAlert } from './lib/utils/layout-alert';
 
 type ClientUser = Awaited<ReturnType<typeof getAuthUser>>;
-
-type LayoutAlertLevel = 'info' | 'warning' | 'error';
-
-type LayoutAlert = {
-	text: string;
-	/** The Alert behavior. Defaults to 'info'. */
-	level?: LayoutAlertLevel;
-	/** The icon path to use from `@mdj/js`. Defaults to level aware icon. */
-	icon?: string;
-};
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces

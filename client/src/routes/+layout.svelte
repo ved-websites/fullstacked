@@ -1,14 +1,13 @@
 <script lang="ts">
 	import '../app.postcss';
 
-	import type { LayoutAlert, LayoutAlertLevel } from '$/app';
 	import Icon from '$/lib/components/Icon.svelte';
 	import { createClient } from '$/lib/urql';
+	import type { LayoutAlertLevel } from '$/lib/utils/layout-alert';
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import InitialTheme from '$lib/InitialTheme.svelte';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
-	import { mdiAlert, mdiHelpRhombus, mdiInformation } from '@mdi/js';
 	import { setContextClient } from '@urql/svelte';
 	import { Alert } from 'flowbite-svelte';
 
@@ -20,26 +19,7 @@
 		setContextClient(urql);
 	}
 
-	let layoutAlert: Required<LayoutAlert> | undefined;
-
-	$: {
-		// @ts-expect-error LayoutAlert does not have required property, we force it here
-		layoutAlert = $page.data.layoutAlert;
-
-		if (layoutAlert && !layoutAlert.level) {
-			layoutAlert.level = 'info';
-		}
-
-		if (layoutAlert && !layoutAlert.icon) {
-			const mapping: Record<LayoutAlertLevel, string> = {
-				info: mdiInformation,
-				warning: mdiHelpRhombus,
-				error: mdiAlert,
-			};
-
-			layoutAlert.icon = mapping[layoutAlert.level ?? 'info'];
-		}
-	}
+	$: layoutAlert = $page.data.layoutAlert;
 
 	const alertColorMapping: Record<LayoutAlertLevel, Alert['$$prop_def']['color']> = {
 		info: 'blue',
