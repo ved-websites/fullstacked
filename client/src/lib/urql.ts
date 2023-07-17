@@ -1,6 +1,5 @@
 import type { RenewBearerTokenMutation, RenewBearerTokenMutationVariables } from '$/graphql/@generated';
 import { browser } from '$app/environment';
-import type { MaybePromise } from '@sveltejs/kit';
 import { authExchange } from '@urql/exchange-auth';
 import {
 	Client,
@@ -22,11 +21,12 @@ import { createClient as createWSClient } from 'graphql-ws';
 import { onDestroy } from 'svelte';
 import { readable, type Readable } from 'svelte/store';
 import { pipe, subscribe as wonkaSubscribe } from 'wonka';
+import { sessionToken } from './stores';
 import { getApiUrl } from './utils';
 
 export type ClientOptions = {
 	fetch?: typeof fetch;
-	requestToken?: string | null | (() => MaybePromise<string | undefined | null>);
+	requestToken?: string | null | (() => string | undefined | null);
 	ws?: unknown;
 };
 
@@ -47,7 +47,19 @@ export function createClient(options?: ClientOptions) {
 			authExchange(async (utils) => {
 				return {
 					addAuthToOperation(operation) {
-						return operation;
+						if (!options?.requestToken) {
+							return operation;
+						}
+
+						const authToken = typeof options.requestToken == 'string' ? options.requestToken : options.requestToken();
+
+						if (!authToken) {
+							return operation;
+						}
+
+						return utils.appendHeaders(operation, {
+							Authorization: `Bearer ${authToken}`,
+						});
 					},
 					didAuthError(error, _operation) {
 						return error.graphQLErrors.some(
@@ -56,7 +68,7 @@ export function createClient(options?: ClientOptions) {
 					},
 					async refreshAuth() {
 						try {
-							await utils.mutate(
+							const { data } = await utils.mutate(
 								gql<RenewBearerTokenMutation, RenewBearerTokenMutationVariables>`
 									mutation RenewBearerToken {
 										renewSession {
@@ -66,6 +78,8 @@ export function createClient(options?: ClientOptions) {
 								`,
 								{},
 							);
+
+							sessionToken.set(data?.renewSession?.accessToken ?? null);
 						} catch (error) {
 							// Renew token failed, ah well
 						}
@@ -88,12 +102,6 @@ export function createClient(options?: ClientOptions) {
 			}),
 		],
 		fetch: options?.fetch,
-		fetchOptions: {
-			credentials: 'include',
-			headers: {
-				'Access-Control-Request-Headers': 'Content-Type, Cookie',
-			},
-		},
 	});
 
 	return urql;
@@ -117,7 +125,7 @@ export function queryStore<Data = unknown, Variables extends AnyVariables = AnyV
 	return urqlQueryStore({
 		client: urql,
 		...args,
-	}) as Readable<OperationResultState<Data, Variables> & { isServer?: boolean }>;
+	}) as Readable<Partial<OperationResultState<Data, Variables>> & { isServer?: never }>;
 }
 
 export function mutation<Data = unknown, Variables extends AnyVariables = AnyVariables>(

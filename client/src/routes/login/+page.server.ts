@@ -19,7 +19,7 @@ export const load = (async () => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, url, locals: { urql } }) => {
+	default: async ({ request, url, locals: { urql, userHasJS } }) => {
 		const form = await superValidate(request, schema);
 
 		if (!form.valid) return { form };
@@ -43,14 +43,19 @@ export const actions = {
 			return message(form, error?.message);
 		}
 
-		const redirectTo = url.searchParams.get('redirectTo');
+		const redirectToParam = url.searchParams.get('redirectTo');
 
-		if (redirectTo) {
-			// Successful login, go to redirectedTo Page
-			throw redirect(StatusCodes.SEE_OTHER, `/${redirectTo.slice(1)}`);
+		let accessTokenSearchParam = '';
+
+		if (userHasJS) {
+			accessTokenSearchParam = redirectToParam
+				? `${redirectToParam.includes('?') ? '&' : '?'}accessToken=${data.login.accessToken}`
+				: `?accessToken=${data.login.accessToken}`;
 		}
 
-		// Successful login, go to Home Page
-		throw redirect(StatusCodes.SEE_OTHER, '/');
+		const redirectTo = redirectToParam ? `/${redirectToParam.slice(1)}` : `/`;
+
+		// Successful login
+		throw redirect(StatusCodes.SEE_OTHER, `${redirectTo}${accessTokenSearchParam}`);
 	},
 } satisfies Actions;

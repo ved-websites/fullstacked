@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { sessionToken } from '$/lib/stores/index.js';
+	import { applyAction } from '$app/forms';
 	import { page } from '$app/stores';
 	import { Alert, Button, Helper, Input, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
@@ -7,7 +9,21 @@
 
 	export let data;
 
-	const { enhance, form, constraints, errors, message } = superForm(data.form);
+	const { enhance, form, constraints, errors, message } = superForm(data.form, {
+		applyAction: false,
+		onResult({ result }) {
+			if (result.type === 'redirect') {
+				const authSession = result.location.match(/\.*accessToken=(.*)(?:&.*)?/)?.[1];
+				
+				if (authSession) {
+					sessionToken.set(authSession);
+					result.location = result.location.replace(/\?accessToken=[^&]+/, '')
+				}
+			}
+			
+			applyAction(result);
+		}
+	});
 </script>
 
 {#if $message || isRedirected}

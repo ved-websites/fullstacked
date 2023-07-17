@@ -5,7 +5,6 @@ import type { Client } from '@urql/svelte';
 import { parseString } from 'set-cookie-parser';
 import ws from 'ws';
 import { GetUserFromSessionDocument } from './graphql/@generated';
-import { AUTH_COOKIE_NAME } from './lib/utils/auth';
 
 export async function getAuthUser(urql: Client) {
 	const result = await urql.query(GetUserFromSessionDocument, {}).toPromise();
@@ -22,11 +21,20 @@ export async function getAuthUser(urql: Client) {
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.urql = createClient({
 		fetch: event.fetch,
-		requestToken: event.cookies.get(AUTH_COOKIE_NAME),
 		ws,
 	});
 
 	event.locals.sessionUser = await getAuthUser(event.locals.urql);
+
+	if (!event.isDataRequest) {
+		const hasJs = event.cookies.get('has_js');
+
+		event.locals.userHasJS = hasJs ? hasJs === 'true' : false;
+
+		event.cookies.set('has_js', '', {
+			expires: new Date('01 Jan 1970 00:00:01 UTC'),
+		});
+	}
 
 	return resolve(event);
 };

@@ -2,22 +2,31 @@
 	import '../app.postcss';
 
 	import Icon from '$/lib/components/Icon.svelte';
+	import InitialTheme from '$/lib/components/head/InitialTheme.svelte';
+	import { sessionToken } from '$/lib/stores';
 	import { createClient } from '$/lib/urql';
+	import { updateCookie } from '$/lib/utils/cookie';
 	import type { LayoutAlertLevel } from '$/lib/utils/layout-alert';
 	import { browser } from '$app/environment';
-	import { page } from '$app/stores';
-	import InitialTheme from '$lib/InitialTheme.svelte';
+	import { navigating, page } from '$app/stores';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
 	import { setContextClient } from '@urql/svelte';
 	import { Alert } from 'flowbite-svelte';
+	import { get } from 'svelte/store';
 
 	export let data;
 
 	if (browser) {
-		const urql = createClient();
+		const urql = createClient({
+			requestToken() {
+				return get(sessionToken);
+			},
+		});
 
 		setContextClient(urql);
 	}
+	
+	$: $navigating, updateCookie('has_js', 'true');
 
 	$: layoutAlert = $page.data.layoutAlert;
 
