@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
 import { Transform, Type } from 'class-transformer';
-import { IsEmail, IsEnum, IsInt, IsOptional, IsString, Matches } from 'class-validator';
+import { IsBoolean, IsEmail, IsEnum, IsInt, IsOptional, IsString, Matches } from 'class-validator';
 
 export function splitIntoArray(value: string) {
 	return value
@@ -20,7 +20,7 @@ export const DEFAULT_PORT = 3000;
 
 export const DEFAULT_GRAPHQL_DEPTH_LIMIT = 10;
 
-export const DEFAULT_MINIO_PORT = 9000;
+export const DEFAULT_MINIO_PORT = 9001;
 
 export class EnvironmentConfig {
 	@IsEmail()
@@ -31,6 +31,11 @@ export class EnvironmentConfig {
 
 	@IsString()
 	readonly EMAIL_AUTH_KEY!: string;
+
+	@IsOptional()
+	@Transform(({ value }) => value === 'true')
+	@IsBoolean()
+	readonly EMAIL_SENT_IN_DEV: boolean = false;
 
 	@IsOptional()
 	@IsEnum(Environment)

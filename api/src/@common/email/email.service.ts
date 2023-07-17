@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { create as createHandlebars, type ExpressHandlebars } from 'express-handlebars';
 import path from 'path';
 import { firstValueFrom } from 'rxjs';
-import { EnvironmentConfig } from '~/env.validation';
+import { Environment, EnvironmentConfig } from '~/env.validation';
 import * as helpers from './helpers';
 import { sendEmailSchema, SendMailData } from './schemas';
 
@@ -49,6 +49,10 @@ export class EmailService {
 
 	async send(emailOptions: SendMailData) {
 		const data = await sendEmailSchema.parseAsync(emailOptions);
+
+		if (this.env.NODE_ENV == Environment.Development && !this.env.EMAIL_SENT_IN_DEV) {
+			return null;
+		}
 
 		const response = this.httpService.post(this.env.EMAIL_ENDPOINT, data, {
 			headers: {
