@@ -1,9 +1,6 @@
 import type { Client } from '@urql/svelte';
-import type { getAuthUser } from './hooks.server';
-import type { ClientUser } from './lib/utils/hooks-helper.server';
+import type { ClientUser } from './hooks.server';
 import type { LayoutAlert } from './lib/utils/layout-alert';
-
-type ClientUser = Awaited<ReturnType<typeof getAuthUser>>;
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces

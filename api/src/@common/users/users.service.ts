@@ -7,7 +7,6 @@ import { Injectable } from '@nestjs/common';
 import { User } from 'lucia';
 import { ADMIN } from '~/@utils/roles';
 import { EnvironmentConfig } from '~/env.validation';
-import { RegisterInput } from './dtos/register.input';
 
 @Injectable()
 export class UsersService {
@@ -18,31 +17,6 @@ export class UsersService {
 		private readonly email: EmailService,
 		private readonly env: EnvironmentConfig,
 	) {}
-
-	async register({ registerToken, password, ...attributes }: RegisterInput) {
-		const session = await this.authService.register(registerToken, password, attributes);
-
-		return session;
-	}
-
-	async getUnregisteredUser(registerToken: string) {
-		const user = await this.prisma.user.findUnique({
-			where: {
-				registerToken,
-			},
-			select: {
-				email: true,
-				firstName: true,
-				lastName: true,
-			},
-		});
-
-		if (!user) {
-			throw new Error('Invalid registration token!');
-		}
-
-		return user;
-	}
 
 	async getUsers(select: PrismaSelector, where?: UserWhereInput) {
 		const users = await this.prisma.user.findMany({

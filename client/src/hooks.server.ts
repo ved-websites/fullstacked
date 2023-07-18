@@ -18,6 +18,8 @@ export async function getAuthUser(urql: Client) {
 	};
 }
 
+export type ClientUser = Awaited<ReturnType<typeof getAuthUser>>;
+
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.urql = createClient({
 		fetch: event.fetch,

@@ -30,4 +30,8 @@ export class RolesService {
 
 		return updatedUser;
 	}
+
+	rolesIntersect(roles1: string[], roles2: string[]) {
+		return roles1.some((role1) => roles2.some((role2) => role2 === role1));
+	}
 }

@@ -4,12 +4,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes, User } from 'lucia';
 import { ADMIN } from '~/@utils/roles';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';
+import { RolesService } from './roles/roles.service';
 
 @Injectable()
 export class AuthService {
 	constructor(
 		@Inject(LuciaFactory) private readonly auth: Auth,
 		private readonly prisma: PrismaService,
+		private readonly rolesService: RolesService,
 	) {}
 
 	readonly providerId = 'email';
@@ -29,6 +31,25 @@ export class AuthService {
 			},
 			...select,
 		});
+
+		return user;
+	}
+
+	async getUnregisteredUser(registerToken: string) {
+		const user = await this.prisma.user.findUnique({
+			where: {
+				registerToken,
+			},
+			select: {
+				email: true,
+				firstName: true,
+				lastName: true,
+			},
+		});
+
+		if (!user) {
+			throw new Error('Invalid registration token!');
+		}
 
 		return user;
 	}
@@ -118,6 +139,6 @@ export class AuthService {
 			})
 		).map((userRole) => userRole.text);
 
-		return rolesCanSendEmail.some((role) => userRoles.some((userRole) => userRole === role));
+		return this.rolesService.rolesIntersect(rolesCanSendEmail, userRoles);
 	}
 }

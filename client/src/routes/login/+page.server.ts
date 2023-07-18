@@ -1,9 +1,11 @@
 import type { LoginMutation, LoginMutationVariables } from '$/graphql/@generated';
+import type { ToastManagerData } from '$/lib/components/ToastManager/helper';
 import { emailSchema, passwordSchema } from '$/lib/schemas/auth';
-import { redirect } from '@sveltejs/kit';
+import { createLayoutAlert } from '$/lib/utils/layout-alert';
+import { fail, redirect } from '@sveltejs/kit';
 import { gql } from '@urql/svelte';
 import { StatusCodes } from 'http-status-codes';
-import { message, superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -12,10 +14,19 @@ const schema = z.object({
 	password: passwordSchema,
 });
 
-export const load = (async () => {
+export const load = (async ({ url }) => {
 	const form = await superValidate(schema);
 
-	return { form };
+	const redirectTo = url.searchParams.has('redirectTo') || undefined;
+
+	const layoutAlert =
+		redirectTo &&
+		createLayoutAlert({
+			text: `Vous devez être connecté pour accéder à cette ressource!`,
+			level: 'warning',
+		});
+
+	return { form, layoutAlert };
 }) satisfies PageServerLoad;
 
 export const actions = {
@@ -40,7 +51,26 @@ export const actions = {
 			.toPromise();
 
 		if (error || !data) {
-			return message(form, error?.message);
+			const invalidUserPassErrorCatcher = 'Invalid';
+
+			const allErrors: ToastManagerData[] =
+				error?.graphQLErrors
+					.filter((gqlError) => !gqlError.message.includes(invalidUserPassErrorCatcher))
+					.map((gqlError) => ({
+						text: gqlError.message,
+						type: 'error',
+					})) ?? [];
+
+			const gqlUserPassError = error && error.graphQLErrors.find((gqlError) => gqlError.message.includes(invalidUserPassErrorCatcher));
+
+			const userPassError =
+				gqlUserPassError &&
+				createLayoutAlert({
+					text: gqlUserPassError.message,
+					level: 'error',
+				});
+
+			return fail(StatusCodes.UNAUTHORIZED, { form, allErrors, layoutAlert: userPassError });
 		}
 
 		const redirectToParam = url.searchParams.get('redirectTo');
