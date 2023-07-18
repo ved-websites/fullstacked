@@ -1,11 +1,17 @@
 import type { DynamicModule } from '@nestjs/common';
 import { TypedConfigModule, dotenvLoader, selectConfig, type DotenvLoaderOptions } from 'nest-typed-config';
 import { EnvironmentConfig } from '../../env.validation';
+import { CIEnvironmentConfig } from './ci-env.validation';
+
+export function getSchema(): typeof CIEnvironmentConfig | typeof EnvironmentConfig {
+	// If GitHub Actions, use CI Env Config
+	return process.env.CI == 'true' ? CIEnvironmentConfig : EnvironmentConfig;
+}
 
 export function createConfigModule(options?: DotenvLoaderOptions) {
 	return TypedConfigModule.forRoot({
 		isGlobal: true,
-		schema: EnvironmentConfig,
+		schema: getSchema(),
 		load: dotenvLoader({
 			expandVariables: true,
 			...options,
@@ -14,7 +20,7 @@ export function createConfigModule(options?: DotenvLoaderOptions) {
 }
 
 export function selectEnvConfig(configModule: DynamicModule) {
-	return selectConfig(configModule, EnvironmentConfig);
+	return selectConfig(configModule, getSchema());
 }
 
 export function createAndSelectConfig(options?: DotenvLoaderOptions) {

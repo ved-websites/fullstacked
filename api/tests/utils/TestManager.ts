@@ -2,12 +2,13 @@ import 'lucia/polyfill/node';
 
 import { AuthModule } from '$auth/auth.module';
 import { AuthService } from '$auth/auth.service';
+import { CIEnvironmentConfig } from '$configs/ci-env.validation';
 import { ConfigModule } from '$configs/config.module';
 import { GraphQLModule, schemaPath } from '$graphql/graphql.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { PrismaService } from '$prisma/prisma.service';
 import { setupViewEngine } from '$utils/setupViewEngine';
-import { ValidationPipe, type ModuleMetadata } from '@nestjs/common';
+import { Provider, ValidationPipe, type ModuleMetadata } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { Test } from '@nestjs/testing';
@@ -17,6 +18,7 @@ import supertest from 'supertest';
 import supertestGQL, { Variables } from 'supertest-graphql';
 import { ADMIN } from '~/@utils/roles';
 import { AppModule } from '~/app.module';
+import { EnvironmentConfig } from '~/env.validation';
 import { prepareTestDb } from '../../prisma/utils/functions';
 import { TestGraphqlModule } from '../mocks/graphql.module';
 
@@ -68,11 +70,17 @@ export class TestManager {
 
 		await ensureGraphQLSchema();
 
+		const metadata = this.options?.metadata;
+
+		const ciEnv: Provider = {
+			provide: EnvironmentConfig,
+			useClass: process.env.CI == 'true' ? CIEnvironmentConfig : EnvironmentConfig,
+		};
+
 		const moduleRef = await Test.createTestingModule({
-			...this.options?.metadata,
-			imports: this.options?.metadata?.imports
-				? [ConfigModule, GraphQLModule, AuthModule, PrismaModule, ...this.options.metadata.imports]
-				: [AppModule],
+			...metadata,
+			imports: metadata?.imports ? [ConfigModule, GraphQLModule, AuthModule, PrismaModule, ...metadata.imports] : [AppModule],
+			providers: metadata?.providers ? [ciEnv, ...metadata.providers] : [ciEnv],
 		})
 			.overrideModule(GraphQLModule)
 			.useModule(TestGraphqlModule)
