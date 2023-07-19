@@ -2,7 +2,6 @@ import 'lucia/polyfill/node';
 
 import { AuthModule } from '$auth/auth.module';
 import { AuthService } from '$auth/auth.service';
-import { ConfigModule } from '$configs/config.module';
 import { GraphQLModule, schemaPath } from '$graphql/graphql.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { PrismaService } from '$prisma/prisma.service';
@@ -64,17 +63,19 @@ export class E2ETestManager extends TestManager<E2ETestOptions> {
 	constructor(options?: E2ETestOptions) {
 		const metadata = options?.metadata;
 
+		const importsOnDefined = [GraphQLModule, AuthModule, PrismaModule];
+
 		super({
 			...options,
 			metadata: {
 				...metadata,
-				imports: metadata?.imports ? [ConfigModule, GraphQLModule, AuthModule, PrismaModule, ...metadata.imports] : [AppModule],
+				imports: metadata?.imports ? [...importsOnDefined, ...metadata.imports] : [AppModule],
 			},
 		});
 	}
 
 	protected override testingModuleSetup(moduleBuilder: TestingModuleBuilder): TestingModuleBuilder {
-		return moduleBuilder.overrideModule(GraphQLModule).useModule(TestGraphqlModule);
+		return super.testingModuleSetup(moduleBuilder).overrideModule(GraphQLModule).useModule(TestGraphqlModule);
 	}
 
 	async beforeAll(): Promise<void> {

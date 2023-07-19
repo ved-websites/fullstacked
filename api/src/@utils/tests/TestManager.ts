@@ -1,5 +1,6 @@
 import { CIEnvironmentConfig } from '$configs/ci-env.validation';
-import { Provider, type ModuleMetadata } from '@nestjs/common';
+import { ConfigModule } from '$configs/config.module';
+import { type ModuleMetadata } from '@nestjs/common';
 import { Test, TestingModule, TestingModuleBuilder } from '@nestjs/testing';
 import { EnvironmentConfig } from '~/env.validation';
 
@@ -19,14 +20,19 @@ export class TestManager<Options extends TestOptions = TestOptions> {
 	async setupTestModule(): Promise<void> {
 		const metadata = this.options?.metadata;
 
-		const ciEnv: Provider = {
-			provide: EnvironmentConfig,
-			useClass: process.env.CI == 'true' ? CIEnvironmentConfig : EnvironmentConfig,
-		};
+		const sharedImports: NonNullable<typeof metadata>['imports'] = [ConfigModule];
+
+		const sharedProviders: NonNullable<typeof metadata>['providers'] = [
+			{
+				provide: EnvironmentConfig,
+				useClass: process.env.CI == 'true' ? CIEnvironmentConfig : EnvironmentConfig,
+			},
+		];
 
 		const moduleBuilder = Test.createTestingModule({
 			...metadata,
-			providers: metadata?.providers ? [ciEnv, ...metadata.providers] : [ciEnv],
+			imports: metadata?.imports ? [...sharedImports, ...metadata.imports] : sharedImports,
+			providers: metadata?.providers ? [...sharedProviders, ...metadata.providers] : sharedProviders,
 		});
 
 		const moduleRef = await this.testingModuleSetup(moduleBuilder).compile();
