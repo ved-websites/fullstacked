@@ -13,7 +13,7 @@
 				const authSession = result.location.match(/\.*accessToken=(.*)(?:&.*)?/)?.[1];
 
 				if (authSession) {
-					sessionToken.set(authSession);
+					sessionToken.set(null && authSession); // temporary until CORS test finished
 					result.location = result.location.replace(/\?accessToken=[^&]+/, '');
 				}
 			}

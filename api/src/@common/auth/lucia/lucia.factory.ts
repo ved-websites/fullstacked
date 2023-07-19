@@ -22,6 +22,11 @@ export async function luciaFactory(prisma: PrismaClient, env: EnvironmentConfig)
 			};
 		},
 		allowedRequestOrigins: env.CORS_LINKS,
+		sessionCookie: {
+			attributes: {
+				sameSite: isDev ? undefined : ('none' as never),
+			},
+		},
 	});
 }
 
