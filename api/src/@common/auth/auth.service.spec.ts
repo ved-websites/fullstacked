@@ -1,20 +1,24 @@
 import { ConfigModule } from '$configs/config.module';
 import { PrismaModule } from '$prisma/prisma.module';
-import { Test, TestingModule } from '@nestjs/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { TestManager } from '~/@utils/tests/TestManager';
 import { AuthService } from './auth.service';
 import { LuciaFactory } from './lucia/lucia.factory';
+import { RolesModule } from './roles/roles.module';
 
 describe('AuthService', () => {
+	const manager = new TestManager({
+		metadata: {
+			imports: [ConfigModule, PrismaModule, RolesModule],
+			providers: [AuthService, { provide: LuciaFactory, useValue: {} }],
+		},
+	});
 	let service: AuthService;
 
 	beforeEach(async () => {
-		const module: TestingModule = await Test.createTestingModule({
-			imports: [ConfigModule, PrismaModule],
-			providers: [AuthService, { provide: LuciaFactory, useValue: {} }],
-		}).compile();
+		await manager.setupTestModule();
 
-		service = module.get<AuthService>(AuthService);
+		service = manager.module.get<AuthService>(AuthService);
 	});
 
 	it('should be defined', () => {

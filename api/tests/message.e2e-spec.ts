@@ -2,12 +2,12 @@ import assert from 'assert';
 import gql from 'graphql-tag';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { GetEmptyMessagesQuery } from './@generated/graphql';
-import { TestManager, users } from './utils/TestManager';
+import { E2ETestManager, users } from './utils/E2ETestManager';
 
 vi.mock('$auth/lucia/modules-compat');
 
 describe('MessageModule (e2e)', () => {
-	const manager = new TestManager();
+	const manager = new E2ETestManager();
 
 	beforeAll(async () => {
 		await manager.beforeAll();
@@ -22,16 +22,14 @@ describe('MessageModule (e2e)', () => {
 	it('return no messages', async () => {
 		const response = await manager
 			.gql<GetEmptyMessagesQuery>()
-			.query(
-				gql`
-					query GetEmptyMessages {
-						messages {
-							text
-							time
-						}
+			.query(gql`
+				query GetEmptyMessages {
+					messages {
+						text
+						time
 					}
-				`,
-			)
+				}
+			`)
 			.expectNoErrors();
 
 		const { data } = response;
@@ -60,16 +58,14 @@ describe('MessageModule (e2e)', () => {
 
 		const response = await manager
 			.gql<GetEmptyMessagesQuery>()
-			.query(
-				gql`
-					query GetEmptyMessages {
-						messages {
-							text
-							time
-						}
+			.query(gql`
+				query GetEmptyMessages {
+					messages {
+						text
+						time
 					}
-				`,
-			)
+				}
+			`)
 			.expectNoErrors();
 
 		const { data } = response;

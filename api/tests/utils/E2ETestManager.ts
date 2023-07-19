@@ -2,23 +2,22 @@ import 'lucia/polyfill/node';
 
 import { AuthModule } from '$auth/auth.module';
 import { AuthService } from '$auth/auth.service';
-import { CIEnvironmentConfig } from '$configs/ci-env.validation';
 import { ConfigModule } from '$configs/config.module';
 import { GraphQLModule, schemaPath } from '$graphql/graphql.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { PrismaService } from '$prisma/prisma.service';
 import { setupViewEngine } from '$utils/setupViewEngine';
-import { Provider, ValidationPipe, type ModuleMetadata } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { Test } from '@nestjs/testing';
+import { TestingModuleBuilder } from '@nestjs/testing';
 import { existsSync } from 'fs';
 import { User } from 'lucia';
 import supertest from 'supertest';
 import supertestGQL, { Variables } from 'supertest-graphql';
 import { ADMIN } from '~/@utils/roles';
+import { TestManager, type TestOptions } from '~/@utils/tests/TestManager';
 import { AppModule } from '~/app.module';
-import { EnvironmentConfig } from '~/env.validation';
 import { prepareTestDb } from '../../prisma/utils/functions';
 import { TestGraphqlModule } from '../mocks/graphql.module';
 
@@ -42,13 +41,12 @@ const userDefinitions = {
 
 export const users: Record<keyof typeof userDefinitions, TestUser> = userDefinitions;
 
-type TestOptions = {
-	metadata?: ModuleMetadata;
+export interface E2ETestOptions extends TestOptions {
 	defaultUser?: keyof typeof users | null;
 	createUser?: Partial<Record<keyof typeof users, boolean>>;
-};
+}
 
-export class TestManager {
+export class E2ETestManager extends TestManager<E2ETestOptions> {
 	#authToken?: string;
 	get authToken(): string | undefined {
 		return this.#authToken;
@@ -63,30 +61,30 @@ export class TestManager {
 	private app!: NestExpressApplication;
 	private authService!: AuthService;
 
-	constructor(private options?: TestOptions) {}
+	constructor(options?: E2ETestOptions) {
+		const metadata = options?.metadata;
+
+		super({
+			...options,
+			metadata: {
+				...metadata,
+				imports: metadata?.imports ? [ConfigModule, GraphQLModule, AuthModule, PrismaModule, ...metadata.imports] : [AppModule],
+			},
+		});
+	}
+
+	protected override testingModuleSetup(moduleBuilder: TestingModuleBuilder): TestingModuleBuilder {
+		return moduleBuilder.overrideModule(GraphQLModule).useModule(TestGraphqlModule);
+	}
 
 	async beforeAll(): Promise<void> {
+		super.setupTestModule();
+
 		await prepareTestDb();
 
 		await ensureGraphQLSchema();
 
-		const metadata = this.options?.metadata;
-
-		const ciEnv: Provider = {
-			provide: EnvironmentConfig,
-			useClass: process.env.CI == 'true' ? CIEnvironmentConfig : EnvironmentConfig,
-		};
-
-		const moduleRef = await Test.createTestingModule({
-			...metadata,
-			imports: metadata?.imports ? [ConfigModule, GraphQLModule, AuthModule, PrismaModule, ...metadata.imports] : [AppModule],
-			providers: metadata?.providers ? [ciEnv, ...metadata.providers] : [ciEnv],
-		})
-			.overrideModule(GraphQLModule)
-			.useModule(TestGraphqlModule)
-			.compile();
-
-		this.app = moduleRef.createNestApplication();
+		this.app = this.module.createNestApplication();
 		this.app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
 		setupViewEngine(this.app);
@@ -107,7 +105,7 @@ export class TestManager {
 		const creationSteps = Object.entries({
 			admin: true,
 			...this.options?.createUser,
-		} satisfies TestOptions['createUser']) as [keyof typeof userDefinitions, boolean][];
+		} satisfies E2ETestOptions['createUser']) as [keyof typeof userDefinitions, boolean][];
 
 		const userCreationPromises = creationSteps.map(async ([user, doCreate]) => {
 			if (!doCreate) {

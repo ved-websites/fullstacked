@@ -1,19 +1,22 @@
 import { ConfigModule } from '$configs/config.module';
 import { HttpModule } from '@nestjs/axios';
-import { Test, TestingModule } from '@nestjs/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { TestManager } from '~/@utils/tests/TestManager';
 import { EmailService } from './email.service';
 
 describe('EmailService', () => {
+	const manager = new TestManager({
+		metadata: {
+			imports: [ConfigModule, HttpModule],
+			providers: [EmailService],
+		},
+	});
 	let service: EmailService;
 
 	beforeEach(async () => {
-		const module: TestingModule = await Test.createTestingModule({
-			imports: [ConfigModule, HttpModule],
-			providers: [EmailService],
-		}).compile();
+		await manager.setupTestModule();
 
-		service = module.get<EmailService>(EmailService);
+		service = manager.module.get<EmailService>(EmailService);
 	});
 
 	it('should be defined', () => {

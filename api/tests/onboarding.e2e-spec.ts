@@ -1,11 +1,11 @@
 import { OnboardingDto } from '$onboarding/onboarding.dto';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { TestManager, users } from './utils/TestManager';
+import { E2ETestManager, users } from './utils/E2ETestManager';
 
 vi.mock('$auth/lucia/modules-compat');
 
 describe('OnboardingModule (e2e)', () => {
-	const manager = new TestManager({
+	const manager = new E2ETestManager({
 		defaultUser: null,
 		createUser: {
 			admin: false,
