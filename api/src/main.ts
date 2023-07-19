@@ -18,7 +18,7 @@ async function bootstrap(): Promise<void> {
 
 	const corsOrigins = env.CORS_LINKS;
 
-	app.enableCors({ credentials: true, origin: corsOrigins ?? '*', allowedHeaders: 'Cookie' });
+	app.enableCors({ credentials: true, origin: corsOrigins ?? '*', allowedHeaders: 'Cookie, content-type' });
 
 	const port = env.PORT;
 
