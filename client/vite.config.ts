@@ -1,12 +1,13 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig, type UserConfig } from 'vite';
 import { nodeLoaderPlugin } from '@vavite/node-loader/plugin';
+import { defineConfig, type UserConfig } from 'vite';
 import VitePluginTsConfigPaths from 'vite-tsconfig-paths';
 
 export const plugins: UserConfig['plugins'] = [
 	sveltekit(),
 	VitePluginTsConfigPaths({
 		loose: true,
+		root: '.',
 	}),
 	nodeLoaderPlugin(),
 ];

@@ -136,7 +136,7 @@ jobs:
         run: pnpm install
 
       - name: Init
-        run: pnpm run init
+        run: pnpm run init --no-client
         env:
           DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 

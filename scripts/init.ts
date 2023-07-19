@@ -52,7 +52,7 @@ if (!args.some((arg) => arg == '--no-api')) {
 if (!args.some((arg) => arg == '--no-client')) {
 	process.stdout.write('Setting up client...');
 
-	await exec('pnpm run --filter ./client build');
+	await exec('pnpm run --filter ./client sync');
 
 	console.log(' Done!');
 }

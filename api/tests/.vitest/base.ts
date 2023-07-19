@@ -14,7 +14,7 @@ const coverageDirectory: string = process.env.COV_DIRECTORY ?? `./coverage`;
 const vitestBaseConfig = defineConfig({
 	plugins: [
 		// @ts-ignore
-		VitePluginTsConfigPaths({ loose: true }),
+		VitePluginTsConfigPaths({ loose: true, root: '.' }),
 	],
 	test: {
 		testTimeout: 30000,
