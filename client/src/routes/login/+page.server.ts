@@ -1,6 +1,7 @@
 import type { LoginMutation, LoginMutationVariables } from '$/graphql/@generated';
 import type { ToastManagerData } from '$/lib/components/ToastManager/helper';
 import { emailSchema, passwordSchema } from '$/lib/schemas/auth';
+import { withJsParam } from '$/lib/utils/js-handling';
 import { createLayoutAlert } from '$/lib/utils/layout-alert';
 import { fail, redirect } from '@sveltejs/kit';
 import { gql } from '@urql/svelte';
@@ -30,7 +31,7 @@ export const load = (async ({ url }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, url, locals: { urql, userHasJS } }) => {
+	default: async ({ request, url, locals: { urql } }) => {
 		const form = await superValidate(request, schema);
 
 		if (!form.valid) return { form };
@@ -73,11 +74,13 @@ export const actions = {
 			return fail(StatusCodes.UNAUTHORIZED, { form, allErrors, layoutAlert: userPassError });
 		}
 
+		const userHasJs = url.searchParams.has(withJsParam);
+
 		const redirectToParam = url.searchParams.get('redirectTo');
 
 		let accessTokenSearchParam = '';
 
-		if (userHasJS) {
+		if (userHasJs) {
 			accessTokenSearchParam = redirectToParam
 				? `${redirectToParam.includes('?') ? '&' : '?'}accessToken=${data.login.accessToken}`
 				: `?accessToken=${data.login.accessToken}`;

@@ -6,10 +6,9 @@
 	import InitialTheme from '$/lib/components/head/InitialTheme.svelte';
 	import { sessionToken } from '$/lib/stores';
 	import { createClient } from '$/lib/urql';
-	import { updateCookie } from '$/lib/utils/cookie';
 	import { alertColorMapping } from '$/lib/utils/layout-alert';
 	import { browser } from '$app/environment';
-	import { navigating, page } from '$app/stores';
+	import { page } from '$app/stores';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
 	import { setContextClient } from '@urql/svelte';
 	import { Alert } from 'flowbite-svelte';
@@ -27,8 +26,6 @@
 
 		setContextClient(urql);
 	}
-
-	$: $navigating, updateCookie('has_js', 'true');
 
 	$: layoutAlert = $page.form?.layoutAlert as PageData['layoutAlert'] || $page.data.layoutAlert;
 </script>

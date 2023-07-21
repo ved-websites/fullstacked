@@ -9,7 +9,6 @@ declare global {
 		interface Locals {
 			urql: Client;
 			sessionUser: ClientUser;
-			userHasJS: boolean;
 		}
 		interface PageData {
 			sessionUser: ClientUser;

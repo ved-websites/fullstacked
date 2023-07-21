@@ -90,6 +90,7 @@ export function createClient(options?: ClientOptions) {
 							sessionToken.set(data?.renewSession?.accessToken ?? null);
 						} catch (error) {
 							// Renew token failed, ah well
+							sessionToken.set(null);
 						}
 					},
 				};

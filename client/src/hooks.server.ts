@@ -28,16 +28,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	event.locals.sessionUser = await getAuthUser(event.locals.urql);
 
-	if (!event.isDataRequest) {
-		const hasJs = event.cookies.get('has_js');
-
-		event.locals.userHasJS = hasJs ? hasJs === 'true' : false;
-
-		event.cookies.set('has_js', '', {
-			expires: new Date('01 Jan 1970 00:00:01 UTC'),
-		});
-	}
-
 	return resolve(event);
 };
 
