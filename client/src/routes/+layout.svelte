@@ -1,17 +1,15 @@
 <script lang="ts">
 	import '../app.postcss';
 
-	import Icon from '$/lib/components/Icon.svelte';
+	import LayoutAlert from '$/lib/components/LayoutAlert/LayoutAlert.svelte';
 	import ToastManager from '$/lib/components/ToastManager/ToastManager.svelte';
 	import InitialTheme from '$/lib/components/head/InitialTheme.svelte';
 	import { sessionToken } from '$/lib/stores';
 	import { createClient } from '$/lib/urql';
-	import { alertColorMapping } from '$/lib/utils/layout-alert';
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
 	import { setContextClient } from '@urql/svelte';
-	import { Alert } from 'flowbite-svelte';
 	import { get } from 'svelte/store';
 	import type { PageData } from './$types.js';
 
@@ -28,20 +26,16 @@
 	}
 
 	$: layoutAlert = $page.form?.layoutAlert as PageData['layoutAlert'] || $page.data.layoutAlert;
+	$: toasts = [...$page.data.toasts, ...($page.form?.toasts as PageData['toasts'] ?? [])];
 </script>
 
 <InitialTheme />
 
 <Navbar sessionUser={data.sessionUser} />
 
-<ToastManager data={[]} />
+<ToastManager data={toasts} />
 
 <main class="container mx-auto mt-20 py-3 px-5">
-	{#if layoutAlert}
-		<Alert color={alertColorMapping[layoutAlert.level]} class="mb-5 flex items-center">
-			<Icon path={layoutAlert.icon} />
-			<span>{layoutAlert.text}</span>
-		</Alert>
-	{/if}
+	<LayoutAlert data={layoutAlert} />
 	<slot />
 </main>

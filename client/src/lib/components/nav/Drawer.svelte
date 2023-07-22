@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ClientUser } from '$/app';
+	import type { ClientUser } from '$/hooks.server';
 	import { navElements } from '$/navigation';
 	import { page } from '$app/stores';
 	import { isDrawerHidden } from '$lib/stores';

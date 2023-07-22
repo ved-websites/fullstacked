@@ -1,5 +1,6 @@
+import { createLayoutAlert } from '$/lib/components/LayoutAlert/helper';
+import type { ToastData } from '$/lib/components/ToastManager/helper';
 import { userCanAccessNav } from '$/lib/components/nav/nav-elements';
-import { createLayoutAlert } from '$/lib/utils/layout-alert';
 import { handleLoginRedirect } from '$/lib/utils/login';
 import { navElements } from '$/navigation';
 import { redirect } from '@sveltejs/kit';
@@ -23,5 +24,6 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 	return {
 		sessionUser,
 		layoutAlert,
+		toasts: [] as ToastData[],
 	};
 }) satisfies LayoutServerLoad;

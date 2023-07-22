@@ -1,8 +1,8 @@
 import type { LoginMutation, LoginMutationVariables } from '$/graphql/@generated';
-import type { ToastManagerData } from '$/lib/components/ToastManager/helper';
+import { createLayoutAlert } from '$/lib/components/LayoutAlert/helper';
+import { createToasts } from '$/lib/components/ToastManager/helper';
 import { emailSchema, passwordSchema } from '$/lib/schemas/auth';
 import { withJsParam } from '$/lib/utils/js-handling';
-import { createLayoutAlert } from '$/lib/utils/layout-alert';
 import { fail, redirect } from '@sveltejs/kit';
 import { gql } from '@urql/svelte';
 import { StatusCodes } from 'http-status-codes';
@@ -54,13 +54,25 @@ export const actions = {
 		if (error || !data) {
 			const invalidUserPassErrorCatcher = 'Invalid';
 
-			const allErrors: ToastManagerData[] =
+			const allErrors = createToasts(
 				error?.graphQLErrors
 					.filter((gqlError) => !gqlError.message.includes(invalidUserPassErrorCatcher))
 					.map((gqlError) => ({
 						text: gqlError.message,
 						type: 'error',
-					})) ?? [];
+					})),
+			);
+
+			const networkError = createToasts(
+				error?.networkError && [
+					{
+						text: `A network error happened! :(`,
+						type: 'error',
+					},
+				],
+			);
+
+			allErrors.push(...networkError);
 
 			const gqlUserPassError = error && error.graphQLErrors.find((gqlError) => gqlError.message.includes(invalidUserPassErrorCatcher));
 
@@ -71,7 +83,7 @@ export const actions = {
 					level: 'error',
 				});
 
-			return fail(StatusCodes.UNAUTHORIZED, { form, allErrors, layoutAlert: userPassError });
+			return fail(StatusCodes.UNAUTHORIZED, { form, toasts: allErrors, layoutAlert: userPassError });
 		}
 
 		const userHasJs = url.searchParams.has(withJsParam);

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ClientUser } from '$/app';
+	import type { ClientUser } from '$/hooks.server';
 	import { navElements } from '$/navigation';
 	import { browser } from '$app/environment';
 	import { applyAction, enhance } from '$app/forms';

@@ -1,6 +1,7 @@
 import type { Client } from '@urql/svelte';
 import type { ClientUser } from './hooks.server';
-import type { LayoutAlert } from './lib/utils/layout-alert';
+import type { LayoutAlertData } from './lib/components/LayoutAlert/helper';
+import type { ToastData } from './lib/components/ToastManager/helper';
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -12,11 +13,10 @@ declare global {
 		}
 		interface PageData {
 			sessionUser: ClientUser;
-			layoutAlert: LayoutAlert | undefined;
+			layoutAlert: LayoutAlertData | undefined;
+			toasts: ToastData[];
 		}
 		// interface Error {}
 		// interface Platform {}
 	}
 }
-
-export { ClientUser, LayoutAlert, LayoutAlertLevel };

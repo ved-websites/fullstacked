@@ -3,7 +3,7 @@ import type { Alert } from 'flowbite-svelte';
 
 export type LayoutAlertLevel = 'info' | 'warning' | 'error';
 
-export type LayoutAlert = {
+export type LayoutAlertData = {
 	text: string;
 	/** The Alert behavior. Defaults to 'info'. */
 	level: LayoutAlertLevel;
@@ -11,14 +11,14 @@ export type LayoutAlert = {
 	icon: string;
 };
 
-export function createLayoutAlert(data: Required<Pick<LayoutAlert, 'text'>> & Partial<LayoutAlert>): LayoutAlert {
-	const layoutAlert: LayoutAlert = data as LayoutAlert;
+export function createLayoutAlert(data: Required<Pick<LayoutAlertData, 'text'>> & Partial<LayoutAlertData>): LayoutAlertData {
+	const layoutAlert = data as LayoutAlertData;
 
 	if (!data.level) {
 		layoutAlert.level = 'info';
 	}
 
-	if (layoutAlert && !layoutAlert.icon) {
+	if (!layoutAlert.icon) {
 		const mapping: Record<LayoutAlertLevel, string> = {
 			info: mdiInformation,
 			warning: mdiHelpRhombus,
@@ -38,4 +38,4 @@ export const alertColorMapping: Record<LayoutAlertLevel, Alert['$$prop_def']['co
 };
 
 export const layoutAlertContextKey = 'layoutAlert';
-export type LayoutAlertContextStore = LayoutAlert | undefined;
+export type LayoutAlertContextStore = LayoutAlertData | undefined;
