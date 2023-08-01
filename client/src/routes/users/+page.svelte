@@ -13,8 +13,8 @@
 	let deletionUser: (typeof users)[number] | undefined;
 </script>
 
-<Heading tag="h2" class="mb-5">This is the users list</Heading>
-<div class="flex mb-5 place-content-center">
+<Heading tag="h2">This is the users list</Heading>
+<div class="self-center">
 	<Button href="/users/new">Create New User</Button>
 </div>
 

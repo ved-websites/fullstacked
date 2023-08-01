@@ -37,7 +37,7 @@
 
 <ToastManager data={toasts} />
 
-<main class="container mx-auto mt-20 py-3 px-5">
+<main class="container mx-auto mt-20 py-3 px-5 flex flex-col gap-3">
 	<LayoutAlert data={layoutAlert} />
 	<slot />
 </main>

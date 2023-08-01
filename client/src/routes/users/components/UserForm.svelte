@@ -25,8 +25,8 @@
 
 <Heading tag="h2">{headerText}</Heading>
 
-<form method="post" class="mt-5" use:enhance>
-	<div class="gap-6 mb-6 md:grid-cols-2">
+<form method="post" use:enhance>
+	<div class="flex flex-col gap-3 md:grid-cols-2">
 		<div>
 			<Label for="email" class="mb-2">Email</Label>
 			<Input let:props>
