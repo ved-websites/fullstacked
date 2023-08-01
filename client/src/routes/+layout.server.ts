@@ -7,7 +7,7 @@ import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import type { LayoutServerLoad } from './$types';
 
-export const load = (async ({ url, locals: { sessionUser } }) => {
+export const load = (async ({ url, locals: { sessionUser, theme } }) => {
 	let layoutAlert: Awaited<ReturnType<LayoutServerLoad>>['layoutAlert'];
 
 	if (!userCanAccessNav(sessionUser, navElements, url.pathname)) {
@@ -23,6 +23,7 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 
 	return {
 		sessionUser,
+		theme,
 		layoutAlert,
 		toasts: [] as ToastData[],
 	};

@@ -1,9 +1,15 @@
 <svelte:head>
 	<script>
 		(function () {
+			function getCookie(name) {
+				const value = `; ${document.cookie}`;
+				const parts = value.split(`; ${name}=`);
+				if (parts.length === 2) return parts.pop().split(';').shift();
+			}
+
 			function getInitialTheme() {
 				try {
-					const theme = localStorage.getItem('color-theme');
+					const theme = getCookie('color-theme');
 
 					if (theme) {
 						return theme;
@@ -23,8 +29,8 @@
 				return;
 			}
 
-			if (theme == 'dark') {
-				window.document.documentElement.classList.add('dark');
+			if (theme == 'light') {
+				window.document.documentElement.classList.remove('dark');
 			}
 		})();
 	</script>

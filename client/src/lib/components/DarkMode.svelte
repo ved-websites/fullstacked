@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { themeStore, useMediaQuery } from '$/lib/stores';
-	import { ButtonGroup, Button } from 'flowbite-svelte';
+	import { page } from '$app/stores';
+	import { mdiThemeLightDark, mdiWeatherNight, mdiWhiteBalanceSunny } from '@mdi/js';
+	import { Button, ButtonGroup } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { derived } from 'svelte/store';
-	import { classList } from '../stores/classlist';
+	import { classList } from '../stores/utils/classlist';
 	import Icon from './Icon.svelte';
-	import { mdiThemeLightDark, mdiWeatherNight, mdiWhiteBalanceSunny } from '@mdi/js';
 
 	const mediaDarkScheme = useMediaQuery('(prefers-color-scheme: dark)');
 
@@ -19,6 +20,22 @@
 
 	let classListStore: ReturnType<typeof classList>;
 
+	const handleThemeSubmit = async ({ submitter }: SubmitEvent) => {
+		const theme = submitter?.dataset?.theme;
+
+		switch (theme) {
+			case 'dark':
+				$themeStore != 'dark' && themeStore.set('dark');
+				break;
+			case 'light':
+				$themeStore != 'light' && themeStore.set('light');
+				break;
+			case 'media':
+				$themeStore != null && themeStore.set(null);
+				break;
+		}
+	};
+
 	onMount(() => {
 		classListStore = classList(document.documentElement, '');
 
@@ -30,26 +47,34 @@
 	$: classListStore?.update(`${$isDark ? 'dark' : ''}`);
 </script>
 
-<ButtonGroup {...$$restProps}>
-	<Button
-		shadow={$themeStore == 'dark'}
-		color={$themeStore == 'dark' ? 'blue' : 'alternative'}
-		on:click={() => $themeStore != 'dark' && themeStore.set('dark')}
-	>
-		<Icon path={mdiWeatherNight} size="18px" />
-	</Button>
-	<Button
-		shadow={$themeStore == null}
-		color={$themeStore == null ? 'purple' : 'alternative'}
-		on:click={() => $themeStore != null && themeStore.set(null)}
-	>
-		<Icon path={mdiThemeLightDark} size="18px" />
-	</Button>
-	<Button
-		shadow={$themeStore == 'light'}
-		color={$themeStore == 'light' ? 'green' : 'alternative'}
-		on:click={() => $themeStore != 'light' && themeStore.set('light')}
-	>
-		<Icon path={mdiWhiteBalanceSunny} size="18px" />
-	</Button>
-</ButtonGroup>
+<form method="POST" on:submit|preventDefault={handleThemeSubmit}>
+	<ButtonGroup {...$$restProps}>
+		<Button
+			data-theme="dark"
+			type="submit"
+			shadow={$themeStore == 'dark'}
+			color={$themeStore == 'dark' ? 'blue' : 'alternative'}
+			formaction="/?/theme&redirectTo={$page.url.pathname}&value=dark"
+		>
+			<Icon path={mdiWeatherNight} size="18px" />
+		</Button>
+		<Button
+			data-theme="media"
+			type="submit"
+			shadow={$themeStore == null}
+			color={$themeStore == null ? 'purple' : 'alternative'}
+			formaction="/?/theme&redirectTo={$page.url.pathname}&value=null"
+		>
+			<Icon path={mdiThemeLightDark} size="18px" />
+		</Button>
+		<Button
+			data-theme="light"
+			type="submit"
+			shadow={$themeStore == 'light'}
+			color={$themeStore == 'light' ? 'green' : 'alternative'}
+			formaction="/?/theme&redirectTo={$page.url.pathname}&value=light"
+		>
+			<Icon path={mdiWhiteBalanceSunny} size="18px" />
+		</Button>
+	</ButtonGroup>
+</form>

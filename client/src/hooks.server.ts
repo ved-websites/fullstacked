@@ -1,10 +1,11 @@
 import { PUBLIC_API_ADDR } from '$env/static/public';
 import { createClient } from '$lib/urql';
-import type { Handle, HandleFetch } from '@sveltejs/kit';
+import type { Handle, HandleFetch, ResolveOptions } from '@sveltejs/kit';
 import type { Client } from '@urql/svelte';
 import { parseString } from 'set-cookie-parser';
 import ws from 'ws';
 import { GetUserFromSessionDocument } from './graphql/@generated';
+import { themeCookieName, themes, type Theme } from './lib/stores';
 
 export async function getAuthUser(urql: Client) {
 	const result = await urql.query(GetUserFromSessionDocument, {}).toPromise();
@@ -28,7 +29,21 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	event.locals.sessionUser = await getAuthUser(event.locals.urql);
 
-	return resolve(event);
+	const themeCookie = event.cookies.get(themeCookieName) as Theme | 'null' | undefined;
+
+	if (themeCookie) {
+		event.locals.theme = themeCookie != 'null' && themes.includes(themeCookie) ? themeCookie : undefined;
+	}
+
+	const opts: ResolveOptions | undefined = ['dark', undefined].includes(event.locals.theme)
+		? {
+				transformPageChunk({ html }) {
+					return html.replace('<html lang="en">', '<html lang="en" class="dark">');
+				},
+		  }
+		: undefined;
+
+	return resolve(event, opts);
 };
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {

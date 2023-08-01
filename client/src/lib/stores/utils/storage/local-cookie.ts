@@ -1,6 +1,6 @@
 import { onDestroy } from 'svelte';
 import { derived } from 'svelte/store';
-import { getCookie, updateCookie } from '../utils/cookie';
+import { getCookie, updateCookie } from './cookie';
 import { useLocalStorage } from './local-storage';
 
 export function useLocalCookie(...args: Parameters<typeof useLocalStorage<string>>) {

@@ -4,7 +4,7 @@
 	import LayoutAlert from '$/lib/components/LayoutAlert/LayoutAlert.svelte';
 	import ToastManager from '$/lib/components/ToastManager/ToastManager.svelte';
 	import InitialTheme from '$/lib/components/head/InitialTheme.svelte';
-	import { sessionToken } from '$/lib/stores';
+	import { sessionToken, themeStore } from '$/lib/stores';
 	import { createClient } from '$/lib/urql';
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
@@ -25,8 +25,10 @@
 		setContextClient(urql);
 	}
 
-	$: layoutAlert = $page.form?.layoutAlert as PageData['layoutAlert'] || $page.data.layoutAlert;
-	$: toasts = [...$page.data.toasts, ...($page.form?.toasts as PageData['toasts'] ?? [])];
+	$: themeStore.set(data.theme ?? null);
+
+	$: layoutAlert = ($page.form?.layoutAlert as PageData['layoutAlert']) || $page.data.layoutAlert;
+	$: toasts = [...$page.data.toasts, ...(($page.form?.toasts as PageData['toasts']) ?? [])];
 </script>
 
 <InitialTheme />
