@@ -1,13 +1,7 @@
 import type { NavElement } from '$lib/components/nav/nav-elements';
-import { mdiAbacus, mdiAccountDetails, mdiChat, mdiHome, mdiInformation, mdiSpiritLevel } from '@mdi/js';
+import { mdiAbacus, mdiAccountDetails, mdiChat, mdiInformation, mdiShieldCrown } from '@mdi/js';
 
 export const navElements: NavElement[] = [
-	{
-		title: 'Home',
-		url: '/',
-		isPublic: true,
-		drawerIconPath: mdiHome,
-	},
 	{
 		title: 'About',
 		url: '/about',
@@ -20,21 +14,21 @@ export const navElements: NavElement[] = [
 		drawerIconPath: mdiChat,
 	},
 	{
-		title: 'Multi Level',
-		id: 'test',
-		drawerIconPath: mdiSpiritLevel,
+		title: 'Admin',
+		id: 'admin',
+		drawerIconPath: mdiShieldCrown,
+		roles: ['admin'],
 		elements: [
+			{
+				title: 'User Management',
+				url: '/users',
+				drawerIconPath: mdiAccountDetails,
+			},
 			{
 				title: 'Data',
 				url: '/data',
 				drawerIconPath: mdiAbacus,
 			},
 		],
-	},
-	{
-		title: 'User Management',
-		url: '/users',
-		drawerIconPath: mdiAccountDetails,
-		roles: ['admin'],
 	},
 ];

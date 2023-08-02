@@ -28,7 +28,7 @@
 	export let sessionUser: ClientUser;
 
 	const enhanceLogout: Parameters<typeof enhance>[1] = () => {
-		return async ({result}) => {
+		return async ({ result }) => {
 			if (result.type == 'success' || result.type == 'redirect') {
 				sessionToken.set(null);
 			}
@@ -38,7 +38,11 @@
 	};
 </script>
 
-<Navbar let:hidden navClass="px-2 sm:px-4 py-2.5 fixed w-full z-20 top-0 left-0 border-b">
+<Navbar
+	let:hidden
+	navClass="px-1 sm:px-3 py-2.5 fixed w-full z-20 top-0 left-0 border-b"
+	navDivClass="mx-auto flex justify-between items-center"
+>
 	<NavHamburger on:click={isDrawerHidden.toggle} />
 	<NavBrand href="/">
 		<img src="/images/logo.svg" width="30px" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />

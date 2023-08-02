@@ -19,7 +19,7 @@
 	export let sessionUser: ClientUser;
 </script>
 
-<Drawer transitionType="fly" {transitionParams} bind:hidden={$isDrawerHidden} id="main-drawer">
+<Drawer transitionType="fly" {transitionParams} bind:hidden={$isDrawerHidden} id="main-drawer" class="max-w-max">
 	<div class="flex items-center">
 		<h5 id="drawer-label" class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">
 			<Icon path={mdiInformation} class="mr-3" />
