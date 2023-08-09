@@ -1,7 +1,7 @@
-export type ChatMessage = {
+export type ChatMessageType = {
 	id?: string;
 	user: { email: string; name?: string };
 	text: string;
-	time: string;
+	time: Date;
 	active: boolean;
 };

@@ -1,0 +1,7 @@
+query GetUnregisteredUser($registerToken: String!) {
+	getUnregisteredUser(registerToken: $registerToken) {
+		email
+		firstName
+		lastName
+	}
+}

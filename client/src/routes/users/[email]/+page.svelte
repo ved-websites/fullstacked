@@ -7,4 +7,4 @@
 	const superFormData = superForm(data.form, { dataType: 'json' });
 </script>
 
-<UserForm headerText="Editing user {data.editableUser?.email}" roles={data.roles} {superFormData} />
+<UserForm headerText="Editing user {data.editableUser?.email}" {superFormData} roles={data.roles} />

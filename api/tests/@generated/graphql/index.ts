@@ -17,6 +17,13 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export enum CachePolicy {
+  CacheAndNetwork = 'CacheAndNetwork',
+  CacheOnly = 'CacheOnly',
+  CacheOrNetwork = 'CacheOrNetwork',
+  NetworkOnly = 'NetworkOnly'
+}
+
 export type CreateUserOutput = {
   /** Email of the created user */
   email: Scalars['String']['output'];
@@ -246,6 +253,11 @@ export type NestedStringNullableFilter = {
 export type NullableStringFieldUpdateOperationsInput = {
   set?: InputMaybe<Scalars['String']['input']>;
 };
+
+export enum PaginateMode {
+  Infinite = 'Infinite',
+  SinglePage = 'SinglePage'
+}
 
 export type Query = {
   getRoles: Array<Role>;

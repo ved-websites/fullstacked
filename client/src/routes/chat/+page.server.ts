@@ -1,12 +1,5 @@
-import {
-	ChatMessageFragmentDoc,
-	type GetChatMessagesQuery,
-	type GetChatMessagesQueryVariables,
-	type SendMessageMutation,
-	type SendMessageMutationVariables,
-} from '$/graphql/@generated';
+import { GetChatMessagesStore, SendMessageStore } from '$houdini';
 import { error } from '@sveltejs/kit';
-import { gql } from '@urql/svelte';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -16,22 +9,15 @@ const schema = z.object({
 	message: z.string(),
 });
 
-export const load = (async ({ locals: { urql } }) => {
-	const { data, error: gqlError } = await urql.query(
-		gql<GetChatMessagesQuery, GetChatMessagesQueryVariables>`
-			${ChatMessageFragmentDoc}
-
-			query GetChatMessages {
-				messages {
-					...ChatMessage
-				}
-			}
-		`,
-		{},
-	);
+export const load = (async ({
+	locals: {
+		gql: { query },
+	},
+}) => {
+	const { data, errors: gqlError } = await query(GetChatMessagesStore);
 
 	if (gqlError || !data) {
-		throw error(StatusCodes.BAD_REQUEST, gqlError?.message);
+		throw error(StatusCodes.BAD_REQUEST, gqlError?.[0]?.message);
 	}
 
 	const form = await superValidate(schema);
@@ -43,22 +29,18 @@ export const load = (async ({ locals: { urql } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	async default({ request, locals: { urql } }) {
+	async default({
+		request,
+		locals: {
+			gql: { mutate },
+		},
+	}) {
 		const form = await superValidate(request, schema);
 
-		const { data, error: gqlError } = await urql.mutation(
-			gql<SendMessageMutation, SendMessageMutationVariables>`
-				mutation SendMessage($message: String!) {
-					addMessage(data: { text: $message }) {
-						text
-					}
-				}
-			`,
-			{ message: form.data.message },
-		);
+		const { data, errors: gqlError } = await mutate(SendMessageStore, { message: form.data.message });
 
 		if (gqlError || !data) {
-			throw error(StatusCodes.BAD_REQUEST, gqlError?.message);
+			throw error(StatusCodes.BAD_REQUEST, gqlError?.[0]?.message);
 		}
 
 		return { form };

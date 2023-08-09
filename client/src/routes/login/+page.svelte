@@ -1,30 +1,13 @@
 <script lang="ts">
-	import { sessionToken } from '$/lib/stores/index.js';
-	import { formWithJs } from '$/lib/utils/js-handling.js';
-	import { applyAction } from '$app/forms';
 	import { Button, Helper, Input, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 
 	export let data;
 
-	const { enhance, form, constraints, errors } = superForm(data.form, {
-		applyAction: false,
-		onResult({ result }) {
-			if (result.type === 'redirect') {
-				const authSession = result.location.match(/\.*accessToken=(.*)(?:&.*)?/)?.[1];
-
-				if (authSession) {
-					sessionToken.set(authSession);
-					result.location = result.location.replace(/\?accessToken=[^&]+/, '');
-				}
-			}
-
-			applyAction(result);
-		},
-	});
+	const { enhance, form, constraints, errors } = superForm(data.form);
 </script>
 
-<form method="post" use:formWithJs use:enhance>
+<form method="post" use:enhance>
 	<div class="gap-6 mb-6 md:grid-cols-2">
 		<div>
 			<Label for="email" class="mb-2">Email</Label>

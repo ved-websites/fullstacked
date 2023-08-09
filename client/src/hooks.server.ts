@@ -1,33 +1,36 @@
 import { PUBLIC_API_ADDR } from '$env/static/public';
-import { createClient } from '$lib/urql';
-import type { Handle, HandleFetch, ResolveOptions } from '@sveltejs/kit';
-import type { Client } from '@urql/svelte';
+import { GetUserFromSessionStore, setSession } from '$houdini';
+import type { Handle, HandleFetch } from '@sveltejs/kit';
 import { parseString } from 'set-cookie-parser';
-import ws from 'ws';
-import { GetUserFromSessionDocument } from './graphql/@generated';
+import type { AppLocals } from './app';
+import { createHoudiniHelpers } from './lib/houdini/helper';
 import { themeCookieName, themes, type Theme } from './lib/stores';
+import { AUTH_COOKIE_NAME } from './lib/utils/auth';
 
-export async function getAuthUser(urql: Client) {
-	const result = await urql.query(GetUserFromSessionDocument, {}).toPromise();
+export async function getAuthUser(query: AppLocals['gql']['query']) {
+	const result = await query(GetUserFromSessionStore);
 
-	if (!result.data) {
+	if (result.type === 'failure') {
 		return null;
 	}
 
-	return {
-		...result.data.getSessionUser,
-	};
+	const { getSessionUser: sessionUser } = result.data;
+
+	return sessionUser;
 }
 
 export type ClientUser = Awaited<ReturnType<typeof getAuthUser>>;
 
 export const handle: Handle = async ({ event, resolve }) => {
-	event.locals.urql = createClient({
-		fetch: event.fetch,
-		ws,
-	});
+	event.locals.gql = createHoudiniHelpers(event);
 
-	event.locals.sessionUser = await getAuthUser(event.locals.urql);
+	const token = event.cookies.get(AUTH_COOKIE_NAME);
+
+	setSession(event, { token });
+
+	if (token) {
+		event.locals.sessionUser = await getAuthUser(event.locals.gql.query);
+	}
 
 	const themeCookie = event.cookies.get(themeCookieName) as Theme | 'null' | undefined;
 
@@ -35,7 +38,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.theme = themeCookie != 'null' && themes.includes(themeCookie) ? themeCookie : undefined;
 	}
 
-	const opts: ResolveOptions | undefined = ['dark', undefined].includes(event.locals.theme)
+	const opts: Parameters<typeof resolve>[1] = ['dark', undefined].includes(event.locals.theme)
 		? {
 				transformPageChunk({ html }) {
 					return html.replace('<html lang="en">', '<html lang="en" class="dark">');

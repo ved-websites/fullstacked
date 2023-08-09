@@ -57,8 +57,14 @@ export class UsersResolver {
 
 	@Mutation(() => GetUserOutput, { nullable: true })
 	async deleteUser(@SelectQL() select: PrismaSelector, @Args('where') where: UserWhereUniqueInput) {
-		const user = await this.usersService.deleteUser(select, where);
+		try {
+			const user = await this.usersService.deleteUser(select, where);
 
-		return user;
+			return user;
+		} catch (error) {
+			const message = error instanceof Error ? error.message : 'Unhandled exception.';
+
+			throw new ForbiddenException(message);
+		}
 	}
 }

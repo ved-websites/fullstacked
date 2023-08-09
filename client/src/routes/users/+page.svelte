@@ -2,10 +2,13 @@
 	import { userHasRole } from '$/lib/components/nav/utils.js';
 	import { enhance } from '$app/forms';
 	import { Badge, Button, Heading, Modal, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
+	import type { PageData } from './$houdini';
 
-	export let data;
+	export let data: PageData;
 
-	$: ({ users, sessionUser } = data);
+	$: ({ sessionUser, ManageGetUsers } = data);
+
+	$: users = $ManageGetUsers.data?.getUsers ?? [];
 
 	$: canActions = userHasRole(sessionUser, 'admin');
 

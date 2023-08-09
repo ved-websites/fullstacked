@@ -1,0 +1,12 @@
+subscription NewMessage {
+	messageAdded {
+		id
+		text
+		time
+		user {
+			email
+			firstName
+			lastName
+		}
+	}
+}

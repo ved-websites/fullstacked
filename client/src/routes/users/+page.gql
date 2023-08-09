@@ -1,0 +1,10 @@
+query ManageGetUsers @blocking {
+	getUsers {
+		email
+		firstName
+		lastName
+		roles {
+			text
+		}
+	}
+}

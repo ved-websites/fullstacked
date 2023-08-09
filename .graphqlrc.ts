@@ -10,7 +10,12 @@ const tsCommonConfig: RawTypesConfig = {
 	skipTypename: true,
 };
 
-const clientDocuments = ['client/src/**/*.graphql', 'client/src/**/*.svelte', 'client/src/**/*.server.ts', 'client/src/lib/urql.ts'];
+const clientDocuments = [
+	'client/$houdini/graphql/documents.gql',
+	'client/src/**/*.graphql',
+	'client/src/**/*.svelte',
+	'client/src/**/*.server.ts',
+];
 const apiDocuments = ['api/tests/**/*.ts'];
 
 const codegen: Types.Config = {
@@ -60,7 +65,7 @@ const codegen: Types.Config = {
 };
 
 const config: IGraphQLConfig = {
-	schema: `./api/src/_generated/nestjs-graphql/schema.gql`,
+	schema: ['./api/src/_generated/nestjs-graphql/schema.gql', './client/$houdini/graphql/schema.graphql'],
 	documents: [...clientDocuments, ...apiDocuments],
 	extensions: {
 		codegen,

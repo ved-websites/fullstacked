@@ -1,0 +1,12 @@
+query GetChatMessages {
+	messages {
+		id
+		text
+		time
+		user {
+			email
+			firstName
+			lastName
+		}
+	}
+}

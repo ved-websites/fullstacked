@@ -1,0 +1,6 @@
+mutation DeleteSpecificUser($email: String!) {
+	deleteUser(where: { email: $email }) {
+		email
+		firstName
+	}
+}

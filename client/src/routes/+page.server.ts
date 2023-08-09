@@ -1,25 +1,17 @@
-import type { LogoutMutation } from '$/graphql/@generated';
 import { themeCookieName, themes } from '$/lib/stores';
+import { LogoutStore } from '$houdini';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
-import { gql } from '@urql/svelte';
 import { StatusCodes } from 'http-status-codes';
 
 export const actions = {
-	async logout({ locals: { urql } }) {
-		const { data, error } = await urql
-			.mutation(
-				gql<LogoutMutation>`
-					mutation Logout {
-						logout {
-							loggedOut
-						}
-					}
-				`,
-				{},
-			)
-			.toPromise();
+	async logout({
+		locals: {
+			gql: { mutate },
+		},
+	}) {
+		const { data, errors } = await mutate(LogoutStore, null);
 
-		if (error || !data) {
+		if (errors || !data) {
 			return;
 		}
 

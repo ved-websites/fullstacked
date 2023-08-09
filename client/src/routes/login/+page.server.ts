@@ -1,10 +1,8 @@
-import type { LoginMutation, LoginMutationVariables } from '$/graphql/@generated';
 import { createLayoutAlert } from '$/lib/components/LayoutAlert/helper';
 import { createToasts } from '$/lib/components/ToastManager/helper';
 import { emailSchema, passwordSchema } from '$/lib/schemas/auth';
-import { withJsParam } from '$/lib/utils/js-handling';
-import { fail, redirect } from '@sveltejs/kit';
-import { gql } from '@urql/svelte';
+import { LoginStore } from '$houdini';
+import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -31,50 +29,36 @@ export const load = (async ({ url }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, url, locals: { urql } }) => {
+	default: async ({
+		request,
+		url,
+		locals: {
+			gql: { mutate },
+		},
+	}) => {
 		const form = await superValidate(request, schema);
 
 		if (!form.valid) return { form };
 
 		const { email, password } = form.data;
 
-		const { data, error } = await urql
-			.mutation(
-				gql<LoginMutation, LoginMutationVariables>`
-					mutation Login($email: String!, $password: String!) {
-						login(data: { email: $email, password: $password }) {
-							accessToken
-						}
-					}
-				`,
-				{ email, password },
-			)
-			.toPromise();
+		const result = await mutate(LoginStore, { email, password });
 
-		if (error || !data) {
+		if (result.type === 'failure') {
 			const invalidUserPassErrorCatcher = 'Invalid';
 
+			const { errors } = result;
+
 			const allErrors = createToasts(
-				error?.graphQLErrors
-					.filter((gqlError) => !gqlError.message.includes(invalidUserPassErrorCatcher))
-					.map((gqlError) => ({
-						text: gqlError.message,
+				errors
+					?.filter(({ message }) => !message.includes(invalidUserPassErrorCatcher))
+					.map(({ message }) => ({
+						text: message,
 						type: 'error',
 					})),
 			);
 
-			const networkError = createToasts(
-				error?.networkError && [
-					{
-						text: `A network error happened! :(`,
-						type: 'error',
-					},
-				],
-			);
-
-			allErrors.push(...networkError);
-
-			const gqlUserPassError = error && error.graphQLErrors.find((gqlError) => gqlError.message.includes(invalidUserPassErrorCatcher));
+			const gqlUserPassError = errors && errors.find(({ message }) => message.includes(invalidUserPassErrorCatcher));
 
 			const userPassError =
 				gqlUserPassError &&
@@ -83,24 +67,17 @@ export const actions = {
 					level: 'error',
 				});
 
-			return fail(StatusCodes.UNAUTHORIZED, { form, toasts: allErrors, layoutAlert: userPassError });
+			return result.kitHandler('failure', {
+				code: StatusCodes.UNAUTHORIZED,
+				data: { form, toasts: allErrors, layoutAlert: userPassError },
+			});
 		}
-
-		const userHasJs = url.searchParams.has(withJsParam);
 
 		const redirectToParam = url.searchParams.get('redirectTo');
-
-		let accessTokenSearchParam = '';
-
-		if (userHasJs) {
-			accessTokenSearchParam = redirectToParam
-				? `${redirectToParam.includes('?') ? '&' : '?'}accessToken=${data.login.accessToken}`
-				: `?accessToken=${data.login.accessToken}`;
-		}
 
 		const redirectTo = redirectToParam ? `/${redirectToParam.slice(1)}` : `/`;
 
 		// Successful login
-		throw redirect(StatusCodes.SEE_OTHER, `${redirectTo}${accessTokenSearchParam}`);
+		throw redirect(StatusCodes.SEE_OTHER, redirectTo);
 	},
 } satisfies Actions;

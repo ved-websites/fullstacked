@@ -4,26 +4,12 @@
 	import LayoutAlert from '$/lib/components/LayoutAlert/LayoutAlert.svelte';
 	import ToastManager from '$/lib/components/ToastManager/ToastManager.svelte';
 	import InitialTheme from '$/lib/components/head/InitialTheme.svelte';
-	import { sessionToken, themeStore } from '$/lib/stores';
-	import { createClient } from '$/lib/urql';
-	import { browser } from '$app/environment';
+	import { themeStore } from '$/lib/stores';
 	import { page } from '$app/stores';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
-	import { setContextClient } from '@urql/svelte';
-	import { get } from 'svelte/store';
 	import type { PageData } from './$types.js';
 
 	export let data;
-
-	if (browser) {
-		const urql = createClient({
-			requestToken() {
-				return get(sessionToken);
-			},
-		});
-
-		setContextClient(urql);
-	}
 
 	$: themeStore.set(data.theme ?? null);
 

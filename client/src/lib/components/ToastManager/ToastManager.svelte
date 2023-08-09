@@ -3,21 +3,21 @@
 	import { Toast } from 'flowbite-svelte';
 	import { onDestroy } from 'svelte';
 	import Icon from '../Icon.svelte';
-	import { toastColorMapping, type ToastData } from './helper';
-	
+	import { toastBorderColorMapping, toastColorMapping, type ToastData } from './helper';
+
 	const toastOffTimeout = 500;
 
 	export let data: ToastData[];
 
-	$: data.forEach(toast => {
-		if (toasts.some(existingToast => toast.id === existingToast.id)) {
+	$: data.forEach((toast) => {
+		if (toasts.some((existingToast) => toast.id === existingToast.id)) {
 			return;
 		}
 
 		toasts = [...toasts, toast];
 	});
 
-	$: toasts.forEach(toast => {
+	$: toasts.forEach((toast) => {
 		if (!browser || toast.timeoutId !== undefined || !toast.timeout) {
 			return;
 		}
@@ -27,7 +27,7 @@
 			toasts = [...toasts];
 			setTimeout(() => {
 				toast.markedForDeletion = true;
-				toasts = toasts.filter(toast => !toast.markedForDeletion);
+				toasts = toasts.filter((toast) => !toast.markedForDeletion);
 			}, toastOffTimeout);
 		}, toast.timeout);
 	});
@@ -35,7 +35,7 @@
 	let toasts: ToastData[] = [];
 
 	onDestroy(() => {
-		toasts.forEach(toast => {
+		toasts.forEach((toast) => {
 			clearTimeout(toast.timeoutId);
 		});
 	});
@@ -44,7 +44,11 @@
 {#if toasts.length}
 	<div class="toast-manager">
 		{#each toasts as toast (toast.id)}
-			<Toast bind:open={toast.open} color={toastColorMapping[toast.type]} class="{toast.classes ? toast.classes : ''}">
+			<Toast
+				bind:open={toast.open}
+				color={toastColorMapping[toast.type]}
+				class={toast.classes ? toast.classes : `border-b-2 ${toastBorderColorMapping[toast.type]}`}
+			>
 				<svelte:fragment slot="icon">
 					{#if toast.icon}
 						<Icon path={toast.icon} />
@@ -64,5 +68,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+
+		z-index: 90000;
 	}
 </style>

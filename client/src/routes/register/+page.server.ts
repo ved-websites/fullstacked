@@ -1,13 +1,6 @@
-import type {
-	GetUnregisteredUserQuery,
-	GetUnregisteredUserQueryVariables,
-	RegisterNewUserMutation,
-	RegisterNewUserMutationVariables,
-} from '$/graphql/@generated';
 import { firstNameSchema, lastNameSchema, passwordSchema } from '$/lib/schemas/auth';
-import { simpleQuery } from '$/lib/utils/auth';
+import { GetUnregisteredUserStore, RegisterNewUserStore } from '$houdini';
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import { gql } from '@urql/svelte';
 import { StatusCodes } from 'http-status-codes';
 import { message, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -20,32 +13,31 @@ const schema = z.object({
 	password: passwordSchema,
 });
 
-export const load = (async (event) => {
-	const registerToken = event.url.searchParams.get('token');
+export const load = (async ({
+	url,
+	locals: {
+		gql: { query },
+	},
+}) => {
+	const registerToken = url.searchParams.get('token');
 
 	if (!registerToken) {
 		throw error(StatusCodes.BAD_REQUEST, { message: 'Missing register token!' });
 	}
 
-	const unregisteredUserQuery = await simpleQuery<GetUnregisteredUserQuery, GetUnregisteredUserQueryVariables>(
-		event,
-		gql`
-			query GetUnregisteredUser($registerToken: String!) {
-				getUnregisteredUser(registerToken: $registerToken) {
-					email
-					firstName
-					lastName
-				}
-			}
-		`,
-		{
+	const { data } = await query(GetUnregisteredUserStore, {
+		variables: {
 			registerToken,
 		},
-	);
+	});
+
+	if (!data) {
+		throw redirect(StatusCodes.SEE_OTHER, `/`);
+	}
 
 	const {
 		getUnregisteredUser: { email, ...attributes },
-	} = unregisteredUserQuery;
+	} = data;
 
 	const form = await superValidate({ registerToken, ...attributes }, schema);
 
@@ -56,32 +48,20 @@ export const load = (async (event) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals: { urql } }) => {
+	default: async ({
+		request,
+		locals: {
+			gql: { mutate },
+		},
+	}) => {
 		const form = await superValidate(request, schema);
 
 		if (!form.valid) return { form };
 
-		const { data, error } = await urql
-			.mutation(
-				gql<RegisterNewUserMutation, RegisterNewUserMutationVariables>`
-					mutation RegisterNewUser($data: RegisterInput!) {
-						register(data: $data) {
-							user {
-								email
-							}
-						}
-					}
-				`,
-				{
-					data: {
-						...form.data,
-					},
-				},
-			)
-			.toPromise();
+		const { data, errors } = await mutate(RegisterNewUserStore, { data: { ...form.data } });
 
-		if (error || !data) {
-			return message(form, error?.message);
+		if (errors || !data) {
+			return message(form, errors?.[0]?.message);
 		}
 
 		throw redirect(StatusCodes.SEE_OTHER, '/');

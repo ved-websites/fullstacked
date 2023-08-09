@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { ChatMessageFragmentDoc, type NewMessageSubscription, type NewMessageSubscriptionVariables } from '$/graphql/@generated';
 	import Icon from '$/lib/components/Icon.svelte';
-	import { subscribe } from '$/lib/urql';
+	import { subscribe } from '$/lib/houdini/helper.js';
 	import { browser } from '$app/environment';
+	import { NewMessageStore } from '$houdini';
 	import { mdiSend } from '@mdi/js';
-	import { gql } from '@urql/svelte';
 	import { Button, Helper, Input, Label, P } from 'flowbite-svelte';
 	import { onMount, tick } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';
-	import type { ChatMessage } from './index.js';
+	import type { ChatMessageType } from './index.js';
 
 	export let data;
 
@@ -26,11 +25,11 @@
 
 			isSending = true;
 
-			const newMessage: ChatMessage = {
+			const newMessage: ChatMessageType = {
 				active: false,
 				user: { email: sessionUser!.email },
 				text: message,
-				time: new Date().toDateString(),
+				time: new Date(),
 			};
 
 			messages = [...messages, newMessage];
@@ -49,44 +48,33 @@
 		},
 	});
 
-	subscribe(
-		gql<NewMessageSubscription, NewMessageSubscriptionVariables>`
-			${ChatMessageFragmentDoc}
-
-			subscription NewMessage {
-				messageAdded {
-					...ChatMessage
-				}
-			}
-		`,
-		({ data }) => {
-			if (!data) {
-				return;
-			}
-
-			if (data.messageAdded.user.email == sessionUser?.email) {
-				messages = messages.map((m) => {
-					if (!m.id && m.text == data.messageAdded.text) {
-						m = { ...data.messageAdded, active: true };
-					}
-					return m;
-				});
-			} else {
-				messages = [
-					...messages.filter((m) => m.active),
-					{
-						...data.messageAdded,
-						active: true,
-					},
-					...messages.filter((m) => !m.active),
-				];
-			}
-		},
-	);
-
 	$: ({ messages: rawMessages, sessionUser } = data);
 
-	$: messages = rawMessages.map<ChatMessage>((rawMessage) => ({
+	subscribe(NewMessageStore, ({ data }) => {
+		if (!data) {
+			return;
+		}
+
+		if (data.messageAdded.user.email == sessionUser?.email) {
+			messages = messages.map((m) => {
+				if (!m.id && m.text == data.messageAdded.text) {
+					m = { ...data.messageAdded, active: true };
+				}
+				return m;
+			});
+		} else {
+			messages = [
+				...messages.filter((m) => m.active),
+				{
+					...data.messageAdded,
+					active: true,
+				},
+				...messages.filter((m) => !m.active),
+			];
+		}
+	});
+
+	$: messages = rawMessages.map<ChatMessageType>((rawMessage) => ({
 		id: rawMessage.id,
 		user: {
 			email: rawMessage.user.email,

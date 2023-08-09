@@ -1,0 +1,6 @@
+query GetRolesForNewUser @blocking {
+	getRoles {
+		id
+		text
+	}
+}

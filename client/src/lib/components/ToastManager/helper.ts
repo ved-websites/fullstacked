@@ -67,3 +67,8 @@ export const toastColorMapping: Record<ToastAlertLevel, Toast['$$prop_def']['col
 	warning: 'yellow',
 	error: 'red',
 };
+export const toastBorderColorMapping: Record<ToastAlertLevel, string> = {
+	info: 'border-blue-400',
+	warning: 'border-yellow-400',
+	error: 'border-red-400',
+};

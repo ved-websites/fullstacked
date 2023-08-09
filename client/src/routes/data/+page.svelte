@@ -1,30 +1,19 @@
 <script lang="ts">
-	import type { GetInitialMessagesQuery } from '$/graphql/@generated';
-	import { queryStore } from '$/lib/urql';
-	import { gql } from '@urql/svelte';
 	import { P } from 'flowbite-svelte';
+	import type { PageData } from './$houdini';
 
-	const messages = queryStore({
-		query: gql<GetInitialMessagesQuery>`
-			query GetInitialMessages {
-				messages {
-					text
-					user {
-						email
-					}
-				}
-			}
-		`,
-	});
+	export let data: PageData;
+
+	$: ({ InitialMessages } = data);
 </script>
 
-{#if $messages.fetching}
+{#if $InitialMessages.fetching}
 	<P>Fetching...</P>
-{:else if $messages.error || !$messages.data}
+{:else if $InitialMessages.errors || !$InitialMessages.data}
 	<P color="red">Error!</P>
-	<P color="red">{$messages.error}</P>
+	<P color="red">{$InitialMessages.errors?.length == 1 ? $InitialMessages.errors[0]?.message : 'Multiple errors! Oh no!'}</P>
 {:else}
-	{#each $messages.data.messages as message}
+	{#each $InitialMessages.data.messages as message}
 		<P>{message.user.email} : {message.text}</P>
 	{/each}
 {/if}

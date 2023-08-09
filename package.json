@@ -37,8 +37,9 @@
     },
     "ignorePatterns": [
       "*.cjs",
-      "/build",
-      "/.svelte-kit"
+      "build",
+      ".svelte-kit",
+      "$houdini"
     ]
   },
   "stylelint": {

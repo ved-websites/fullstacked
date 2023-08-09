@@ -5,7 +5,7 @@ export function capitalize(str: string): string {
 }
 
 /**
- * Returns the path created using the env variable `VITE_API_ADDR`.
+ * Returns the path created using the env variable `PUBLIC_API_ADDR`.
  *
  * @param path The remaining path / query objects used to create the api path.
  * @returns The full path desired.

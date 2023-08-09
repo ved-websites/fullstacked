@@ -1,17 +1,17 @@
 <script lang="ts">
 	import type { Role } from '$/graphql/@generated';
 	import { Alert, Button, Heading, Helper, Input, Label, MultiSelect } from 'flowbite-svelte';
-	import type { SelectOptionType } from 'flowbite-svelte/dist/types.js';
+	import type { SelectOptionType } from 'flowbite-svelte/dist/types';
 	import type { SuperForm } from 'sveltekit-superforms/client';
 	import type { userFormSchema } from './userform.schema';
 
 	export let headerText: string;
-	export let roles: Pick<Role, 'id' | 'text'>[];
 	export let superFormData: SuperForm<typeof userFormSchema>;
+	export let roles: Pick<Role, 'id' | 'text'>[];
 
 	$: ({ enhance, form, constraints, errors, message } = superFormData);
 
-	let availableRoles: SelectOptionType[] = roles.map((role) => ({
+	$: availableRoles = roles.map<SelectOptionType>((role) => ({
 		name: role.text,
 		value: role.text,
 	}));

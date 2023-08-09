@@ -1,0 +1,8 @@
+query InitialMessages {
+	messages {
+		text
+		user {
+			email
+		}
+	}
+}
