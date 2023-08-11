@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import { sveltekit } from '@sveltejs/kit/vite';
 import { nodeLoaderPlugin } from '@vavite/node-loader/plugin';
 import houdini from 'houdini/vite';
@@ -9,6 +11,7 @@ export const plugins: UserConfig['plugins'] = [
 		loose: true,
 		root: '.',
 	}),
+	// @ts-ignore
 	houdini(),
 	sveltekit(),
 	nodeLoaderPlugin(),

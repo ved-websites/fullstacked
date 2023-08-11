@@ -5,6 +5,7 @@ import { SelectQL } from '$prisma/select-ql.decorator';
 import { InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { type Session as LuciaSession } from 'lucia';
+import { ErrorMessage } from 'lucia/dist/auth/error';
 import { Public } from './auth.guard';
 import { AuthService } from './auth.service';
 import { LoggedUserOutput } from './dtos/logged-user.output';
@@ -61,7 +62,9 @@ export class AuthResolver {
 			const { LuciaError } = await loadLuciaModule();
 
 			if (error instanceof LuciaError) {
-				if (error.message === 'AUTH_INVALID_PASSWORD') {
+				const userPassError: ErrorMessage[] = ['AUTH_INVALID_PASSWORD', 'AUTH_INVALID_KEY_ID'];
+
+				if (userPassError.includes(error.message)) {
 					throw new UnauthorizedException('Invalid username or password!');
 				}
 			}

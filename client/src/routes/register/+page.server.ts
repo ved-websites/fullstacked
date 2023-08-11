@@ -2,7 +2,7 @@ import { firstNameSchema, lastNameSchema, passwordSchema } from '$/lib/schemas/a
 import { GetUnregisteredUserStore, RegisterNewUserStore } from '$houdini';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
-import { message, superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
 
@@ -58,10 +58,10 @@ export const actions = {
 
 		if (!form.valid) return { form };
 
-		const { data, errors } = await mutate(RegisterNewUserStore, { data: { ...form.data } });
+		const result = await mutate(RegisterNewUserStore, { data: { ...form.data } });
 
-		if (errors || !data) {
-			return message(form, errors?.[0]?.message);
+		if (result.type === 'failure') {
+			return result.kitHandler('formMessage', { form });
 		}
 
 		throw redirect(StatusCodes.SEE_OTHER, '/');

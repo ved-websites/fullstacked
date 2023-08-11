@@ -7,9 +7,10 @@
 	import { Button, Helper, Input, Label, P } from 'flowbite-svelte';
 	import { onMount, tick } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';
+	import type { PageData } from './$houdini.js';
 	import type { ChatMessageType } from './index.js';
 
-	export let data;
+	export let data: PageData;
 
 	let isSending = false;
 	let messageViewElement: HTMLDivElement;
@@ -48,7 +49,7 @@
 		},
 	});
 
-	$: ({ messages: rawMessages, sessionUser } = data);
+	$: ({ GetChatMessages, sessionUser } = data);
 
 	subscribe(NewMessageStore, ({ data }) => {
 		if (!data) {
@@ -74,7 +75,7 @@
 		}
 	});
 
-	$: messages = rawMessages.map<ChatMessageType>((rawMessage) => ({
+	$: messages = ($GetChatMessages.data?.messages ?? []).map<ChatMessageType>((rawMessage) => ({
 		id: rawMessage.id,
 		user: {
 			email: rawMessage.user.email,

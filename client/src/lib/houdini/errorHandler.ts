@@ -1,5 +1,5 @@
 import type { QueryResult } from '$houdini';
-import { fail, redirect, type RequestEvent } from '@sveltejs/kit';
+import { error, fail, redirect, type RequestEvent } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import type { SuperValidated } from 'sveltekit-superforms';
 import { message } from 'sveltekit-superforms/client';
@@ -9,6 +9,7 @@ import { handleLoginRedirect } from '../utils/login';
 type KitHandlerFailure = [type: 'failure', params?: { code?: number; data?: Record<string, unknown> }];
 type KitHandlerFormMessage = [type: 'formMessage', params: { form: SuperValidated<never> }];
 type KitHandlerRedirect = [type: 'redirect', params?: { status?: Parameters<typeof redirect>[0]; location?: `/${string}` }];
+type KitHandlerError = [type: 'error', params?: { status?: Parameters<typeof error>[0]; body?: Parameters<typeof error>[1] }];
 
 export class GraphQLOperationFailure {
 	readonly type = 'failure';
@@ -22,8 +23,9 @@ export class GraphQLOperationFailure {
 	kitHandler(...args: KitHandlerFailure): ReturnType<typeof fail>;
 	kitHandler(...args: KitHandlerFormMessage): ReturnType<typeof message>;
 	kitHandler(...args: KitHandlerRedirect): never;
+	kitHandler(...args: KitHandlerError): never;
 
-	kitHandler(...args: KitHandlerFailure | KitHandlerFormMessage | KitHandlerRedirect): unknown {
+	kitHandler(...args: KitHandlerFailure | KitHandlerFormMessage | KitHandlerRedirect | KitHandlerError): unknown {
 		const [handlerType, params] = args;
 
 		if (handlerType === 'failure') {
@@ -33,7 +35,9 @@ export class GraphQLOperationFailure {
 		if (handlerType === 'formMessage') {
 			const { form } = params ?? {};
 
-			return message(form, {});
+			const errorMessage = this.errors?.at(0)?.message;
+
+			return message(form, errorMessage);
 		}
 
 		if (handlerType === 'redirect') {
@@ -58,6 +62,14 @@ export class GraphQLOperationFailure {
 			}
 
 			throw redirect(status, location);
+		}
+
+		if (handlerType === 'error') {
+			const { status = StatusCodes.BAD_REQUEST, body } = params ?? {};
+
+			const errorMessage = body ?? this.errors?.at(0)?.message;
+
+			throw error(status, errorMessage);
 		}
 
 		throw new Error('woops');

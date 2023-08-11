@@ -9,9 +9,9 @@ export const actions = {
 			gql: { mutate },
 		},
 	}) {
-		const { data, errors } = await mutate(LogoutStore, null);
+		const result = await mutate(LogoutStore, null);
 
-		if (errors || !data) {
+		if (result.type === 'failure') {
 			return;
 		}
 

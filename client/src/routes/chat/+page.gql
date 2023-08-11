@@ -1,4 +1,4 @@
-query GetChatMessages {
+query GetChatMessages @blocking {
 	messages {
 		id
 		text
