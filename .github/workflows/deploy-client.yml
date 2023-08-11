@@ -40,6 +40,9 @@ jobs:
         run: |
           echo "git_head_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
+      - name: Init
+        run: pnpm run init --no-api --no-client
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         id: vercel-action

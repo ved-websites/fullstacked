@@ -95,7 +95,7 @@ jobs:
         run: pnpm install
 
       - name: Init
-        run: pnpm run init --no-api --no-client
+        run: pnpm run init --no-api
 
       - name: Build
         run: pnpm run --filter ./client build
@@ -107,7 +107,9 @@ jobs:
           path: |
             client/.vercel
             client/.svelte-kit
-          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/package.json', 'client/.vercel/**', 'client/.svelte-kit/**') }}
+            client/$houdini
+            api/src/_generated/nestjs-graphql
+          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/package.json', 'client/.vercel/**', 'client/.svelte-kit/**', 'client/$houdini/**', 'api/src/_generated/nestjs-graphql/**') }}
 
   validate:
     name: Validate
@@ -132,16 +134,15 @@ jobs:
       - name: Install packages
         run: pnpm install
 
-      - name: Init
-        run: pnpm run init --no-api --no-client
-
       - name: Fetch Cached Build Folders
         uses: actions/cache@v3
         with:
           path: |
             client/.vercel
             client/.svelte-kit
-          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/package.json', 'client/.vercel/**', 'client/.svelte-kit/**') }}
+            client/$houdini
+            api/src/_generated/nestjs-graphql
+          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/package.json', 'client/.vercel/**', 'client/.svelte-kit/**', 'client/$houdini/**', 'api/src/_generated/nestjs-graphql/**') }}
           restore-keys: |
             client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-
 

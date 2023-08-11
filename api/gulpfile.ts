@@ -2,7 +2,6 @@ import { exec as execNoPromise } from 'child_process';
 import del from 'del';
 import fs from 'fs';
 import gulp, { type TaskFunction } from 'gulp';
-import ts from 'gulp-typescript';
 import util from 'util';
 import { generate as generatePrisma, pushDb, seedDb } from './prisma/utils/functions';
 
@@ -10,10 +9,8 @@ const exec = util.promisify(execNoPromise);
 
 // CONFIGS
 
-const tsProject = ts.createProject('./tsconfig.json');
-
 export const configs = {
-	buildDest: (tsProject.config.compilerOptions?.outDir as string) || './dist',
+	buildDest: './dist',
 	uploadsFolder: './uploads',
 	devPort: 3005,
 	prismaGeneratedFolder: 'src/_generated',
@@ -41,6 +38,10 @@ function setupEnv() {
 	}
 
 	return Promise.resolve();
+}
+
+function generateGraphQLSchema() {
+	return exec('pnpm exec nest start --entryFile="@common/graphql/schema/generate-schema"');
 }
 
 function generatePrismaHelpers() {
@@ -94,6 +95,8 @@ export const cleanDb: TaskFunction = gulp.series(setupEnv, updateDatabaseSchema)
 export const seed: TaskFunction = seedDatabase;
 
 export const cleanSeed: TaskFunction = gulp.series(cleanDb, seedDatabase);
+
+export const setupGQLSchema: TaskFunction = gulp.series(setupPrisma, generateGraphQLSchema);
 
 // Useful commands
 

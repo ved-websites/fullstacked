@@ -2,9 +2,9 @@
 	import type { ClientUser } from '$/hooks.server';
 	import { navElements } from '$/navigation';
 	import { browser } from '$app/environment';
-	import { applyAction, enhance } from '$app/forms';
+	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
-	import { isDrawerHidden, sessionToken } from '$lib/stores';
+	import { isDrawerHidden } from '$lib/stores';
 	import { mdiLogout } from '@mdi/js';
 	import {
 		Avatar,
@@ -26,16 +26,6 @@
 	import { isNavElemVisible } from './utils';
 
 	export let sessionUser: ClientUser;
-
-	const enhanceLogout: Parameters<typeof enhance>[1] = () => {
-		return async ({ result }) => {
-			if (result.type == 'success' || result.type == 'redirect') {
-				sessionToken.set(null);
-			}
-
-			await applyAction(result);
-		};
-	};
 </script>
 
 <Navbar
@@ -53,7 +43,7 @@
 		{#if sessionUser}
 			<Avatar class="cursor-pointer" id="avatar-menu" src="https://static-00.iconduck.com/assets.00/user-icon-2048x2048-ihoxz4vq.png" />
 
-			<form method="POST" action="/?/logout" use:enhance={enhanceLogout}>
+			<form method="POST" action="/?/logout" use:enhance>
 				<Button type="submit" outline={true} class="!p-2 ml-3" size="lg">
 					<Icon path={mdiLogout} />
 				</Button>

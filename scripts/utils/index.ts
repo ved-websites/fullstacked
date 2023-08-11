@@ -18,3 +18,21 @@ export function generateGuid() {
 		})
 		.join('');
 }
+
+export async function progresser(text: string, func: () => unknown | Promise<unknown>) {
+	const perfStart = `${text}-start`;
+	const perfEnd = `${text}-end`;
+
+	performance.mark(perfStart);
+
+	process.stdout.write(`${text}...`);
+
+	await func();
+
+	performance.mark(perfEnd);
+
+	const perf = performance.measure(text, perfStart, perfEnd);
+	const duration = Math.floor(perf.duration);
+
+	console.log(` Done! (${duration} ms)`);
+}

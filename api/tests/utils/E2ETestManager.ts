@@ -2,15 +2,14 @@ import 'lucia/polyfill/node';
 
 import { AuthModule } from '$auth/auth.module';
 import { AuthService } from '$auth/auth.service';
-import { GraphQLModule, schemaPath } from '$graphql/graphql.module';
+import { GraphQLModule } from '$graphql/graphql.module';
+import { ensureGraphQLSchema } from '$graphql/schema/schema.manager';
 import { PrismaModule } from '$prisma/prisma.module';
 import { PrismaService } from '$prisma/prisma.service';
 import { setupViewEngine } from '$utils/setupViewEngine';
 import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { TestingModuleBuilder } from '@nestjs/testing';
-import { existsSync } from 'fs';
 import { User } from 'lucia';
 import supertest from 'supertest';
 import supertestGQL, { Variables } from 'supertest-graphql';
@@ -175,15 +174,5 @@ export class E2ETestManager extends TestManager<E2ETestOptions> {
 		const session = await this.authService.loginUser(users[user].instance!.id);
 
 		this.authToken = session.sessionId;
-	}
-}
-
-export async function ensureGraphQLSchema() {
-	if (!existsSync(schemaPath)) {
-		// If schema file doesn't exist, run app once to generate schema
-		const tempGqlApp = await NestFactory.create(AppModule);
-
-		await tempGqlApp.init();
-		await tempGqlApp.close();
 	}
 }

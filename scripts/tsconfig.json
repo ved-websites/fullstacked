@@ -6,4 +6,12 @@
     "target": "es2022",
   },
   "include": ["./**/*.ts"],
+	"ts-node": {
+		"esm": true,
+		"experimentalSpecifierResolution": "node",
+		"moduleTypes": {
+			"**/*.ts": "esm"
+		},
+		"require": ["tsconfig-paths/register"],
+	},
 }

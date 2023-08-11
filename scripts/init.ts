@@ -3,33 +3,30 @@ import util from 'util';
 import { setupRenovate } from './subscripts/file-changes.js';
 import { setupProjectName } from './subscripts/project-name.js';
 import { setupEnvs } from './subscripts/setup-envs.js';
-import { getCliArgs } from './utils/cli.js';
+import { getCliArgs } from './utils/args.js';
+import { progresser } from './utils/index.js';
 
 const exec = util.promisify(execNoPromise);
+
+const { args } = getCliArgs();
 
 // =====================
 //  Setup Generic Files
 // =====================
 
-process.stdout.write('Setting up renovate...');
-await setupRenovate();
-console.log(' Done!');
+await progresser('Setting up renovate', setupRenovate);
 
 // =====================
-//       Setup Envs
+//      Setup Envs
 // =====================
 
-process.stdout.write('Setting up env vars...');
-await setupEnvs();
-console.log(' Done!');
+await progresser('Setting up env vars', setupEnvs);
 
 // =====================
 //       Init API
 // =====================
 
-const { args } = getCliArgs();
-
-if (!args.some((arg) => arg == '--no-api')) {
+if (!args.some(({ name }) => name == 'no-api')) {
 	try {
 		const { stdout } = await exec(
 			`if [ $(pgrep -f 'pnpm start:debug$' -d ' ') ] ; then echo Killing API process to allow for init to run properly. Remember to start it again / reload at the end! ; fi`,
@@ -43,18 +40,19 @@ if (!args.some((arg) => arg == '--no-api')) {
 	} catch (error) {
 		// Do nothing on api kill error
 	}
-	process.stdout.write('Setting up api...');
 
-	await exec('pnpm run --filter ./api init');
-
-	console.log(' Done!');
+	await progresser('Setting up api', () => exec('pnpm run --filter ./api init'));
+} else if (!args.some(({ name }) => name == 'no-gql')) {
+	// If not setting API, at least check for GraphQL generation
+	await progresser('Setting up GraphQL', () => exec('pnpm run --filter ./api gql:generate'));
 }
-if (!args.some((arg) => arg == '--no-client')) {
-	process.stdout.write('Setting up client...');
 
-	await exec('pnpm run --filter ./client sync');
+// =====================
+//      Init Client
+// =====================
 
-	console.log(' Done!');
+if (!args.some(({ name }) => name == 'no-client')) {
+	await progresser('Setting up client', () => exec('pnpm run --filter ./client sync'));
 }
 
 // No need to setup project name in CI

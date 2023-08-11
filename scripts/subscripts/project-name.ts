@@ -24,9 +24,7 @@ async function getOldProjectName(rl: Interface) {
 		return;
 	}
 
-	const files = fs.readdirSync('.').filter((fn) => fn.endsWith('.code-workspace'));
-
-	const workspaceFile = files[0];
+	const workspaceFile = fs.readdirSync('.').find((fn) => fn.endsWith('.code-workspace'));
 
 	if (!workspaceFile) {
 		throw 'Logic to find workspace file name failed, check your file permissions!';

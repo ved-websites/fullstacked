@@ -12,7 +12,7 @@
     "./client"
   ],
   "scripts": {
-    "init": "ts-node-esm ./scripts/init.ts",
+    "init": "ts-node ./scripts/init.ts",
     "gql": "graphql-codegen --config .graphqlrc.ts",
     "gql:watch": "pnpm gql --watch"
   },
@@ -45,9 +45,6 @@
   "stylelint": {
     "extends": [
       "@v-ed/stylelint-config"
-    ],
-    "ignoreFiles": [
-      "./client/static/theme/**/*"
     ]
   },
   "devDependencies": {

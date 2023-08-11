@@ -5,7 +5,8 @@ import { parseString } from 'set-cookie-parser';
 import type { AppLocals } from './app';
 import { createHoudiniHelpers } from './lib/houdini/helper';
 import { themeCookieName, themes, type Theme } from './lib/stores';
-import { AUTH_COOKIE_NAME } from './lib/utils/auth';
+
+export const AUTH_COOKIE_NAME = 'auth_session';
 
 export async function getAuthUser(query: AppLocals['gql']['query']) {
 	const result = await query(GetUserFromSessionStore);
