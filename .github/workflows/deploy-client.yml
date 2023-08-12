@@ -2,6 +2,10 @@ name: CD - Client
 
 on: workflow_dispatch
 
+env:
+  NODE_VERSION: '18'
+  PNPM_VERSION: 8
+
 jobs:
   deploy:
     name: Deploy
@@ -39,6 +43,19 @@ jobs:
         id: commit-vars
         run: |
           echo "git_head_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'pnpm'
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install packages
+        run: pnpm install
 
       - name: Init
         run: pnpm run init --no-api --no-client
