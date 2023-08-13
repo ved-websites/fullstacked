@@ -5,7 +5,7 @@ import { LocalEnvironmentConfig } from './local-env.validation';
 
 const isCI = process.env.CI == 'true';
 
-const isLocal = isCI || process.env.LOCAL == 'true';
+export const isLocal = isCI || process.env.LOCAL == 'true';
 
 export function getSchema(): typeof LocalEnvironmentConfig | typeof EnvironmentConfig {
 	// If Local (for example, GitHub Actions), use Local Env Config

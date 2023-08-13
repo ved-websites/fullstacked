@@ -1,5 +1,6 @@
+import { isLocal } from '$configs/helpers';
 import { PrismaClient } from '$prisma-client';
-import { Inject, Injectable, OnApplicationBootstrap, OnModuleDestroy } from '@nestjs/common';
+import { Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { PrismaSelect } from '@paljs/plugins';
 import { PubSub } from 'graphql-subscriptions';
 import { withCancel } from '../utils/withCancel';
@@ -12,15 +13,21 @@ export type PrismaSelector = {
 };
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnApplicationBootstrap, OnModuleDestroy {
+export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
 	private eventSubsSelectors: Record<string, unknown[] | undefined> = {};
 
 	constructor(@Inject('PUB_SUB') private pubSub: PubSub) {
 		super();
 	}
 
-	async onApplicationBootstrap(): Promise<void> {
-		await this.$connect();
+	async onModuleInit(): Promise<void> {
+		await this.$connect().catch((error) => {
+			if (isLocal) {
+				return;
+			}
+
+			throw error;
+		});
 	}
 
 	async onModuleDestroy(): Promise<void> {
