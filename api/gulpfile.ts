@@ -41,7 +41,7 @@ function setupEnv() {
 }
 
 function generateGraphQLSchema() {
-	return exec('pnpm exec nest start --entryFile="@common/graphql/schema/generate-schema"');
+	return exec('LOCAL=true pnpm exec nest start --entryFile="@common/graphql/schema/generate-schema"');
 }
 
 function generatePrismaHelpers() {

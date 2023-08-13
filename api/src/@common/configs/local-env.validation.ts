@@ -3,7 +3,7 @@
 import { IsString } from 'class-validator';
 import { EnvironmentConfig } from '../../env.validation';
 
-export class CIEnvironmentConfig extends EnvironmentConfig {
+export class LocalEnvironmentConfig extends EnvironmentConfig {
 	@IsString()
 	override readonly EMAIL_FROM: string = '';
 

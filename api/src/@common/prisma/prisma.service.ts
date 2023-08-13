@@ -1,5 +1,5 @@
 import { PrismaClient } from '$prisma-client';
-import { Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnApplicationBootstrap, OnModuleDestroy } from '@nestjs/common';
 import { PrismaSelect } from '@paljs/plugins';
 import { PubSub } from 'graphql-subscriptions';
 import { withCancel } from '../utils/withCancel';
@@ -12,14 +12,14 @@ export type PrismaSelector = {
 };
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+export class PrismaService extends PrismaClient implements OnApplicationBootstrap, OnModuleDestroy {
 	private eventSubsSelectors: Record<string, unknown[] | undefined> = {};
 
 	constructor(@Inject('PUB_SUB') private pubSub: PubSub) {
 		super();
 	}
 
-	async onModuleInit(): Promise<void> {
+	async onApplicationBootstrap(): Promise<void> {
 		await this.$connect();
 	}
 

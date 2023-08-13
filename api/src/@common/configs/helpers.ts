@@ -1,13 +1,15 @@
 import type { DynamicModule } from '@nestjs/common';
 import { TypedConfigModule, dotenvLoader, selectConfig, type DotenvLoaderOptions } from 'nest-typed-config';
 import { EnvironmentConfig } from '../../env.validation';
-import { CIEnvironmentConfig } from './ci-env.validation';
+import { LocalEnvironmentConfig } from './local-env.validation';
 
 const isCI = process.env.CI == 'true';
 
-export function getSchema(): typeof CIEnvironmentConfig | typeof EnvironmentConfig {
-	// If GitHub Actions, use CI Env Config
-	return isCI ? CIEnvironmentConfig : EnvironmentConfig;
+const isLocal = isCI || process.env.LOCAL == 'true';
+
+export function getSchema(): typeof LocalEnvironmentConfig | typeof EnvironmentConfig {
+	// If Local (for example, GitHub Actions), use Local Env Config
+	return isLocal ? LocalEnvironmentConfig : EnvironmentConfig;
 }
 
 export function createConfigModule(options?: DotenvLoaderOptions): DynamicModule {
@@ -24,7 +26,7 @@ export function createConfigModule(options?: DotenvLoaderOptions): DynamicModule
 
 	const configProviders = [...(module.providers ?? [])];
 
-	if (isCI) {
+	if (isLocal) {
 		configProviders.push({ provide: EnvironmentConfig, useExisting: schema });
 	}
 

@@ -8,7 +8,7 @@ import { GQLGeneratorPrismaService } from './gql-generator-prisma.service';
 	providers: [
 		{
 			provide: PrismaService,
-			useValue: GQLGeneratorPrismaService,
+			useClass: GQLGeneratorPrismaService,
 		},
 	],
 })
