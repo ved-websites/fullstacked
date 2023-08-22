@@ -5,11 +5,10 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { isDrawerHidden } from '$lib/stores';
-	import { mdiLogout } from '@mdi/js';
+	import { mdiChevronDown, mdiLogout } from '@mdi/js';
 	import {
 		Avatar,
 		Button,
-		Chevron,
 		Dropdown,
 		DropdownDivider,
 		DropdownHeader,
@@ -73,12 +72,10 @@
 						{navElement.title}
 					</NavLi>
 				{:else}
-					<NavLi
-						id={navElement.id}
-						class="cursor-pointer"
-						active={navElement.elements.some((navSubElement) => $page.url.pathname == navSubElement.url)}
-					>
-						<Chevron aligned>{navElement.title}</Chevron>
+					{@const isActive = navElement.elements.some((navSubElement) => $page.url.pathname == navSubElement.url)}
+					<NavLi id={navElement.id} class="cursor-pointer flex items-center" active={isActive}>
+						{navElement.title}
+						<Icon path={mdiChevronDown}></Icon>
 					</NavLi>
 					{#if browser}
 						<Dropdown triggeredBy="#{navElement.id}" class="w-44 z-20">

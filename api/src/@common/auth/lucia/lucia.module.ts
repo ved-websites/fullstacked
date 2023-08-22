@@ -1,4 +1,3 @@
-import { ConfigModule } from '$configs/config.module';
 import { getSchema } from '$configs/helpers';
 import { PrismaModule } from '$prisma/prisma.module';
 import { PrismaService } from '$prisma/prisma.service';
@@ -7,7 +6,7 @@ import { LuciaFactory, luciaFactory } from './lucia.factory';
 import { LuciaMiddleware } from './lucia.middleware';
 
 @Module({
-	imports: [PrismaModule, ConfigModule],
+	imports: [PrismaModule],
 	providers: [
 		{
 			provide: LuciaFactory,

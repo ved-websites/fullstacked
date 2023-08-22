@@ -38,6 +38,8 @@ model User {
   firstName String? @map("first_name")
   lastName  String? @map("last_name")
 
+  avatarRef String? @map("avatar_ref")
+
   /// @HideField({ output: true, input: false })
   registerToken String? @unique @map("register_token")
 

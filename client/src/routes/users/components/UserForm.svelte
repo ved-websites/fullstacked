@@ -26,33 +26,39 @@
 <Heading tag="h2">{headerText}</Heading>
 
 <form method="post" use:enhance>
-	<div class="flex flex-col gap-3 md:grid-cols-2">
+	<div class="grid gap-3">
+		<slot name="above" />
+
 		<div>
-			<Label for="email" class="mb-2">Email</Label>
-			<Input let:props>
-				<input {...props} type="email" name="email" placeholder="example@example.com" bind:value={$form.email} {...$constraints.email} />
-			</Input>
-			{#if $errors.email}<Helper color="red">{$errors.email}</Helper>{/if}
+			<Label>
+				<span> Email </span>
+				<Input class="mt-2" type="email" placeholder="example@example.com" bind:value={$form.email} {...$constraints.email} />
+				{#if $errors.email}<Helper class="mt-2" color="red">{$errors.email}</Helper>{/if}
+			</Label>
+		</div>
+		<div class="grid gap-3 sm:grid-cols-2">
+			<div>
+				<Label>
+					<span> First Name </span>
+					<Input class="mt-2" type="text" bind:value={$form.firstName} {...$constraints.firstName} />
+					{#if $errors.firstName}<Helper class="mt-2" color="red">{$errors.firstName}</Helper>{/if}
+				</Label>
+			</div>
+			<div>
+				<Label>
+					<span> Last Name </span>
+					<Input class="mt-2" type="text" bind:value={$form.lastName} {...$constraints.lastName} />
+					{#if $errors.lastName}<Helper class="mt-2" color="red">{$errors.lastName}</Helper>{/if}
+				</Label>
+			</div>
 		</div>
 		<div>
-			<Label for="firstName" class="mb-2">First Name</Label>
-			<Input let:props>
-				<input {...props} type="text" name="firstName" bind:value={$form.firstName} {...$constraints.firstName} />
-			</Input>
-			{#if $errors.firstName}<Helper color="red">{$errors.firstName}</Helper>{/if}
+			<Label>Roles</Label>
+			<MultiSelect class="mt-2" items={availableRoles} bind:value={$form.roles} />
+			{#if $errors.roles}<Helper class="mt-2" color="red">{$errors.roles}</Helper>{/if}
 		</div>
-		<div>
-			<Label for="lastName" class="mb-2">Last Name</Label>
-			<Input let:props>
-				<input {...props} type="text" name="lastName" bind:value={$form.lastName} {...$constraints.lastName} />
-			</Input>
-			{#if $errors.lastName}<Helper color="red">{$errors.lastName}</Helper>{/if}
-		</div>
-		<div>
-			<Label for="roles" class="mb-2">Roles</Label>
-			<MultiSelect items={availableRoles} bind:value={$form.roles} />
-			{#if $errors.roles}<Helper color="red">{$errors.roles}</Helper>{/if}
-		</div>
+
+		<slot name="below" />
 
 		<Button type="submit" class="mt-5">Submit</Button>
 	</div>

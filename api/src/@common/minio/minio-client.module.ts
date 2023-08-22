@@ -1,13 +1,12 @@
-import { ConfigModule } from '$configs/config.module';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import { MinioModule } from 'nestjs-minio-client';
 import { EnvironmentConfig } from '~/env.validation';
+import { MinioClientService } from './minio-client.service';
 
 @Module({
 	imports: [
-		ConfigModule,
 		MinioModule.registerAsync({
-			imports: [ConfigModule],
 			useFactory: async (configService: EnvironmentConfig) => ({
 				endPoint: configService.MINIO_ENDPOINT,
 				port: configService.MINIO_PORT,
@@ -18,6 +17,11 @@ import { EnvironmentConfig } from '~/env.validation';
 			inject: [EnvironmentConfig],
 		}),
 	],
-	providers: [EnvironmentConfig],
+	providers: [MinioClientService],
+	exports: [MinioClientService],
 })
-export class MinioClientModule {}
+export class MinioClientModule implements NestModule {
+	configure(consumer: MiddlewareConsumer) {
+		consumer.apply(graphqlUploadExpress({ maxFileSize: 1000000, maxFiles: 10 })).forRoutes('/graphql');
+	}
+}

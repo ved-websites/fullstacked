@@ -4,7 +4,6 @@ import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
 import { InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { type Session as LuciaSession } from 'lucia';
 import { ErrorMessage } from 'lucia/dist/auth/error';
 import { Public } from './auth.guard';
 import { AuthService } from './auth.service';
@@ -16,7 +15,7 @@ import { RenewedSessionOutput } from './dtos/renewed-session.output';
 import { UnregisteredUserOutput } from './dtos/unregistered-user.output';
 import { LuciaAuth, LuciaAuthRequest } from './lucia/lucia.decorator';
 import { loadLuciaModule } from './lucia/modules-compat';
-import { AuthSession } from './session.decorator';
+import { AuthSession, LuciaSession } from './session.decorator';
 
 @Resolver()
 export class AuthResolver {
