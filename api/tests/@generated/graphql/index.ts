@@ -206,7 +206,7 @@ export type MessageWhereUniqueInput = {
 export type Mutation = {
   addMessage?: Maybe<Message>;
   createUser: CreateUserOutput;
-  deleteAvatar?: Maybe<SuccessOutput>;
+  deleteAvatar: Scalars['Boolean']['output'];
   deleteUser?: Maybe<GetUserOutput>;
   editUser: User;
   login: LoggedUserOutput;
@@ -561,10 +561,6 @@ export type Subscription = {
 
 export type SubscriptionMessageAddedArgs = {
   where?: InputMaybe<MessageWhereInput>;
-};
-
-export type SuccessOutput = {
-  success: Scalars['Boolean']['output'];
 };
 
 export type UnregisteredUserOutput = {

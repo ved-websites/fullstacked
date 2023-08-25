@@ -54,7 +54,7 @@ export class AvatarService {
 
 	async deleteUserImage(user: User) {
 		if (!user.avatarRef) {
-			return;
+			return false;
 		}
 
 		await this.minioClientService.delete(user.avatarRef, AVATAR_BUCKET_NAME);
@@ -67,5 +67,7 @@ export class AvatarService {
 				id: user.id,
 			},
 		});
+
+		return true;
 	}
 }

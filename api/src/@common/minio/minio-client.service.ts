@@ -3,6 +3,7 @@ import * as crypto from 'crypto';
 import { FileUpload } from 'graphql-upload/Upload.js';
 import { MinioService } from 'nestjs-minio-client';
 import { EnvironmentConfig } from '~/env.validation';
+import { GRAPHQL_MAX_FILE_COUNT, GRAPHQL_MAX_FILE_SIZE_MB } from './minio-client.module';
 
 @Injectable()
 export class MinioClientService {
@@ -40,6 +41,20 @@ export class MinioClientService {
 	}
 
 	public async upload(file: FileUpload, bucketName: string) {
+		const fileStream = (() => {
+			try {
+				return file.createReadStream();
+			} catch (error) {
+				throw new HttpException(
+					`Invalid file! Make sure that you are sending less than ${GRAPHQL_MAX_FILE_COUNT} files and that the files are less than ${GRAPHQL_MAX_FILE_SIZE_MB} MB.`,
+					HttpStatus.BAD_REQUEST,
+					{
+						cause: error,
+					},
+				);
+			}
+		})();
+
 		const timestamp = Date.now().toString();
 		const hashedFileName = crypto.createHash('md5').update(timestamp).digest('hex');
 		const extension = file.filename.substring(file.filename.lastIndexOf('.'), file.filename.length);
@@ -52,7 +67,7 @@ export class MinioClientService {
 		await this.verifyBucketExistence(appBucketName);
 
 		try {
-			await this.client.putObject(appBucketName, fileName, file.createReadStream(), {
+			await this.client.putObject(appBucketName, fileName, fileStream, {
 				'Content-Type': file.mimetype,
 			});
 		} catch (error) {
