@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ClientUser } from '$/hooks.server';
+	import { getAvatarImageUrl } from '$/lib/utils/images';
 	import { navElements } from '$/navigation';
 	import { browser } from '$app/environment';
 	import { enhance } from '$app/forms';
@@ -40,7 +41,7 @@
 	<div class="flex items-center md:order-2">
 		<DarkMode class="mr-3 hidden md:flex" />
 		{#if sessionUser}
-			<Avatar class="cursor-pointer" id="avatar-menu" src="https://static-00.iconduck.com/assets.00/user-icon-2048x2048-ihoxz4vq.png" />
+			<Avatar class="cursor-pointer" id="avatar-menu" src={getAvatarImageUrl(sessionUser.avatarRef)} />
 
 			<form method="POST" action="/?/logout" use:enhance>
 				<Button type="submit" outline={true} class="!p-2 ml-3" size="lg">

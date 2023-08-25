@@ -5,6 +5,7 @@
 	import { Helper, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import UserForm from '../components/UserForm.svelte';
+	import { ACCEPTED_AVATAR_TYPES } from '../components/userform.schema';
 
 	export let data;
 
@@ -12,7 +13,8 @@
 
 	$: ({ errors } = superFormData);
 
-	let profilePicture: File | undefined;
+	let inputRef: HTMLInputElement;
+	let avatarFile: File | undefined;
 
 	const handlePictureDrop = (event: DragEvent) => {
 		event.preventDefault();
@@ -23,9 +25,18 @@
 			return;
 		}
 
-		const file = files[0] instanceof DataTransferItem ? files[0].getAsFile()! : files[0];
+		const file = files[0] instanceof DataTransferItem ? files[0].getAsFile() : files[0];
 
-		profilePicture = file;
+		if (!file) {
+			return;
+		}
+
+		avatarFile = file;
+
+		const dT = new DataTransfer();
+
+		dT.items.add(avatarFile);
+		inputRef.files = dT.files;
 	};
 
 	const handlePictureChange = (event: Event) => {
@@ -36,7 +47,7 @@
 			return;
 		}
 
-		profilePicture = files[0];
+		avatarFile = files[0];
 	};
 </script>
 
@@ -51,23 +62,27 @@
 				event.preventDefault();
 			}}
 			on:change={handlePictureChange}
-			name="profile-picture"
+			name="avatar"
 			class="mt-2"
+			accept={ACCEPTED_AVATAR_TYPES.map((type) => `image/${type}`).join(' ')}
+			bind:input={inputRef}
 			let:isDraggingOver
 		>
-			{#if !profilePicture}
+			{#if !avatarFile}
 				<Icon path={mdiUpload}></Icon>
 				<p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-				<p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+				<p class="text-xs text-gray-500 dark:text-gray-400">
+					Accepted formats: {new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_AVATAR_TYPES)}.
+				</p>
 				{#if isDraggingOver}
 					<p>Yes, right here!</p>
 				{/if}
 			{:else}
-				<img src={URL.createObjectURL(profilePicture)} alt="user profile" class="max-h-64" />
+				<img src={URL.createObjectURL(avatarFile)} alt="user profile" class="max-h-64" />
 			{/if}
 		</VDropzone>
-		{#if $errors.profilePicture}
-			<Helper class="mt-2" color="red">{$errors.profilePicture}</Helper>
+		{#if $errors.avatarFile}
+			<Helper class="mt-2" color="red">{$errors.avatarFile}</Helper>
 		{/if}
 	</div>
 </UserForm>

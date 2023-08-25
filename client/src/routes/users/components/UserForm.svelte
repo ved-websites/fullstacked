@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Role } from '$/graphql/@generated';
-	import { Alert, Button, Heading, Helper, Input, Label, MultiSelect } from 'flowbite-svelte';
+	import { Button, Heading, Helper, Input, Label, MultiSelect } from 'flowbite-svelte';
 	import type { SelectOptionType } from 'flowbite-svelte/dist/types';
 	import type { SuperForm } from 'sveltekit-superforms/client';
 	import type { userFormSchema } from './userform.schema';
@@ -9,7 +9,7 @@
 	export let superFormData: SuperForm<typeof userFormSchema>;
 	export let roles: Pick<Role, 'id' | 'text'>[];
 
-	$: ({ enhance, form, constraints, errors, message } = superFormData);
+	$: ({ enhance, form, constraints, errors } = superFormData);
 
 	$: availableRoles = roles.map<SelectOptionType>((role) => ({
 		name: role.text,
@@ -17,15 +17,9 @@
 	}));
 </script>
 
-{#if $message}
-	<Alert color="red" class="mb-5">
-		{$message}
-	</Alert>
-{/if}
-
 <Heading tag="h2">{headerText}</Heading>
 
-<form method="post" use:enhance>
+<form method="post" enctype="multipart/form-data" use:enhance>
 	<div class="grid gap-3">
 		<slot name="above" />
 

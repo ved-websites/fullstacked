@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
 
 	export let value: string = '';
@@ -7,7 +6,7 @@
 	export let defaultClass: string =
 		'flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600';
 
-	let input: HTMLInputElement;
+	export let input: HTMLInputElement;
 	let isDraggingOver: boolean = false;
 
 	function keydown(ev: KeyboardEvent) {
@@ -17,18 +16,11 @@
 		}
 	}
 
-	type EventOverrides = {
-		dragenter: DragEvent;
-		dragleave: DragEvent;
-	};
-
-	const dispatch = createEventDispatcher<EventOverrides>();
-
-	function forwardDragWithAddition(eventName: keyof EventOverrides, event: EventOverrides[typeof eventName], func: () => unknown) {
-		dispatch(eventName, event);
-		if (!event.defaultPrevented) {
-			func();
-		}
+	function dragIn() {
+		isDraggingOver = true;
+	}
+	function dragOut() {
+		isDraggingOver = false;
 	}
 </script>
 
@@ -40,19 +32,21 @@
 	on:mouseenter
 	on:mouseleave
 	on:mouseover
-	on:dragenter={(event) =>
-		forwardDragWithAddition('dragenter', event, () => {
-			isDraggingOver = true;
-		})}
-	on:dragleave={(event) =>
-		forwardDragWithAddition('dragleave', event, () => {
-			isDraggingOver = false;
-		})}
+	on:dragenter
+	on:dragleave
 	on:dragover
 	on:drop
 	type="button"
 >
-	<label class="w-full h-full flex justify-center cursor-pointer" tabIndex="0">
+	<label
+		class="w-full h-full flex justify-center cursor-pointer"
+		on:dragenter={dragIn}
+		on:dragleave={dragOut}
+		on:dragexit={dragOut}
+		on:dragend={dragOut}
+		on:drop={dragOut}
+		tabIndex="0"
+	>
 		<div class="flex-initial flex-col self-center max-w-full max-h-full">
 			<slot {isDraggingOver} />
 		</div>
@@ -94,7 +88,7 @@
   -->
 
 <style>
-	button * {
+	button label * {
 		pointer-events: none;
 	}
 </style>

@@ -13,11 +13,11 @@ export class AvatarService {
 		private prisma: PrismaService,
 	) {}
 
-	readonly acceptedFileExtension: string[] = ['jpeg', 'png'];
+	readonly acceptedFileExtension: string[] = ['jpeg', 'jpg', 'png', 'webp'];
 
 	async uploadImage(file: FileUpload, user: User) {
 		if (!this.acceptedFileExtension.some((extension) => file.filename.endsWith(extension))) {
-			throw new HttpException('Image type not supported', HttpStatus.BAD_REQUEST);
+			throw new HttpException('Image type not supported.', HttpStatus.BAD_REQUEST);
 		}
 
 		const uploadedImage = await this.minioClientService.upload(file, AVATAR_BUCKET_NAME);

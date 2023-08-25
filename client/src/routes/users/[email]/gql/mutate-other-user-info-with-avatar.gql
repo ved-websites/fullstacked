@@ -1,0 +1,19 @@
+mutation EditOtherUserInfoWithAvatar(
+	$oldEmail: String!
+	$email: String!
+	$firstName: String
+	$lastName: String
+	$roles: [RoleWhereUniqueInput!]
+	$avatar: Upload!
+) {
+	editUser(
+		where: { email: $oldEmail }
+		data: { email: { set: $email }, firstName: { set: $firstName }, lastName: { set: $lastName }, roles: { set: $roles } }
+	) {
+		email
+		firstName
+	}
+	uploadAvatar(avatar: $avatar) {
+		fileName
+	}
+}

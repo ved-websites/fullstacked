@@ -6,5 +6,6 @@ query GetUserFromSession {
 		roles {
 			text
 		}
+		avatarRef
 	}
 }
