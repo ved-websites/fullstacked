@@ -1,5 +1,5 @@
 import { setupViewEngine } from '$utils/setupViewEngine';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import cookieParser from 'cookie-parser';
@@ -24,7 +24,7 @@ async function bootstrap(): Promise<void> {
 
 	await app.listen(port);
 
-	console.log(`Server launched on port ${port}!`);
+	Logger.verbose(`Server launched on port ${port}!`);
 }
 
 bootstrap();
