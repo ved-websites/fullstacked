@@ -1,13 +1,8 @@
-import {
-	EditOtherUserInfoStore,
-	EditOtherUserInfoWithAvatarStore,
-	GetEditableUserStore,
-	type EditOtherUserInfo$input,
-	type EditOtherUserInfoWithAvatar$input,
-} from '$houdini';
-import { redirect } from '@sveltejs/kit';
+import { createToasts } from '$/lib/components/ToastManager/helper';
+import { DeleteUserProfilePictureStore, EditOtherUserInfoStore, EditUserProfilePictureStore, GetEditableUserStore } from '$houdini';
+import { fail, redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
-import { setError, superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms/server';
 import { userFormSchema } from '../components/userform.schema';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -45,51 +40,78 @@ export const load = (async ({
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({
+	user: async ({
 		request,
 		locals: {
 			gql: { mutate },
 		},
 		params: { email: editableUserEmail },
 	}) => {
-		const formData = await request.formData();
-		const form = await superValidate(formData, userFormSchema);
+		const form = await superValidate(request, userFormSchema);
 
 		if (!form.valid) return { form };
 
 		const { email, firstName, lastName, roles } = form.data;
-		const avatarFile = formData.get('avatar');
 
-		const [EditUserStore, variables] = (():
-			| [typeof EditOtherUserInfoStore, EditOtherUserInfo$input]
-			| [typeof EditOtherUserInfoWithAvatarStore, EditOtherUserInfoWithAvatar$input] => {
-			const variables = {
-				oldEmail: editableUserEmail,
-				email,
-				firstName,
-				lastName,
-				roles: roles.map((role) => ({
-					text: role,
-				})),
-			};
-
-			if (avatarFile instanceof File && avatarFile.size > 0) {
-				(variables as EditOtherUserInfoWithAvatar$input).avatar = avatarFile;
-
-				return [EditOtherUserInfoWithAvatarStore, variables];
-			}
-
-			return [EditOtherUserInfoStore, variables];
-		})();
-
-		const result = await mutate(EditUserStore, variables);
+		const result = await mutate(EditOtherUserInfoStore, {
+			oldEmail: editableUserEmail,
+			email,
+			firstName,
+			lastName,
+			roles: roles.map((role) => ({
+				text: role,
+			})),
+		});
 
 		if (result.type === 'failure') {
-			return result.kitHandler('custom', ({ errors }) => {
-				return setError(form, 'avatarFile', errors?.at(0)?.message ?? 'Unknown error');
-			});
+			return result.kitHandler('error');
 		}
 
 		throw redirect(StatusCodes.SEE_OTHER, '/users');
+	},
+	profilePicture: async ({
+		request,
+		locals: {
+			gql: { mutate },
+			sessionUser,
+		},
+	}) => {
+		const formData = await request.formData();
+
+		const avatarFile = formData.get('avatar');
+
+		if (!(avatarFile instanceof File)) {
+			const toasts = createToasts([
+				{
+					text: 'Missing avatar file!',
+				},
+			]);
+
+			return fail(StatusCodes.BAD_REQUEST, { toasts });
+		}
+
+		const result = await mutate(EditUserProfilePictureStore, {
+			profilePicture: avatarFile,
+		});
+
+		if (result.type === 'failure') {
+			return result.kitHandler('error');
+		}
+
+		throw redirect(StatusCodes.SEE_OTHER, `/users/${sessionUser!.email}`);
+	},
+	deleteProfilePicture: async ({
+		locals: {
+			gql: { mutate },
+			sessionUser,
+		},
+	}) => {
+		const result = await mutate(DeleteUserProfilePictureStore, null);
+
+		if (result.type === 'failure') {
+			return result.kitHandler('error');
+		}
+
+		throw redirect(StatusCodes.SEE_OTHER, `/users/${sessionUser!.email}`);
 	},
 } satisfies Actions;

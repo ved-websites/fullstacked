@@ -1,0 +1,5 @@
+mutation EditUserProfilePicture($profilePicture: Upload!) {
+	uploadAvatar(avatar: $profilePicture) {
+		fileName
+	}
+}

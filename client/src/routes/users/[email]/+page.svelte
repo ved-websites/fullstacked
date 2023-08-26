@@ -1,16 +1,20 @@
 <script lang="ts">
 	import Icon from '$/lib/components/Icon.svelte';
 	import VDropzone from '$/lib/components/flowbite-custom/VDropzone.svelte';
+	import { getAvatarImageUrl } from '$/lib/utils/images';
+	import { browser } from '$app/environment';
+	import { enhance } from '$app/forms';
 	import { mdiUpload } from '@mdi/js';
-	import { Helper, Label } from 'flowbite-svelte';
+	import { Button, Heading, Helper, Hr, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import UserForm from '../components/UserForm.svelte';
 	import { ACCEPTED_AVATAR_TYPES } from '../components/userform.schema';
 
 	export let data;
 
-	const superFormData = superForm(data.form, { dataType: 'json' });
+	$: currentAvatarRef = data.sessionUser?.avatarRef;
 
+	$: superFormData = superForm(data.form, { dataType: 'json' });
 	$: ({ errors } = superFormData);
 
 	let inputRef: HTMLInputElement;
@@ -51,8 +55,11 @@
 	};
 </script>
 
-<UserForm headerText="Editing user {data.editableUser?.email}" {superFormData} roles={data.roles}>
-	<div slot="below">
+<Heading tag="h2" class="overflow-x-clip text-ellipsis">Editing user {data.editableUser?.email}</Heading>
+
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-y-5 sm:gap-10">
+	<form method="post" enctype="multipart/form-data" use:enhance class="col-span-1 order-2 sm:order-none">
+		<Hr classHr="sm:hidden" />
 		<Label>Profile Picture</Label>
 		<VDropzone
 			id="dropzone"
@@ -64,25 +71,47 @@
 			on:change={handlePictureChange}
 			name="avatar"
 			class="mt-2"
-			accept={ACCEPTED_AVATAR_TYPES.map((type) => `image/${type}`).join(' ')}
+			accept={ACCEPTED_AVATAR_TYPES.map((type) => `image/${type}`).join(', ')}
 			bind:input={inputRef}
 			let:isDraggingOver
 		>
-			{#if !avatarFile}
-				<Icon path={mdiUpload}></Icon>
-				<p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-				<p class="text-xs text-gray-500 dark:text-gray-400">
-					Accepted formats: {new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_AVATAR_TYPES)}.
-				</p>
-				{#if isDraggingOver}
-					<p>Yes, right here!</p>
-				{/if}
-			{:else}
-				<img src={URL.createObjectURL(avatarFile)} alt="user profile" class="max-h-64" />
-			{/if}
+			<div class="grid grid-cols-2 p-5 gap-3">
+				<div class="flex flex-col justify-center items-center">
+					<Icon path={mdiUpload}></Icon>
+					<p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+					<p class="text-xs text-gray-500 dark:text-gray-400">
+						Accepted formats: {new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_AVATAR_TYPES)}.
+					</p>
+					{#if isDraggingOver}
+						<p>Yes, right here!</p>
+					{/if}
+				</div>
+
+				<div class="flex justify-center items-center">
+					<img
+						src={avatarFile ? URL.createObjectURL(avatarFile) : getAvatarImageUrl(currentAvatarRef)}
+						alt="user profile"
+						class="max-h-36"
+					/>
+				</div>
+			</div>
+			<!-- <Icon path={mdiUpload}></Icon>
+			<p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+			<p class="text-xs text-gray-500 dark:text-gray-400">
+				Accepted formats: {new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_AVATAR_TYPES)}.
+			</p>
+			{#if isDraggingOver}
+				<p>Yes, right here!</p>
+			{/if} -->
 		</VDropzone>
 		{#if $errors.avatarFile}
 			<Helper class="mt-2" color="red">{$errors.avatarFile}</Helper>
 		{/if}
-	</div>
-</UserForm>
+
+		<div class="mt-5 grid grid-cols-2 gap-5">
+			<Button type="submit" formaction="?/deleteProfilePicture" disabled={!currentAvatarRef} color="red">Delete</Button>
+			<Button type="submit" formaction="?/profilePicture" disabled={!(!browser || avatarFile)}>Submit Profile Picture</Button>
+		</div>
+	</form>
+	<UserForm action="?/user" {superFormData} roles={data.roles} class="col-span-2 order-1 sm:order-none" />
+</div>

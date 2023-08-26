@@ -1,11 +1,10 @@
 <script lang="ts">
 	import type { Role } from '$/graphql/@generated';
-	import { Button, Heading, Helper, Input, Label, MultiSelect } from 'flowbite-svelte';
+	import { Button, Helper, Input, Label, MultiSelect } from 'flowbite-svelte';
 	import type { SelectOptionType } from 'flowbite-svelte/dist/types';
 	import type { SuperForm } from 'sveltekit-superforms/client';
 	import type { userFormSchema } from './userform.schema';
 
-	export let headerText: string;
 	export let superFormData: SuperForm<typeof userFormSchema>;
 	export let roles: Pick<Role, 'id' | 'text'>[];
 
@@ -17,9 +16,7 @@
 	}));
 </script>
 
-<Heading tag="h2">{headerText}</Heading>
-
-<form method="post" enctype="multipart/form-data" use:enhance>
+<form method="post" use:enhance {...$$restProps}>
 	<div class="grid gap-3">
 		<slot name="above" />
 
