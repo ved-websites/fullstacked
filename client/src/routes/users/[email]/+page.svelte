@@ -12,10 +12,11 @@
 
 	export let data;
 
-	$: currentAvatarRef = data.sessionUser?.avatarRef;
-
 	$: superFormData = superForm(data.form, { dataType: 'json' });
 	$: ({ errors } = superFormData);
+
+	$: currentAvatarRef = data.sessionUser?.avatarRef;
+	$: !currentAvatarRef && (avatarFile = undefined);
 
 	let inputRef: HTMLInputElement;
 	let avatarFile: File | undefined;
