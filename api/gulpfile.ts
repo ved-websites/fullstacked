@@ -41,7 +41,12 @@ function setupEnv() {
 }
 
 function generateGraphQLSchema() {
-	return exec('LOCAL=true pnpm exec nest start --entryFile="@common/graphql/schema/generate-schema"');
+	return exec('pnpm exec nest start --entryFile="@common/graphql/schema/generate-schema"', {
+		env: {
+			...process.env,
+			LOCAL: 'true',
+		},
+	});
 }
 
 function generatePrismaHelpers() {
@@ -100,4 +105,4 @@ export const setupGQLSchema: TaskFunction = gulp.series(setupPrisma, generateGra
 
 // Useful commands
 
-export { deleteDist, setupEnv };
+export { deleteDist, generateGraphQLSchema, setupEnv };
