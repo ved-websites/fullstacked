@@ -39,13 +39,13 @@ export type CreateUserOutput = {
 
 export type GetUserOutput = {
   _count: UserCount;
-  avatarRef?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
   messages?: Maybe<Array<Message>>;
+  profilePictureRef?: Maybe<Scalars['String']['output']>;
   roles: Array<Role>;
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -206,7 +206,7 @@ export type MessageWhereUniqueInput = {
 export type Mutation = {
   addMessage?: Maybe<Message>;
   createUser: CreateUserOutput;
-  deleteAvatar: Scalars['Boolean']['output'];
+  deleteProfilePicture: Scalars['Boolean']['output'];
   deleteUser?: Maybe<GetUserOutput>;
   editUser: User;
   login: LoggedUserOutput;
@@ -214,7 +214,7 @@ export type Mutation = {
   register: Session;
   renewSession?: Maybe<RenewedSessionOutput>;
   updateMessage: Message;
-  uploadAvatar: UploadAvatarOutput;
+  uploadProfilePicture: UploadProfilePictureOutput;
 };
 
 
@@ -254,8 +254,8 @@ export type MutationUpdateMessageArgs = {
 };
 
 
-export type MutationUploadAvatarArgs = {
-  avatar: Scalars['Upload']['input'];
+export type MutationUploadProfilePictureArgs = {
+  profilePicture: Scalars['Upload']['input'];
 };
 
 export type NestedIntFilter = {
@@ -572,20 +572,20 @@ export type UnregisteredUserOutput = {
   lastName?: Maybe<Scalars['String']['output']>;
 };
 
-export type UploadAvatarOutput = {
-  /** file name of the uploaded avatar */
+export type UploadProfilePictureOutput = {
+  /** file name of the uploaded profile picture */
   fileName: Scalars['String']['output'];
 };
 
 export type User = {
   _count: UserCount;
-  avatarRef?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
   messages?: Maybe<Array<Message>>;
+  profilePictureRef?: Maybe<Scalars['String']['output']>;
   roles?: Maybe<Array<Role>>;
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -599,21 +599,21 @@ export type UserCount = {
 
 export type UserCountAggregate = {
   _all: Scalars['Int']['output'];
-  avatarRef: Scalars['Int']['output'];
   createdAt: Scalars['Int']['output'];
   email: Scalars['Int']['output'];
   firstName: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
   lastName: Scalars['Int']['output'];
+  profilePictureRef: Scalars['Int']['output'];
   updatedAt: Scalars['Int']['output'];
 };
 
 export type UserCreateInput = {
-  avatarRef?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   firstName?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutUserInput>;
+  profilePictureRef?: InputMaybe<Scalars['String']['input']>;
   registerToken?: InputMaybe<Scalars['String']['input']>;
   roles?: InputMaybe<RoleCreateNestedManyWithoutUsersInput>;
 };
@@ -625,22 +625,22 @@ export type UserListRelationFilter = {
 };
 
 export type UserMaxAggregate = {
-  avatarRef?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
+  profilePictureRef?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type UserMinAggregate = {
-  avatarRef?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   firstName?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
+  profilePictureRef?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
@@ -650,11 +650,11 @@ export type UserRelationFilter = {
 };
 
 export type UserUpdateInput = {
-  avatarRef?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   firstName?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   lastName?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutUserNestedInput>;
+  profilePictureRef?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   registerToken?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   roles?: InputMaybe<RoleUpdateManyWithoutUsersNestedInput>;
 };
@@ -663,11 +663,11 @@ export type UserWhereInput = {
   AND?: InputMaybe<Array<UserWhereInput>>;
   NOT?: InputMaybe<Array<UserWhereInput>>;
   OR?: InputMaybe<Array<UserWhereInput>>;
-  avatarRef?: InputMaybe<StringNullableFilter>;
   email?: InputMaybe<StringFilter>;
   firstName?: InputMaybe<StringNullableFilter>;
   lastName?: InputMaybe<StringNullableFilter>;
   messages?: InputMaybe<MessageListRelationFilter>;
+  profilePictureRef?: InputMaybe<StringNullableFilter>;
   registerToken?: InputMaybe<StringNullableFilter>;
   roles?: InputMaybe<RoleListRelationFilter>;
 };

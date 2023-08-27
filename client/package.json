@@ -21,8 +21,9 @@
 		"vitest": "vitest",
 		"playwright:test": "npm-run-all -s build preview",
 		"validate": "npm-run-all -s validate:*",
-		"validate:svelte": "pnpm run sync && svelte-check --tsconfig ./tsconfig.json",
+		"validate:svelte": "npm-run-all -s sync check:svelte",
 		"validate:ts": "tsc --noEmit",
+		"check:svelte": "svelte-check --tsconfig ./tsconfig.json",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
 	},

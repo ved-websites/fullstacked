@@ -78,12 +78,12 @@ export const actions = {
 	}) => {
 		const formData = await request.formData();
 
-		const avatarFile = formData.get('avatar');
+		const profilePictureFile = formData.get('profile-picture');
 
-		if (!(avatarFile instanceof File)) {
+		if (!(profilePictureFile instanceof File)) {
 			const toasts = createToasts([
 				{
-					text: 'Missing avatar file!',
+					text: 'Missing profile picture file!',
 				},
 			]);
 
@@ -91,7 +91,7 @@ export const actions = {
 		}
 
 		const result = await mutate(EditUserProfilePictureStore, {
-			profilePicture: avatarFile,
+			profilePicture: profilePictureFile,
 		});
 
 		if (result.type === 'failure') {

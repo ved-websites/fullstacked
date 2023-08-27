@@ -4,10 +4,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FileUpload } from 'graphql-upload/Upload.js';
 import { User } from 'lucia';
 
-export const AVATAR_BUCKET_NAME = 'avatars';
+export const PROFILE_PICTURE_BUCKET_NAME = 'profile-pictures';
 
 @Injectable()
-export class AvatarService {
+export class ProfilePictureService {
 	constructor(
 		private minioClientService: MinioClientService,
 		private prisma: PrismaService,
@@ -20,48 +20,48 @@ export class AvatarService {
 			throw new HttpException('Image type not supported.', HttpStatus.BAD_REQUEST);
 		}
 
-		const uploadedImage = await this.minioClientService.upload(file, AVATAR_BUCKET_NAME);
+		const uploadedImage = await this.minioClientService.upload(file, PROFILE_PICTURE_BUCKET_NAME);
 
 		try {
 			await this.prisma.user.update({
 				data: {
-					avatarRef: uploadedImage.fileName,
+					profilePictureRef: uploadedImage.fileName,
 				},
 				where: {
 					id: user.id,
 				},
 			});
 		} catch (error) {
-			await this.minioClientService.delete(uploadedImage.fileName, AVATAR_BUCKET_NAME);
+			await this.minioClientService.delete(uploadedImage.fileName, PROFILE_PICTURE_BUCKET_NAME);
 		}
 
 		return uploadedImage;
 	}
 
-	async getUserImage({ avatarRef }: User) {
-		if (!avatarRef) {
+	async getUserImage({ profilePictureRef }: User) {
+		if (!profilePictureRef) {
 			return;
 		}
 
-		return this.getImage(avatarRef);
+		return this.getImage(profilePictureRef);
 	}
 
-	async getImage(avatarRef: string) {
-		const avatarFile = await this.minioClientService.get(avatarRef, AVATAR_BUCKET_NAME);
+	async getImage(profilePictureRef: string) {
+		const profilePictureFile = await this.minioClientService.get(profilePictureRef, PROFILE_PICTURE_BUCKET_NAME);
 
-		return avatarFile;
+		return profilePictureFile;
 	}
 
 	async deleteUserImage(user: User) {
-		if (!user.avatarRef) {
+		if (!user.profilePictureRef) {
 			return false;
 		}
 
-		await this.minioClientService.delete(user.avatarRef, AVATAR_BUCKET_NAME);
+		await this.minioClientService.delete(user.profilePictureRef, PROFILE_PICTURE_BUCKET_NAME);
 
 		await this.prisma.user.update({
 			data: {
-				avatarRef: null,
+				profilePictureRef: null,
 			},
 			where: {
 				id: user.id,

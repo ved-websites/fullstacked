@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { AvatarService } from './avatar.service';
+import { ProfilePictureService } from './profile-picture.service';
 
-describe('AvatarService', () => {
-	let service: AvatarService;
+describe('ProfilePictureService', () => {
+	let service: ProfilePictureService;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [AvatarService],
+			providers: [ProfilePictureService],
 		}).compile();
 
-		service = module.get<AvatarService>(AvatarService);
+		service = module.get<ProfilePictureService>(ProfilePictureService);
 	});
 
 	it('should be defined', () => {

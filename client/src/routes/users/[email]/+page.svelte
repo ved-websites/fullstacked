@@ -1,25 +1,25 @@
 <script lang="ts">
 	import Icon from '$/lib/components/Icon.svelte';
 	import VDropzone from '$/lib/components/flowbite-custom/VDropzone.svelte';
-	import { getAvatarImageUrl } from '$/lib/utils/images';
+	import { getProfilePictureImageUrl } from '$/lib/utils/images';
 	import { browser } from '$app/environment';
 	import { enhance } from '$app/forms';
 	import { mdiUpload } from '@mdi/js';
 	import { Button, Heading, Helper, Hr, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import UserForm from '../components/UserForm.svelte';
-	import { ACCEPTED_AVATAR_TYPES } from '../components/userform.schema';
+	import { ACCEPTED_PROFILE_PICTURE_TYPES } from '../components/userform.schema';
 
 	export let data;
 
 	$: superFormData = superForm(data.form, { dataType: 'json' });
 	$: ({ errors } = superFormData);
 
-	$: currentAvatarRef = data.sessionUser?.avatarRef;
-	$: !currentAvatarRef && (avatarFile = undefined);
+	$: currentProfilePictureRef = data.sessionUser?.profilePictureRef;
+	$: !currentProfilePictureRef && (profilePictureFile = undefined);
 
 	let inputRef: HTMLInputElement;
-	let avatarFile: File | undefined;
+	let profilePictureFile: File | undefined;
 
 	const handlePictureDrop = (event: DragEvent) => {
 		event.preventDefault();
@@ -36,11 +36,11 @@
 			return;
 		}
 
-		avatarFile = file;
+		profilePictureFile = file;
 
 		const dT = new DataTransfer();
 
-		dT.items.add(avatarFile);
+		dT.items.add(profilePictureFile);
 		inputRef.files = dT.files;
 	};
 
@@ -52,7 +52,7 @@
 			return;
 		}
 
-		avatarFile = files[0];
+		profilePictureFile = files[0];
 	};
 </script>
 
@@ -70,9 +70,9 @@
 				event.preventDefault();
 			}}
 			on:change={handlePictureChange}
-			name="avatar"
+			name="profile-picture"
 			class="mt-2"
-			accept={ACCEPTED_AVATAR_TYPES.map((type) => `image/${type}`).join(', ')}
+			accept={ACCEPTED_PROFILE_PICTURE_TYPES.map((type) => `image/${type}`).join(', ')}
 			bind:input={inputRef}
 			let:isDraggingOver
 		>
@@ -81,7 +81,7 @@
 					<Icon path={mdiUpload}></Icon>
 					<p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
 					<p class="text-xs text-gray-500 dark:text-gray-400">
-						Accepted formats: {new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_AVATAR_TYPES)}.
+						Accepted formats: {new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_PROFILE_PICTURE_TYPES)}.
 					</p>
 					{#if isDraggingOver}
 						<p>Yes, right here!</p>
@@ -90,7 +90,7 @@
 
 				<div class="flex justify-center items-center">
 					<img
-						src={avatarFile ? URL.createObjectURL(avatarFile) : getAvatarImageUrl(currentAvatarRef)}
+						src={profilePictureFile ? URL.createObjectURL(profilePictureFile) : getProfilePictureImageUrl(currentProfilePictureRef)}
 						alt="user profile"
 						class="max-h-36"
 					/>
@@ -99,19 +99,19 @@
 			<!-- <Icon path={mdiUpload}></Icon>
 			<p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
 			<p class="text-xs text-gray-500 dark:text-gray-400">
-				Accepted formats: {new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_AVATAR_TYPES)}.
+				Accepted formats: {new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_PROFILE_PICTURE_TYPES)}.
 			</p>
 			{#if isDraggingOver}
 				<p>Yes, right here!</p>
 			{/if} -->
 		</VDropzone>
-		{#if $errors.avatarFile}
-			<Helper class="mt-2" color="red">{$errors.avatarFile}</Helper>
+		{#if $errors.profilePictureFile}
+			<Helper class="mt-2" color="red">{$errors.profilePictureFile}</Helper>
 		{/if}
 
 		<div class="mt-5 grid grid-cols-2 gap-5">
-			<Button type="submit" formaction="?/deleteProfilePicture" disabled={!currentAvatarRef} color="red">Delete</Button>
-			<Button type="submit" formaction="?/profilePicture" disabled={!(!browser || avatarFile)}>Submit Profile Picture</Button>
+			<Button type="submit" formaction="?/deleteProfilePicture" disabled={!currentProfilePictureRef} color="red">Delete</Button>
+			<Button type="submit" formaction="?/profilePicture" disabled={!(!browser || profilePictureFile)}>Submit Profile Picture</Button>
 		</div>
 	</form>
 	<UserForm action="?/user" {superFormData} roles={data.roles} class="col-span-2 order-1 sm:order-none" />

@@ -10,7 +10,7 @@ declare global {
 			firstName?: string;
 			lastName?: string;
 			registerToken?: string | null;
-			avatarRef?: string;
+			profilePictureRef?: string;
 		};
 		// type DatabaseSessionAttributes = {};
 	}
