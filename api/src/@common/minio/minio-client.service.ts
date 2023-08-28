@@ -7,14 +7,12 @@ import { GRAPHQL_MAX_FILE_COUNT, GRAPHQL_MAX_FILE_SIZE_MB } from './minio-client
 
 @Injectable()
 export class MinioClientService {
-	private readonly logger: Logger;
+	private readonly logger = new Logger(MinioClientService.name);
 
 	constructor(
 		private readonly minio: MinioService,
 		private readonly env: EnvironmentConfig,
-	) {
-		this.logger = new Logger('MinioService');
-	}
+	) {}
 
 	public get client() {
 		return this.minio.client;

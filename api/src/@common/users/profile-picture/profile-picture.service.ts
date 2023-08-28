@@ -1,8 +1,10 @@
 import { MinioClientService } from '$minio/minio-client.service';
 import { PrismaService } from '$prisma/prisma.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FileUpload } from 'graphql-upload/Upload.js';
 import { User } from 'lucia';
+import { PROFILE_PICTURE_UPLOAD_EVENT_KEY, PROFILE_PICTURE_UPLOAD_EVENT_TYPE } from './listeners/profile-picture.events';
 
 export const PROFILE_PICTURE_BUCKET_NAME = 'profile-pictures';
 
@@ -11,6 +13,7 @@ export class ProfilePictureService {
 	constructor(
 		private minioClientService: MinioClientService,
 		private prisma: PrismaService,
+		private eventEmitter: EventEmitter2,
 	) {}
 
 	readonly acceptedFileExtension: string[] = ['jpeg', 'jpg', 'png', 'webp'];
@@ -34,6 +37,10 @@ export class ProfilePictureService {
 		} catch (error) {
 			await this.minioClientService.delete(uploadedImage.fileName, PROFILE_PICTURE_BUCKET_NAME);
 		}
+
+		this.eventEmitter.emit(PROFILE_PICTURE_UPLOAD_EVENT_KEY, {
+			profilePictureRef: user.profilePictureRef,
+		} satisfies PROFILE_PICTURE_UPLOAD_EVENT_TYPE);
 
 		return uploadedImage;
 	}
