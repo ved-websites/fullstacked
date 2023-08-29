@@ -2,6 +2,7 @@ import { RoleCreateNestedManyWithoutUsersInput, RoleWhereInput } from '$prisma-g
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { User } from 'lucia';
+import { ADMIN } from '~/@utils/roles';
 
 @Injectable()
 export class RolesService {
@@ -33,5 +34,26 @@ export class RolesService {
 
 	rolesIntersect(roles1: string[], roles2: string[]) {
 		return roles1.some((role1) => roles2.some((role2) => role2 === role1));
+	}
+
+	async userCanSendEmail(user: User) {
+		const rolesCanSendEmail = [ADMIN];
+
+		const userRoles = (
+			await this.prisma.role.findMany({
+				where: {
+					users: {
+						some: {
+							email: user.email,
+						},
+					},
+				},
+				select: {
+					text: true,
+				},
+			})
+		).map((userRole) => userRole.text);
+
+		return this.rolesIntersect(rolesCanSendEmail, userRoles);
 	}
 }

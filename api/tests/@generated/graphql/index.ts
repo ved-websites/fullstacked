@@ -15,6 +15,8 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: any; output: any; }
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: { input: any; output: any; }
 };
 
 export enum CachePolicy {
@@ -43,6 +45,7 @@ export type GetUserOutput = {
   id: Scalars['ID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
   messages?: Maybe<Array<Message>>;
+  profilePictureRef?: Maybe<Scalars['String']['output']>;
   roles: Array<Role>;
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -137,8 +140,39 @@ export type MessageMinAggregate = {
   time?: Maybe<Scalars['DateTime']['output']>;
 };
 
+export type MessageScalarWhereInput = {
+  AND?: InputMaybe<Array<MessageScalarWhereInput>>;
+  NOT?: InputMaybe<Array<MessageScalarWhereInput>>;
+  OR?: InputMaybe<Array<MessageScalarWhereInput>>;
+  id?: InputMaybe<IntFilter>;
+  text?: InputMaybe<StringFilter>;
+};
+
 export type MessageSumAggregate = {
   id?: Maybe<Scalars['Int']['output']>;
+};
+
+export type MessageUpdateManyMutationInput = {
+  text?: InputMaybe<StringFieldUpdateOperationsInput>;
+};
+
+export type MessageUpdateManyWithWhereWithoutUserInput = {
+  data: MessageUpdateManyMutationInput;
+  where: MessageScalarWhereInput;
+};
+
+export type MessageUpdateManyWithoutUserNestedInput = {
+  connect?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<MessageCreateOrConnectWithoutUserInput>>;
+  create?: InputMaybe<Array<MessageCreateWithoutUserInput>>;
+  createMany?: InputMaybe<MessageCreateManyUserInputEnvelope>;
+  delete?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<MessageScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  set?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  update?: InputMaybe<Array<MessageUpdateWithWhereUniqueWithoutUserInput>>;
+  updateMany?: InputMaybe<Array<MessageUpdateManyWithWhereWithoutUserInput>>;
+  upsert?: InputMaybe<Array<MessageUpsertWithWhereUniqueWithoutUserInput>>;
 };
 
 export type MessageUpdateWithWhereUniqueWithoutUserInput = {
@@ -148,6 +182,12 @@ export type MessageUpdateWithWhereUniqueWithoutUserInput = {
 
 export type MessageUpdateWithoutUserInput = {
   text?: InputMaybe<StringFieldUpdateOperationsInput>;
+};
+
+export type MessageUpsertWithWhereUniqueWithoutUserInput = {
+  create: MessageCreateWithoutUserInput;
+  update: MessageUpdateWithoutUserInput;
+  where: MessageWhereUniqueInput;
 };
 
 export type MessageWhereInput = {
@@ -166,13 +206,16 @@ export type MessageWhereUniqueInput = {
 export type Mutation = {
   addMessage?: Maybe<Message>;
   createUser: CreateUserOutput;
+  deleteProfilePicture: Scalars['Boolean']['output'];
   deleteUser?: Maybe<GetUserOutput>;
   editUser: User;
+  editUserSettings: User;
   login: LoggedUserOutput;
   logout: LogoutOutput;
   register: Session;
   renewSession?: Maybe<RenewedSessionOutput>;
   updateMessage: Message;
+  uploadProfilePicture: UploadProfilePictureOutput;
 };
 
 
@@ -192,8 +235,13 @@ export type MutationDeleteUserArgs = {
 
 
 export type MutationEditUserArgs = {
-  data: UserUpdateWithoutMessagesInput;
+  data: UserUpdateInput;
   where: UserWhereUniqueInput;
+};
+
+
+export type MutationEditUserSettingsArgs = {
+  data: UserUpdateInput;
 };
 
 
@@ -209,6 +257,11 @@ export type MutationRegisterArgs = {
 
 export type MutationUpdateMessageArgs = {
   query: MessageUpdateWithWhereUniqueWithoutUserInput;
+};
+
+
+export type MutationUploadProfilePictureArgs = {
+  profilePicture: Scalars['Upload']['input'];
 };
 
 export type NestedIntFilter = {
@@ -525,6 +578,11 @@ export type UnregisteredUserOutput = {
   lastName?: Maybe<Scalars['String']['output']>;
 };
 
+export type UploadProfilePictureOutput = {
+  /** file name of the uploaded profile picture */
+  fileName: Scalars['String']['output'];
+};
+
 export type User = {
   _count: UserCount;
   createdAt: Scalars['DateTime']['output'];
@@ -533,6 +591,7 @@ export type User = {
   id: Scalars['ID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
   messages?: Maybe<Array<Message>>;
+  profilePictureRef?: Maybe<Scalars['String']['output']>;
   roles?: Maybe<Array<Role>>;
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -551,6 +610,7 @@ export type UserCountAggregate = {
   firstName: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
   lastName: Scalars['Int']['output'];
+  profilePictureRef: Scalars['Int']['output'];
   updatedAt: Scalars['Int']['output'];
 };
 
@@ -559,6 +619,7 @@ export type UserCreateInput = {
   firstName?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutUserInput>;
+  profilePictureRef?: InputMaybe<Scalars['String']['input']>;
   registerToken?: InputMaybe<Scalars['String']['input']>;
   roles?: InputMaybe<RoleCreateNestedManyWithoutUsersInput>;
 };
@@ -575,6 +636,7 @@ export type UserMaxAggregate = {
   firstName?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
+  profilePictureRef?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
@@ -584,6 +646,7 @@ export type UserMinAggregate = {
   firstName?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
+  profilePictureRef?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
@@ -592,10 +655,12 @@ export type UserRelationFilter = {
   isNot?: InputMaybe<UserWhereInput>;
 };
 
-export type UserUpdateWithoutMessagesInput = {
+export type UserUpdateInput = {
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   firstName?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   lastName?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutUserNestedInput>;
+  profilePictureRef?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   registerToken?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   roles?: InputMaybe<RoleUpdateManyWithoutUsersNestedInput>;
 };
@@ -608,6 +673,7 @@ export type UserWhereInput = {
   firstName?: InputMaybe<StringNullableFilter>;
   lastName?: InputMaybe<StringNullableFilter>;
   messages?: InputMaybe<MessageListRelationFilter>;
+  profilePictureRef?: InputMaybe<StringNullableFilter>;
   registerToken?: InputMaybe<StringNullableFilter>;
   roles?: InputMaybe<RoleListRelationFilter>;
 };

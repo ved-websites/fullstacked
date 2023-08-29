@@ -1,4 +1,5 @@
 import { ConfigModule } from '$configs/config.module';
+import { isLocal } from '$configs/helpers';
 import { LocalEnvironmentConfig } from '$configs/local-env.validation';
 import { type ModuleMetadata } from '@nestjs/common';
 import { Test, TestingModule, TestingModuleBuilder } from '@nestjs/testing';
@@ -25,7 +26,7 @@ export class TestManager<Options extends TestOptions = TestOptions> {
 		const sharedProviders: NonNullable<typeof metadata>['providers'] = [
 			{
 				provide: EnvironmentConfig,
-				useClass: process.env.CI == 'true' ? LocalEnvironmentConfig : EnvironmentConfig,
+				useClass: isLocal ? LocalEnvironmentConfig : EnvironmentConfig,
 			},
 		];
 

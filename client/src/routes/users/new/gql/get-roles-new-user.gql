@@ -1,0 +1,6 @@
+query GetRolesForNewUser {
+	getRoles {
+		id
+		text
+	}
+}

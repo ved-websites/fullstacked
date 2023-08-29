@@ -10,6 +10,16 @@ type KitHandlerFailure = [type: 'failure', params?: { code?: number; data?: Reco
 type KitHandlerFormMessage = [type: 'formMessage', params: { form: SuperValidated<never> }];
 type KitHandlerRedirect = [type: 'redirect', params?: { status?: Parameters<typeof redirect>[0]; location?: `/${string}` }];
 type KitHandlerError = [type: 'error', params?: { status?: Parameters<typeof error>[0]; body?: Parameters<typeof error>[1] }];
+type KitHandlerCustom = [
+	type: 'custom',
+	handler: (data: {
+		errors:
+			| {
+					message: string;
+			  }[]
+			| null;
+	}) => unknown,
+];
 
 export class GraphQLOperationFailure {
 	readonly type = 'failure';
@@ -24,8 +34,9 @@ export class GraphQLOperationFailure {
 	kitHandler(...args: KitHandlerFormMessage): ReturnType<typeof message>;
 	kitHandler(...args: KitHandlerRedirect): never;
 	kitHandler(...args: KitHandlerError): never;
+	kitHandler(...args: KitHandlerCustom): never;
 
-	kitHandler(...args: KitHandlerFailure | KitHandlerFormMessage | KitHandlerRedirect | KitHandlerError): unknown {
+	kitHandler(...args: KitHandlerFailure | KitHandlerFormMessage | KitHandlerRedirect | KitHandlerError | KitHandlerCustom): unknown {
 		const [handlerType, params] = args;
 
 		if (handlerType === 'failure') {
@@ -70,6 +81,10 @@ export class GraphQLOperationFailure {
 			const errorMessage = body ?? this.errors?.at(0)?.message;
 
 			throw error(status, errorMessage);
+		}
+
+		if (handlerType === 'custom') {
+			return params({ errors: this.errors });
 		}
 
 		throw new Error('woops');

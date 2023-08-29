@@ -5,12 +5,17 @@ import { GraphQLModule } from '$graphql/graphql.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { UsersModule } from '$users/users.module';
 import { ModuleMetadata } from '@nestjs/common';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 export const BaseModules = [
 	ConfigModule,
 	EmailModule,
 	PrismaModule,
 	GraphQLModule,
+	EventEmitterModule.forRoot({
+		global: true,
+		verboseMemoryLeak: true,
+	}),
 	AuthModule,
 	UsersModule,
 ] satisfies ModuleMetadata['imports'];

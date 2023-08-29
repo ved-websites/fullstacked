@@ -1,12 +1,11 @@
 import { Roles } from '$auth/roles/roles.guard';
-import { AuthSession } from '$auth/session.decorator';
-import { User, UserCreateInput, UserUpdateWithoutMessagesInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
+import { AuthSession, LuciaSession } from '$auth/session.decorator';
+import { User, UserCreateInput, UserUpdateInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
 import { Origin } from '$utils/origin.decorator';
 import { ForbiddenException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Session as LuciaSession } from 'lucia';
 import { ADMIN } from '~/@utils/roles';
 import { CreateUserOutput } from './dtos/create-user.output';
 import { GetUserOutput } from './dtos/getUser.output';
@@ -39,11 +38,7 @@ export class UsersResolver {
 	}
 
 	@Mutation(() => User)
-	async editUser(
-		@SelectQL() select: PrismaSelector,
-		@Args('where') where: UserWhereUniqueInput,
-		@Args('data') data: UserUpdateWithoutMessagesInput,
-	) {
+	async editUser(@SelectQL() select: PrismaSelector, @Args('where') where: UserWhereUniqueInput, @Args('data') data: UserUpdateInput) {
 		try {
 			const user = await this.usersService.editUser(select, where, data);
 

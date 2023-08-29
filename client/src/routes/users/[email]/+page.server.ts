@@ -2,7 +2,7 @@ import { EditOtherUserInfoStore, GetEditableUserStore } from '$houdini';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
-import { userFormSchema } from '../components/userform.schema';
+import { adminUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({
@@ -29,7 +29,7 @@ export const load = (async ({
 		formattedEditableUser.roles = editableUser!.roles.map((role) => role.value);
 	}
 
-	const form = await superValidate(formattedEditableUser, userFormSchema);
+	const form = await superValidate(formattedEditableUser, adminUserFormSchema);
 
 	return {
 		editableUser,
@@ -46,15 +46,14 @@ export const actions = {
 		},
 		params: { email: editableUserEmail },
 	}) => {
-		const form = await superValidate(request, userFormSchema);
+		const form = await superValidate(request, adminUserFormSchema);
 
 		if (!form.valid) return { form };
 
-		const { email, firstName, lastName, roles } = form.data;
+		const { firstName, lastName, roles } = form.data;
 
 		const result = await mutate(EditOtherUserInfoStore, {
 			oldEmail: editableUserEmail,
-			email,
 			firstName,
 			lastName,
 			roles: roles.map((role) => ({
@@ -63,8 +62,7 @@ export const actions = {
 		});
 
 		if (result.type === 'failure') {
-			return result.kitHandler('formMessage', { form });
-			// return message(form, errors?.at(0)?.message);
+			return result.kitHandler('error');
 		}
 
 		throw redirect(StatusCodes.SEE_OTHER, '/users');

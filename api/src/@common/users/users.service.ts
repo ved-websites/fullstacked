@@ -1,7 +1,7 @@
 import { AuthService } from '$auth/auth.service';
 import { RolesService } from '$auth/roles/roles.service';
 import { EmailService } from '$email/email.service';
-import { UserCreateInput, UserUpdateWithoutMessagesInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
+import { UserCreateInput, UserUpdateInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { User } from 'lucia';
@@ -72,7 +72,7 @@ export class UsersService {
 		return user;
 	}
 
-	async editUser(select: PrismaSelector, where: UserWhereUniqueInput, data: UserUpdateWithoutMessagesInput) {
+	async editUser(select: PrismaSelector, where: UserWhereUniqueInput, data: UserUpdateInput) {
 		if (data.roles?.set?.every((role) => role.text != ADMIN)) {
 			// if no role has admin, check if at least one admin would remain
 			const otherAdminsCount = await this.prisma.user.count({

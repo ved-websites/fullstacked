@@ -1,10 +1,10 @@
-import { getGraphQLResponse } from '$utils/contextExtracter';
+import { getResponse } from '$utils/contextExtracter';
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 import type { AuthRequest } from 'lucia';
 import type { Auth } from './lucia.factory';
 
 export function getLuciaAuthFromContext(context: ExecutionContext) {
-	const response = getGraphQLResponse(context);
+	const response = getResponse(context);
 
 	return response.locals.authRequest;
 }

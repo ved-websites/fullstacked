@@ -15,6 +15,7 @@ export default new HoudiniClient({
 		return {
 			headers: {
 				Authorization: `Bearer ${session.token}`,
+				'apollo-require-preflight': 'true',
 			},
 		};
 	},
@@ -31,6 +32,7 @@ export default new HoudiniClient({
 
 					return {
 						Authorization: `Bearer ${session.token}`,
+						'apollo-require-preflight': 'true',
 					};
 				},
 			});

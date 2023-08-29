@@ -20,7 +20,7 @@ export const DEFAULT_PORT = 3000;
 
 export const DEFAULT_GRAPHQL_DEPTH_LIMIT = 10;
 
-export const DEFAULT_MINIO_PORT = 9001;
+export const DEFAULT_MINIO_PORT = 9000;
 
 export class EnvironmentConfig {
 	@IsEmail()

@@ -56,6 +56,12 @@ export function setupContext(auth: Auth) {
 			throw 'Internal server error';
 		}
 
-		return { req: context?.req, res: context?.res };
+		const req = context?.req;
+
+		if (req) {
+			await setupRequest(req, auth);
+		}
+
+		return { req, res: context?.res };
 	};
 }

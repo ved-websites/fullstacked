@@ -1,17 +1,14 @@
 import { loadLuciaUtils } from '$auth/lucia/modules-compat';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { Inject, Injectable } from '@nestjs/common';
-import type { GlobalDatabaseUserAttributes, User } from 'lucia';
-import { ADMIN } from '~/@utils/roles';
+import type { GlobalDatabaseUserAttributes } from 'lucia';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';
-import { RolesService } from './roles/roles.service';
 
 @Injectable()
 export class AuthService {
 	constructor(
 		@Inject(LuciaFactory) private readonly auth: Auth,
 		private readonly prisma: PrismaService,
-		private readonly rolesService: RolesService,
 	) {}
 
 	readonly providerId = 'email';
@@ -119,26 +116,5 @@ export class AuthService {
 
 	async logout(sessionId: string) {
 		return await this.auth.invalidateSession(sessionId);
-	}
-
-	async userCanSendEmail(user: User) {
-		const rolesCanSendEmail = [ADMIN];
-
-		const userRoles = (
-			await this.prisma.role.findMany({
-				where: {
-					users: {
-						some: {
-							email: user.email,
-						},
-					},
-				},
-				select: {
-					text: true,
-				},
-			})
-		).map((userRole) => userRole.text);
-
-		return this.rolesService.rolesIntersect(rolesCanSendEmail, userRoles);
 	}
 }

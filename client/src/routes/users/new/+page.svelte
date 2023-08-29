@@ -1,13 +1,36 @@
 <script lang="ts">
+	import UserForm from '$/lib/components/UserForm/UserForm.svelte';
+	import { Heading, Helper, Input, Label, MultiSelect } from 'flowbite-svelte';
+	import type { SelectOptionType } from 'flowbite-svelte/dist/types';
 	import { superForm } from 'sveltekit-superforms/client';
-	import UserForm from '../components/UserForm.svelte';
-	import type { PageData } from './$houdini';
 
-	export let data: PageData;
+	export let data;
+	$: ({ roles } = data);
 
-	$: ({ GetRolesForNewUser } = data);
+	$: superFormData = superForm(data.form);
+	$: ({ form, constraints, errors } = superFormData);
 
-	const superFormData = superForm(data.form, { dataType: 'json' });
+	$: availableRoles = roles.map<SelectOptionType>((role) => ({
+		name: role.text,
+		value: role.text,
+	}));
 </script>
 
-<UserForm headerText="Creating New User" {superFormData} roles={$GetRolesForNewUser.data?.getRoles ?? []} />
+<Heading tag="h2">Creating New User</Heading>
+
+<UserForm {superFormData}>
+	<div slot="above">
+		<div>
+			<Label>
+				<span> Email </span>
+				<Input class="mt-2" type="email" placeholder="example@example.com" bind:value={$form.email} {...$constraints.email} />
+				{#if $errors.email}<Helper class="mt-2" color="red">{$errors.email}</Helper>{/if}
+			</Label>
+		</div>
+	</div>
+	<div slot="below">
+		<Label>Roles</Label>
+		<MultiSelect class="mt-2" items={availableRoles} bind:value={$form.roles} />
+		{#if $errors.roles}<Helper class="mt-2" color="red">{$errors.roles}</Helper>{/if}
+	</div>
+</UserForm>

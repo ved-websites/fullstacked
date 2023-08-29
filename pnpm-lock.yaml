@@ -102,6 +102,9 @@ importers:
       '@nestjs/core':
         specifier: 10.0.5
         version: 10.0.5(@nestjs/common@10.0.5)(@nestjs/platform-express@10.0.5)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/event-emitter':
+        specifier: 2.0.2
+        version: 2.0.2(@nestjs/common@10.0.5)(@nestjs/core@10.0.5)(reflect-metadata@0.1.13)
       '@nestjs/graphql':
         specifier: 12.0.7
         version: 12.0.7(@nestjs/common@10.0.5)(@nestjs/core@10.0.5)(class-transformer@0.5.1)(class-validator@0.14.0)(graphql@16.7.1)(reflect-metadata@0.1.13)
@@ -144,6 +147,9 @@ importers:
       graphql-subscriptions:
         specifier: 2.0.0
         version: 2.0.0(graphql@16.7.1)
+      graphql-upload:
+        specifier: 15.0.2
+        version: 15.0.2(@types/express@4.17.17)(graphql@16.7.1)
       graphql-ws:
         specifier: 5.14.0
         version: 5.14.0(graphql@16.7.1)
@@ -193,6 +199,9 @@ importers:
       '@types/graphql-depth-limit':
         specifier: 1.1.3
         version: 1.1.3
+      '@types/graphql-upload':
+        specifier: 15.0.2
+        version: 15.0.2
       '@types/gulp':
         specifier: 4.0.13
         version: 4.0.13
@@ -249,7 +258,7 @@ importers:
         version: 1.3.2(@swc/core@1.3.68)(webpack@5.88.1)
       vite-tsconfig-paths:
         specifier: 4.2.0
-        version: 4.2.0(typescript@5.1.6)
+        version: 4.2.0(typescript@5.1.6)(vite@4.4.9)
       vitest:
         specifier: 0.32.4
         version: 0.32.4
@@ -271,6 +280,9 @@ importers:
       sveltekit-superforms:
         specifier: 1.5.0
         version: 1.5.0(@sveltejs/kit@1.22.4)(svelte@4.1.2)(zod@3.21.4)
+      tailwind-merge:
+        specifier: 1.14.0
+        version: 1.14.0
       vercel-email:
         specifier: 0.0.6
         version: 0.0.6
@@ -324,11 +336,11 @@ importers:
         specifier: 1.8.1
         version: 1.8.1
       flowbite-svelte:
-        specifier: 0.41.2
-        version: 0.41.2(svelte@4.1.2)
+        specifier: 0.43.1
+        version: 0.43.1(svelte@4.1.2)
       flowbite-svelte-blocks:
-        specifier: 0.3.9
-        version: 0.3.9
+        specifier: 0.4.6
+        version: 0.4.6
       houdini:
         specifier: 1.2.8
         version: 1.2.8
@@ -2666,6 +2678,19 @@ packages:
     transitivePeerDependencies:
       - encoding
 
+  /@nestjs/event-emitter@2.0.2(@nestjs/common@10.0.5)(@nestjs/core@10.0.5)(reflect-metadata@0.1.13):
+    resolution: {integrity: sha512-qxJE+6yKSW/ReBzT1jKES2m3zZh6gmgunDtIvCl66G8i9zZ4TQciwoq01MigqnruTgXjH/AzNPqtr6ZUt207mg==}
+    peerDependencies:
+      '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
+      '@nestjs/core': ^8.0.0 || ^9.0.0 || ^10.0.0
+      reflect-metadata: ^0.1.12
+    dependencies:
+      '@nestjs/common': 10.0.5(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/core': 10.0.5(@nestjs/common@10.0.5)(@nestjs/platform-express@10.0.5)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      eventemitter2: 6.4.9
+      reflect-metadata: 0.1.13
+    dev: false
+
   /@nestjs/graphql@12.0.7(@nestjs/common@10.0.5)(@nestjs/core@10.0.5)(class-transformer@0.5.1)(class-validator@0.14.0)(graphql@16.7.1)(reflect-metadata@0.1.13):
     resolution: {integrity: sha512-4XnfdAb9JHazh6Z/zbh0IUbcs8iPS5VxCoDS77CsjOHDCYzrwDVFWiZ3k5XofACIpdyekagavmVNuo1G0Q6JlA==}
     peerDependencies:
@@ -3399,6 +3424,12 @@ packages:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
 
+  /@types/accepts@1.3.5:
+    resolution: {integrity: sha512-jOdnI/3qTpHABjM5cx1Hc0sKsPoYCp+DP/GJRGtDlPd7fiV9oXGGIcjW/ZOxLIvjGz8MA+uMZI9metHlgqbgwQ==}
+    dependencies:
+      '@types/node': 18.16.18
+    dev: true
+
   /@types/body-parser@1.19.2:
     resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
     dependencies:
@@ -3408,6 +3439,12 @@ packages:
   /@types/braces@3.0.2:
     resolution: {integrity: sha512-U5tlMYa0U/2eFTmJgKcPWQOEICP173sJDa6OjHbj5Tv+NVaYcrq2xmdWpNXOwWYGwJu+jER/pfTLdoQ31q8PzA==}
     dev: true
+
+  /@types/busboy@1.5.0:
+    resolution: {integrity: sha512-ncOOhwmyFDW76c/Tuvv9MA9VGYUCn8blzyWmzYELcNGDb0WXWLSmFi7hJq25YdRBYJrmMBB5jZZwUjlJe9HCjQ==}
+    dependencies:
+      '@types/node': 18.16.18
+    dev: false
 
   /@types/chai-subset@1.3.3:
     resolution: {integrity: sha512-frBecisrNGz+F4T6bcc+NLeolfiojh5FxW2klu669+8BARtyQv2C/GkNW6FUodVe4BroGMP/wER/YDGc7rEllw==}
@@ -3424,6 +3461,10 @@ packages:
     dependencies:
       '@types/node': 18.16.18
 
+  /@types/content-disposition@0.5.5:
+    resolution: {integrity: sha512-v6LCdKfK6BwcqMo+wYW05rLS12S0ZO0Fl4w1h4aaZMD7bqT3gVUns6FvLJKGZHQmYn3SX55JWGpziwJRwVgutA==}
+    dev: true
+
   /@types/cookie-parser@1.4.3:
     resolution: {integrity: sha512-CqSKwFwefj4PzZ5n/iwad/bow2hTCh0FlNAeWLtQM3JA/NX/iYagIpWG2cf1bQKQ2c9gU2log5VUCrn7LDOs0w==}
     dependencies:
@@ -3435,6 +3476,15 @@ packages:
 
   /@types/cookiejar@2.1.2:
     resolution: {integrity: sha512-t73xJJrvdTjXrn4jLS9VSGRbz0nUY3cl2DMGDU48lKl+HR9dbbjW2A9r3g40VA++mQpy6uuHg33gy7du2BKpog==}
+    dev: true
+
+  /@types/cookies@0.7.7:
+    resolution: {integrity: sha512-h7BcvPUogWbKCzBR2lY4oqaZbO3jXZksexYJVFvkrFeLgbZjQkU4x8pRq6eg2MHXQhY0McQdqmmsxRWlVAHooA==}
+    dependencies:
+      '@types/connect': 3.4.35
+      '@types/express': 4.17.17
+      '@types/keygrip': 1.0.2
+      '@types/node': 18.16.18
     dev: true
 
   /@types/cross-spawn@6.0.2:
@@ -3504,12 +3554,25 @@ packages:
       graphql: 14.7.0
     dev: true
 
+  /@types/graphql-upload@15.0.2:
+    resolution: {integrity: sha512-dK4GN/JbMmgHbsKZaUWVYwaLMCwIR0QMBcFz+jb4xj/cRLq1yo2VfnoFvnP5yCw7W4IgGgW7JRwEvM4jn0ahlA==}
+    dependencies:
+      '@types/express': 4.17.17
+      '@types/koa': 2.13.8
+      fs-capacitor: 8.0.0
+      graphql: 16.7.1
+    dev: true
+
   /@types/gulp@4.0.13:
     resolution: {integrity: sha512-Ms20Q2tZ3MpThZGn4Ag6e7ifz/oQJFxsuiopqz5oHmhE6q2ohnELgafi5K/pKX/4ntlpidS61v/TXAguYsVcaA==}
     dependencies:
       '@types/undertaker': 1.2.8
       '@types/vinyl-fs': 3.0.2
       chokidar: 3.5.3
+    dev: true
+
+  /@types/http-assert@1.5.3:
+    resolution: {integrity: sha512-FyAOrDuQmBi8/or3ns4rwPno7/9tJTijVW6aQQjK02+kOQ8zmoNg2XJtAuQhvQcy1ASJq38wirX5//9J1EqoUA==}
     dev: true
 
   /@types/http-errors@2.0.1:
@@ -3529,6 +3592,29 @@ packages:
 
   /@types/json-stable-stringify@1.0.34:
     resolution: {integrity: sha512-s2cfwagOQAS8o06TcwKfr9Wx11dNGbH2E9vJz1cqV+a/LOyhWNLUNd6JSRYNzvB4d29UuJX2M0Dj9vE1T8fRXw==}
+    dev: true
+
+  /@types/keygrip@1.0.2:
+    resolution: {integrity: sha512-GJhpTepz2udxGexqos8wgaBx4I/zWIDPh/KOGEwAqtuGDkOUJu5eFvwmdBX4AmB8Odsr+9pHCQqiAqDL/yKMKw==}
+    dev: true
+
+  /@types/koa-compose@3.2.5:
+    resolution: {integrity: sha512-B8nG/OoE1ORZqCkBVsup/AKcvjdgoHnfi4pZMn5UwAPCbhk/96xyv284eBYW8JlQbQ7zDmnpFr68I/40mFoIBQ==}
+    dependencies:
+      '@types/koa': 2.13.8
+    dev: true
+
+  /@types/koa@2.13.8:
+    resolution: {integrity: sha512-Ugmxmgk/yPRW3ptBTh9VjOLwsKWJuGbymo1uGX0qdaqqL18uJiiG1ZoV0rxCOYSaDGhvEp5Ece02Amx0iwaxQQ==}
+    dependencies:
+      '@types/accepts': 1.3.5
+      '@types/content-disposition': 0.5.5
+      '@types/cookies': 0.7.7
+      '@types/http-assert': 1.5.3
+      '@types/http-errors': 2.0.1
+      '@types/keygrip': 1.0.2
+      '@types/koa-compose': 3.2.5
+      '@types/node': 18.16.18
     dev: true
 
   /@types/long@4.0.2:
@@ -3572,6 +3658,10 @@ packages:
 
   /@types/normalize-package-data@2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
+
+  /@types/object-path@0.11.1:
+    resolution: {integrity: sha512-219LSCO9HPcoXcRTC6DbCs0FRhZgBnEMzf16RRqkT40WbkKx3mOeQuz3e2XqbfhOz/AHfbru0kzB1n1RCAsIIg==}
+    dev: false
 
   /@types/parse-json@4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
@@ -6600,6 +6690,10 @@ packages:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
     engines: {node: '>= 0.6'}
 
+  /eventemitter2@6.4.9:
+    resolution: {integrity: sha512-JEPTiaOt9f04oa6NOkc4aH+nVp5I3wEjpHbIPqfgCdD5v5bUzy7xQqwcVO2aDQgOWhI28da57HksMrzK9HlRxg==}
+    dev: false
+
   /eventemitter3@3.1.2:
     resolution: {integrity: sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==}
 
@@ -7052,13 +7146,13 @@ packages:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
     dev: true
 
-  /flowbite-svelte-blocks@0.3.9:
-    resolution: {integrity: sha512-bqwUohnPcPZP8pgUbrs0Jqmc27ASUwdOB/e53LxInJZ0Bs1gzL9EsECxaRpjECYKYMRgFSFazlZ+kDjbgjmVPQ==}
+  /flowbite-svelte-blocks@0.4.6:
+    resolution: {integrity: sha512-p1Ia27HQtJVjDXN9XaNXe6STRwTdrQYwBWqMHDxToKOCU2diZMyFunb7PBckGl19PR45oda7OGXQjIwq2yGnkQ==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     dev: true
 
-  /flowbite-svelte@0.41.2(svelte@4.1.2):
-    resolution: {integrity: sha512-pQl1DeNGmjMlHEbYnYidUXcxgekLNnrEMFzzp/peSQQuBJs27uKE+BOzENYo0EqYNxKJMaVhym3vKnQUkt183Q==}
+  /flowbite-svelte@0.43.1(svelte@4.1.2):
+    resolution: {integrity: sha512-01ofjsHi7YRNx/MvmjpULQ5L6ar8El7yqWD3aJJupyaXRvTyPb5CHPUP5fT1rOJA11oeZDnPRTdJ27aDuTXpZQ==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     peerDependencies:
       svelte: ^3.55.1 || ^4.0.0
@@ -7196,6 +7290,16 @@ packages:
   /fresh@0.5.2:
     resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
     engines: {node: '>= 0.6'}
+
+  /fs-capacitor@6.2.0:
+    resolution: {integrity: sha512-nKcE1UduoSKX27NSZlg879LdQc94OtbOsEmKMN2MBNudXREvijRKx2GEBsTMTfws+BrbkJoEuynbGSVRSpauvw==}
+    engines: {node: '>=10'}
+    dev: false
+
+  /fs-capacitor@8.0.0:
+    resolution: {integrity: sha512-+Lk6iSKajdGw+7XYxUkwIzreJ2G1JFlYOdnKJv5PzwFLVsoJYBpCuS7WPIUSNT1IbQaEWT1nhYU63Ud03DyzLA==}
+    engines: {node: ^14.17.0 || >=16.0.0}
+    dev: true
 
   /fs-constants@1.0.0:
     resolution: {integrity: sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==}
@@ -7645,6 +7749,30 @@ packages:
     dependencies:
       graphql: 16.7.1
       tslib: 2.6.0
+
+  /graphql-upload@15.0.2(@types/express@4.17.17)(graphql@16.7.1):
+    resolution: {integrity: sha512-ufJAkZJBKWRDD/4wJR3VZMy9QWTwqIYIciPtCEF5fCNgWF+V1p7uIgz+bP2YYLiS4OJBhCKR8rnqE/Wg3XPUiw==}
+    engines: {node: ^14.17.0 || ^16.0.0 || >= 18.0.0}
+    peerDependencies:
+      '@types/express': ^4.0.29
+      '@types/koa': ^2.11.4
+      graphql: ^16.3.0
+    peerDependenciesMeta:
+      '@types/express':
+        optional: true
+      '@types/koa':
+        optional: true
+    dependencies:
+      '@types/busboy': 1.5.0
+      '@types/express': 4.17.17
+      '@types/node': 18.16.18
+      '@types/object-path': 0.11.1
+      busboy: 1.6.0
+      fs-capacitor: 6.2.0
+      graphql: 16.7.1
+      http-errors: 2.0.0
+      object-path: 0.11.8
+    dev: false
 
   /graphql-ws@5.14.0(graphql@16.7.1):
     resolution: {integrity: sha512-itrUTQZP/TgswR4GSSYuwWUzrE/w5GhbwM2GX3ic2U7aw33jgEsayfIlvaj7/GcIvZgNMzsPTrE5hqPuFUiE5g==}
@@ -9707,6 +9835,11 @@ packages:
     resolution: {integrity: sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==}
     engines: {node: '>= 0.4'}
     dev: true
+
+  /object-path@0.11.8:
+    resolution: {integrity: sha512-YJjNZrlXJFM42wTBn6zgOJVar9KFJvzx6sTWDte8sWZF//cnjl0BxHNpfZx+ZffXX63A9q0b1zsFiBX4g4X5KA==}
+    engines: {node: '>= 10.12.0'}
+    dev: false
 
   /object-visit@1.0.1:
     resolution: {integrity: sha512-GBaMwwAVK9qbQN3Scdo0OyvgPW7l3lnaVMj84uTOZlswkX0KpF6fyDBJhtTthf7pymztoN36/KEr1DyhF96zEA==}
@@ -11951,7 +12084,6 @@ packages:
 
   /tailwind-merge@1.14.0:
     resolution: {integrity: sha512-3mFKyCo/MBcgyOTlrY8T7odzZFx+w+qKSMAmdFzRvqBfLlSigU6TZnlFHK0lkMwj9Bj8OYU+9yW9lmGuS0QEnQ==}
-    dev: true
 
   /tailwindcss@3.3.3(ts-node@10.9.1):
     resolution: {integrity: sha512-A0KgSkef7eE4Mf+nKJ83i75TMyq8HqY3qmFIJSWy8bNt0v1lG7jUcpGpoTFxAwYcWOphcTBLPPJg+bDfhDf52w==}
@@ -12870,22 +13002,6 @@ packages:
     dependencies:
       '@kitql/helper': 0.6.1
       micromatch: 4.0.5
-    dev: true
-
-  /vite-tsconfig-paths@4.2.0(typescript@5.1.6):
-    resolution: {integrity: sha512-jGpus0eUy5qbbMVGiTxCL1iB9ZGN6Bd37VGLJU39kTDD6ZfULTTb1bcc5IeTWqWJKiWV5YihCaibeASPiGi8kw==}
-    peerDependencies:
-      vite: '*'
-    peerDependenciesMeta:
-      vite:
-        optional: true
-    dependencies:
-      debug: 4.3.4
-      globrex: 0.1.2
-      tsconfck: 2.1.1(typescript@5.1.6)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
     dev: true
 
   /vite-tsconfig-paths@4.2.0(typescript@5.1.6)(vite@4.4.9):

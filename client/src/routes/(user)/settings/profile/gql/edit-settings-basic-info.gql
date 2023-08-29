@@ -1,0 +1,6 @@
+mutation EditSettingsBasicInfo($firstName: String, $lastName: String) {
+	editUserSettings(data: { firstName: { set: $firstName }, lastName: { set: $lastName } }) {
+		email
+		firstName
+	}
+}

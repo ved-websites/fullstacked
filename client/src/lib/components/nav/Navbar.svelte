@@ -1,31 +1,21 @@
 <script lang="ts">
 	import type { ClientUser } from '$/hooks.server';
+	import { getProfilePictureImageUrl } from '$/lib/utils/images';
 	import { navElements } from '$/navigation';
 	import { browser } from '$app/environment';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { isDrawerHidden } from '$lib/stores';
-	import { mdiLogout } from '@mdi/js';
-	import {
-		Avatar,
-		Button,
-		Chevron,
-		Dropdown,
-		DropdownDivider,
-		DropdownHeader,
-		DropdownItem,
-		NavBrand,
-		NavHamburger,
-		NavLi,
-		NavUl,
-		Navbar,
-	} from 'flowbite-svelte';
+	import { mdiChevronDown, mdiLogout } from '@mdi/js';
+	import { Avatar, Button, Dropdown, DropdownHeader, DropdownItem, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
 	import DarkMode from '../DarkMode.svelte';
 	import Icon from '../Icon.svelte';
 	import Drawer from './Drawer.svelte';
 	import { isNavElemVisible } from './utils';
 
 	export let sessionUser: ClientUser;
+
+	$: activeUrl = $page.url.pathname;
 </script>
 
 <Navbar
@@ -41,7 +31,7 @@
 	<div class="flex items-center md:order-2">
 		<DarkMode class="mr-3 hidden md:flex" />
 		{#if sessionUser}
-			<Avatar class="cursor-pointer" id="avatar-menu" src="https://static-00.iconduck.com/assets.00/user-icon-2048x2048-ihoxz4vq.png" />
+			<Avatar class="cursor-pointer" id="avatar-menu" src={getProfilePictureImageUrl(sessionUser.profilePictureRef)} />
 
 			<form method="POST" action="/?/logout" use:enhance>
 				<Button type="submit" outline={true} class="!p-2 ml-3" size="lg">
@@ -55,10 +45,7 @@
 						<span class="block text-sm">{sessionUser.firstName} {sessionUser.lastName}</span>
 						<span class="block truncate text-sm font-light"> {sessionUser.email} </span>
 					</DropdownHeader>
-					<DropdownItem>Dashboard</DropdownItem>
-					<DropdownItem>Earnings</DropdownItem>
-					<DropdownDivider />
-					<DropdownItem>Settings</DropdownItem>
+					<DropdownItem href="/settings">Settings</DropdownItem>
 				</Dropdown>
 			{/if}
 		{:else}
@@ -73,12 +60,10 @@
 						{navElement.title}
 					</NavLi>
 				{:else}
-					<NavLi
-						id={navElement.id}
-						class="cursor-pointer"
-						active={navElement.elements.some((navSubElement) => $page.url.pathname == navSubElement.url)}
-					>
-						<Chevron aligned>{navElement.title}</Chevron>
+					{@const isActive = navElement.elements.some((navSubElement) => $page.url.pathname == navSubElement.url)}
+					<NavLi id={navElement.id} class="cursor-pointer flex items-center" active={isActive}>
+						{navElement.title}
+						<Icon path={mdiChevronDown}></Icon>
 					</NavLi>
 					{#if browser}
 						<Dropdown triggeredBy="#{navElement.id}" class="w-44 z-20">

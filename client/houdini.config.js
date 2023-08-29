@@ -18,6 +18,9 @@ const config = {
 				return date && date.getTime();
 			},
 		},
+		Upload: {
+			type: 'File',
+		},
 	},
 };
 

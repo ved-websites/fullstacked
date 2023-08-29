@@ -1,5 +1,5 @@
 import { PrismaService } from '$prisma/prisma.service';
-import { getGraphQLRequest } from '$utils/contextExtracter';
+import { getRequest } from '$utils/contextExtracter';
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable, SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RolesService } from './roles.service';
@@ -19,7 +19,7 @@ export class RolesGuard implements CanActivate {
 			return true;
 		}
 
-		const { session } = getGraphQLRequest(context);
+		const { session } = getRequest(context);
 
 		if (!session) {
 			// If no session, don't handle
