@@ -21,7 +21,7 @@ export async function getAuthUser(query: AppLocals['gql']['query']) {
 	return sessionUser;
 }
 
-export type ClientUser = Awaited<ReturnType<typeof getAuthUser>>;
+export type SessionUser = Awaited<ReturnType<typeof getAuthUser>>;
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.gql = createHoudiniHelpers(event);

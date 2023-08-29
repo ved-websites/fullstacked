@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
-import type { ClientUser } from './hooks.server';
+import type { SessionUser } from './hooks.server';
 import type { LayoutAlertData } from './lib/components/LayoutAlert/helper';
 import type { ToastData } from './lib/components/ToastManager/helper';
 import type { createHoudiniHelpers } from './lib/houdini/helper';
@@ -8,12 +8,12 @@ import type { Theme } from './lib/stores';
 
 export interface AppLocals {
 	gql: ReturnType<typeof createHoudiniHelpers>;
-	sessionUser: ClientUser;
+	sessionUser: SessionUser;
 	theme?: Theme;
 }
 
 export interface AppPageData {
-	sessionUser: ClientUser;
+	sessionUser: SessionUser;
 	layoutAlert: LayoutAlertData | undefined;
 	toasts: ToastData[];
 }

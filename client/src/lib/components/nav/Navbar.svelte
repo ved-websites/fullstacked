@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ClientUser } from '$/hooks.server';
+	import type { SessionUser } from '$/hooks.server';
 	import { getProfilePictureImageUrl } from '$/lib/utils/images';
 	import { navElements } from '$/navigation/routes';
 	import { browser } from '$app/environment';
@@ -13,7 +13,7 @@
 	import Drawer from './Drawer.svelte';
 	import { isNavElemVisible } from './utils';
 
-	export let sessionUser: ClientUser;
+	export let sessionUser: SessionUser;
 
 	$: activeUrl = $page.url.pathname;
 </script>

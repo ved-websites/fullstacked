@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ClientUser } from '$/hooks.server';
+	import type { SessionUser } from '$/hooks.server';
 	import { navElements } from '$/navigation/routes';
 	import { page } from '$app/stores';
 	import { isDrawerHidden } from '$lib/stores';
@@ -16,7 +16,7 @@
 		easing: sineIn,
 	};
 
-	export let sessionUser: ClientUser;
+	export let sessionUser: SessionUser;
 </script>
 
 <Drawer transitionType="fly" {transitionParams} bind:hidden={$isDrawerHidden} id="main-drawer" class="max-w-max">

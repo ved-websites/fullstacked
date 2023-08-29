@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { ClientUser } from '$/hooks.server';
+	import type { SessionUser } from '$/hooks.server';
 	import Icon from '$/lib/components/Icon.svelte';
 	import { getProfilePictureImageUrl } from '$/lib/utils/images';
 	import { page } from '$app/stores';
 	import { mdiAccount } from '@mdi/js';
 	import { Avatar, Heading, P, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
 
-	export let sessionUser: NonNullable<ClientUser>;
+	export let sessionUser: NonNullable<SessionUser>;
 	export let label: string;
 
 	$: activeUrl = $page.url.pathname;

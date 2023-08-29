@@ -1,4 +1,4 @@
-import type { ClientUser } from '$/hooks.server';
+import type { SessionUser } from '$/hooks.server';
 import { getNavElement, rolesIntersect } from '$/lib/components/nav/nav-elements';
 import { handleLoginRedirect } from '$/lib/utils/login';
 import { navElements } from '$/navigation/routes';
@@ -17,7 +17,7 @@ export function verifyUserAccess(event: RequestEvent) {
 	}
 }
 
-export function userCanAccessNav(user: ClientUser, ...getNavElementArgs: Parameters<typeof getNavElement>) {
+export function userCanAccessNav(user: SessionUser, ...getNavElementArgs: Parameters<typeof getNavElement>) {
 	const userToCheck = user;
 	const currentNav = getNavElement(...getNavElementArgs);
 

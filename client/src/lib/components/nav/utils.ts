@@ -1,7 +1,7 @@
-import type { ClientUser } from '$/hooks.server';
+import type { SessionUser } from '$/hooks.server';
 import type { NavElement } from './nav-elements';
 
-export function userHasRole(user: ClientUser, ...roles: string[]) {
+export function userHasRole(user: SessionUser, ...roles: string[]) {
 	if (!user) {
 		return false;
 	}
@@ -9,7 +9,7 @@ export function userHasRole(user: ClientUser, ...roles: string[]) {
 	return roles.some((role) => user.roles?.some((userRole) => userRole.text === role));
 }
 
-export function isNavElemVisible(navElem: NavElement, user: ClientUser): boolean {
+export function isNavElemVisible(navElem: NavElement, user: SessionUser): boolean {
 	if (navElem.isPublic) {
 		return true;
 	}
