@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ClientUser } from '$/hooks.server';
-	import { navElements } from '$/navigation';
+	import { navElements } from '$/navigation/routes';
 	import { page } from '$app/stores';
 	import { isDrawerHidden } from '$lib/stores';
 	import { mdiChevronDown, mdiChevronUp, mdiInformation } from '@mdi/js';

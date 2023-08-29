@@ -5,6 +5,7 @@ import { parseString } from 'set-cookie-parser';
 import type { AppLocals } from './app';
 import { createHoudiniHelpers } from './lib/houdini/helper';
 import { themeCookieName, themes, type Theme } from './lib/stores';
+import { verifyUserAccess } from './navigation/permissions';
 
 export const AUTH_COOKIE_NAME = 'auth_session';
 
@@ -32,6 +33,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (token) {
 		event.locals.sessionUser = await getAuthUser(event.locals.gql.query);
 	}
+
+	verifyUserAccess(event);
 
 	const themeCookie = event.cookies.get(themeCookieName) as Theme | 'null' | undefined;
 

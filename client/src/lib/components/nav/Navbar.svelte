@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ClientUser } from '$/hooks.server';
 	import { getProfilePictureImageUrl } from '$/lib/utils/images';
-	import { navElements } from '$/navigation';
+	import { navElements } from '$/navigation/routes';
 	import { browser } from '$app/environment';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
