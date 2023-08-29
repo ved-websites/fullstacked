@@ -209,6 +209,7 @@ export type Mutation = {
   deleteProfilePicture: Scalars['Boolean']['output'];
   deleteUser?: Maybe<GetUserOutput>;
   editUser: User;
+  editUserSettings: User;
   login: LoggedUserOutput;
   logout: LogoutOutput;
   register: Session;
@@ -236,6 +237,11 @@ export type MutationDeleteUserArgs = {
 export type MutationEditUserArgs = {
   data: UserUpdateInput;
   where: UserWhereUniqueInput;
+};
+
+
+export type MutationEditUserSettingsArgs = {
+  data: UserUpdateInput;
 };
 
 

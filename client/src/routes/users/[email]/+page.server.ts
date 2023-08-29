@@ -1,9 +1,8 @@
-import { createToasts } from '$/lib/components/ToastManager/helper';
-import { DeleteUserProfilePictureStore, EditOtherUserInfoStore, EditUserProfilePictureStore, GetEditableUserStore } from '$houdini';
-import { fail, redirect } from '@sveltejs/kit';
+import { EditOtherUserInfoStore, GetEditableUserStore } from '$houdini';
+import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
-import { userFormSchema } from '../components/userform.schema';
+import { adminUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({
@@ -30,7 +29,7 @@ export const load = (async ({
 		formattedEditableUser.roles = editableUser!.roles.map((role) => role.value);
 	}
 
-	const form = await superValidate(formattedEditableUser, userFormSchema);
+	const form = await superValidate(formattedEditableUser, adminUserFormSchema);
 
 	return {
 		editableUser,
@@ -40,22 +39,21 @@ export const load = (async ({
 }) satisfies PageServerLoad;
 
 export const actions = {
-	user: async ({
+	default: async ({
 		request,
 		locals: {
 			gql: { mutate },
 		},
 		params: { email: editableUserEmail },
 	}) => {
-		const form = await superValidate(request, userFormSchema);
+		const form = await superValidate(request, adminUserFormSchema);
 
 		if (!form.valid) return { form };
 
-		const { email, firstName, lastName, roles } = form.data;
+		const { firstName, lastName, roles } = form.data;
 
 		const result = await mutate(EditOtherUserInfoStore, {
 			oldEmail: editableUserEmail,
-			email,
 			firstName,
 			lastName,
 			roles: roles.map((role) => ({
@@ -68,50 +66,5 @@ export const actions = {
 		}
 
 		throw redirect(StatusCodes.SEE_OTHER, '/users');
-	},
-	profilePicture: async ({
-		request,
-		locals: {
-			gql: { mutate },
-			sessionUser,
-		},
-	}) => {
-		const formData = await request.formData();
-
-		const profilePictureFile = formData.get('profile-picture');
-
-		if (!(profilePictureFile instanceof File)) {
-			const toasts = createToasts([
-				{
-					text: 'Missing profile picture file!',
-				},
-			]);
-
-			return fail(StatusCodes.BAD_REQUEST, { toasts });
-		}
-
-		const result = await mutate(EditUserProfilePictureStore, {
-			profilePicture: profilePictureFile,
-		});
-
-		if (result.type === 'failure') {
-			return result.kitHandler('error');
-		}
-
-		throw redirect(StatusCodes.SEE_OTHER, `/users/${sessionUser!.email}`);
-	},
-	deleteProfilePicture: async ({
-		locals: {
-			gql: { mutate },
-			sessionUser,
-		},
-	}) => {
-		const result = await mutate(DeleteUserProfilePictureStore, null);
-
-		if (result.type === 'failure') {
-			return result.kitHandler('error');
-		}
-
-		throw redirect(StatusCodes.SEE_OTHER, `/users/${sessionUser!.email}`);
 	},
 } satisfies Actions;

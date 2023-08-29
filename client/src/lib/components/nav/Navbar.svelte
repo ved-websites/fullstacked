@@ -7,25 +7,15 @@
 	import { page } from '$app/stores';
 	import { isDrawerHidden } from '$lib/stores';
 	import { mdiChevronDown, mdiLogout } from '@mdi/js';
-	import {
-		Avatar,
-		Button,
-		Dropdown,
-		DropdownDivider,
-		DropdownHeader,
-		DropdownItem,
-		NavBrand,
-		NavHamburger,
-		NavLi,
-		NavUl,
-		Navbar,
-	} from 'flowbite-svelte';
+	import { Avatar, Button, Dropdown, DropdownHeader, DropdownItem, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
 	import DarkMode from '../DarkMode.svelte';
 	import Icon from '../Icon.svelte';
 	import Drawer from './Drawer.svelte';
 	import { isNavElemVisible } from './utils';
 
 	export let sessionUser: ClientUser;
+
+	$: activeUrl = $page.url.pathname;
 </script>
 
 <Navbar
@@ -55,10 +45,7 @@
 						<span class="block text-sm">{sessionUser.firstName} {sessionUser.lastName}</span>
 						<span class="block truncate text-sm font-light"> {sessionUser.email} </span>
 					</DropdownHeader>
-					<DropdownItem>Dashboard</DropdownItem>
-					<DropdownItem>Earnings</DropdownItem>
-					<DropdownDivider />
-					<DropdownItem>Settings</DropdownItem>
+					<DropdownItem href="/settings">Settings</DropdownItem>
 				</Dropdown>
 			{/if}
 		{:else}

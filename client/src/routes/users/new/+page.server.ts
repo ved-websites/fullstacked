@@ -1,9 +1,28 @@
-import { CreateNewUserStore } from '$houdini';
+import { CreateNewUserStore, GetRolesForNewUserStore } from '$houdini';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
-import { userFormSchema } from '../components/userform.schema';
-import type { Actions } from './$types';
+import { adminNewUserFormSchema } from '../schema/schema';
+import type { Actions, PageServerLoad } from './$types';
+
+export const load = (async ({
+	locals: {
+		gql: { query },
+	},
+}) => {
+	const result = await query(GetRolesForNewUserStore);
+
+	if (result.type === 'failure') {
+		return result.kitHandler('redirect');
+	}
+
+	const form = await superValidate(adminNewUserFormSchema);
+
+	return {
+		form,
+		roles: result.data.getRoles,
+	};
+}) satisfies PageServerLoad;
 
 export const actions = {
 	default: async ({
@@ -12,7 +31,7 @@ export const actions = {
 			gql: { mutate },
 		},
 	}) => {
-		const form = await superValidate(request, userFormSchema);
+		const form = await superValidate(request, adminNewUserFormSchema);
 
 		if (!form.valid) return { form };
 
