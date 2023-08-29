@@ -31,6 +31,6 @@
 
 		<slot name="below" />
 
-		<Button type="submit" class="mt-5">Submit</Button>
+		<Button type="submit" class="mt-3">Submit</Button>
 	</div>
 </form>

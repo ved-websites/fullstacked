@@ -11,7 +11,7 @@
 	$: superFormData = superForm(data.form, { dataType: 'json' });
 </script>
 
-<SettingPage {sessionUser}>
+<SettingPage {sessionUser} label="Profile">
 	<div class="grid grid-cols-1 lg:grid-cols-3 gap-y-5 lg:gap-10">
 		<UserForm action="?/basicUserInfo" {superFormData} class="col-span-2 order-1 lg:order-none"></UserForm>
 		<ProfilePictureForm class="col-span-1 order-2 lg:order-none" currentProfilePictureRef={data.sessionUser?.profilePictureRef} />

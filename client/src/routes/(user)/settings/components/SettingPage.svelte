@@ -4,9 +4,10 @@
 	import { getProfilePictureImageUrl } from '$/lib/utils/images';
 	import { page } from '$app/stores';
 	import { mdiAccount } from '@mdi/js';
-	import { Avatar, P, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
+	import { Avatar, Heading, P, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
 
 	export let sessionUser: NonNullable<ClientUser>;
+	export let label: string;
 
 	$: activeUrl = $page.url.pathname;
 </script>
@@ -36,7 +37,8 @@
 			</SidebarWrapper>
 		</Sidebar>
 	</section>
-	<section class="grow">
+	<section class="grow" {...$$restProps}>
+		<Heading tag="h2" class="mb-5">{label}</Heading>
 		<slot />
 	</section>
 </div>

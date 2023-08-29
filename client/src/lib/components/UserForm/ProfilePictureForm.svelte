@@ -6,7 +6,7 @@
 	import { applyAction, enhance } from '$app/forms';
 	import { mdiUpload } from '@mdi/js';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { Button, Hr, Label } from 'flowbite-svelte';
+	import { Button, Label } from 'flowbite-svelte';
 
 	const ACCEPTED_PROFILE_PICTURE_TYPES = ['jpeg', 'jpg', 'png', 'webp'];
 
@@ -70,7 +70,6 @@
 </script>
 
 <form method="post" enctype="multipart/form-data" use:enhance={handleEnhance} {...$$restProps}>
-	<Hr classHr="sm:hidden" />
 	<Label>Profile Picture</Label>
 	<VDropzone
 		id="dropzone"
