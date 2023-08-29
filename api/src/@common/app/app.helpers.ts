@@ -1,6 +1,7 @@
 import { AuthModule } from '$auth/auth.module';
 import { ConfigModule } from '$configs/config.module';
 import { EmailModule } from '$email/email.module';
+import { ContextModule } from '$graphql/context/context.module';
 import { GraphQLModule } from '$graphql/graphql.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { UsersModule } from '$users/users.module';
@@ -12,6 +13,7 @@ export const BaseModules = [
 	EmailModule,
 	PrismaModule,
 	GraphQLModule,
+	ContextModule,
 	EventEmitterModule.forRoot({
 		global: true,
 		verboseMemoryLeak: true,

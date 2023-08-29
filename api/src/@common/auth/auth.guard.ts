@@ -1,4 +1,4 @@
-import { getRequest } from '$utils/contextExtracter';
+import { ContextService } from '$graphql/context/context.service';
 import { CanActivate, ExecutionContext, Injectable, SetMetadata, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
 			return true;
 		}
 
-		const { session } = getRequest(context);
+		const { session } = ContextService.getRequest(context);
 
 		if (!session) {
 			// Unauthorized == Unauthenticated
