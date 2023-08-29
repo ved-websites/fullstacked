@@ -6,6 +6,7 @@ import { User } from 'lucia';
 @Injectable()
 export class SettingsService {
 	constructor(private readonly prisma: PrismaService) {}
+
 	async editUser(select: PrismaSelector, user: User, data: UserUpdateInput) {
 		const updatedUser = await this.prisma.mutate(['USER_EDITED'], select, (allSelect) => {
 			return this.prisma.user.update({

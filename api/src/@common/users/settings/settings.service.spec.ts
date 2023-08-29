@@ -1,16 +1,21 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaModule } from '$prisma/prisma.module';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { TestManager } from '~/@utils/tests/TestManager';
 import { SettingsService } from './settings.service';
 
 describe('SettingsService', () => {
+	const manager = new TestManager({
+		metadata: {
+			imports: [PrismaModule],
+			providers: [SettingsService],
+		},
+	});
 	let service: SettingsService;
 
 	beforeEach(async () => {
-		const module: TestingModule = await Test.createTestingModule({
-			providers: [SettingsService],
-		}).compile();
+		await manager.setupTestModule();
 
-		service = module.get<SettingsService>(SettingsService);
+		service = manager.module.get<SettingsService>(SettingsService);
 	});
 
 	it('should be defined', () => {
