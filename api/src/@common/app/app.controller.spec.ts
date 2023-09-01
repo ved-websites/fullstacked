@@ -1,16 +1,19 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { TestManager } from '~/@utils/tests/TestManager';
 import { AppController } from './app.controller';
 
 describe('AppController', () => {
+	const manager = new TestManager({
+		metadata: {
+			controllers: [AppController],
+		},
+	});
 	let controller: AppController;
 
 	beforeEach(async () => {
-		const module: TestingModule = await Test.createTestingModule({
-			controllers: [AppController],
-		}).compile();
+		await manager.setupTestModule();
 
-		controller = module.get<AppController>(AppController);
+		controller = manager.module.get<AppController>(AppController);
 	});
 
 	it('should be defined', () => {

@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { ContextService } from './context.service';
 
 @Module({
-	imports: [LuciaModule, ContextModule],
+	imports: [LuciaModule],
 	providers: [ContextService],
 	exports: [ContextService],
 })
