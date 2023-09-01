@@ -91,7 +91,7 @@ export const setupPrismaFull: TaskFunction = gulp.series(setupPrisma, updateData
 
 export const build: TaskFunction = gulp.series(gulp.parallel(deleteDist, setupPrisma), buildNest, buildPrisma);
 
-export const init: TaskFunction = gulp.series(deleteDist, setupEnv, setupPrismaFull);
+export const init: TaskFunction = gulp.series(deleteDist, setupEnv, setupPrismaFull, generateGraphQLSchema);
 
 export const cleanBuild: TaskFunction = gulp.series(init, build);
 
