@@ -41,7 +41,10 @@ if (!args.some(({ name }) => name == 'no-api')) {
 		// Do nothing on api kill error
 	}
 
-	await progresser('Setting up api', () => exec('pnpm run --filter ./api init'));
+	await progresser('Setting up api', async () => {
+		await exec('pnpm run --filter ./api init');
+		await exec('pnpm run gql');
+	});
 } else if (!args.some(({ name }) => name == 'no-gql')) {
 	// If not setting API, at least check for GraphQL generation
 	await progresser('Setting up GraphQL', () => exec('pnpm run --filter ./api gql:generate'));

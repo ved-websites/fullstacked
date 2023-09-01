@@ -1,4 +1,4 @@
-import type { SessionUser } from '$/hooks.server';
+import type { SessionUser } from '$/auth/auth-handler';
 import { getNavElement, rolesIntersect } from '$/lib/components/nav/nav-elements';
 import { handleLoginRedirect } from '$/lib/utils/login';
 import { navElements } from '$/navigation/routes';

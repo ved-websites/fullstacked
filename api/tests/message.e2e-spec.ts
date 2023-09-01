@@ -1,7 +1,7 @@
 import assert from 'assert';
 import gql from 'graphql-tag';
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { GetEmptyMessagesQuery } from './@generated/graphql';
+import { GetEmptyMessagesQuery } from './_generated/graphql';
 import { E2ETestManager, users } from './utils/E2ETestManager';
 
 vi.mock('$auth/lucia/modules-compat');

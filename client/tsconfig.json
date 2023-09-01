@@ -4,7 +4,6 @@
 		"baseUrl": ".",
 		"paths": {
 			"$/*": ["./src/*"],
-			"$gql": ["./src/graphql/@generated"],
 			"$lib": ["./src/lib"],
 			"$lib/*": ["./src/lib/*"],
 			"$houdini": ["./$houdini"],

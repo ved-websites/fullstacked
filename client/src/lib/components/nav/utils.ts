@@ -1,4 +1,4 @@
-import type { SessionUser } from '$/hooks.server';
+import type { SessionUser } from '$/auth/auth-handler';
 import type { NavElement } from './nav-elements';
 
 export function userHasRole(user: SessionUser, ...roles: string[]) {

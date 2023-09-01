@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { SessionUser } from '$/hooks.server';
+	import type { SessionUser } from '$/auth/auth-handler';
 	import Icon from '$/lib/components/Icon.svelte';
 	import { getProfilePictureImageUrl } from '$/lib/utils/images';
 	import { page } from '$app/stores';

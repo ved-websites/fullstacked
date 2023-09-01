@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { SessionUser } from '$/hooks.server';
+	import type { SessionUser } from '$/auth/auth-handler';
 	import { getProfilePictureImageUrl } from '$/lib/utils/images';
 	import { navElements } from '$/navigation/routes';
 	import { browser } from '$app/environment';

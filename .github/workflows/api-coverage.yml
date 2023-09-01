@@ -47,7 +47,7 @@ jobs:
         run: pnpm install
 
       - name: Init
-        run: pnpm run init
+        run: pnpm run init --no-client
         env:
           DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
 
@@ -57,7 +57,7 @@ jobs:
           accessToken: '${{ secrets.GH_BOT_TOKEN }}'
           runCommand: 'pnpm run --filter ./api coverage'
           # delta: 0.5 # Delta of % changed that would make this job fail
-          afterSwitchCommand: 'pnpm i'
+          afterSwitchCommand: 'pnpm i && pnpm run init --no-client'
           useSameComment: true
         env:
           TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
-import type { SessionUser } from './hooks.server';
+import type { SessionUser } from './auth/auth-handler';
 import type { LayoutAlertData } from './lib/components/LayoutAlert/helper';
 import type { ToastData } from './lib/components/ToastManager/helper';
 import type { createHoudiniHelpers } from './lib/houdini/helper';

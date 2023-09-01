@@ -1,27 +1,11 @@
 import { PUBLIC_API_ADDR } from '$env/static/public';
-import { GetUserFromSessionStore, setSession } from '$houdini';
+import { setSession } from '$houdini';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 import { parseString } from 'set-cookie-parser';
-import type { AppLocals } from './app';
+import { AUTH_COOKIE_NAME, getAuthUser } from './auth/auth-handler';
 import { createHoudiniHelpers } from './lib/houdini/helper';
 import { themeCookieName, themes, type Theme } from './lib/stores';
 import { verifyUserAccess } from './navigation/permissions';
-
-export const AUTH_COOKIE_NAME = 'auth_session';
-
-export async function getAuthUser(query: AppLocals['gql']['query']) {
-	const result = await query(GetUserFromSessionStore);
-
-	if (result.type === 'failure') {
-		return null;
-	}
-
-	const { getSessionUser: sessionUser } = result.data;
-
-	return sessionUser;
-}
-
-export type SessionUser = Awaited<ReturnType<typeof getAuthUser>>;
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.gql = createHoudiniHelpers(event);

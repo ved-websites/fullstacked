@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { SessionUser } from '$/hooks.server';
+	import type { SessionUser } from '$/auth/auth-handler';
 	import { navElements } from '$/navigation/routes';
 	import { page } from '$app/stores';
 	import { isDrawerHidden } from '$lib/stores';

@@ -21,27 +21,7 @@ const apiDocuments = ['api/tests/**/*.ts'];
 const codegen: Types.Config = {
 	ignoreNoDocuments: true,
 	generates: {
-		'client/src/graphql/@generated/index.ts': {
-			documents: [...clientDocuments, '!api/**/*'],
-			plugins: [
-				{
-					typescript: {
-						...tsCommonConfig,
-					} as TypeScriptPluginConfig,
-				},
-				{
-					'typescript-operations': {
-						...tsCommonConfig,
-					} as TypeScriptDocumentsPluginConfig,
-				},
-				{
-					'typed-document-node': {
-						...tsCommonConfig,
-					} as TypeScriptTypedDocumentNodesConfig,
-				},
-			],
-		},
-		'api/tests/@generated/graphql/index.ts': {
+		'api/tests/_generated/graphql/index.ts': {
 			documents: [...apiDocuments, '!client/**/*'],
 			plugins: [
 				{
