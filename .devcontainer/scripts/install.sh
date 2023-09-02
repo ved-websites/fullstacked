@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cat ~/workspace/.devcontainer/files/.bashrc >> ~/.bashrc
+
 PNPM_TMP_OWNER=$(stat -c '%U' /home/node/.local/share/pnpm/store/v3/tmp/)
 
 if [ $PNPM_TMP_OWNER = "root" ]
