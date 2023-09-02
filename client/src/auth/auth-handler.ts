@@ -1,9 +1,9 @@
-import type { AppLocals } from '$/app';
-import { GetUserFromSessionStore } from '$houdini';
+import type { GraphQLQuery } from '$/lib/houdini/helper';
+import { GetUserFromSessionStore, type GetUserFromSession$result } from '$houdini';
 
 export const AUTH_COOKIE_NAME = 'auth_session';
 
-export async function getAuthUser(query: AppLocals['gql']['query']) {
+export async function getAuthUser(query: GraphQLQuery): Promise<GetUserFromSession$result['getSessionUser'] | null> {
 	const result = await query(GetUserFromSessionStore);
 
 	if (result.type === 'failure') {
@@ -15,4 +15,4 @@ export async function getAuthUser(query: AppLocals['gql']['query']) {
 	return sessionUser;
 }
 
-export type SessionUser = Awaited<ReturnType<typeof getAuthUser>>;
+export type SessionUser = GetUserFromSession$result['getSessionUser'];
