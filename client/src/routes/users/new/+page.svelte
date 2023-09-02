@@ -7,7 +7,7 @@
 	export let data;
 	$: ({ roles } = data);
 
-	$: superFormData = superForm(data.form);
+	$: superFormData = superForm(data.form, { dataType: 'json' });
 	$: ({ form, constraints, errors } = superFormData);
 
 	$: availableRoles = roles.map<SelectOptionType>((role) => ({

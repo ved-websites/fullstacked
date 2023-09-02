@@ -16,14 +16,14 @@
 			<div>
 				<Label>
 					<span> First Name </span>
-					<Input class="mt-2" type="text" bind:value={$form.firstName} {...$constraints.firstName} />
+					<Input name="firstName" class="mt-2" type="text" bind:value={$form.firstName} {...$constraints.firstName} />
 					{#if $errors.firstName}<Helper class="mt-2" color="red">{$errors.firstName}</Helper>{/if}
 				</Label>
 			</div>
 			<div>
 				<Label>
 					<span> Last Name </span>
-					<Input class="mt-2" type="text" bind:value={$form.lastName} {...$constraints.lastName} />
+					<Input name="lastName" class="mt-2" type="text" bind:value={$form.lastName} {...$constraints.lastName} />
 					{#if $errors.lastName}<Helper class="mt-2" color="red">{$errors.lastName}</Helper>{/if}
 				</Label>
 			</div>
