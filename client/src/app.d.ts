@@ -10,12 +10,14 @@ export interface AppLocals {
 	gql: ReturnType<typeof createHoudiniHelpers>;
 	sessionUser: SessionUser;
 	theme?: Theme;
+	userHasJs: boolean;
 }
 
 export interface AppPageData {
 	sessionUser: SessionUser;
 	layoutAlert: LayoutAlertData | undefined;
 	toasts: ToastData[];
+	userHasJs: boolean;
 }
 
 export interface HoudiniSession {

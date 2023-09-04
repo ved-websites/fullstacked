@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Icon from '$/lib/components/Icon.svelte';
 	import { subscribe } from '$/lib/houdini/helper.js';
-	import { browser } from '$app/environment';
 	import { NewMessageStore } from '$houdini';
 	import { mdiSend } from '@mdi/js';
 	import { Button, Helper, Input, Label, P } from 'flowbite-svelte';
@@ -88,7 +87,7 @@
 		active: true,
 	}));
 
-	$: canSend = !browser || (!!$form.message && !isSending);
+	$: canSend = !data.userHasJs || (!!$form.message && !isSending);
 
 	onMount(() => {
 		messageViewElement.scrollTop = messageViewElement.scrollHeight;

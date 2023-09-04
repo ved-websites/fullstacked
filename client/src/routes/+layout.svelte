@@ -3,6 +3,7 @@
 
 	import LayoutAlert from '$/lib/components/LayoutAlert/LayoutAlert.svelte';
 	import ToastManager from '$/lib/components/ToastManager/ToastManager.svelte';
+	import HasJs from '$/lib/components/head/HasJS.svelte';
 	import InitialTheme from '$/lib/components/head/InitialTheme.svelte';
 	import { themeStore } from '$/lib/stores';
 	import { page } from '$app/stores';
@@ -17,6 +18,7 @@
 	$: toasts = [...$page.data.toasts, ...(($page.form?.toasts as PageData['toasts']) ?? [])];
 </script>
 
+<HasJs />
 <InitialTheme />
 
 <Navbar sessionUser={data.sessionUser} />

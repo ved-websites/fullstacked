@@ -10,6 +10,20 @@
 	export let label: string;
 
 	$: activeUrl = $page.url.pathname;
+
+	type VSidebarElement = {
+		href: `/${string}`;
+		label: string;
+		icon?: string;
+	};
+
+	const items: VSidebarElement[] = [
+		{
+			href: '/settings/profile',
+			label: 'Profile',
+			icon: mdiAccount,
+		},
+	];
 </script>
 
 <header class="flex gap-5 mb-5">
@@ -23,16 +37,20 @@
 	</P>
 </header>
 
-<div class="flex gap-10 flex-col sm:flex-row">
+<div class="flex gap-10 flex-col md:flex-row">
 	<section>
-		<Sidebar {activeUrl} asideClass="w-full sm:w-64">
+		<Sidebar {activeUrl} class="w-full md:w-64">
 			<SidebarWrapper>
 				<SidebarGroup>
-					<SidebarItem href="/settings/profile" label="Profile">
-						<svelte:fragment slot="icon">
-							<Icon path={mdiAccount} />
-						</svelte:fragment>
-					</SidebarItem>
+					{#each items as item}
+						<SidebarItem href={item.href} label={item.label} active={activeUrl === item.href}>
+							<svelte:fragment slot="icon">
+								{#if item.icon}
+									<Icon path={item.icon} />
+								{/if}
+							</svelte:fragment>
+						</SidebarItem>
+					{/each}
 				</SidebarGroup>
 			</SidebarWrapper>
 		</Sidebar>

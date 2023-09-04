@@ -5,6 +5,7 @@ import { parseString } from 'set-cookie-parser';
 import { AUTH_COOKIE_NAME, getAuthUser } from './auth/auth-handler';
 import { createHoudiniHelpers } from './lib/houdini/helper';
 import { themeCookieName, themes, type Theme } from './lib/stores';
+import { HASJS_COOKIE_NAME } from './lib/utils/js-handling';
 import { verifyUserAccess } from './navigation/permissions';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -20,19 +21,25 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	verifyUserAccess(event);
 
+	event.locals.userHasJs = !!event.cookies.get(HASJS_COOKIE_NAME);
+
 	const themeCookie = event.cookies.get(themeCookieName) as Theme | 'null' | undefined;
 
 	if (themeCookie) {
 		event.locals.theme = themeCookie != 'null' && themes.includes(themeCookie) ? themeCookie : undefined;
 	}
 
-	const opts: Parameters<typeof resolve>[1] = ['dark', undefined].includes(event.locals.theme)
-		? {
-				transformPageChunk({ html }) {
-					return html.replace('<html lang="en">', '<html lang="en" class="dark">');
-				},
-		  }
-		: undefined;
+	const opts = ((): Parameters<typeof resolve>[1] => {
+		if (!['dark', undefined].includes(event.locals.theme)) {
+			return undefined;
+		}
+
+		return {
+			transformPageChunk({ html }) {
+				return html.replace('<html lang="en">', '<html lang="en" class="dark">');
+			},
+		};
+	})();
 
 	return resolve(event, opts);
 };

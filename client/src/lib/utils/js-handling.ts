@@ -27,3 +27,5 @@ export const formWithJs: Action = (element) => {
 		},
 	};
 };
+
+export const HASJS_COOKIE_NAME = 'hasJs';

@@ -1,9 +1,16 @@
 import type { AppPageData } from '$/app';
 import { createLayoutAlert } from '$/lib/components/LayoutAlert/helper';
 import type { ToastData } from '$/lib/components/ToastManager/helper';
+import { HASJS_COOKIE_NAME } from '$/lib/utils/js-handling';
 import type { LayoutServerLoad } from './$types';
 
-export const load = (async ({ url, locals: { sessionUser, theme } }) => {
+export const load = (async ({ cookies, isDataRequest, isSubRequest, url, locals: { sessionUser, theme, userHasJs } }) => {
+	if (!isDataRequest && !isSubRequest) {
+		cookies.delete(HASJS_COOKIE_NAME, {
+			path: '/',
+		});
+	}
+
 	let layoutAlert: AppPageData['layoutAlert'];
 
 	if (url.searchParams.has('forbidden')) {
@@ -18,5 +25,6 @@ export const load = (async ({ url, locals: { sessionUser, theme } }) => {
 		theme,
 		layoutAlert,
 		toasts: [] as ToastData[],
+		userHasJs,
 	};
 }) satisfies LayoutServerLoad;

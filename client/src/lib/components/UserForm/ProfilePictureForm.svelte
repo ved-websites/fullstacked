@@ -2,7 +2,6 @@
 	import Icon from '$/lib/components/Icon.svelte';
 	import VDropzone from '$/lib/components/flowbite-custom/VDropzone.svelte';
 	import { getProfilePictureImageUrl } from '$/lib/utils/images';
-	import { browser } from '$app/environment';
 	import { applyAction, enhance } from '$app/forms';
 	import { mdiUpload } from '@mdi/js';
 	import type { SubmitFunction } from '@sveltejs/kit';
@@ -11,6 +10,7 @@
 	const ACCEPTED_PROFILE_PICTURE_TYPES = ['jpeg', 'jpg', 'png', 'webp'];
 
 	export let currentProfilePictureRef: string | undefined | null;
+	export let hasJs: boolean;
 
 	$: !currentProfilePictureRef && (profilePictureFile = undefined);
 
@@ -58,7 +58,6 @@
 			const successTypes: (typeof result.type)[] = ['success', 'redirect'];
 
 			if (successTypes.includes(result.type)) {
-				console.log('yay');
 				profilePictureFile = undefined;
 			}
 
@@ -109,8 +108,8 @@
 
 	<div class="mt-5 grid grid-cols-2 gap-5">
 		<Button type="submit" formaction="?/deleteProfilePicture" disabled={!currentProfilePictureRef} color="red">Delete</Button>
-		<Button type="submit" formaction="?/profilePicture" disabled={!(!browser || profilePictureFile) || isSendingProfilePicture}
-			>Submit Profile Picture</Button
-		>
+		<Button type="submit" formaction="?/profilePicture" disabled={(hasJs && !profilePictureFile) || isSendingProfilePicture}>
+			Submit Profile Picture
+		</Button>
 	</div>
 </form>
