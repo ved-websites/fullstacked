@@ -12,6 +12,10 @@ export const actions = {
 	}) {
 		const form = await superValidate(request, schema);
 
+		if (!form.valid) {
+			return { form };
+		}
+
 		const result = await mutate(SendMessageStore, { message: form.data.message });
 
 		if (result.type === 'failure') {

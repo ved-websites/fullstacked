@@ -100,11 +100,11 @@
 	{/each}
 </div>
 
-<form method="POST" use:enhance>
-	<div class="mb-3">
+<form method="POST" use:enhance class="flex flex-col gap-3">
+	<div>
 		<Label for="message" class="mb-2">Message</Label>
 		<Input type="text" name="message" disabled={isSending} bind:value={$form.message} autocomplete="off" {...$constraints} />
-		{#if $errors.message}<Helper color="red">{$errors.message}</Helper>{/if}
+		{#if $errors.message}<Helper class="mt-1" color="red">{$errors.message}</Helper>{/if}
 	</div>
 
 	<Button type="submit" disabled={!canSend}>
