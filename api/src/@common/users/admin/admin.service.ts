@@ -2,11 +2,10 @@ import { UserCreateInput, UserUpdateInput, UserWhereInput, UserWhereUniqueInput 
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { AuthService } from '$users/auth/auth.service';
 import { RolesService } from '$users/auth/roles/roles.service';
-import { EmailService } from '$users/email/email.service';
 import { Injectable } from '@nestjs/common';
-import { User } from 'lucia';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ADMIN } from '~/@utils/roles';
-import { EnvironmentConfig } from '~/env.validation';
+import { ADMIN_CREATE_USER_EVENT_KEY, ADMIN_CREATE_USER_EVENT_TYPE } from './listeners/admin.events';
 
 @Injectable()
 export class AdminService {
@@ -14,8 +13,7 @@ export class AdminService {
 		private readonly prisma: PrismaService,
 		private readonly authService: AuthService,
 		private readonly rolesService: RolesService,
-		private readonly email: EmailService,
-		private readonly env: EnvironmentConfig,
+		private eventEmitter: EventEmitter2,
 	) {}
 
 	async getUsers(select: PrismaSelector, where?: UserWhereInput) {
@@ -39,7 +37,7 @@ export class AdminService {
 		return users;
 	}
 
-	async createUser(data: UserCreateInput, options: { origin: string; originUser: User; waitForEmail?: boolean }) {
+	async createUser(data: UserCreateInput, options: ADMIN_CREATE_USER_EVENT_TYPE['options']) {
 		const { email, firstName, lastName, roles } = data;
 
 		const user = await this.authService.createUser(email, null, {
@@ -51,23 +49,10 @@ export class AdminService {
 			await this.rolesService.setUserRoles(user, roles);
 		}
 
-		if (user.registerToken) {
-			const templateData = {
-				name: user.fullName ?? user.email,
-				url: `${options.origin}/register?token=${user.registerToken}`,
-			};
-
-			const emailer = this.email.renderAndSend(['RegisterEmail.hbs', templateData], {
-				to: { email: user.email, name: user.fullName },
-				from: { email: this.env.EMAIL_FROM, name: options.originUser.fullName },
-				replyTo: { email: options.originUser.email, name: options.originUser.fullName },
-				subject: `You have been invited to join the Fullstacked website!`,
-			});
-
-			if (options.waitForEmail) {
-				await emailer;
-			}
-		}
+		this.eventEmitter.emit(ADMIN_CREATE_USER_EVENT_KEY, {
+			user,
+			options,
+		} satisfies ADMIN_CREATE_USER_EVENT_TYPE);
 
 		return user;
 	}
