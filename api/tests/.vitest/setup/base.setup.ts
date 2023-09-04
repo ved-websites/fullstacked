@@ -1,3 +1,3 @@
 import { vi } from 'vitest';
 
-vi.mock('$auth/lucia/modules-compat');
+vi.mock('$users/auth/lucia/modules-compat');

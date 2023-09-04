@@ -1,4 +1,4 @@
-import { AuthSession, LuciaSession } from '$auth/session.decorator';
+import { AuthSession, LuciaSession } from '$users/auth/session.decorator';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { FileUpload } from 'graphql-upload/Upload.js';

@@ -1,11 +1,11 @@
 import 'lucia/polyfill/node';
 
-import { AuthModule } from '$auth/auth.module';
-import { AuthService } from '$auth/auth.service';
 import { GraphQLModule } from '$graphql/graphql.module';
 import { ensureGraphQLSchema } from '$graphql/schema/schema.manager';
 import { PrismaModule } from '$prisma/prisma.module';
 import { PrismaService } from '$prisma/prisma.service';
+import { AuthModule } from '$users/auth/auth.module';
+import { AuthService } from '$users/auth/auth.service';
 import { setupViewEngine } from '$utils/setupViewEngine';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';

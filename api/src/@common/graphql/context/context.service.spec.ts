@@ -1,4 +1,4 @@
-import { LuciaModule } from '$auth/lucia/lucia.module';
+import { LuciaModule } from '$users/auth/lucia/lucia.module';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TestManager } from '~/@utils/tests/TestManager';
 import { ContextService } from './context.service';

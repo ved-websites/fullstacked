@@ -1,7 +1,7 @@
-import { AuthSession, LuciaSession } from '$auth/session.decorator';
 import { User, UserUpdateInput } from '$prisma-graphql/user';
 import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
+import { AuthSession, LuciaSession } from '$users/auth/session.decorator';
 import { ForbiddenException } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { SettingsService } from './settings.service';

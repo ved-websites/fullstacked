@@ -1,5 +1,5 @@
-import { Auth, LuciaFactory } from '$auth/lucia/lucia.factory';
-import { COOKIE_NAME, setupRequest } from '$auth/lucia/lucia.middleware';
+import { Auth, LuciaFactory } from '$users/auth/lucia/lucia.factory';
+import { COOKIE_NAME, setupRequest } from '$users/auth/lucia/lucia.middleware';
 import { ExecutionContext, Inject, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import type { Request, Response } from 'express';

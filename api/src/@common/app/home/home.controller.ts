@@ -1,8 +1,8 @@
-import { Public } from '$auth/auth.guard';
+import { Public } from '$users/auth/auth.guard';
 import { Controller, Get } from '@nestjs/common';
 
 @Controller()
-export class AppController {
+export class HomeController {
 	@Public()
 	@Get()
 	home() {

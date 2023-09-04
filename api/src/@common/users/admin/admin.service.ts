@@ -1,15 +1,15 @@
-import { AuthService } from '$auth/auth.service';
-import { RolesService } from '$auth/roles/roles.service';
-import { EmailService } from '$email/email.service';
 import { UserCreateInput, UserUpdateInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
+import { AuthService } from '$users/auth/auth.service';
+import { RolesService } from '$users/auth/roles/roles.service';
+import { EmailService } from '$users/email/email.service';
 import { Injectable } from '@nestjs/common';
 import { User } from 'lucia';
 import { ADMIN } from '~/@utils/roles';
 import { EnvironmentConfig } from '~/env.validation';
 
 @Injectable()
-export class UsersService {
+export class AdminService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly authService: AuthService,

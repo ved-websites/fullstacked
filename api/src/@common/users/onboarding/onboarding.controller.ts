@@ -1,6 +1,6 @@
-import { Public } from '$auth/auth.guard';
-import { AuthService } from '$auth/auth.service';
 import { PrismaService } from '$prisma/prisma.service';
+import { Public } from '$users/auth/auth.guard';
+import { AuthService } from '$users/auth/auth.service';
 import { Body, Controller, Get, Next, Post, Redirect, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import type { NextFunction, Response } from 'express';
 import { OnboardingDto } from './onboarding.dto';

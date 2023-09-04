@@ -1,5 +1,5 @@
-import { loadLuciaUtils } from '$auth/lucia/modules-compat';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
+import { loadLuciaUtils } from '$users/auth/lucia/modules-compat';
 import { Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes } from 'lucia';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';

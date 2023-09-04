@@ -1,14 +1,15 @@
-import { AuthModule } from '$auth/auth.module';
-import { RolesModule } from '$auth/roles/roles.module';
-import { EmailModule } from '$email/email.module';
-import { PrismaModule } from '$prisma/prisma.module';
 import { Module } from '@nestjs/common';
-import { SettingsModule } from './settings/settings.module';
-import { UsersResolver } from './users.resolver';
-import { UsersService } from './users.service';
+import { AdminModule } from './admin/admin.module';
+import { AuthModule } from './auth/auth.module';
+import { EmailModule } from './email/email.module';
+import { OnboardingModule } from './onboarding/onboarding.module';
+import { UserModule } from './user/user.module';
 
+/**
+ * The module responsible to handle all common users handling.
+ */
 @Module({
-	imports: [PrismaModule, AuthModule, RolesModule, EmailModule, SettingsModule],
-	providers: [UsersResolver, UsersService],
+	imports: [OnboardingModule, EmailModule, AuthModule, AdminModule, UserModule],
+	exports: [AuthModule],
 })
 export class UsersModule {}

@@ -1,19 +1,19 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TestManager } from '~/@utils/tests/TestManager';
-import { AppController } from './app.controller';
+import { HomeController } from './home.controller';
 
-describe('AppController', () => {
+describe('HomeController', () => {
 	const manager = new TestManager({
 		metadata: {
-			controllers: [AppController],
+			controllers: [HomeController],
 		},
 	});
-	let controller: AppController;
+	let controller: HomeController;
 
 	beforeEach(async () => {
 		await manager.setupTestModule();
 
-		controller = manager.module.get<AppController>(AppController);
+		controller = manager.module.get<HomeController>(HomeController);
 	});
 
 	it('should be defined', () => {
