@@ -6,7 +6,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 
-export const urlsWhitelist: string[] = ['/', '/login'];
+export const urlsWhitelist: string[] = ['/', '/login', '/register'] satisfies `/${string}`[];
 
 export function verifyUserAccess(event: RequestEvent) {
 	const {
