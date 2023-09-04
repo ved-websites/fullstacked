@@ -48,11 +48,11 @@ export class EmailService {
 	}
 
 	async send(emailOptions: SendMailData) {
-		const data = await sendEmailSchema.parseAsync(emailOptions);
-
 		if (this.env.NODE_ENV == Environment.Development && !this.env.EMAIL_SENT_IN_DEV) {
 			return null;
 		}
+
+		const data = await sendEmailSchema.parseAsync(emailOptions);
 
 		const response = this.httpService.post(this.env.EMAIL_ENDPOINT, data, {
 			headers: {
