@@ -14,8 +14,6 @@
 	import { isNavElemVisible } from './utils';
 
 	export let sessionUser: SessionUser;
-
-	$: activeUrl = $page.url.pathname;
 </script>
 
 <Navbar
