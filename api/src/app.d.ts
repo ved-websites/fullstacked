@@ -1,4 +1,4 @@
-import type { Auth as ApiAuth } from '$auth/lucia/lucia.factory';
+import type { Auth as ApiAuth } from '$users/auth/lucia/lucia.factory';
 import type { AuthRequest, Session } from 'lucia';
 
 declare global {
