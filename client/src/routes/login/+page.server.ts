@@ -13,17 +13,25 @@ const schema = z.object({
 	password: passwordSchema,
 });
 
-export const load = (async ({ url }) => {
+export const load = (async ({ url, locals: { sessionUser } }) => {
 	const form = await superValidate(schema);
 
-	const redirectTo = url.searchParams.has('redirectTo') || undefined;
+	const redirectTo = getRedirectTo(url);
 
-	const layoutAlert =
-		redirectTo &&
-		createLayoutAlert({
+	if (sessionUser) {
+		throw redirect(StatusCodes.SEE_OTHER, redirectTo || '/');
+	}
+
+	const layoutAlert = (() => {
+		if (!redirectTo) {
+			return;
+		}
+
+		return createLayoutAlert({
 			text: `Vous devez être connecté pour accéder à cette ressource!`,
 			level: 'warning',
 		});
+	})();
 
 	return { form, layoutAlert };
 }) satisfies PageServerLoad;
@@ -73,11 +81,21 @@ export const actions = {
 			});
 		}
 
-		const redirectToParam = url.searchParams.get('redirectTo');
-
-		const redirectTo = redirectToParam ? `/${redirectToParam.slice(1)}` : `/`;
+		const redirectTo = getRedirectTo(url) || '/';
 
 		// Successful login
 		throw redirect(StatusCodes.SEE_OTHER, redirectTo);
 	},
 } satisfies Actions;
+
+function getRedirectTo(url: URL) {
+	const redirectToParam = url.searchParams.get('redirectTo');
+
+	if (redirectToParam === null) {
+		return false;
+	}
+
+	const redirectTo: `/${string}` = `/${redirectToParam.slice(1)}`;
+
+	return redirectTo;
+}
