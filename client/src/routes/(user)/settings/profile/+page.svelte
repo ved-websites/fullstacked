@@ -1,8 +1,8 @@
 <script lang="ts">
-	import ProfilePictureForm from '$/lib/components/UserForm/ProfilePictureForm.svelte';
 	import UserForm from '$/lib/components/UserForm/UserForm.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import SettingPage from '../components/SettingPage.svelte';
+	import ProfilePictureForm from './ProfilePictureForm.svelte';
 
 	export let data;
 
