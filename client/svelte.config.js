@@ -11,6 +11,7 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
+			$: './src',
 			$houdini: path.resolve('.', '$houdini'),
 		},
 	},

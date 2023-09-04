@@ -1,14 +1,6 @@
 {
 	"extends": ["@v-ed/tsconfig", "./.svelte-kit/tsconfig.json"],
 	"compilerOptions": {
-		"baseUrl": ".",
-		"paths": {
-			"$/*": ["./src/*"],
-			"$lib": ["./src/lib"],
-			"$lib/*": ["./src/lib/*"],
-			"$houdini": ["./$houdini"],
-		},
-		
 		"rootDirs": [".", "./.svelte-kit/types", "./$houdini/types"],
 		
 		"declaration": false,
