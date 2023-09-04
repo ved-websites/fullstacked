@@ -3,7 +3,7 @@ import { GetUserFromSessionStore, type GetUserFromSession$result } from '$houdin
 
 export const AUTH_COOKIE_NAME = 'auth_session';
 
-export async function getAuthUser(query: GraphQLQuery): Promise<GetUserFromSession$result['getSessionUser'] | null> {
+export async function getAuthUser(query: GraphQLQuery): Promise<SessionUser> {
 	const result = await query(GetUserFromSessionStore);
 
 	if (result.type === 'failure') {
@@ -15,4 +15,4 @@ export async function getAuthUser(query: GraphQLQuery): Promise<GetUserFromSessi
 	return sessionUser;
 }
 
-export type SessionUser = GetUserFromSession$result['getSessionUser'];
+export type SessionUser = GetUserFromSession$result['getSessionUser'] | null;
