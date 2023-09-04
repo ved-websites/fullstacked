@@ -14,7 +14,7 @@ export class AdminListener {
 	) {}
 
 	@OnEvent(ADMIN_CREATE_USER_EVENT_KEY, { async: true })
-	async handleProfilePictureUploadEvent({ user, options }: ADMIN_CREATE_USER_EVENT_TYPE) {
+	async handleUserCreatedEvent({ user, options }: ADMIN_CREATE_USER_EVENT_TYPE) {
 		if (!user.registerToken) {
 			return;
 		}
@@ -25,7 +25,7 @@ export class AdminListener {
 		};
 
 		try {
-			await this.email.renderAndSend(['../RegisterEmail.hbs', templateData], {
+			await this.email.renderAndSend(['../emails/RegisterEmail.hbs', templateData], {
 				to: { email: user.email, name: user.fullName },
 				from: { email: this.env.EMAIL_FROM, name: options.originUser.fullName },
 				replyTo: { email: options.originUser.email, name: options.originUser.fullName },
