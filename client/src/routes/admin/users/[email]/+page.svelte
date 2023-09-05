@@ -6,7 +6,7 @@
 
 	export let data;
 
-	$: superFormData = superForm(data.form, { dataType: 'json' });
+	$: superFormData = superForm(data.form);
 	$: ({ form, errors } = superFormData);
 
 	$: availableRoles = data.roles.map<SelectOptionType>((role) => ({
@@ -20,7 +20,7 @@
 <UserForm {superFormData} class="col-span-2 order-1 sm:order-none">
 	<div slot="below">
 		<Label>Roles</Label>
-		<MultiSelect class="mt-2" items={availableRoles} bind:value={$form.roles} />
+		<MultiSelect name="roles" class="mt-2" items={availableRoles} bind:value={$form.roles} />
 		{#if $errors.roles}<Helper class="mt-2" color="red">{$errors.roles}</Helper>{/if}
 	</div>
 </UserForm>
