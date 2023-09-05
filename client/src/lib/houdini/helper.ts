@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { MutationStore, QueryStore, type SubscriptionStore } from '$houdini';
+import { MutationStore, QueryStore, type QueryResult, type SubscriptionStore } from '$houdini';
 import type { RequestEvent } from '@sveltejs/kit';
 import { onDestroy } from 'svelte';
 import { handleHoudiniErrors, type GraphQLOperationResult } from './errorHandler';
@@ -25,7 +25,7 @@ export function createHoudiniHelpers(event: RequestEvent) {
 
 		const gqlStore = store instanceof QueryStore ? store : new (store as new () => QueryStore<any, any>)();
 
-		const result = await gqlStore.fetch({ event, fetch: event.fetch, ...(params ?? {}) });
+		const result = (await gqlStore.fetch({ event, fetch: event.fetch, ...(params ?? {}) })) as QueryResult;
 
 		return handleHoudiniErrors(event, result);
 	}) as GraphQLQuery;
@@ -35,7 +35,7 @@ export function createHoudiniHelpers(event: RequestEvent) {
 
 		const gqlStore = store instanceof MutationStore ? store : new (store as new () => MutationStore<any, any, any>)();
 
-		const result = await gqlStore.mutate(variables, { event, fetch: event.fetch, ...(params ?? {}) });
+		const result = (await gqlStore.mutate(variables, { event, fetch: event.fetch, ...(params ?? {}) })) as QueryResult;
 
 		return handleHoudiniErrors(event, result);
 	}) as GraphQLMutate;

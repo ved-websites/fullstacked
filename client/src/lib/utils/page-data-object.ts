@@ -7,6 +7,6 @@ export type PageDataObject = {
 	[x: string]: unknown;
 };
 
-export function createPageDataObject(data: PageDataObject) {
+export function createPageDataObject<T extends PageDataObject>(data: T) {
 	return data;
 }
