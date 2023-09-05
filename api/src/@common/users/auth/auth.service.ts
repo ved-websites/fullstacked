@@ -1,6 +1,6 @@
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { loadLuciaUtils } from '$users/auth/lucia/modules-compat';
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes } from 'lucia';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';
 
@@ -59,7 +59,7 @@ export class AuthService {
 		});
 
 		if (userWithEmail !== 0) {
-			throw new Error('A user with this email already exists!');
+			throw new BadRequestException('A user with this email already exists!');
 		}
 
 		const registerTokenLength = 16;

@@ -11,9 +11,9 @@ export class CreateUserOutput {
 	@Field(() => String, { description: 'Generated registerToken of the created user' })
 	registerToken!: string;
 
-	@Field(() => String, { description: 'First name of the user' })
-	firstName!: string;
+	@Field(() => String, { nullable: true, description: 'First name of the user' })
+	firstName?: string;
 
-	@Field(() => String, { description: 'Last name of the user' })
-	lastName!: string;
+	@Field(() => String, { nullable: true, description: 'Last name of the user' })
+	lastName?: string;
 }

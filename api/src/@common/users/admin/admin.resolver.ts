@@ -34,7 +34,7 @@ export class AdminResolver {
 	async createUser(@Args('data') data: UserCreateInput, @AuthSession() { user: originUser }: LuciaSession, @Origin() origin: string) {
 		const user = await this.adminService.createUser(data, { origin, originUser });
 
-		return user;
+		return user satisfies CreateUserOutput;
 	}
 
 	@Mutation(() => User)

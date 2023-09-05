@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
+import type { QueryResult as HoudiniQueryResult } from '../$houdini/runtime/lib';
 import type { SessionUser } from './auth/auth-handler';
 import type { LayoutAlertData } from './lib/components/LayoutAlert/helper';
 import type { ToastData } from './lib/components/ToastManager/helper';
@@ -36,4 +37,29 @@ declare global {
 		// Houdini
 		interface Session extends HoudiniSession {}
 	}
+}
+
+export type GraphQLError = {
+	message: string;
+	locations: {
+		line: number;
+		column: number;
+	}[];
+	path: string[];
+	extensions: {
+		code: string;
+		stacktrace: string[];
+		originalError: {
+			message: string;
+			error: string;
+			statusCode: number;
+		};
+	};
+};
+
+// Allow for Houdini errors to show extensions and other GraphQL error data.
+declare module '$houdini' {
+	export type QueryResult<_Data = GraphQLObject, _Input = GraphQLVariables> = Omit<HoudiniQueryResult<_Data, _Input>, 'errors'> & {
+		errors: GraphQLError[] | null;
+	};
 }

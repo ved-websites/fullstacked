@@ -1,7 +1,8 @@
+import { createToasts } from '$/lib/components/ToastManager/helper';
 import { CreateNewUserStore, GetRolesForNewUserStore } from '$houdini';
-import { redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
-import { superValidate } from 'sveltekit-superforms/server';
+import { setError, superValidate } from 'sveltekit-superforms/server';
 import { adminNewUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -33,7 +34,9 @@ export const actions = {
 	}) => {
 		const form = await superValidate(request, adminNewUserFormSchema);
 
-		if (!form.valid) return { form };
+		if (!form.valid) {
+			return { form };
+		}
 
 		const { email, firstName, lastName, roles } = form.data;
 
@@ -49,7 +52,27 @@ export const actions = {
 		});
 
 		if (result.type === 'failure') {
-			return result.kitHandler('formMessage', { form });
+			return result.kitHandler('custom', ({ errors }) => {
+				const error = errors!.at(0)!;
+
+				const errorMessage = error.message;
+				const errorStatus = error.extensions.originalError.statusCode;
+
+				if (errorStatus == StatusCodes.BAD_REQUEST) {
+					setError(form, 'email', errorMessage);
+				} else {
+					setError(form, errorMessage);
+				}
+
+				const toasts = createToasts([
+					{
+						text: 'Error creating new user!',
+						type: 'error',
+					},
+				]);
+
+				return fail(StatusCodes.BAD_REQUEST, { form, toasts });
+			});
 		}
 
 		throw redirect(StatusCodes.SEE_OTHER, '/admin/users');

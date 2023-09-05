@@ -10,16 +10,7 @@ type KitHandlerFailure = [type: 'failure', params?: { code?: number; data?: Reco
 type KitHandlerFormMessage = [type: 'formMessage', params: { form: SuperValidated<never> }];
 type KitHandlerRedirect = [type: 'redirect', params?: { status?: Parameters<typeof redirect>[0]; location?: `/${string}` }];
 type KitHandlerError = [type: 'error', params?: { status?: Parameters<typeof error>[0]; body?: Parameters<typeof error>[1] }];
-type KitHandlerCustom = [
-	type: 'custom',
-	handler: (data: {
-		errors:
-			| {
-					message: string;
-			  }[]
-			| null;
-	}) => unknown,
-];
+type KitHandlerCustom = [type: 'custom', handler: (data: { errors: QueryResult['errors'] }) => unknown];
 
 export class GraphQLOperationFailure {
 	readonly type = 'failure';

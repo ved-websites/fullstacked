@@ -4,6 +4,7 @@ import { AuthService } from '$users/auth/auth.service';
 import { RolesService } from '$users/auth/roles/roles.service';
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { User } from 'lucia';
 import { ADMIN } from '~/@utils/roles';
 import { ADMIN_CREATE_USER_EVENT_KEY, ADMIN_CREATE_USER_EVENT_TYPE } from './listeners/admin.events';
 
@@ -40,10 +41,10 @@ export class AdminService {
 	async createUser(data: UserCreateInput, options: ADMIN_CREATE_USER_EVENT_TYPE['options']) {
 		const { email, firstName, lastName, roles } = data;
 
-		const user = await this.authService.createUser(email, null, {
+		const user = (await this.authService.createUser(email, null, {
 			firstName,
 			lastName,
-		});
+		})) satisfies User as Omit<User, 'registerToken'> & { registerToken: NonNullable<User['registerToken']> };
 
 		if (roles) {
 			await this.rolesService.setUserRoles(user, roles);
