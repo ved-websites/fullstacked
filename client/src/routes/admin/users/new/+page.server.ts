@@ -1,4 +1,5 @@
 import { createToasts } from '$/lib/components/ToastManager/helper';
+import { createPageDataObject } from '$/lib/utils/page-data-object';
 import { CreateNewUserStore, GetRolesForNewUserStore } from '$houdini';
 import { fail, redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
@@ -56,7 +57,7 @@ export const actions = {
 				const error = errors!.at(0)!;
 
 				const errorMessage = error.message;
-				const errorStatus = error.extensions.originalError.statusCode;
+				const errorStatus = error.extensions.originalError?.statusCode;
 
 				if (errorStatus == StatusCodes.BAD_REQUEST) {
 					setError(form, 'email', errorMessage);
@@ -71,7 +72,7 @@ export const actions = {
 					},
 				]);
 
-				return fail(StatusCodes.BAD_REQUEST, { form, toasts });
+				return fail(StatusCodes.BAD_REQUEST, createPageDataObject({ form, toasts }));
 			});
 		}
 

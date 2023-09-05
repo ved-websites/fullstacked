@@ -6,6 +6,7 @@ import type { LayoutAlertData } from './lib/components/LayoutAlert/helper';
 import type { ToastData } from './lib/components/ToastManager/helper';
 import type { createHoudiniHelpers } from './lib/houdini/helper';
 import type { Theme } from './lib/stores';
+import type { GraphQLError } from './lib/types';
 
 export interface AppLocals {
 	gql: ReturnType<typeof createHoudiniHelpers>;
@@ -38,24 +39,6 @@ declare global {
 		interface Session extends HoudiniSession {}
 	}
 }
-
-export type GraphQLError = {
-	message: string;
-	locations: {
-		line: number;
-		column: number;
-	}[];
-	path: string[];
-	extensions: {
-		code: string;
-		stacktrace: string[];
-		originalError: {
-			message: string;
-			error: string;
-			statusCode: number;
-		};
-	};
-};
 
 // Allow for Houdini errors to show extensions and other GraphQL error data.
 declare module '$houdini' {

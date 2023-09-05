@@ -5,8 +5,9 @@ import type { SuperValidated } from 'sveltekit-superforms';
 import { message } from 'sveltekit-superforms/client';
 import { createToasts } from '../components/ToastManager/helper';
 import { handleLoginRedirect } from '../utils/login';
+import type { PageDataObject } from '../utils/page-data-object';
 
-type KitHandlerFailure = [type: 'failure', params?: { code?: number; data?: Record<string, unknown> }];
+type KitHandlerFailure = [type: 'failure', params?: { code?: number; data?: PageDataObject }];
 type KitHandlerFormMessage = [type: 'formMessage', params: { form: SuperValidated<never> }];
 type KitHandlerRedirect = [type: 'redirect', params?: { status?: Parameters<typeof redirect>[0]; location?: `/${string}` }];
 type KitHandlerError = [type: 'error', params?: { status?: Parameters<typeof error>[0]; body?: Parameters<typeof error>[1] }];

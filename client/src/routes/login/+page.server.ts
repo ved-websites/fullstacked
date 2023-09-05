@@ -1,6 +1,7 @@
 import { createLayoutAlert } from '$/lib/components/LayoutAlert/helper';
 import { createToasts } from '$/lib/components/ToastManager/helper';
 import { emailSchema, passwordSchema } from '$/lib/schemas/auth';
+import { createPageDataObject } from '$/lib/utils/page-data-object';
 import { LoginStore } from '$houdini';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
@@ -33,7 +34,7 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 		});
 	})();
 
-	return { form, layoutAlert };
+	return createPageDataObject({ form, layoutAlert });
 }) satisfies PageServerLoad;
 
 export const actions = {
@@ -77,7 +78,7 @@ export const actions = {
 
 			return result.kitHandler('failure', {
 				code: StatusCodes.UNAUTHORIZED,
-				data: { form, toasts: allErrors, layoutAlert: userPassError },
+				data: createPageDataObject({ form, toasts: allErrors, layoutAlert: userPassError }),
 			});
 		}
 
