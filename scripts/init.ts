@@ -1,6 +1,6 @@
 import { exec as execNoPromise } from 'child_process';
 import util from 'util';
-import { setupRenovate } from './subscripts/file-changes.js';
+import { setupReleasePlease, setupRenovate } from './subscripts/file-changes.js';
 import { setupProjectName } from './subscripts/project-name.js';
 import { setupEnvs } from './subscripts/setup-envs.js';
 import { getCliArgs } from './utils/args.js';
@@ -15,6 +15,7 @@ const { args } = getCliArgs();
 // =====================
 
 await progresser('Setting up renovate', setupRenovate);
+await progresser('Setting up release-please', setupReleasePlease);
 
 // =====================
 //      Setup Envs

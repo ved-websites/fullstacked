@@ -11,7 +11,22 @@ export async function setupRenovate() {
 			allowEmptyPaths: true,
 		});
 	} catch (error) {
-		console.error(`An error happened while replacing old project name in files! Check file permissions and try again.`);
+		console.error(`An error happened while enabling Renovate! Check file permissions and try again.`);
+
+		throw error;
+	}
+}
+
+export async function setupReleasePlease() {
+	try {
+		await replaceInFile({
+			files: ['.github/workflows/release.yml'],
+			from: `if: false && github.event_name != 'workflow_dispatch'`,
+			to: `if: github.event_name != 'workflow_dispatch'`,
+			allowEmptyPaths: true,
+		});
+	} catch (error) {
+		console.error(`An error happened while enabling Release-Please! Check file permissions and try again.`);
 
 		throw error;
 	}
