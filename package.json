@@ -52,6 +52,7 @@
     "@graphql-codegen/typed-document-node": "5.0.1",
     "@graphql-codegen/typescript": "4.0.1",
     "@graphql-codegen/typescript-operations": "4.0.1",
+    "@parcel/watcher": "2.3.0",
     "@types/node": "18.16.18",
     "@v-ed/eslint-config": "0.1.6",
     "@v-ed/prettier-config": "0.3.0",
