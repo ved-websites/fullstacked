@@ -5,7 +5,12 @@ import { nodeLoaderPlugin } from '@vavite/node-loader/plugin';
 import houdini from 'houdini/vite';
 import { defineConfig, type UserConfig } from 'vite';
 
-export const plugins: UserConfig['plugins'] = [houdini(), sveltekit(), nodeLoaderPlugin()];
+export const plugins: UserConfig['plugins'] = [
+	// @ts-ignore Ignoring plugin version incompat
+	houdini(),
+	sveltekit(),
+	nodeLoaderPlugin(),
+];
 
 export default defineConfig({
 	server: {
