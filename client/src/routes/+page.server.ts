@@ -17,10 +17,12 @@ export const actions = {
 
 		throw redirect(StatusCodes.SEE_OTHER, '/login');
 	},
-	theme({ cookies, url: { searchParams } }) {
+	async theme({ cookies, url: { searchParams }, request }) {
+		const formData = await request.formData();
+
 		const theme = searchParams.get('value');
 
-		const redirectToParam = searchParams.get('redirectTo');
+		const redirectToParam = formData.get('redirectTo');
 		const redirectTo = redirectToParam ? `/${redirectToParam.slice(1)}` : `/`;
 
 		if (theme === 'null') {

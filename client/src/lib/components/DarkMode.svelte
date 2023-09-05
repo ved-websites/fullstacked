@@ -52,29 +52,33 @@
 		<Button
 			data-theme="dark"
 			type="submit"
+			title="dark theme"
 			shadow={$themeStore == 'dark'}
 			color={$themeStore == 'dark' ? 'blue' : 'alternative'}
-			formaction="/?/theme&redirectTo={$page.url.pathname}&value=dark"
+			formaction="/?/theme&value=dark"
 		>
 			<Icon path={mdiWeatherNight} size="18px" />
 		</Button>
 		<Button
 			data-theme="media"
 			type="submit"
+			title="system theme"
 			shadow={$themeStore == null}
 			color={$themeStore == null ? 'purple' : 'alternative'}
-			formaction="/?/theme&redirectTo={$page.url.pathname}&value=null"
+			formaction="/?/theme&value=null"
 		>
 			<Icon path={mdiThemeLightDark} size="18px" />
 		</Button>
 		<Button
 			data-theme="light"
 			type="submit"
+			title="light theme"
 			shadow={$themeStore == 'light'}
 			color={$themeStore == 'light' ? 'green' : 'alternative'}
-			formaction="/?/theme&redirectTo={$page.url.pathname}&value=light"
+			formaction="/?/theme&value=light"
 		>
 			<Icon path={mdiWhiteBalanceSunny} size="18px" />
 		</Button>
 	</ButtonGroup>
+	<input type="hidden" name="redirectTo" value={$page.url.pathname} />
 </form>
