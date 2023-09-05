@@ -1,0 +1,7 @@
+import { redirect } from '@sveltejs/kit';
+import { StatusCodes } from 'http-status-codes';
+import type { PageServerLoad } from './$types';
+
+export const load = (async () => {
+	throw redirect(StatusCodes.MOVED_PERMANENTLY, '/admin/users');
+}) satisfies PageServerLoad;

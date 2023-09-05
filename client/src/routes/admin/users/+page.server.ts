@@ -14,7 +14,7 @@ export const actions = {
 		const formdata = await request.formData();
 
 		const email = await emailSchema.parseAsync(formdata.get('email')).catch(() => {
-			throw redirect(StatusCodes.SEE_OTHER, '/users?error=Missing email!');
+			throw redirect(StatusCodes.SEE_OTHER, '/admin/users?error=Missing email!');
 		});
 
 		const result = await mutate(DeleteSpecificUserStore, { email });
@@ -23,6 +23,6 @@ export const actions = {
 			return result.kitHandler('failure');
 		}
 
-		throw redirect(StatusCodes.SEE_OTHER, '/users');
+		throw redirect(StatusCodes.SEE_OTHER, '/admin/users');
 	},
 } satisfies Actions;

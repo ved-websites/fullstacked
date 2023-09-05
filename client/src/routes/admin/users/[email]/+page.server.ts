@@ -65,6 +65,6 @@ export const actions = {
 			return result.kitHandler('error');
 		}
 
-		throw redirect(StatusCodes.SEE_OTHER, '/users');
+		throw redirect(StatusCodes.SEE_OTHER, '/admin/users');
 	},
 } satisfies Actions;

@@ -21,12 +21,12 @@ export const navElements: NavElement[] = [
 		elements: [
 			{
 				title: 'User Management',
-				url: '/users',
+				url: '/admin/users',
 				drawerIconPath: mdiAccountDetails,
 			},
 			{
 				title: 'Data',
-				url: '/data',
+				url: '/admin/data',
 				drawerIconPath: mdiAbacus,
 			},
 		],

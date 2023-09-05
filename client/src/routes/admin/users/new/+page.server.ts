@@ -50,9 +50,8 @@ export const actions = {
 
 		if (result.type === 'failure') {
 			return result.kitHandler('formMessage', { form });
-			// return message(form, errors?.at(0)?.message);
 		}
 
-		throw redirect(StatusCodes.SEE_OTHER, '/users');
+		throw redirect(StatusCodes.SEE_OTHER, '/admin/users');
 	},
 } satisfies Actions;

@@ -18,7 +18,7 @@
 
 <Heading tag="h2">This is the users list</Heading>
 <div class="self-center">
-	<Button href="/users/new">Create New User</Button>
+	<Button href="/admin/users/new">Create New User</Button>
 </div>
 
 <Table>
@@ -48,7 +48,7 @@
 				</TableBodyCell>
 				{#if canActions}
 					<TableBodyCell>
-						<Button size="xs" href="/users/{user.email}">Edit</Button>
+						<Button size="xs" href="/admin/users/{user.email}">Edit</Button>
 						<Button
 							size="xs"
 							on:click={() => {
