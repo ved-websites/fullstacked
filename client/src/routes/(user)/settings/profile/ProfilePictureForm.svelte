@@ -52,18 +52,40 @@
 		profilePictureFile = files[0];
 	};
 
-	const handleEnhance: SubmitFunction = () => {
+	const handleEnhance: SubmitFunction = ({ action }) => {
+		const actionType = action.search === '?/deleteProfilePicture' ? 'delete' : 'update';
+
+		const prevRef = currentProfilePictureRef;
+		const prevFile = profilePictureFile;
+
+		if (actionType === 'delete') {
+			currentProfilePictureRef = undefined;
+		} else if (actionType === 'update') {
+			if (profilePictureFile) {
+				currentProfilePictureRef = URL.createObjectURL(profilePictureFile);
+				profilePictureFile = undefined;
+			}
+		}
+
 		isSendingProfilePicture = true;
+
 		return async ({ result }) => {
+			await applyAction(result);
+
 			const successTypes: (typeof result.type)[] = ['success', 'redirect'];
 
 			if (successTypes.includes(result.type)) {
 				profilePictureFile = undefined;
+			} else {
+				if (actionType === 'delete') {
+					currentProfilePictureRef = prevRef;
+				} else if (actionType === 'update') {
+					currentProfilePictureRef = prevRef;
+					profilePictureFile = prevFile;
+				}
 			}
 
 			isSendingProfilePicture = false;
-
-			await applyAction(result);
 		};
 	};
 </script>
