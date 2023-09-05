@@ -4,8 +4,11 @@
 		{
 			"label": "api dev",
 			"type": "shell",
-			"command": "pnpm start:debug",
+			"command": "./.vscode/scripts/debug.sh",
 			"isBackground": true,
+			"windows": {
+				"command": "pnpm start:debug"
+			},
 			"runOptions": {
 				"runOn": "folderOpen"
 			},

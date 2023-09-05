@@ -59,7 +59,6 @@
 		}
 	},
 
-	"initializeCommand": ".devcontainer/scripts/initialize.sh",
 	"postCreateCommand": ".devcontainer/scripts/install.sh",
 
 	"remoteUser": "node"

@@ -4,8 +4,11 @@
 		{
 			"label": "client dev",
 			"type": "shell",
-			"command": "pnpm dev",
+			"command": "./.vscode/scripts/debug.sh",
 			"isBackground": true,
+			"windows": {
+				"command": "pnpm dev"
+			},
 			"runOptions": {
 				"runOn": "folderOpen"
 			},
@@ -28,7 +31,7 @@
 				"group": "dev",
 				"showReuseMessage": false,
 				"clear": false,
-				"close": true,
+				// "close": true,
 			}
 		},
 		{
