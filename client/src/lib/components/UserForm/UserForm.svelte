@@ -1,8 +1,10 @@
 <script lang="ts" generics="T extends UserFormSchemaType">
 	import { Button, Helper, Input, Label } from 'flowbite-svelte';
 	import type { SuperForm } from 'sveltekit-superforms/client';
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	import type { UserFormSchemaType } from './userform.schema';
 
+	// eslint-disable-next-line no-undef
 	export let superFormData: SuperForm<T>;
 
 	$: ({ enhance, form, constraints, errors } = superFormData);

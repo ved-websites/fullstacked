@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { twMerge } from 'tailwind-merge';
 
-	export let value: string = '';
+	export let value = '';
 	export let files: FileList | undefined = undefined;
-	export let defaultClass: string =
+	export let defaultClass =
 		'flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600';
 
 	export let input: HTMLInputElement;
-	let isDraggingOver: boolean = false;
+	let isDraggingOver = false;
 
+	// eslint-disable-next-line no-inner-declarations
 	function keydown(ev: KeyboardEvent) {
 		if ([' ', 'Enter'].includes(ev.key)) {
 			ev.preventDefault();
@@ -16,9 +17,11 @@
 		}
 	}
 
+	// eslint-disable-next-line no-inner-declarations
 	function dragIn() {
 		isDraggingOver = true;
 	}
+	// eslint-disable-next-line no-inner-declarations
 	function dragOut() {
 		isDraggingOver = false;
 	}

@@ -98,5 +98,6 @@
 				"group": "Dev Container"
 			}
 		],
+		"eslint.validate": ["javascript", "typescript", "svelte"]
 	}
 }

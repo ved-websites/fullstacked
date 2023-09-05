@@ -76,13 +76,11 @@
 
 			if (successTypes.includes(result.type)) {
 				profilePictureFile = undefined;
-			} else {
-				if (actionType === 'delete') {
-					currentProfilePictureRef = prevRef;
-				} else if (actionType === 'update') {
-					currentProfilePictureRef = prevRef;
-					profilePictureFile = prevFile;
-				}
+			} else if (actionType === 'delete') {
+				currentProfilePictureRef = prevRef;
+			} else if (actionType === 'update') {
+				currentProfilePictureRef = prevRef;
+				profilePictureFile = prevFile;
 			}
 
 			isSendingProfilePicture = false;

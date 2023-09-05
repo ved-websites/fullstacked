@@ -7,8 +7,11 @@
 		$page.form;
 
 		if (browser) {
+			const expiryInYears = 2;
+
 			const date = new Date();
-			date.setFullYear(date.getFullYear() + 2);
+
+			date.setFullYear(date.getFullYear() + expiryInYears);
 
 			document.cookie = `${HASJS_COOKIE_NAME}=true; expires=${date.toUTCString()}; path=/`;
 		}
