@@ -77,7 +77,7 @@
 		"sqltools.connections": [
 			{
 				"previewLimit": 50,
-				"server": "localhost",
+				"server": "127.0.0.1",
 				"port": 5432,
 				"driver": "PostgreSQL",
 				"name": "Dev DB",
@@ -88,7 +88,7 @@
 			},
 			{
 				"previewLimit": 50,
-				"server": "localhost",
+				"server": "127.0.0.1",
 				"port": 5432,
 				"driver": "PostgreSQL",
 				"name": "Tests DB",
