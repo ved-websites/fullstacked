@@ -85,7 +85,7 @@ function deletePrismaGenerated() {
 
 // COMBINES
 
-export const setupPrisma: TaskFunction = gulp.series(deletePrismaGenerated, generatePrismaHelpers);
+export const setupPrisma: TaskFunction = gulp.series(deletePrismaGenerated, generatePrismaHelpers, generateGraphQLSchema);
 
 export const setupPrismaFull: TaskFunction = gulp.series(setupPrisma, updateDatabaseSchema);
 
@@ -100,8 +100,6 @@ export const cleanDb: TaskFunction = gulp.series(setupEnv, updateDatabaseSchema)
 export const seed: TaskFunction = seedDatabase;
 
 export const cleanSeed: TaskFunction = gulp.series(cleanDb, seedDatabase);
-
-export const setupGQLSchema: TaskFunction = gulp.series(setupPrisma, generateGraphQLSchema);
 
 // Useful commands
 
