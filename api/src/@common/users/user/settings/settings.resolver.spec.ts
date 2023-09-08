@@ -1,22 +1,22 @@
 import { PrismaModule } from '$prisma/prisma.module';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TestManager } from '~/@utils/tests/TestManager';
-import { SettingsResolver } from './settings.resolver';
-import { SettingsService } from './settings.service';
+import { UserSettingsResolver } from './settings.resolver';
+import { UserSettingsService } from './settings.service';
 
-describe('SettingsResolver', () => {
+describe('UserSettingsResolver', () => {
 	const manager = new TestManager({
 		metadata: {
 			imports: [PrismaModule],
-			providers: [SettingsResolver, SettingsService],
+			providers: [UserSettingsResolver, UserSettingsService],
 		},
 	});
-	let resolver: SettingsResolver;
+	let resolver: UserSettingsResolver;
 
 	beforeEach(async () => {
 		await manager.setupTestModule();
 
-		resolver = manager.module.get<SettingsResolver>(SettingsResolver);
+		resolver = manager.module.get<UserSettingsResolver>(UserSettingsResolver);
 	});
 
 	it('should be defined', () => {

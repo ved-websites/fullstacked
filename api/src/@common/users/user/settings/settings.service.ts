@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from 'lucia';
 
 @Injectable()
-export class SettingsService {
+export class UserSettingsService {
 	constructor(private readonly prisma: PrismaService) {}
 
 	async editUser(select: PrismaSelector, user: User, data: UserUpdateInput) {

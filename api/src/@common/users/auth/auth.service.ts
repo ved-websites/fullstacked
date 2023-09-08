@@ -13,12 +13,23 @@ export class AuthService {
 
 	readonly providerId = 'email';
 
-	protected defineEmailKey(email: string, password: string | null) {
+	defineEmailKey(email: string, password: string | null): Omit<Parameters<typeof this.auth.createKey>[0], 'userId'>;
+	defineEmailKey(email: string, password: string | null, userId: string): Parameters<typeof this.auth.createKey>[0];
+	defineEmailKey(email: string, password: string | null, userId?: string) {
+		if (userId) {
+			return {
+				providerId: this.providerId,
+				providerUserId: email,
+				password,
+				userId,
+			} satisfies Parameters<typeof this.auth.createKey>[0];
+		}
+
 		return {
 			providerId: this.providerId,
 			providerUserId: email,
 			password,
-		} as Parameters<typeof this.auth.createKey>[0];
+		};
 	}
 
 	async getLuciaUser(userId: string) {
@@ -96,7 +107,7 @@ export class AuthService {
 			throw new Error('Invalid userId!');
 		}
 
-		const key = await this.auth.createKey({ ...this.defineEmailKey(user.email, password), userId: user.id });
+		const key = await this.auth.createKey(this.defineEmailKey(user.email, password, user.id));
 
 		await this.auth.updateUserAttributes(key.userId, {
 			...attributes,

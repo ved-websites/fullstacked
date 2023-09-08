@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
-import { SettingsModule } from './settings/settings.module';
+import { UserSecurityModule } from './security/security.module';
+import { UserSettingsModule } from './settings/settings.module';
 
 @Module({
-	imports: [SettingsModule],
+	imports: [UserSettingsModule, UserSecurityModule],
 })
 export class UserModule {}

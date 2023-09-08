@@ -1,6 +1,6 @@
 import { ContextService } from '$graphql/context/context.service';
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
-import { Session } from 'lucia';
+import { Session, User } from 'lucia';
 
 export const AuthSession = createParamDecorator(async (_data, context: ExecutionContext) => {
 	const { session } = ContextService.getRequest(context);
@@ -9,3 +9,4 @@ export const AuthSession = createParamDecorator(async (_data, context: Execution
 });
 
 export type LuciaSession = Session;
+export type LuciaUser = User;
