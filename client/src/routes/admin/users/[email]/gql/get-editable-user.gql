@@ -1,5 +1,5 @@
 query GetEditableUser($email: String!) @blocking {
-	getUser(where: { email: { equals: $email } }) {
+	getUser(where: { email: $email }) {
 		email
 		firstName
 		lastName

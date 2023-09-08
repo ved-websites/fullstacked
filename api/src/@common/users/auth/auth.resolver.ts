@@ -23,7 +23,7 @@ export class AuthResolver {
 
 	@Query(() => User)
 	async getSessionUser(@AuthSession() { user }: LuciaSession, @SelectQL() select: PrismaSelector) {
-		const authUser = this.authService.getAuthUser(user.email, select);
+		const authUser = await this.authService.getAuthUser(user.email, select);
 
 		return authUser;
 	}

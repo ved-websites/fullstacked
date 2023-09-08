@@ -5,7 +5,7 @@
 	import ToastManager from '$/lib/components/ToastManager/ToastManager.svelte';
 	import HasJs from '$/lib/components/head/HasJS.svelte';
 	import InitialTheme from '$/lib/components/head/InitialTheme.svelte';
-	import { themeStore } from '$/lib/stores';
+	import { layoutAlertStore, themeStore, toastsStore } from '$/lib/stores';
 	import { page } from '$app/stores';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
 	import type { PageData } from './$types.js';
@@ -14,8 +14,8 @@
 
 	$: themeStore.set(data.theme ?? null);
 
-	$: layoutAlert = ($page.form?.layoutAlert as PageData['layoutAlert']) || $page.data.layoutAlert;
-	$: toasts = [...$page.data.toasts, ...(($page.form?.toasts as PageData['toasts']) ?? [])];
+	$: layoutAlert = ($page.form?.layoutAlert as PageData['layoutAlert']) || $page.data.layoutAlert || $layoutAlertStore;
+	$: toasts = [...$page.data.toasts, ...(($page.form?.toasts as PageData['toasts']) ?? []), ...$toastsStore];
 </script>
 
 <HasJs />

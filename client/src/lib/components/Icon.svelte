@@ -29,6 +29,7 @@
 	class:spin
 	class:disabled
 	style="--icon-size: {size}; --icon-rotate: {rotate}deg; {style ? style : ''}"
+	{...$$restProps}
 >
 	<svg xmlns="http://www.w3.org/2000/svg" {width} {height} viewBox="0 0 {viewWidth} {viewHeight}">
 		<path d={path}>
@@ -57,7 +58,9 @@
 		cursor: inherit;
 		user-select: none;
 		direction: ltr;
-		transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), visibility 0s;
+		transition:
+			0.3s cubic-bezier(0.25, 0.8, 0.5, 1),
+			visibility 0s;
 
 		&.spin {
 			animation: infinite s-icon-spin linear 1s;

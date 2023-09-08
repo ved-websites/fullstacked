@@ -21,6 +21,10 @@ export class AuthService {
 		} as Parameters<typeof this.auth.createKey>[0];
 	}
 
+	async getLuciaUser(userId: string) {
+		return this.auth.getUser(userId);
+	}
+
 	async getAuthUser(email: string, select: PrismaSelector) {
 		const user = await this.prisma.user.findUnique({
 			where: {

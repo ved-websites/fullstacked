@@ -1,10 +1,21 @@
 query ManageGetUsers @blocking {
-	getUsers {
+	users: getUsers(where: { registerToken: null }) {
 		email
 		firstName
 		lastName
 		roles {
 			text
 		}
+		profilePictureRef
+	}
+	unregisteredUsers: getUsers(where: { registerToken: { not: null } }) {
+		email
+		firstName
+		lastName
+		roles {
+			text
+		}
+		profilePictureRef
+		registerToken
 	}
 }

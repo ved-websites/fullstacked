@@ -1,6 +1,7 @@
 import { User, UserCreateInput, UserUpdateInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
+import { AuthService } from '$users/auth/auth.service';
 import { Roles } from '$users/auth/roles/roles.guard';
 import { AuthSession, LuciaSession } from '$users/auth/session.decorator';
 import { Origin } from '$utils/origin.decorator';
@@ -14,7 +15,10 @@ import { GetUserOutput } from './dtos/getUser.output';
 @Roles(ADMIN)
 @Resolver()
 export class AdminResolver {
-	constructor(private readonly adminService: AdminService) {}
+	constructor(
+		private readonly adminService: AdminService,
+		private readonly authService: AuthService,
+	) {}
 
 	@Query(() => [User])
 	async getUsers(@SelectQL() select: PrismaSelector, @Args('where', { nullable: true }) where?: UserWhereInput) {
@@ -24,25 +28,25 @@ export class AdminResolver {
 	}
 
 	@Query(() => GetUserOutput, { nullable: true })
-	async getUser(@SelectQL() select: PrismaSelector, @Args('where') where: UserWhereInput) {
+	async getUser(@SelectQL() select: PrismaSelector, @Args('where') where: UserWhereUniqueInput) {
 		const user = await this.adminService.getUser(select, where);
 
 		return user;
 	}
 
 	@Mutation(() => CreateUserOutput)
-	async createUser(@Args('data') data: UserCreateInput, @AuthSession() { user: originUser }: LuciaSession, @Origin() origin: string) {
-		const user = await this.adminService.createUser(data, { origin, originUser });
+	async createUser(@Args('data') data: UserCreateInput, @AuthSession() { user }: LuciaSession, @Origin() origin: string) {
+		const newUser = await this.adminService.createUser(data, { url: origin, user });
 
-		return user satisfies CreateUserOutput;
+		return newUser satisfies CreateUserOutput;
 	}
 
 	@Mutation(() => User)
 	async editUser(@SelectQL() select: PrismaSelector, @Args('where') where: UserWhereUniqueInput, @Args('data') data: UserUpdateInput) {
 		try {
-			const user = await this.adminService.editUser(select, where, data);
+			const editedUser = await this.adminService.editUser(select, where, data);
 
-			return user;
+			return editedUser;
 		} catch (error) {
 			const message = error instanceof Error ? error.message : 'Unhandled exception.';
 
@@ -53,13 +57,32 @@ export class AdminResolver {
 	@Mutation(() => GetUserOutput, { nullable: true })
 	async deleteUser(@SelectQL() select: PrismaSelector, @Args('where') where: UserWhereUniqueInput) {
 		try {
-			const user = await this.adminService.deleteUser(select, where);
+			const deletedUser = await this.adminService.deleteUser(select, where);
 
-			return user;
+			return deletedUser;
 		} catch (error) {
 			const message = error instanceof Error ? error.message : 'Unhandled exception.';
 
 			throw new ForbiddenException(message);
+		}
+	}
+
+	@Mutation(() => Boolean)
+	async resendNewUserEmail(@Args('where') where: UserWhereUniqueInput, @AuthSession() { user }: LuciaSession, @Origin() origin: string) {
+		try {
+			const dbUserToResendTo = await this.adminService.getUser({}, where);
+
+			if (!dbUserToResendTo) {
+				return false;
+			}
+
+			const userToResendTo = await this.authService.getLuciaUser(dbUserToResendTo.id);
+
+			await this.adminService.sendNewUserRegistrationEmail(userToResendTo, { url: origin, user });
+
+			return true;
+		} catch (error) {
+			return false;
 		}
 	}
 }

@@ -1,73 +1,77 @@
 <script lang="ts">
-	import { userHasRole } from '$/lib/components/nav/utils.js';
 	import { enhance } from '$app/forms';
-	import { Badge, Button, Heading, Modal, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
+	import { ResendInviteLinkStore } from '$houdini';
+	import { Button, Heading, Modal } from 'flowbite-svelte';
+	import type { ComponentEvents } from 'svelte';
 	import type { PageData } from './$houdini';
+	import CopyInviteButton from './components/UsersTable/CopyInviteButton.svelte';
+	import UsersTable from './components/UsersTable/UsersTable.svelte';
+	import type { BaseUser } from './types';
 
 	export let data: PageData;
 
-	$: ({ sessionUser, ManageGetUsers } = data);
+	$: ({ ManageGetUsers } = data);
 
-	$: users = $ManageGetUsers.data?.getUsers ?? [];
-
-	$: canActions = userHasRole(sessionUser, 'admin');
+	$: users = $ManageGetUsers.data?.users ?? [];
+	$: unregisteredUsers = $ManageGetUsers.data?.unregisteredUsers ?? [];
 
 	let deleteModalOpen = false;
-	let deletionUser: (typeof users)[number] | undefined;
+	let deletionUser: BaseUser | undefined;
+
+	// eslint-disable-next-line no-inner-declarations
+	function onDeleteUser(event: ComponentEvents<UsersTable>['deleteUser']) {
+		const { detail: user } = event;
+
+		deletionUser = user;
+		deleteModalOpen = true;
+	}
+
+	const inviteLinkResender = new ResendInviteLinkStore();
 </script>
 
-<Heading tag="h2">This is the users list</Heading>
+<Heading tag="h2">User Management</Heading>
+
 <div class="self-center">
 	<Button href="/admin/users/new">Create New User</Button>
 </div>
 
-<Table>
-	<TableHead>
-		<TableHeadCell>Email</TableHeadCell>
-		<TableHeadCell>First Name</TableHeadCell>
-		<TableHeadCell>Last Name</TableHeadCell>
-		<TableHeadCell>Roles</TableHeadCell>
-		{#if canActions}
-			<TableHeadCell>Actions</TableHeadCell>
-		{/if}
-	</TableHead>
-	<TableBody tableBodyClass="divide-y">
-		{#each users as user}
-			<TableBodyRow>
-				<TableBodyCell>{user.email}</TableBodyCell>
-				<TableBodyCell>{user.firstName ?? '-'}</TableBodyCell>
-				<TableBodyCell>{user.lastName ?? '-'}</TableBodyCell>
-				<TableBodyCell>
-					{#if user.roles}
-						{#each user.roles as role}
-							<Badge color="indigo">{role.text}</Badge>
-						{/each}
-					{:else}
-						~ No Roles ~
-					{/if}
-				</TableBodyCell>
-				{#if canActions}
-					<TableBodyCell>
-						<Button size="xs" href="/admin/users/{user.email}">Edit</Button>
-						<Button
-							size="xs"
-							on:click={() => {
-								deleteModalOpen = true;
-								deletionUser = user;
-							}}
-							color="red">Delete</Button
-						>
-					</TableBodyCell>
-				{/if}
-			</TableBodyRow>
-		{/each}
-	</TableBody>
-</Table>
+<div class="grid gap-10 grid-cols-1 lg:grid-cols-2">
+	<div>
+		<Heading tag="h4" class="mb-2">Registered Users</Heading>
+
+		<UsersTable {users} on:deleteUser={onDeleteUser} />
+	</div>
+
+	<!-- <Hr /> -->
+
+	<div>
+		<Heading tag="h4" class="mb-2">Unregistered Users List</Heading>
+
+		<UsersTable name="unregistered" users={unregisteredUsers} on:deleteUser={onDeleteUser}>
+			<span slot="user" let:user let:popoverId id={popoverId}>{user.email}</span>
+			<svelte-fragment slot="more-actions" let:user>
+				<Button
+					size="xs"
+					on:click={async () => {
+						await inviteLinkResender.mutate({ email: user.email });
+					}}
+					color="green"
+				>
+					Resend invite email
+				</Button>
+				<CopyInviteButton {user} />
+			</svelte-fragment>
+		</UsersTable>
+	</div>
+</div>
 
 <Modal title="Confirmation" bind:open={deleteModalOpen}>
-	<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-		Deleting a user is permanent! Are you sure you want to delete the user <span class="font-bold">{deletionUser?.email}</span>?
-	</p>
+	<div class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+		<p>Deleting a user is permanent!</p>
+		<p>
+			Are you sure you want to delete the user <span class="font-bold">{deletionUser?.email}</span>?
+		</p>
+	</div>
 
 	<form method="post" action="?/delete" use:enhance on:submit={() => (deleteModalOpen = false)}>
 		<Button color="red" type="submit">Confirm</Button>
