@@ -1,6 +1,6 @@
 import { createToasts } from '$/lib/components/ToastManager/helper';
 import { passwordSchema } from '$/lib/schemas/auth';
-import type { PageDataObject } from '$/lib/utils/page-data-object';
+import { createPageDataObject } from '$/lib/utils/page-data-object';
 import { ChangeSelfPasswordStore } from '$houdini';
 import type { Actions } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
@@ -42,6 +42,6 @@ export const actions = {
 			},
 		]);
 
-		return { form, toasts } satisfies PageDataObject;
+		return createPageDataObject({ form, toasts });
 	},
 } satisfies Actions;
