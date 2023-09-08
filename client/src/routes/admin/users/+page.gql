@@ -1,4 +1,4 @@
-query ManageGetUsers @blocking {
+query ManageGetUsers {
 	users: getUsers(where: { registerToken: null }) {
 		email
 		firstName

@@ -6,6 +6,7 @@
 		Button,
 		Hr,
 		Popover,
+		Spinner,
 		Table,
 		TableBody,
 		TableBodyCell,
@@ -18,8 +19,9 @@
 	import type { BaseUser } from '../../types';
 
 	// eslint-disable-next-line no-undef
-	export let users: T[];
+	export let users: T[] | undefined;
 	export let name: string = '';
+
 	export let tableClass: string = '';
 	export let tableBodyClass: string = 'divide-y';
 
@@ -37,28 +39,38 @@
 		<TableHeadCell>Actions</TableHeadCell>
 	</TableHead>
 	<TableBody {tableBodyClass}>
-		{#each users as user, i}
-			{@const popoverId = `info-${name}${i}`}
+		{#if !users}
 			<TableBodyRow>
-				<TableBodyCell>
-					<slot name="user" {user} {popoverId}>
-						<div id="info-{name}{i}" class="inline-flex gap-2">
-							<Avatar class="hidden sm:block lg:hidden xl:block" src={getProfilePictureImageUrl(user.profilePictureRef)}></Avatar>
-							<span class="self-center">{user.email}</span>
-						</div>
-					</slot>
-				</TableBodyCell>
-				<TableBodyCell>
-					<Button size="xs" href="/admin/users/{user.email}">Edit</Button>
-					<Button size="xs" on:click={() => dispatch('deleteUser', user)} color="red">Delete</Button>
-					<slot name="more-actions" {user} {popoverId} />
+				<TableBodyCell colspan="2">
+					<div class="flex justify-center py-3">
+						<Spinner />
+					</div>
 				</TableBodyCell>
 			</TableBodyRow>
-		{/each}
+		{:else}
+			{#each users as user, i}
+				{@const popoverId = `info-${name}${i}`}
+				<TableBodyRow>
+					<TableBodyCell>
+						<slot name="user" {user} {popoverId}>
+							<div id="info-{name}{i}" class="inline-flex gap-2">
+								<Avatar class="hidden sm:block lg:hidden xl:block" src={getProfilePictureImageUrl(user.profilePictureRef)}></Avatar>
+								<span class="self-center">{user.email}</span>
+							</div>
+						</slot>
+					</TableBodyCell>
+					<TableBodyCell>
+						<Button size="xs" href="/admin/users/{user.email}">Edit</Button>
+						<Button size="xs" on:click={() => dispatch('deleteUser', user)} color="red">Delete</Button>
+						<slot name="more-actions" {user} {popoverId} />
+					</TableBodyCell>
+				</TableBodyRow>
+			{/each}
+		{/if}
 	</TableBody>
 </Table>
 
-{#each users as user, i}
+{#each users ?? [] as user, i}
 	<Popover defaultClass="p-3 flex flex-col gap-3" class="w-64 text-sm font-light" triggeredBy="#info-{name}{i}">
 		<div slot="title" class="font-semibold text-gray-900 dark:text-white text-center">Info Card</div>
 		<div class="flex justify-between gap-3">

@@ -12,8 +12,8 @@
 
 	$: ({ ManageGetUsers } = data);
 
-	$: users = $ManageGetUsers.data?.users ?? [];
-	$: unregisteredUsers = $ManageGetUsers.data?.unregisteredUsers ?? [];
+	$: users = $ManageGetUsers.data?.users;
+	$: unregisteredUsers = $ManageGetUsers.data?.unregisteredUsers;
 
 	let deleteModalOpen = false;
 	let deletionUser: BaseUser | undefined;
