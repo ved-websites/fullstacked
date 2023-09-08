@@ -1,7 +1,8 @@
+import { createToasts } from '$/lib/components/ToastManager/helper';
 import { passwordSchema } from '$/lib/schemas/auth';
+import type { PageDataObject } from '$/lib/utils/page-data-object';
 import { ChangeSelfPasswordStore } from '$houdini';
-import { redirect, type Actions } from '@sveltejs/kit';
-import { StatusCodes } from 'http-status-codes';
+import type { Actions } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
@@ -35,6 +36,12 @@ export const actions = {
 			return result.kitHandler('error');
 		}
 
-		throw redirect(StatusCodes.SEE_OTHER, '/settings/security');
+		const toasts = createToasts([
+			{
+				text: 'Successfully updated password!',
+			},
+		]);
+
+		return { form, toasts } satisfies PageDataObject;
 	},
 } satisfies Actions;

@@ -13,14 +13,6 @@ export class UserSecurityService {
 	async editSelfPassword(session: LuciaSession, newPassword: string) {
 		const { user } = session;
 
-		await this.auth.deleteKey(this.authService.providerId, user.email);
-
-		const newKey = await this.auth.createKey(this.authService.defineEmailKey(user.email, newPassword, user.id));
-
-		const newSession = await this.authService.loginUser(newKey.userId);
-
-		await this.auth.invalidateSession(session.sessionId);
-
-		return newSession;
+		await this.auth.updateKeyPassword(this.authService.providerId, user.email, newPassword);
 	}
 }

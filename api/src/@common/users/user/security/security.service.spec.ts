@@ -1,15 +1,22 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { AuthModule } from '$users/auth/auth.module';
+import { LuciaModule } from '$users/auth/lucia/lucia.module';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { TestManager } from '~/@utils/tests/TestManager';
 import { UserSecurityService } from './security.service';
 
-describe('SecurityService', () => {
+describe('UserSecurityService', () => {
+	const manager = new TestManager({
+		metadata: {
+			imports: [AuthModule, LuciaModule],
+			providers: [UserSecurityService],
+		},
+	});
 	let service: UserSecurityService;
 
 	beforeEach(async () => {
-		const module: TestingModule = await Test.createTestingModule({
-			providers: [UserSecurityService],
-		}).compile();
+		await manager.setupTestModule();
 
-		service = module.get<UserSecurityService>(UserSecurityService);
+		service = manager.module.get<UserSecurityService>(UserSecurityService);
 	});
 
 	it('should be defined', () => {
