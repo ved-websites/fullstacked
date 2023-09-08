@@ -9,7 +9,6 @@
 	export let input: HTMLInputElement;
 	let isDraggingOver = false;
 
-	// eslint-disable-next-line no-inner-declarations
 	function keydown(ev: KeyboardEvent) {
 		if ([' ', 'Enter'].includes(ev.key)) {
 			ev.preventDefault();
@@ -17,11 +16,9 @@
 		}
 	}
 
-	// eslint-disable-next-line no-inner-declarations
 	function dragIn() {
 		isDraggingOver = true;
 	}
-	// eslint-disable-next-line no-inner-declarations
 	function dragOut() {
 		isDraggingOver = false;
 	}

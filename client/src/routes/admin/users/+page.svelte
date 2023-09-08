@@ -18,7 +18,6 @@
 	let deleteModalOpen = false;
 	let deletionUser: BaseUser | undefined;
 
-	// eslint-disable-next-line no-inner-declarations
 	function onDeleteUser(event: ComponentEvents<UsersTable>['deleteUser']) {
 		const { detail: user } = event;
 
