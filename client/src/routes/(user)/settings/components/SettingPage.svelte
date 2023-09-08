@@ -3,27 +3,14 @@
 	import Icon from '$/lib/components/Icon.svelte';
 	import { getProfilePictureImageUrl } from '$/lib/utils/images';
 	import { page } from '$app/stores';
-	import { mdiAccount } from '@mdi/js';
 	import { Avatar, Heading, P, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
+	import type { RouteInfo } from '../+layout.server';
 
 	export let sessionUser: NonNullable<SessionUser>;
 	export let label: string;
+	export let routesInfo: RouteInfo[];
 
 	$: activeUrl = $page.url.pathname;
-
-	type VSidebarElement = {
-		href: `/${string}`;
-		label: string;
-		icon?: string;
-	};
-
-	const items: VSidebarElement[] = [
-		{
-			href: '/settings/profile',
-			label: 'Profile',
-			icon: mdiAccount,
-		},
-	];
 </script>
 
 <header class="flex gap-5 mb-5">
@@ -42,11 +29,11 @@
 		<Sidebar {activeUrl} class="w-full md:w-64">
 			<SidebarWrapper>
 				<SidebarGroup>
-					{#each items as item}
-						<SidebarItem href={item.href} label={item.label} active={activeUrl === item.href}>
+					{#each routesInfo as route}
+						<SidebarItem href={route.url} label={route.name} active={activeUrl === route.url}>
 							<svelte:fragment slot="icon">
-								{#if item.icon}
-									<Icon path={item.icon} />
+								{#if route.icon}
+									<Icon path={route.icon} />
 								{/if}
 							</svelte:fragment>
 						</SidebarItem>
