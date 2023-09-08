@@ -1,4 +1,4 @@
-import { getCallerFilePath } from '$utils/callerFilePath';
+import { resolveRelativePath } from '$utils/callerFilePath';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { create as createHandlebars, type ExpressHandlebars } from 'express-handlebars';
@@ -6,7 +6,7 @@ import path from 'path';
 import { firstValueFrom } from 'rxjs';
 import { Environment, EnvironmentConfig } from '~/env.validation';
 import * as helpers from './helpers';
-import { sendEmailSchema, SendMailData } from './schemas';
+import { SendMailData, sendEmailSchema } from './schemas';
 
 type HbsRenderViewParameters = Parameters<ExpressHandlebars['renderView']>;
 
@@ -17,7 +17,7 @@ export class EmailService {
 		private readonly httpService: HttpService,
 	) {}
 
-	async render(...args: [viewPath: HbsRenderViewParameters[0], options?: HbsRenderViewParameters[1], depth?: number]) {
+	async render(viewPath: HbsRenderViewParameters[0], options: HbsRenderViewParameters[1] = {}, callerDepth: number = 1) {
 		const hb = createHandlebars({
 			extname: 'hbs',
 			helpers,
@@ -25,11 +25,7 @@ export class EmailService {
 			partialsDir: path.resolve(__dirname, './partials'),
 		});
 
-		const [viewPath, options = {}, callerDepth = 1] = args;
-
-		const callerPath = getCallerFilePath(callerDepth);
-		const directory = path.dirname(callerPath);
-		const filePath = path.resolve(directory, viewPath);
+		const filePath = resolveRelativePath(viewPath, callerDepth);
 
 		return hb.renderView(filePath, options);
 	}
