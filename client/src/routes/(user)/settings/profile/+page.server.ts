@@ -1,7 +1,7 @@
 import { createToasts } from '$/lib/components/ToastManager/helper';
 import { userFormSchema } from '$/lib/components/UserForm/userform.schema';
 import { DeleteUserProfilePictureStore, EditSettingsBasicInfoStore, EditUserProfilePictureStore } from '$houdini';
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { fail, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad } from './$types';
@@ -34,7 +34,7 @@ export const actions = {
 			return result.kitHandler('error');
 		}
 
-		throw redirect(StatusCodes.SEE_OTHER, '/settings/profile');
+		return { form };
 	},
 	profilePicture: async ({
 		request,
@@ -64,7 +64,7 @@ export const actions = {
 			return result.kitHandler('error');
 		}
 
-		throw redirect(StatusCodes.SEE_OTHER, '/settings/profile');
+		return {};
 	},
 	deleteProfilePicture: async ({
 		locals: {
@@ -77,6 +77,6 @@ export const actions = {
 			return result.kitHandler('error');
 		}
 
-		throw redirect(StatusCodes.SEE_OTHER, '/settings/profile');
+		return {};
 	},
 } satisfies Actions;

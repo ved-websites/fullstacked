@@ -1,4 +1,6 @@
+import { createToasts } from '$/lib/components/ToastManager/helper';
 import { emailSchema } from '$/lib/schemas/auth';
+import type { PageDataObject } from '$/lib/utils/page-data-object';
 import { DeleteSpecificUserStore } from '$houdini';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
@@ -23,6 +25,12 @@ export const actions = {
 			return result.kitHandler('failure');
 		}
 
-		throw redirect(StatusCodes.SEE_OTHER, '/admin/users');
+		const toasts = createToasts([
+			{
+				text: `Successfully deleted user "${email}"!`,
+			},
+		]);
+
+		return { toasts } satisfies PageDataObject;
 	},
 } satisfies Actions;

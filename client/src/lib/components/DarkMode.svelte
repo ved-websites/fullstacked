@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { themeStore, useMediaQuery } from '$/lib/stores';
-	import { page } from '$app/stores';
 	import { mdiThemeLightDark, mdiWeatherNight, mdiWhiteBalanceSunny } from '@mdi/js';
 	import { Button, ButtonGroup } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
@@ -80,5 +79,4 @@
 			<Icon path={mdiWhiteBalanceSunny} size="18px" />
 		</Button>
 	</ButtonGroup>
-	<input type="hidden" name="redirectTo" value={$page.url.pathname} />
 </form>

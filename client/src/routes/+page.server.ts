@@ -17,18 +17,13 @@ export const actions = {
 
 		throw redirect(StatusCodes.SEE_OTHER, '/login');
 	},
-	async theme({ cookies, url: { searchParams }, request }) {
-		const formData = await request.formData();
-
+	async theme({ cookies, url: { searchParams } }) {
 		const theme = searchParams.get('value');
-
-		const redirectToParam = formData.get('redirectTo');
-		const redirectTo = redirectToParam ? `/${redirectToParam.slice(1)}` : `/`;
 
 		if (theme === 'null') {
 			cookies.delete(themeCookieName);
 
-			throw redirect(StatusCodes.SEE_OTHER, redirectTo);
+			return {};
 		}
 
 		if (!theme || !(themes as unknown as string[]).includes(theme)) {
@@ -40,6 +35,6 @@ export const actions = {
 			httpOnly: false,
 		});
 
-		throw redirect(StatusCodes.SEE_OTHER, redirectTo);
+		return {};
 	},
 } satisfies Actions;
