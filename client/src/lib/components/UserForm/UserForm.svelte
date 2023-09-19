@@ -15,20 +15,16 @@
 		<slot name="above" />
 
 		<div class="grid gap-3 sm:grid-cols-2">
-			<div>
-				<Label>
-					<span> First Name </span>
-					<Input name="firstName" class="mt-2" type="text" bind:value={$form.firstName} {...$constraints.firstName} />
-					{#if $errors.firstName}<Helper class="mt-2" color="red">{$errors.firstName}</Helper>{/if}
-				</Label>
-			</div>
-			<div>
-				<Label>
-					<span> Last Name </span>
-					<Input name="lastName" class="mt-2" type="text" bind:value={$form.lastName} {...$constraints.lastName} />
-					{#if $errors.lastName}<Helper class="mt-2" color="red">{$errors.lastName}</Helper>{/if}
-				</Label>
-			</div>
+			<Label>
+				<span> First Name </span>
+				<Input name="firstName" class="mt-2" type="text" bind:value={$form.firstName} {...$constraints.firstName} />
+				{#if $errors.firstName}<Helper class="mt-2" color="red">{$errors.firstName}</Helper>{/if}
+			</Label>
+			<Label>
+				<span> Last Name </span>
+				<Input name="lastName" class="mt-2" type="text" bind:value={$form.lastName} {...$constraints.lastName} />
+				{#if $errors.lastName}<Helper class="mt-2" color="red">{$errors.lastName}</Helper>{/if}
+			</Label>
 		</div>
 
 		<slot name="below" />

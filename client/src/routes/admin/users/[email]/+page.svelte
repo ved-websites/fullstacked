@@ -6,8 +6,8 @@
 
 	export let data;
 
-	$: superFormData = superForm(data.form);
-	$: ({ form, errors } = superFormData);
+	const superFormData = superForm(data.form);
+	const { form, errors } = superFormData;
 
 	$: availableRoles = data.roles.map<SelectOptionType>((role) => ({
 		name: role.text,

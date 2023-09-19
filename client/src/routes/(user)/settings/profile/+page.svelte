@@ -15,7 +15,7 @@
 
 	$: sessionUser = data.sessionUser!;
 
-	$: superFormData = superForm(data.form, { dataType: 'json' });
+	const superFormData = superForm(data.form, { dataType: 'json' });
 </script>
 
 <SettingPage routesInfo={data.routesInfo} {sessionUser} label={name}>

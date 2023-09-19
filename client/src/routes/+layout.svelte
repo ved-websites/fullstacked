@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.postcss';
 
+	import type { AppPageData } from '$/app.d';
 	import LayoutAlert from '$/lib/components/LayoutAlert/LayoutAlert.svelte';
 	import ToastManager from '$/lib/components/ToastManager/ToastManager.svelte';
 	import HasJs from '$/lib/components/head/HasJS.svelte';
@@ -8,14 +9,13 @@
 	import { layoutAlertStore, themeStore, toastsStore } from '$/lib/stores';
 	import { page } from '$app/stores';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
-	import type { PageData } from './$types.js';
 
 	export let data;
 
 	$: themeStore.set(data.theme ?? null);
 
-	$: layoutAlert = ($page.form?.layoutAlert as PageData['layoutAlert']) || $page.data.layoutAlert || $layoutAlertStore;
-	$: toasts = [...$page.data.toasts, ...(($page.form?.toasts as PageData['toasts']) ?? []), ...$toastsStore];
+	$: layoutAlert = ($page.form?.layoutAlert as AppPageData['layoutAlert']) || $page.data.layoutAlert || $layoutAlertStore;
+	$: toasts = [...$page.data.toasts, ...(($page.form?.toasts as AppPageData['toasts']) ?? []), ...$toastsStore];
 </script>
 
 <HasJs />

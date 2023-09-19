@@ -5,7 +5,7 @@ import type { SuperValidated } from 'sveltekit-superforms';
 import { message } from 'sveltekit-superforms/client';
 import { createToasts } from '../components/ToastManager/helper';
 import { handleLoginRedirect } from '../utils/login';
-import type { PageDataObject } from '../utils/page-data-object';
+import { createPageDataObject, type PageDataObject } from '../utils/page-data-object';
 
 type KitHandlerFailure = [type: 'failure', params?: { code?: number; data?: PageDataObject }];
 type KitHandlerFormMessage = [type: 'formMessage', params: { form: SuperValidated<never> }];
@@ -94,7 +94,7 @@ export class GraphQLOperationFailure {
 				})),
 		);
 
-		return fail(code, { toasts, ...data });
+		return fail(code, createPageDataObject({ toasts, ...data }));
 	}
 }
 

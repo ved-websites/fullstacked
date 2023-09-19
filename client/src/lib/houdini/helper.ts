@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { MutationStore, QueryStore, type QueryResult, type SubscriptionStore } from '$houdini';
 import type { RequestEvent } from '@sveltejs/kit';
@@ -8,7 +9,12 @@ import { handleHoudiniErrors, type GraphQLOperationResult } from './errorHandler
 export type GraphQLQuery = <T extends (new (...args: never[]) => QueryStore<any, any>) | QueryStore<any, any>>(
 	store: T,
 	...options: Parameters<(T extends QueryStore<any, any> ? T : T extends new () => QueryStore<any, any> ? InstanceType<T> : never)['fetch']>
-) => Promise<GraphQLOperationResult<T extends QueryStore<infer D, any> ? D : T extends new () => QueryStore<infer D, any> ? D : never>>;
+) => Promise<
+	GraphQLOperationResult<
+		// @ts-ignore oh yeah btw `infer D extends any` doesn't work, love it
+		T extends new () => QueryStore<infer D extends any, any> ? D : T extends QueryStore<infer D extends any, any> ? D : never
+	>
+>;
 
 export type GraphQLMutate = <T extends (new (...args: never[]) => MutationStore<any, any, any>) | MutationStore<any, any, any>>(
 	store: T,

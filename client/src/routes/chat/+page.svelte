@@ -1,26 +1,26 @@
 <script lang="ts">
 	import Icon from '$/lib/components/Icon.svelte';
-	import { subscribe } from '$/lib/houdini/helper.js';
+	import { subscribe } from '$/lib/houdini/helper';
 	import { NewMessageStore } from '$houdini';
 	import { mdiSend } from '@mdi/js';
-	import { Button, Helper, Input, Label, P } from 'flowbite-svelte';
+	import { Button, Helper, Input, Label } from 'flowbite-svelte';
 	import { onMount, tick } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';
-	import type { PageData } from './$houdini.js';
-	import type { ChatMessageType } from './index.js';
+	import type { ChatMessageType } from './types';
 
-	export let data: PageData;
+	export let data;
+	$: ({ sessionUser, chatMessages } = data);
 
 	let isSending = false;
 	let messageViewElement: HTMLDivElement;
 
 	const { enhance, form, constraints, errors } = superForm(data.form, {
 		resetForm: true,
-		async onSubmit({ formData, cancel }) {
+		async onSubmit({ formData }) {
 			const message = formData.get('message')?.toString();
 
 			if (!message) {
-				return cancel();
+				return;
 			}
 
 			isSending = true;
@@ -28,7 +28,7 @@
 			const newMessage: ChatMessageType = {
 				active: false,
 				user: { email: sessionUser!.email },
-				text: message,
+				text: message!,
 				time: new Date(),
 			};
 
@@ -47,8 +47,6 @@
 			messageViewElement.scrollTop = messageViewElement.scrollHeight;
 		},
 	});
-
-	$: ({ GetChatMessages, sessionUser } = data);
 
 	subscribe(NewMessageStore, ({ data }) => {
 		if (!data) {
@@ -74,7 +72,7 @@
 		}
 	});
 
-	$: messages = ($GetChatMessages.data?.messages ?? []).map<ChatMessageType>((rawMessage) => ({
+	$: messages = chatMessages.map<ChatMessageType>((rawMessage) => ({
 		id: rawMessage.id,
 		user: {
 			email: rawMessage.user.email,
@@ -94,18 +92,27 @@
 	});
 </script>
 
-<div bind:this={messageViewElement} class="h-[55vh] overflow-y-scroll mb-5">
+<div bind:this={messageViewElement} class="h-[55vh] overflow-y-scroll mb-5 flex flex-col">
 	{#each messages as message (message.id)}
-		<P class={message.active ? '' : 'text-gray-500 dark:text-gray-400 italic'}>{message.user.email} : {message.text}</P>
+		<div class={message.active ? '' : 'text-gray-500 dark:text-gray-400 italic'}>
+			<span>{message.user.email}</span>
+			<span> : </span>
+			<span>{message.text}</span>
+		</div>
+	{:else}
+		<div class="self-center text-center">
+			<p>No messages yet!</p>
+			<p class="italic">Be the first?</p>
+		</div>
 	{/each}
 </div>
 
 <form method="POST" use:enhance class="flex flex-col gap-3">
-	<div>
-		<Label for="message" class="mb-2">Message</Label>
-		<Input type="text" name="message" disabled={isSending} bind:value={$form.message} autocomplete="off" {...$constraints} />
-		{#if $errors.message}<Helper class="mt-1" color="red">{$errors.message}</Helper>{/if}
-	</div>
+	<Label>
+		<span>Message</span>
+		<Input type="text" class="mt-2" name="message" disabled={isSending} bind:value={$form.message} autocomplete="off" {...$constraints} />
+		{#if $errors.message}<Helper class="mt-2" color="red">{$errors.message}</Helper>{/if}
+	</Label>
 
 	<Button type="submit" disabled={!canSend}>
 		Send
