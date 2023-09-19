@@ -1,6 +1,6 @@
 import { MinioClientService } from '$minio/minio-client.service';
 import { PrismaService } from '$prisma/prisma.service';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FileUpload } from 'graphql-upload/Upload.js';
 import { User } from 'lucia';
@@ -10,6 +10,8 @@ export const PROFILE_PICTURE_BUCKET_NAME = 'profile-pictures';
 
 @Injectable()
 export class ProfilePictureService {
+	private readonly logger = new Logger(ProfilePictureService.name);
+
 	constructor(
 		private minioClientService: MinioClientService,
 		private prisma: PrismaService,
@@ -64,7 +66,9 @@ export class ProfilePictureService {
 			return false;
 		}
 
-		await this.minioClientService.delete(user.profilePictureRef, PROFILE_PICTURE_BUCKET_NAME);
+		this.minioClientService.delete(user.profilePictureRef, PROFILE_PICTURE_BUCKET_NAME).catch((e) => {
+			this.logger.error(`Couldn't delete profile picture of user "${user.email}"!`, e instanceof Error ? e.stack : undefined);
+		});
 
 		await this.prisma.user.update({
 			data: {
