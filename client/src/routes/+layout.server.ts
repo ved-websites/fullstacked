@@ -4,7 +4,9 @@ import type { ToastData } from '$/lib/components/ToastManager/helper';
 import { HASJS_COOKIE_NAME } from '$/lib/utils/js-handling';
 import type { LayoutServerLoad } from './$types';
 
-export const load = (async ({ cookies, isDataRequest, isSubRequest, url, locals: { sessionUser, theme, userHasJs } }) => {
+export const load = (async ({ cookies, isDataRequest, isSubRequest, url, depends, locals: { sessionUser, theme, userHasJs } }) => {
+	depends('data:sessionUser');
+
 	if (!isDataRequest && !isSubRequest) {
 		cookies.delete(HASJS_COOKIE_NAME, {
 			path: '/',

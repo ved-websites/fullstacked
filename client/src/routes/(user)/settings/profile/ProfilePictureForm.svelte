@@ -3,6 +3,7 @@
 	import VDropzone from '$/lib/components/flowbite-custom/VDropzone.svelte';
 	import { getProfilePictureImageUrl } from '$/lib/utils/images';
 	import { applyAction, enhance } from '$app/forms';
+	import { invalidate } from '$app/navigation';
 	import { mdiUpload } from '@mdi/js';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { Button, Label } from 'flowbite-svelte';
@@ -76,6 +77,8 @@
 
 			if (successTypes.includes(result.type)) {
 				profilePictureFile = undefined;
+
+				invalidate('data:sessionUser');
 			} else if (actionType === 'delete') {
 				currentProfilePictureRef = prevRef;
 			} else if (actionType === 'update') {
