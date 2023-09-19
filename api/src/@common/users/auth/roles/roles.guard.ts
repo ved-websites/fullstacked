@@ -1,6 +1,6 @@
 import { ContextService } from '$graphql/context/context.service';
 import { PrismaService } from '$prisma/prisma.service';
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable, SetMetadata } from '@nestjs/common';
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RolesService } from './roles.service';
 
@@ -13,7 +13,7 @@ export class RolesGuard implements CanActivate {
 	) {}
 
 	async canActivate(context: ExecutionContext) {
-		const definedRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [context.getHandler(), context.getClass()]);
+		const definedRoles = this.reflector.getAllAndOverride(Roles, [context.getHandler(), context.getClass()]);
 
 		if (!definedRoles) {
 			return true;
@@ -48,5 +48,4 @@ export class RolesGuard implements CanActivate {
 	}
 }
 
-export const ROLES_KEY = 'roles';
-export const Roles = (...roles: [string, ...string[]]) => SetMetadata(ROLES_KEY, roles);
+export const Roles = Reflector.createDecorator<[string, ...string[]]>();

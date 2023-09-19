@@ -12,7 +12,7 @@ import { AdminService } from './admin.service';
 import { CreateUserOutput } from './dtos/create-user.output';
 import { GetUserOutput } from './dtos/getUser.output';
 
-@Roles(ADMIN)
+@Roles([ADMIN])
 @Resolver()
 export class AdminResolver {
 	constructor(
