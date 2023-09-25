@@ -39,15 +39,7 @@
 		<TableHeadCell>Actions</TableHeadCell>
 	</TableHead>
 	<TableBody {tableBodyClass}>
-		{#if !users}
-			<TableBodyRow>
-				<TableBodyCell colspan="2">
-					<div class="flex justify-center py-3">
-						<Spinner />
-					</div>
-				</TableBodyCell>
-			</TableBodyRow>
-		{:else}
+		{#if users?.length}
 			{#each users as user, i}
 				{@const popoverId = `info-${name}${i}`}
 				<TableBodyRow>
@@ -66,6 +58,18 @@
 					</TableBodyCell>
 				</TableBodyRow>
 			{/each}
+		{:else}
+			<TableBodyRow>
+				<TableBodyCell colspan="2">
+					<div class="flex justify-center py-3">
+						{#if users === undefined}
+							<Spinner />
+						{:else}
+							<span class="italic">No unregistered Users!</span>
+						{/if}
+					</div>
+				</TableBodyCell>
+			</TableBodyRow>
 		{/if}
 	</TableBody>
 </Table>
