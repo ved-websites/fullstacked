@@ -38,7 +38,7 @@
 			</form>
 
 			{#if browser}
-				<Dropdown placement="bottom" triggeredBy="#avatar-menu">
+				<Dropdown placement="bottom" triggeredBy="#avatar-menu" class="py-2">
 					<DropdownHeader>
 						<span class="block text-sm">{sessionUser.firstName} {sessionUser.lastName}</span>
 						<span class="block truncate text-sm font-light"> {sessionUser.email} </span>
@@ -64,7 +64,7 @@
 						<Icon path={mdiChevronDown}></Icon>
 					</NavLi>
 					{#if browser}
-						<Dropdown triggeredBy="#{navElement.id}" class="w-44 z-20">
+						<Dropdown triggeredBy="#{navElement.id}" class="py-2 w-44 z-20">
 							{#each navElement.elements as navSubElement}
 								<DropdownItem href={navSubElement.url}>{navSubElement.title}</DropdownItem>
 							{/each}
