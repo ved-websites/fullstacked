@@ -7,7 +7,7 @@
 	import type { RouteInfo } from '../+layout.server';
 
 	export let sessionUser: NonNullable<SessionUser>;
-	export let label: string;
+	export let label: string | undefined = undefined;
 	export let routesInfo: RouteInfo[];
 
 	$: activeUrl = $page.url.pathname;
@@ -43,7 +43,9 @@
 		</Sidebar>
 	</section>
 	<section class="grow" {...$$restProps}>
-		<Heading tag="h2" class="mb-5">{label}</Heading>
+		{#if label}
+			<Heading tag="h2" class="mb-5">{label}</Heading>
+		{/if}
 		<slot />
 	</section>
 </div>
