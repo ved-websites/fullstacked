@@ -1,4 +1,3 @@
-import { mdiAlert, mdiHelpRhombus, mdiInformation } from '@mdi/js';
 import type { Toast } from 'flowbite-svelte';
 
 export const defaultToastTimeout = 10000;
@@ -40,9 +39,9 @@ export function createToasts(data?: ToastManagerData[]): ToastData[] {
 
 		if (!toast.icon) {
 			const mapping: Record<ToastAlertLevel, string> = {
-				info: mdiInformation,
-				warning: mdiHelpRhombus,
-				error: mdiAlert,
+				info: 'i-mdi-information',
+				warning: 'i-mdi-help-rhombus',
+				error: 'i-mdi-alert',
 			};
 
 			toast.icon = mapping[toast.type]!;

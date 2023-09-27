@@ -6,7 +6,6 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { isDrawerHidden } from '$lib/stores';
-	import { mdiChevronDown, mdiLogout } from '@mdi/js';
 	import { Avatar, Button, Dropdown, DropdownHeader, DropdownItem, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
 	import DarkMode from '../DarkMode.svelte';
 	import Icon from '../Icon.svelte';
@@ -14,6 +13,8 @@
 	import { isNavElemVisible } from './utils';
 
 	export let sessionUser: SessionUser;
+
+	$: activeUrl = $page.url.pathname.match(/^\/[^//]*/)![0];
 </script>
 
 <Navbar
@@ -33,7 +34,7 @@
 
 			<form method="POST" action="/?/logout" use:enhance>
 				<Button type="submit" outline={true} class="!p-2 ml-3" size="lg">
-					<Icon path={mdiLogout} />
+					<Icon class="i-mdi-logout" />
 				</Button>
 			</form>
 
@@ -50,18 +51,18 @@
 			<Button href="/login" class={sessionUser ? 'hidden' : ''}>Login</Button>
 		{/if}
 	</div>
-	<NavUl {hidden}>
+	<NavUl {hidden} {activeUrl}>
 		{#each navElements as navElement}
 			{#if isNavElemVisible(navElement, sessionUser)}
 				{#if 'url' in navElement}
-					<NavLi href={navElement.url} active={$page.url.pathname == navElement.url}>
+					<NavLi href={navElement.url}>
 						{navElement.title}
 					</NavLi>
 				{:else}
 					{@const isActive = navElement.elements.some((navSubElement) => $page.url.pathname == navSubElement.url)}
 					<NavLi id={navElement.id} class="cursor-pointer flex items-center" active={isActive}>
 						{navElement.title}
-						<Icon path={mdiChevronDown}></Icon>
+						<Icon class="i-mdi-chevron-down"></Icon>
 					</NavLi>
 					{#if browser}
 						<Dropdown triggeredBy="#{navElement.id}" class="py-2 w-44 z-20">

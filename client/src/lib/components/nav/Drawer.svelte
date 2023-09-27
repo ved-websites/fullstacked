@@ -3,7 +3,6 @@
 	import { navElements } from '$/navigation/routes';
 	import { page } from '$app/stores';
 	import { isDrawerHidden } from '$lib/stores';
-	import { mdiChevronDown, mdiChevronUp, mdiInformation } from '@mdi/js';
 	import { CloseButton, Drawer, Sidebar, SidebarDropdownWrapper, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
 	import DarkMode from '../DarkMode.svelte';
@@ -22,7 +21,7 @@
 <Drawer transitionType="fly" {transitionParams} bind:hidden={$isDrawerHidden} id="main-drawer" class="max-w-max">
 	<div class="flex items-center">
 		<h5 id="drawer-label" class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">
-			<Icon path={mdiInformation} class="mr-3" />
+			<Icon class="i-mdi-information mr-3" />
 			Navigation
 		</h5>
 		<CloseButton on:click={isDrawerHidden.toggle} class="mb-4" />
@@ -40,7 +39,7 @@
 						>
 							<svelte:fragment slot="icon">
 								{#if navElement.drawerIconPath}
-									<Icon path={navElement.drawerIconPath} />
+									<Icon class={navElement.drawerIconPath} />
 								{/if}
 							</svelte:fragment>
 						</SidebarItem>
@@ -51,14 +50,14 @@
 						>
 							<svelte:fragment slot="icon">
 								{#if navElement.drawerIconPath}
-									<Icon path={navElement.drawerIconPath} />
+									<Icon class={navElement.drawerIconPath} />
 								{/if}
 							</svelte:fragment>
 							<svelte:fragment slot="arrowup">
-								<Icon path={mdiChevronUp} />
+								<Icon class="i-mdi-chevron-up" />
 							</svelte:fragment>
 							<svelte:fragment slot="arrowdown">
-								<Icon path={mdiChevronDown} />
+								<Icon class="i-mdi-chevron-down" />
 							</svelte:fragment>
 							{#each navElement.elements.filter((navSubElement) => navSubElement.isPublic || sessionUser) as navSubElement}
 								<SidebarItem
@@ -70,7 +69,7 @@
 								>
 									<svelte:fragment slot="icon">
 										{#if navSubElement.drawerIconPath}
-											<Icon path={navSubElement.drawerIconPath} />
+											<Icon class={navSubElement.drawerIconPath} />
 										{/if}
 									</svelte:fragment>
 								</SidebarItem>

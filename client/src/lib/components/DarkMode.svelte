@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { themeStore, useMediaQuery } from '$/lib/stores';
-	import { mdiThemeLightDark, mdiWeatherNight, mdiWhiteBalanceSunny } from '@mdi/js';
 	import { Button, ButtonGroup } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { derived } from 'svelte/store';
@@ -56,7 +55,7 @@
 			color={$themeStore == 'dark' ? 'blue' : 'alternative'}
 			formaction="/?/theme&value=dark"
 		>
-			<Icon path={mdiWeatherNight} size="18px" />
+			<Icon class="i-mdi-weather-night s-4" />
 		</Button>
 		<Button
 			data-theme="media"
@@ -66,7 +65,7 @@
 			color={$themeStore == null ? 'purple' : 'alternative'}
 			formaction="/?/theme&value=null"
 		>
-			<Icon path={mdiThemeLightDark} size="18px" />
+			<Icon class="i-mdi-theme-light-dark s-4" />
 		</Button>
 		<Button
 			data-theme="light"
@@ -76,7 +75,7 @@
 			color={$themeStore == 'light' ? 'green' : 'alternative'}
 			formaction="/?/theme&value=light"
 		>
-			<Icon path={mdiWhiteBalanceSunny} size="18px" />
+			<Icon class="i-mdi-white-balance-sunny s-4" />
 		</Button>
 	</ButtonGroup>
 </form>

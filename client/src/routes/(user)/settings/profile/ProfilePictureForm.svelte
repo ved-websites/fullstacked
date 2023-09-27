@@ -4,7 +4,6 @@
 	import { getProfilePictureImageUrl } from '$/lib/utils/images';
 	import { applyAction, enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
-	import { mdiUpload } from '@mdi/js';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { Button, Label } from 'flowbite-svelte';
 
@@ -109,8 +108,10 @@
 	>
 		<div class="grid grid-cols-2 p-5 gap-3">
 			<div class="flex flex-col justify-center items-center">
-				<Icon path={mdiUpload}></Icon>
-				<p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+				<Icon class="i-mdi-upload"></Icon>
+				<p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+					<span class="font-semibold">Click to upload</span>{hasJs ? ' or drag and drop' : ''}
+				</p>
 				<p class="text-xs text-gray-500 dark:text-gray-400">
 					Accepted formats: {new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_PROFILE_PICTURE_TYPES)}.
 				</p>

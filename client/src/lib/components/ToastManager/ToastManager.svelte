@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { twMerge } from '$/lib/twMerge';
 	import { browser } from '$app/environment';
 	import { Toast } from 'flowbite-svelte';
 	import { onDestroy } from 'svelte';
@@ -47,11 +48,11 @@
 			<Toast
 				bind:open={toast.open}
 				color={toastColorMapping[toast.type]}
-				class={toast.classes ? toast.classes : `border-b-2 ${toastBorderColorMapping[toast.type]}`}
+				class={twMerge('border-b-2', toastBorderColorMapping[toast.type], toast.classes)}
 			>
 				<svelte:fragment slot="icon">
 					{#if toast.icon}
-						<Icon path={toast.icon} />
+						<Icon class={toast.icon} />
 					{/if}
 				</svelte:fragment>
 				{toast.text}

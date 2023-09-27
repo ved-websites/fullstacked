@@ -1,8 +1,6 @@
 <script lang="ts" context="module">
-	import { mdiAccount } from '@mdi/js';
-
 	export const name = 'Profile';
-	export const icon = mdiAccount;
+	export const icon = 'i-mdi-account';
 </script>
 
 <script lang="ts">

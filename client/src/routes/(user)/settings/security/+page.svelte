@@ -1,8 +1,6 @@
 <script lang="ts" context="module">
-	import { mdiSecurity } from '@mdi/js';
-
 	export const name = 'Security';
-	export const icon = mdiSecurity;
+	export const icon = 'i-mdi-security';
 </script>
 
 <script lang="ts">

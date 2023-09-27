@@ -1,4 +1,3 @@
-import { mdiAlert, mdiHelpRhombus, mdiInformation } from '@mdi/js';
 import type { Alert } from 'flowbite-svelte';
 
 export type LayoutAlertLevel = 'info' | 'warning' | 'error';
@@ -7,7 +6,7 @@ export type LayoutAlertData = {
 	text: string;
 	/** The Alert behavior. Defaults to 'info'. */
 	level: LayoutAlertLevel;
-	/** The icon path to use from `@mdj/js`. Defaults to level aware icon. */
+	/** The icon class to use from `iconify`. Defaults to level aware icon. */
 	icon: string;
 };
 
@@ -20,9 +19,9 @@ export function createLayoutAlert(data: Required<Pick<LayoutAlertData, 'text'>> 
 
 	if (!layoutAlert.icon) {
 		const mapping: Record<LayoutAlertLevel, string> = {
-			info: mdiInformation,
-			warning: mdiHelpRhombus,
-			error: mdiAlert,
+			info: 'i-mdi-information',
+			warning: 'i-mdi-help-rhombus',
+			error: 'i-mdi-alert',
 		};
 
 		layoutAlert.icon = mapping[layoutAlert.level]!;

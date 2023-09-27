@@ -1,33 +1,32 @@
 import type { NavElement } from '$lib/components/nav/nav-elements';
-import { mdiAbacus, mdiAccountDetails, mdiChat, mdiInformation, mdiShieldCrown } from '@mdi/js';
 
 export const navElements: NavElement[] = [
 	{
 		title: 'About',
 		url: '/about',
 		isPublic: true,
-		drawerIconPath: mdiInformation,
+		drawerIconPath: 'i-mdi-information',
 	},
 	{
 		title: 'Chat',
 		url: '/chat',
-		drawerIconPath: mdiChat,
+		drawerIconPath: 'i-mdi-chat',
 	},
 	{
 		title: 'Admin',
 		id: 'admin',
-		drawerIconPath: mdiShieldCrown,
+		drawerIconPath: 'i-mdi-shield-crown',
 		roles: ['admin'],
 		elements: [
 			{
 				title: 'User Management',
 				url: '/admin/users',
-				drawerIconPath: mdiAccountDetails,
+				drawerIconPath: 'i-mdi-account-details',
 			},
 			{
 				title: 'Data',
 				url: '/admin/data',
-				drawerIconPath: mdiAbacus,
+				drawerIconPath: 'i-mdi-abacus',
 			},
 		],
 	},

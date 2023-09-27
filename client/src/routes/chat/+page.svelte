@@ -2,7 +2,6 @@
 	import Icon from '$/lib/components/Icon.svelte';
 	import { subscribe } from '$/lib/houdini/helper';
 	import { NewMessageStore } from '$houdini';
-	import { mdiSend } from '@mdi/js';
 	import { Button, Helper, Input, Label } from 'flowbite-svelte';
 	import { onMount, tick } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';
@@ -116,6 +115,6 @@
 
 	<Button type="submit" disabled={!canSend}>
 		Send
-		<Icon path={mdiSend} class="ml-2" />
+		<Icon class="i-mdi-send ml-2" />
 	</Button>
 </form>

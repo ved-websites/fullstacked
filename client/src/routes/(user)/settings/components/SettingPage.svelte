@@ -33,7 +33,7 @@
 						<SidebarItem href={route.url} label={route.name} active={activeUrl === route.url}>
 							<svelte:fragment slot="icon">
 								{#if route.icon}
-									<Icon path={route.icon} />
+									<Icon class={route.icon} />
 								{/if}
 							</svelte:fragment>
 						</SidebarItem>
