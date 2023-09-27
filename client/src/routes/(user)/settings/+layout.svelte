@@ -42,7 +42,7 @@
 			</SidebarWrapper>
 		</Sidebar>
 	</section>
-	<section class="grow" {...$$restProps}>
+	<section class="grow">
 		{#if label}
 			<Heading tag="h2" class="mb-5">{label}</Heading>
 		{/if}
