@@ -19,7 +19,7 @@
 
 <Navbar
 	let:hidden
-	navClass="px-1 sm:px-3 py-2.5 fixed w-full z-20 top-0 left-0 border-b"
+	navClass="pl-1 pr-4 sm:px-3 py-2.5 fixed w-[100vw] z-20 top-0 left-0 border-b"
 	navDivClass="mx-auto flex justify-between items-center"
 >
 	<NavHamburger on:click={isDrawerHidden.toggle} />
