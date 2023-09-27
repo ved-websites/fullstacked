@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$i18n';
 	import { Alert } from 'flowbite-svelte';
 
 	const sections: { text: string; color: string }[] = [
@@ -11,8 +12,10 @@
 </script>
 
 <h1 class="text-3xl">Welcome to SvelteKit</h1>
-<p class="dark:text-white">
-	Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation
+<p class="dark:text-white">{@html $t('home.visit', { link: '<a href="https://kit.svelte.dev">kit.svelte.dev</a>' })}</p>
+
+<p>
+	{$t('common.test')}
 </p>
 
 <div class="self-center flex gap-3">

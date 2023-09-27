@@ -98,6 +98,15 @@
 				"group": "Dev Container"
 			}
 		],
-		"eslint.validate": ["javascript", "typescript", "svelte"]
+		"eslint.validate": [
+			"javascript",
+			"typescript",
+			"svelte"
+		],
+		"i18n-ally.namespace": true,
+		"i18n-ally.pathMatcher": "{locale}/{namespaces}.json",
+		"i18n-ally.keystyle": "nested",
+		"i18n-ally.indent": 4,
+		"i18n-ally.tabStyle": "tab",
 	}
 }

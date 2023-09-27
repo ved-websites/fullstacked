@@ -24,7 +24,8 @@
 				"bradlc.vscode-tailwindcss",
 				"ZixuanChen.vitest-explorer",
 				"mtxr.sqltools",
-				"mtxr.sqltools-driver-pg"
+				"mtxr.sqltools-driver-pg",
+				"lokalise.i18n-ally"
 			]
 		}
 	},

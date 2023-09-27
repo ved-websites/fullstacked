@@ -2,4 +2,7 @@
 	"css.validate": false,
 	"less.validate": false,
 	"scss.validate": false,
+	"i18n-ally.localesPaths": [
+		"src/i18n"
+	],
 }

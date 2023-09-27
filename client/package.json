@@ -41,6 +41,7 @@
 		"graphql-ws": "^5.13.1",
 		"http-status-codes": "^2.2.0",
 		"set-cookie-parser": "2.6.0",
+		"sveltekit-i18n": "2.4.2",
 		"sveltekit-superforms": "1.7.0",
 		"tailwind-merge": "1.14.0",
 		"vercel-email": "0.0.6",

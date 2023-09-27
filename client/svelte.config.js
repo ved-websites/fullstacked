@@ -13,6 +13,7 @@ const config = {
 		alias: {
 			$: './src',
 			$houdini: path.resolve('.', '$houdini'),
+			$i18n: './src/i18n/translations.ts',
 		},
 	},
 };
