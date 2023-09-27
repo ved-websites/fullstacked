@@ -14,7 +14,7 @@
 
 	export let sessionUser: SessionUser;
 
-	$: activeUrl = $page.url.pathname.match(/^\/[^//]*/)![0];
+	$: activeUrl = $page.url.pathname;
 </script>
 
 <Navbar
@@ -60,12 +60,15 @@
 					</NavLi>
 				{:else}
 					{@const isActive = navElement.elements.some((navSubElement) => $page.url.pathname == navSubElement.url)}
-					<NavLi id={navElement.id} class="cursor-pointer flex items-center" active={isActive}>
+					{@const activeClasses = isActive
+						? ` text-white bg-primary-700 md:bg-transparent md:text-primary-700 md:dark:text-white dark:bg-primary-600 md:dark:bg-transparent`
+						: ''}
+					<NavLi id={navElement.id} class="cursor-pointer flex items-center{activeClasses}">
 						{navElement.title}
 						<Icon class="i-mdi-chevron-down"></Icon>
 					</NavLi>
 					{#if browser}
-						<Dropdown triggeredBy="#{navElement.id}" class="py-2 w-44 z-20">
+						<Dropdown triggeredBy="#{navElement.id}" class="py-2 w-44 z-20" {activeUrl}>
 							{#each navElement.elements as navSubElement}
 								<DropdownItem href={navSubElement.url}>{navSubElement.title}</DropdownItem>
 							{/each}
