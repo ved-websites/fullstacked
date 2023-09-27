@@ -21,7 +21,7 @@
 				},
 				"background": {
 					"beginsPattern": ".*vite dev.*",
-					"endsPattern": ".*ready in.*"
+					"endsPattern": ".*(?:ready in|server restarted|hmr update).*",
 				}
 			},
 			"presentation": {
