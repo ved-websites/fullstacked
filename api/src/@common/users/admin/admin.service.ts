@@ -1,3 +1,4 @@
+import { I18nException } from '$i18n/i18n.error';
 import { UserCreateInput, UserUpdateInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { AuthService } from '$users/auth/auth.service';
@@ -78,7 +79,8 @@ export class AdminService {
 			});
 
 			if (!otherAdminsCount) {
-				throw new Error('Cannot remove the admin role on the last admin, make sure to define another user with the admin role first!');
+				throw new I18nException('admin.errors.last.role');
+				// throw new Error();
 			}
 		}
 
@@ -106,7 +108,7 @@ export class AdminService {
 		});
 
 		if (!otherAdminsCount) {
-			throw new Error('Cannot delete the last admin user, make sure to define another user with the admin role first!');
+			throw new I18nException('admin.errors.last.user');
 		}
 
 		const deletedUser = await this.prisma.user.delete({

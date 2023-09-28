@@ -12,6 +12,7 @@
     "paths": {
       "$prisma-client": ["./src/_generated/prisma/client/index"],
       "$prisma-graphql/*": ["./src/_generated/prisma-nestjs-graphql/*"],
+      "$nestjs-i18n": ["./src/_generated/nestjs-i18n/i18n.generated.ts"],
       "$*": ["./src/@common/*"],
       "~/*": ["./src/*"],
     },

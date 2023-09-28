@@ -109,6 +109,7 @@
 !**/.vscode/extensions.json
 !.vscode/workspace.code-workspace
 !**/.vscode/scripts
+!**/.vscode/i18n-ally-custom-framework.yml
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files

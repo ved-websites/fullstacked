@@ -62,7 +62,7 @@ export const actions = {
 		});
 
 		if (result.type === 'failure') {
-			return result.kitHandler('error');
+			return result.kitHandler('failure', { data: { form } });
 		}
 
 		throw redirect(StatusCodes.SEE_OTHER, '/admin/users');

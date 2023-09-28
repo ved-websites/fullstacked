@@ -12,8 +12,8 @@ export class CreateUserOutput {
 	registerToken!: string;
 
 	@Field(() => String, { nullable: true, description: 'First name of the user' })
-	firstName?: string;
+	firstName?: string | null;
 
 	@Field(() => String, { nullable: true, description: 'Last name of the user' })
-	lastName?: string;
+	lastName?: string | null;
 }
