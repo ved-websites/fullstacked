@@ -22,7 +22,7 @@ import { SessionI18nResolver } from './session.i18n-resolver';
 				},
 				throwOnMissingKey: false,
 				disableMiddleware: true,
-				typesOutputPath: path.resolve('.', 'src/_generated/nestjs-i18n/i18n.generated.ts'),
+				typesOutputPath: path.resolve('.', 'src/@common/i18n/@generated/i18n.generated.ts'),
 			}),
 			resolvers: [SessionI18nResolver, GraphQLWebsocketResolver, QueryResolver, AcceptLanguageResolver, new HeaderResolver(['x-lang'])],
 			inject: [],
