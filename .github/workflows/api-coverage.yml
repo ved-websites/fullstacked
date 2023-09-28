@@ -60,6 +60,7 @@ jobs:
           afterSwitchCommand: 'pnpm i && pnpm run init --no-client'
           useSameComment: true
         env:
+          DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
           TEST_DATABASE_URL: 'postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres'
           COV_REPORTER: 'json-summary'
           COV_DIRECTORY: '../'
