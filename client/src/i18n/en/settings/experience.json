@@ -1,0 +1,10 @@
+{
+	"lang": {
+		"label": "Language",
+		"map": {
+			"null": "Automatic",
+			"en": "English",
+			"fr": "Français"
+		}
+	}
+}

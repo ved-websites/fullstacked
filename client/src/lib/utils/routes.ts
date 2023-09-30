@@ -24,6 +24,8 @@ type ConvertRawRouteInfoCallbackArgs = {
 	component: DefaultComponent;
 	route: string;
 	parents: string[];
+	index: number;
+	order: number;
 };
 
 export function convertRawRoutesInfo<T>(
@@ -32,8 +34,10 @@ export function convertRawRoutesInfo<T>(
 ): T[] {
 	const rawRoutesInfo = getRawRoutesInfo(rawImports);
 
-	const unfilteredValues = rawRoutesInfo.map<T | undefined>((rawRouteInfo) => {
-		if (!rawRouteInfo.component || !(typeof rawRouteInfo.component === 'object')) {
+	const argsMap = rawRoutesInfo.map((rawRouteInfo, index) => {
+		const component = rawRouteInfo.component as DefaultComponent | undefined;
+
+		if (!component || !(typeof component === 'object')) {
 			console.error(`Failed parsing given file. Does the "${rawRouteInfo.route}" svelte file is actually svelte?`);
 			return undefined;
 		}
@@ -44,20 +48,41 @@ export function convertRawRoutesInfo<T>(
 			parents.reverse();
 		}
 
+		if ('order' in component && typeof component.order !== 'number') {
+			throw `Component '${rawRouteInfo.route}' has defined an 'order' property that isn't a number!`;
+		}
+
+		const order = (component.order as number | undefined) ?? index;
+
 		const args: ConvertRawRouteInfoCallbackArgs = {
 			fullRoute: rawRouteInfo.route,
-			component: rawRouteInfo.component as DefaultComponent,
+			component,
 			route: route ?? '',
 			parents,
+			index,
+			order,
 		};
 
+		return args;
+	});
+
+	type Args = NonNullable<(typeof argsMap)[number]>;
+
+	const sortedArgsMap = argsMap
+		.filter<Args>((converted): converted is Args => converted !== undefined)
+		.sort((val1, val2) => {
+			return val1!.order - val2!.order;
+		});
+	const unfilteredValues = sortedArgsMap.map((rawArgsData) => {
 		try {
-			return converter(args);
+			return converter(rawArgsData);
 		} catch (error) {
 			console.log(error);
 			return undefined;
 		}
 	});
 
-	return unfilteredValues.filter((converted) => converted !== undefined) as T[];
+	const filteredValues = unfilteredValues.filter((val): val is T => val !== undefined);
+
+	return filteredValues;
 }

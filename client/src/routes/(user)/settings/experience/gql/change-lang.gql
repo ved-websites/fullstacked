@@ -1,0 +1,5 @@
+mutation ChangeLang($lang: String) {
+	editUserSettings(data: { lang: { set: $lang } }) {
+		lang
+	}
+}
