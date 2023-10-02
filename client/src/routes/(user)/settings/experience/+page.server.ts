@@ -2,7 +2,7 @@ import { createToasts } from '$/lib/components/ToastManager/helper';
 import { createPageDataObject } from '$/lib/utils/page-data-object';
 import { ChangeLangStore } from '$houdini';
 import { locales, setLocale, t } from '$i18n';
-import { fail, type Actions } from '@sveltejs/kit';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -15,7 +15,7 @@ const langSchema = z.object({
 export const load = (async ({ locals: { sessionUser } }) => {
 	const lang = sessionUser!.lang;
 
-	const form = await superValidate({ lang }, langSchema);
+	const form = await superValidate<typeof langSchema, string>({ lang }, langSchema);
 
 	return { form };
 }) satisfies PageServerLoad;
@@ -25,6 +25,7 @@ export const actions = {
 		request,
 		locals: {
 			gql: { mutate },
+			userHasJs,
 		},
 	}) => {
 		const form = await superValidate(request, langSchema);
@@ -43,6 +44,10 @@ export const actions = {
 
 		if (result.type === 'failure') {
 			return result.kitHandler('error');
+		}
+
+		if (!userHasJs) {
+			throw redirect(StatusCodes.MOVED_TEMPORARILY, request.url);
 		}
 
 		const toasts = (() => {
