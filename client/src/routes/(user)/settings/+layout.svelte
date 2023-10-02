@@ -12,7 +12,7 @@
 
 	$: sessionUser = data.sessionUser!;
 	$: routesInfo = data.routesInfo;
-	$: label = currentRoute && $t(`settings.${currentRoute.name}.name`);
+	$: label = currentRoute && ($t(`settings.${currentRoute.name}.name`) as string);
 </script>
 
 <header class="flex gap-5 mb-5">
