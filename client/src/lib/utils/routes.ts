@@ -77,7 +77,7 @@ export function convertRawRoutesInfo<T>(
 		try {
 			return converter(rawArgsData);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			return undefined;
 		}
 	});
