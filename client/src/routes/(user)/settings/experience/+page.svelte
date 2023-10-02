@@ -1,5 +1,4 @@
 <script lang="ts" context="module">
-	export const name = 'Experience';
 	export const icon = 'i-mdi-face-man-shimmer';
 	export const order = 10;
 </script>

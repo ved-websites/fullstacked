@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$/i18n/translations.js';
 	import Icon from '$/lib/components/Icon.svelte';
 	import { getProfilePictureImageUrl } from '$/lib/utils/images';
 	import { page } from '$app/stores';
@@ -6,11 +7,12 @@
 
 	export let data;
 
+	$: activeUrl = $page.url.pathname;
+	$: currentRoute = routesInfo.find(({ url }) => url === activeUrl);
+
 	$: sessionUser = data.sessionUser!;
 	$: routesInfo = data.routesInfo;
-	$: label = routesInfo.find(({ url }) => url === $page.url.pathname)?.name;
-
-	$: activeUrl = $page.url.pathname;
+	$: label = currentRoute && $t(`settings.${currentRoute.name}.name`);
 </script>
 
 <header class="flex gap-5 mb-5">
@@ -30,7 +32,7 @@
 			<SidebarWrapper>
 				<SidebarGroup>
 					{#each routesInfo as route}
-						<SidebarItem href={route.url} label={route.name} active={activeUrl === route.url}>
+						<SidebarItem href={route.url} label={$t(`settings.${route.name}.name`)} active={activeUrl === route.url}>
 							<svelte:fragment slot="icon">
 								{#if route.icon}
 									<Icon class={route.icon} />
