@@ -7,4 +7,5 @@ import type { Config } from 'sveltekit-i18n';
  */
 export const routing: Record<string, NonNullable<Config['loaders']>[number]['routes']> = {
 	home: ['/'],
+	'settings.experience': ['/settings/experience'],
 };
