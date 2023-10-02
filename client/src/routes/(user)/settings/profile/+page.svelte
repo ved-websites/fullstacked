@@ -1,5 +1,4 @@
 <script lang="ts" context="module">
-	export const name = 'Profile';
 	export const icon = 'i-mdi-account';
 </script>
 
