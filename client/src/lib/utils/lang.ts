@@ -1,24 +1,19 @@
+import { fallbackLocale, locales } from '$i18n';
 import type { ServerLoadEvent } from '@sveltejs/kit';
-
-const defaultLang = 'en';
+import { pick } from 'accept-language-parser';
 
 export function getUserLang({ request, locals: { sessionUser } }: ServerLoadEvent) {
 	if (sessionUser?.lang) {
-		return sessionUser?.lang;
+		return sessionUser.lang;
 	}
 
 	const langHeader = request.headers.get('Accept-Language');
 
 	if (!langHeader) {
-		return defaultLang;
-	}
-	const mainLangs = langHeader.split(';')[0];
-
-	if (!mainLangs) {
-		return defaultLang;
+		return fallbackLocale;
 	}
 
-	const mainLang = mainLangs.split(',')[0];
+	const lang = pick(locales.get(), langHeader, { loose: true });
 
-	return mainLang ?? defaultLang;
+	return lang ?? fallbackLocale;
 }

@@ -34,6 +34,8 @@ export type Params = {
 	[x: string]: unknown;
 };
 
+export const fallbackLocale = 'en';
+
 const config: Config<Params> = {
 	loaders: translationFiles.map(({ locale, routes, key, loader }) => ({
 		locale,
@@ -42,7 +44,7 @@ const config: Config<Params> = {
 		loader,
 	})),
 	fallbackValue: 'MISSING TRANSLATION',
-	fallbackLocale: 'en',
+	fallbackLocale,
 };
 
 export const { t, locale, locales, loading, loadTranslations, setLocale } = new i18n(config);
