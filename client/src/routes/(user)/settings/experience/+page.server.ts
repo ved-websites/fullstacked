@@ -46,21 +46,12 @@ export const actions = {
 		}
 
 		const toasts = (() => {
-			const toastTimeout = 3000;
-
-			if (!lang) {
-				return createToasts([
-					{
-						text: t.get('settings.experience.lang.toast.automatic'),
-						timeout: toastTimeout,
-					},
-				]);
-			}
+			const text = lang ? t.get('settings.experience.lang.toast.targetted') : t.get('settings.experience.lang.toast.automatic');
 
 			return createToasts([
 				{
-					text: t.get('settings.experience.lang.toast.targetted'),
-					timeout: toastTimeout,
+					text,
+					timeout: 3000,
 				},
 			]);
 		})();
