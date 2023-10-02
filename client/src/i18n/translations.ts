@@ -10,22 +10,13 @@ const translationFiles = Object.entries(rawTranslationImports).map(([path, getFi
 		throw `No key given for file "${path}"!`;
 	}
 
-	const key = keys.reduce(
-		(fullKey, currentKey) => {
-			const cleanKey = currentKey.replace('.json', '');
+	const key = (() => {
+		const fileName = keys.pop()!;
 
-			if (!fullKey) {
-				return cleanKey;
-			}
+		const cleanKeys = [...keys, fileName.replace('.json', '')];
 
-			return `${fullKey}.${cleanKey}`;
-		},
-		undefined as string | undefined,
-	);
-
-	if (!key) {
-		throw `Couldn't map key for file "${path}"!`;
-	}
+		return cleanKeys.join('.');
+	})();
 
 	return {
 		locale: lang,

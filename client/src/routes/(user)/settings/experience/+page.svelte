@@ -8,7 +8,7 @@
 	import VSelect from '$/lib/components/flowbite-custom/VSelect/VSelect.svelte';
 	import type { VSelectOptionType } from '$/lib/components/flowbite-custom/VSelect/types';
 
-	import { t } from '$i18n';
+	import { locales, t } from '$i18n';
 	import { Button, Helper, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 
@@ -16,7 +16,7 @@
 
 	const { form, errors, constraints, enhance } = superForm(data.form);
 
-	$: allowedLocales = [null, 'en', 'fr'];
+	$: allowedLocales = [null, ...$locales];
 
 	$: selectableLocales = allowedLocales.map<VSelectOptionType>((l) => ({
 		name: $t(`settings.experience.lang.map.${l}`),
