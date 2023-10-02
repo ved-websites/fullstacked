@@ -1,7 +1,8 @@
+import { createToasts } from '$/lib/components/ToastManager/helper';
 import { createPageDataObject } from '$/lib/utils/page-data-object';
 import { ChangeLangStore } from '$houdini';
-import { locales } from '$i18n';
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { locales, setLocale, t } from '$i18n';
+import { fail, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -32,16 +33,34 @@ export const actions = {
 			return fail(StatusCodes.BAD_REQUEST, createPageDataObject({ form }));
 		}
 
-		const { lang } = form.data;
+		const { lang: formLang } = form.data;
 
-		const fLang = locales.get().includes(lang as string) ? lang : null;
+		const lang = locales.get().includes(formLang as string) ? formLang : null;
 
-		const result = await mutate(ChangeLangStore, { lang: fLang });
+		await setLocale(lang ?? undefined);
+
+		const result = await mutate(ChangeLangStore, { lang });
 
 		if (result.type === 'failure') {
 			return result.kitHandler('error');
 		}
 
-		throw redirect(StatusCodes.MOVED_TEMPORARILY, request.url);
+		const toasts = (() => {
+			if (!lang) {
+				return createToasts([
+					{
+						text: t.get('settings.experience.lang.toast.automatic'),
+					},
+				]);
+			}
+
+			return createToasts([
+				{
+					text: t.get('settings.experience.lang.toast.targetted'),
+				},
+			]);
+		})();
+
+		return createPageDataObject({ form, toasts });
 	},
 } satisfies Actions;

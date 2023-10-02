@@ -5,6 +5,10 @@
 			"null": "Automatic",
 			"en": "English",
 			"fr": "Français"
+		},
+		"toast": {
+			"automatic": "Successfully changed the language to follow your browser settings!",
+			"targetted": "Successfully changed the language to English!"
 		}
 	}
 }
