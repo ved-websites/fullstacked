@@ -1,9 +1,9 @@
 {{#> container }}
 
-	{{> preview text="You have been invited to join the Fullstacked Website!" }}
+	{{> preview text=(t 'admin.emails.register.body.preview') }}
 
 	{{#> text }}
-		Hello, {{name}}!
+		{{ t 'admin.emails.register.body.greetings' (object name=name) }}
 	{{/text}}
 
 	{{> hr }}
@@ -21,7 +21,7 @@
 		width="100%"
 	)
 	}}
-		Register now!
+		{{ t 'admin.emails.register.body.cta-button' }}
 	{{/button}}
 
 {{/container}}

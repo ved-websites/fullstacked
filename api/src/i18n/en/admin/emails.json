@@ -1,5 +1,10 @@
 {
 	"register": {
-		"subject": "You have been invited to join the Fullstacked website!"
+		"subject": "You have been invited to join the Fullstacked website!",
+		"body": {
+			"preview": "You have been invited to join the Fullstacked Website!",
+			"cta-button": "Register now!",
+			"greetings": "Hello, {name}!"
+		}
 	}
 }

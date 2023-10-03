@@ -1,12 +1,12 @@
+import { I18nService } from '$i18n/i18n.service';
 import { resolveRelativePath } from '$utils/callerFilePath';
+import { getHbsConfigs } from '$utils/setupViewEngine';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { create as createHandlebars, type ExpressHandlebars } from 'express-handlebars';
-import path from 'path';
 import { firstValueFrom } from 'rxjs';
 import { Environment, EnvironmentConfig } from '~/env.validation';
-import * as helpers from './helpers';
-import { SendMailData, sendEmailSchema } from './schemas';
+import { sendEmailSchema, SendMailData } from './schemas';
 
 type HbsRenderViewParameters = Parameters<ExpressHandlebars['renderView']>;
 
@@ -15,15 +15,17 @@ export class EmailService {
 	constructor(
 		private readonly env: EnvironmentConfig,
 		private readonly httpService: HttpService,
+		private readonly i18n: I18nService,
 	) {}
 
 	async render(viewPath: HbsRenderViewParameters[0], options: HbsRenderViewParameters[1] = {}, callerDepth: number = 1) {
-		const hb = createHandlebars({
-			extname: 'hbs',
-			helpers,
-			layoutsDir: path.resolve(__dirname, './layouts'),
-			partialsDir: path.resolve(__dirname, './partials'),
-		});
+		const hb = createHandlebars(
+			getHbsConfigs({
+				helpers: {
+					t: this.i18n.hbsHelper,
+				},
+			}),
+		);
 
 		const filePath = resolveRelativePath(viewPath, callerDepth);
 

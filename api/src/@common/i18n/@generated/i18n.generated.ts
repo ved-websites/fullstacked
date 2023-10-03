@@ -9,6 +9,11 @@ export type I18nTranslations = {
         "emails": {
             "register": {
                 "subject": string;
+                "body": {
+                    "preview": string;
+                    "cta-button": string;
+                    "greetings": string;
+                };
             };
         };
         "errors": {
