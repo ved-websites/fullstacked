@@ -6,6 +6,11 @@ export type I18nTranslations = {
         "test": string;
     };
     "admin": {
+        "emails": {
+            "register": {
+                "subject": string;
+            };
+        };
         "errors": {
             "last": {
                 "user": string;

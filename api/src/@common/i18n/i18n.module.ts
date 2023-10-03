@@ -1,15 +1,18 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import {
 	AcceptLanguageResolver,
 	GraphQLWebsocketResolver,
 	HeaderResolver,
 	I18nMiddleware,
 	I18nModule as NestI18nModule,
+	I18nService as NestI18nService,
 	QueryResolver,
 } from 'nestjs-i18n';
 import path from 'path';
+import { I18nService, I18nServiceFactory } from './i18n.service';
 import { SessionI18nResolver } from './session.i18n-resolver';
 
+@Global()
 @Module({
 	imports: [
 		NestI18nModule.forRootAsync({
@@ -34,6 +37,14 @@ import { SessionI18nResolver } from './session.i18n-resolver';
 			inject: [],
 		}),
 	],
+	providers: [
+		{
+			provide: I18nService,
+			useFactory: I18nServiceFactory,
+			inject: [NestI18nService],
+		},
+	],
+	exports: [I18nService],
 })
 export class I18nModule implements NestModule {
 	configure(consumer: MiddlewareConsumer) {

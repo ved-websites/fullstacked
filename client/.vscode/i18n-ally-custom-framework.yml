@@ -20,8 +20,8 @@ usageMatchRegex:
 # An array of strings containing refactor templates.
 # The "$1" will be replaced by the keypath specified.
 # Optional: uncomment the following two lines to use
-refactorTemplates:
- - t.get("$1")
+# refactorTemplates:
+#  - t.get("$1")
 
 # If set to true, only enables this custom framework (will disable all built-in frameworks)
 # monopoly: true
