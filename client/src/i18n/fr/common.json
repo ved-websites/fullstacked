@@ -1,3 +1,10 @@
 {
-	"submit": "Soumettre"
+	"submit": "Soumettre",
+	"lang": {
+		"map": {
+			"null": "Automatique",
+			"fr": "Français",
+			"en": "English"
+		}
+	}
 }

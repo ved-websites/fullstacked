@@ -1,3 +1,4 @@
+import { fallbackLanguage } from '$i18n/i18n.module';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { loadLuciaUtils } from '$users/auth/lucia/modules-compat';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
@@ -85,6 +86,7 @@ export class AuthService {
 			attributes: {
 				email,
 				registerToken,
+				emailLang: attributes?.emailLang ?? fallbackLanguage,
 				...attributes,
 			},
 		});

@@ -39,6 +39,7 @@ model User {
   lastName  String? @map("last_name")
 
   lang              String?
+  emailLang         String
   profilePictureRef String? @map("profile_picture_ref")
   registerToken     String? @unique @map("register_token")
 

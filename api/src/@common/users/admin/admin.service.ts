@@ -46,11 +46,12 @@ export class AdminService {
 	}
 
 	async createUser(data: UserCreateInput, origin: ADMIN_CREATE_USER_EVENT_TYPE[1]) {
-		const { email, firstName, lastName, roles } = data;
+		const { email, firstName, lastName, roles, emailLang } = data;
 
 		const user = (await this.authService.createUser(email, null, {
 			firstName,
 			lastName,
+			emailLang,
 		})) satisfies User as Omit<User, 'registerToken'> & { registerToken: NonNullable<User['registerToken']> };
 
 		if (roles) {
@@ -125,16 +126,19 @@ export class AdminService {
 			return;
 		}
 
+		const lang = user.emailLang;
+
 		const templateData = {
 			name: user.fullName ?? user.email,
 			url: `${origin.url}/register?token=${user.registerToken}`,
+			i18nLang: lang,
 		};
 
 		return this.email.renderAndSend(['./emails/RegisterEmail.hbs', templateData], {
 			to: { email: user.email, name: user.fullName },
 			from: { email: this.env.EMAIL_FROM, name: origin.user.fullName },
 			replyTo: { email: origin.user.email, name: origin.user.fullName },
-			subject: this.i18n.t('admin.emails.register.subject'),
+			subject: this.i18n.t('admin.emails.register.subject', { lang }),
 		});
 	}
 }

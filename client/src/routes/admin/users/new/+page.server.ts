@@ -39,7 +39,7 @@ export const actions = {
 			return { form };
 		}
 
-		const { email, firstName, lastName, roles } = form.data;
+		const { email, firstName, lastName, roles, emailLang } = form.data;
 
 		const result = await mutate(CreateNewUserStore, {
 			email,
@@ -50,6 +50,7 @@ export const actions = {
 					text: role,
 				})),
 			},
+			emailLang,
 		});
 
 		if (result.type === 'failure') {

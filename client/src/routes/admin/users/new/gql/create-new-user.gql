@@ -1,5 +1,11 @@
-mutation CreateNewUser($email: String!, $firstName: String, $lastName: String, $roles: RoleCreateNestedManyWithoutUsersInput) {
-	createUser(data: { email: $email, firstName: $firstName, lastName: $lastName, roles: $roles }) {
+mutation CreateNewUser(
+	$email: String!
+	$firstName: String
+	$lastName: String
+	$roles: RoleCreateNestedManyWithoutUsersInput
+	$emailLang: String!
+) {
+	createUser(data: { email: $email, firstName: $firstName, lastName: $lastName, roles: $roles, emailLang: $emailLang }) {
 		email
 		firstName
 		lastName

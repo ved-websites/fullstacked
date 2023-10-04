@@ -1,9 +1,9 @@
-import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { PrismaModule } from '$prisma/prisma.module';
+import { Module } from '@nestjs/common';
 import {
 	AcceptLanguageResolver,
 	GraphQLWebsocketResolver,
 	HeaderResolver,
-	I18nMiddleware,
 	I18nModule as NestI18nModule,
 	I18nService as NestI18nService,
 	QueryResolver,
@@ -12,19 +12,20 @@ import path from 'path';
 import { I18nService, I18nServiceFactory } from './i18n.service';
 import { SessionI18nResolver } from './session.i18n-resolver';
 
-@Global()
+export const fallbackLanguage = 'en';
+
 @Module({
 	imports: [
+		PrismaModule,
 		NestI18nModule.forRootAsync({
 			useFactory: () => ({
-				fallbackLanguage: 'en',
+				fallbackLanguage,
 				loaderOptions: {
 					path: path.resolve('.', 'src/i18n'),
 					watch: true,
 					includeSubfolders: true,
 				},
 				throwOnMissingKey: false,
-				disableMiddleware: true,
 				typesOutputPath: path.resolve('.', 'src/@common/i18n/@generated/i18n.generated.ts'),
 			}),
 			resolvers: [
@@ -34,7 +35,6 @@ import { SessionI18nResolver } from './session.i18n-resolver';
 				new AcceptLanguageResolver({ matchType: 'loose' }),
 				new HeaderResolver(['x-lang']),
 			],
-			inject: [],
 		}),
 	],
 	providers: [
@@ -46,8 +46,4 @@ import { SessionI18nResolver } from './session.i18n-resolver';
 	],
 	exports: [I18nService],
 })
-export class I18nModule implements NestModule {
-	configure(consumer: MiddlewareConsumer) {
-		consumer.apply(I18nMiddleware).forRoutes('(.*)');
-	}
-}
+export class I18nModule {}

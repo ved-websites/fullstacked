@@ -1,9 +1,10 @@
+import { I18nModule } from '$i18n/i18n.module';
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { EmailService } from './email.service';
 
 @Module({
-	imports: [HttpModule],
+	imports: [HttpModule, I18nModule],
 	providers: [EmailService],
 	exports: [EmailService],
 })

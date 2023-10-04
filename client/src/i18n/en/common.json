@@ -1,3 +1,10 @@
 {
-	"submit": "Submit"
+	"submit": "Submit",
+	"lang": {
+		"map": {
+			"null": "Automatic",
+			"en": "English",
+			"fr": "Français"
+		}
+	}
 }

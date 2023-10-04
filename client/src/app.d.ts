@@ -13,6 +13,7 @@ export interface AppLocals {
 	sessionUser: SessionUser;
 	theme?: Theme;
 	userHasJs: boolean;
+	browserLang: string;
 }
 
 export interface AppPageData {

@@ -7,4 +7,5 @@ export const adminUserFormSchema = userFormSchema.augment({
 
 export const adminNewUserFormSchema = adminUserFormSchema.augment({
 	email: z.string().email(),
+	emailLang: z.string(),
 });
