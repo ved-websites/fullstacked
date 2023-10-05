@@ -49,16 +49,15 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 	if (request.url.startsWith(PUBLIC_API_ADDR)) {
-		const headers = event.request.headers.entries();
+		const passedHeaders: string[] = ['cookie', 'accept-language'];
 
-		const passedHeaders: string[] = ['cookies', 'accept-language'];
+		passedHeaders.forEach((header) => {
+			const headerValue = event.request.headers.get(header);
 
-		for (const [name, value] of headers) {
-			if (!passedHeaders.includes(name)) {
-				continue;
+			if (headerValue) {
+				request.headers.set(header, headerValue);
 			}
-			request.headers.set(name, value);
-		}
+		});
 	}
 
 	const response = await fetch(request);
