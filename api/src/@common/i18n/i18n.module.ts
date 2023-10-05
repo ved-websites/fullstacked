@@ -24,7 +24,7 @@ export const fallbackLanguage = 'en';
 					includeSubfolders: true,
 				},
 				throwOnMissingKey: false,
-				typesOutputPath: path.resolve('.', 'src/@common/i18n/@generated/i18n.generated.ts'),
+				// typesOutputPath: path.resolve('.', 'src/@common/i18n/@generated/i18n.generated.ts'),
 			}),
 			resolvers: [
 				SessionI18nResolver,
