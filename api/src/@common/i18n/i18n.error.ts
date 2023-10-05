@@ -1,5 +1,6 @@
 import { I18nContext, I18nTranslator, TranslateOptions } from 'nestjs-i18n';
-import { I18nPath } from './@generated/i18n.generated';
+// import { I18nPath } from './@generated/i18n.generated';
+export type I18nPath = string;
 
 export class I18nException extends Error {
 	get translation(): I18nPath {
