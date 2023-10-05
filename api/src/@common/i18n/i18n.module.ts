@@ -8,7 +8,7 @@ import {
 	QueryResolver,
 } from 'nestjs-i18n';
 import path from 'path';
-import { I18nService, I18nServiceFactory } from './i18n.service';
+import { TypedI18nService, TypedI18nServiceFactory } from './i18n.service';
 import { SessionI18nResolver } from './session.i18n-resolver';
 
 export const fallbackLanguage = 'en';
@@ -37,11 +37,11 @@ export const fallbackLanguage = 'en';
 	],
 	providers: [
 		{
-			provide: I18nService,
-			useFactory: I18nServiceFactory,
+			provide: TypedI18nService,
+			useFactory: TypedI18nServiceFactory,
 			inject: [NestI18nService],
 		},
 	],
-	exports: [I18nService],
+	exports: [TypedI18nService],
 })
-export class I18nModule {}
+export class TypedI18nModule {}

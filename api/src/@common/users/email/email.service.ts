@@ -1,4 +1,4 @@
-import { I18nService } from '$i18n/i18n.service';
+import { TypedI18nService } from '$i18n/i18n.service';
 import { resolveRelativePath } from '$utils/callerFilePath';
 import { getHbsConfigs } from '$utils/setupViewEngine';
 import { HttpService } from '@nestjs/axios';
@@ -15,7 +15,7 @@ export class EmailService {
 	constructor(
 		private readonly env: EnvironmentConfig,
 		private readonly httpService: HttpService,
-		private readonly i18n: I18nService,
+		private readonly i18n: TypedI18nService,
 	) {}
 
 	async render(viewPath: HbsRenderViewParameters[0], options: HbsRenderViewParameters[1] = {}, callerDepth: number = 1) {

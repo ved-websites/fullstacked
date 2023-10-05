@@ -1,5 +1,5 @@
 import { ContextService } from '$graphql/context/context.service';
-import { I18nService } from '$i18n/i18n.service';
+import { TypedI18nService } from '$i18n/i18n.service';
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
@@ -7,7 +7,7 @@ import { Reflector } from '@nestjs/core';
 export class AuthGuard implements CanActivate {
 	constructor(
 		private reflector: Reflector,
-		private readonly i18n: I18nService,
+		private readonly i18n: TypedI18nService,
 	) {}
 
 	async canActivate(context: ExecutionContext) {

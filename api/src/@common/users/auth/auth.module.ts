@@ -1,4 +1,4 @@
-import { I18nModule } from '$i18n/i18n.module';
+import { TypedI18nModule } from '$i18n/i18n.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
@@ -9,7 +9,7 @@ import { LuciaModule } from './lucia/lucia.module';
 import { RolesModule } from './roles/roles.module';
 
 @Module({
-	imports: [PrismaModule, I18nModule, LuciaModule, RolesModule],
+	imports: [PrismaModule, TypedI18nModule, LuciaModule, RolesModule],
 	providers: [
 		AuthResolver,
 		AuthService,

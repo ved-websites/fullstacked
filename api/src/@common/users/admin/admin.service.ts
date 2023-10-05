@@ -1,5 +1,5 @@
 import { I18nException } from '$i18n/i18n.error';
-import { I18nService } from '$i18n/i18n.service';
+import { TypedI18nService } from '$i18n/i18n.service';
 import { UserCreateInput, UserUpdateInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { AuthService } from '$users/auth/auth.service';
@@ -21,7 +21,7 @@ export class AdminService {
 		private eventEmitter: EventEmitter2,
 		private readonly email: EmailService,
 		private readonly env: EnvironmentConfig,
-		private readonly i18n: I18nService,
+		private readonly i18n: TypedI18nService,
 	) {}
 
 	async getUsers(select: PrismaSelector, where?: UserWhereInput) {
