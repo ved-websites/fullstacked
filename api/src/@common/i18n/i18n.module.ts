@@ -1,4 +1,3 @@
-import { PrismaModule } from '$prisma/prisma.module';
 import { Module } from '@nestjs/common';
 import {
 	AcceptLanguageResolver,
@@ -16,7 +15,6 @@ export const fallbackLanguage = 'en';
 
 @Module({
 	imports: [
-		PrismaModule,
 		NestI18nModule.forRootAsync({
 			useFactory: () => ({
 				fallbackLanguage,

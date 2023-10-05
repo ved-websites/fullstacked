@@ -2,8 +2,12 @@
 
 import { Path } from "nestjs-i18n";
 export type I18nTranslations = {
-    "events": {
-        "test": string;
+    "auth": {
+        "errors": {
+            "session": {
+                "inactive": string;
+            };
+        };
     };
     "admin": {
         "emails": {
