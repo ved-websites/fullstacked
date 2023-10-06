@@ -11,16 +11,12 @@ export type RouteInfo = {
 
 const rawSettingPages = import.meta.glob('./**/+page.svelte', { eager: true });
 
-const routesInfo = convertRawRoutesInfo<RouteInfo>(rawSettingPages, ({ component, route, parents, fullRoute }) => {
-	if (!('name' in component) || typeof component.name !== 'string') {
-		throw `Processed setting route "${route}" does not contain a 'name' module export of type string!`;
-	}
-
+const routesInfo = convertRawRoutesInfo<RouteInfo>(rawSettingPages, ({ component, parents, fullRoute }) => {
 	const icon = 'icon' in component && typeof component.icon === 'string' ? component.icon : undefined;
 
 	return {
 		url: `/settings/${fullRoute}`,
-		name: component.name,
+		name: fullRoute.replaceAll('/', '.'),
 		icon,
 		parents,
 	};

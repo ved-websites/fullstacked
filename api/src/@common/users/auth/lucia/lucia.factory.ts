@@ -1,4 +1,4 @@
-import type { PrismaClient } from '$prisma-client';
+import type { PrismaClient, User } from '$prisma-client';
 import { loadLuciaCryptoNode18, loadLuciaMiddleware, loadLuciaModule, loadPrismaAdapterModule } from '$users/auth/lucia/modules-compat';
 import { Environment, type EnvironmentConfig } from '~/env.validation';
 
@@ -15,9 +15,11 @@ export async function luciaFactory(prisma: PrismaClient, env: EnvironmentConfig)
 		adapter: prismaAdapter(prisma),
 		env: isDev ? 'DEV' : 'PROD',
 		middleware: express(),
-		getUserAttributes: (dbUser) => {
+		getUserAttributes: (userSchema) => {
+			const dbUser = userSchema as User;
+
 			return {
-				fullName: dbUser.firstName && dbUser.lastName ? `${dbUser.firstName} ${dbUser.lastName}` : undefined,
+				fullName: userSchema.firstName && userSchema.lastName ? `${userSchema.firstName} ${userSchema.lastName}` : undefined,
 				...dbUser,
 			};
 		},

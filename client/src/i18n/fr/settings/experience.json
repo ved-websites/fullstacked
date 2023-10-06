@@ -1,0 +1,15 @@
+{
+	"name": "Expérience",
+	"lang": {
+		"map": {
+			"null": "Automatique",
+			"fr": "Français",
+			"en": "English"
+		},
+		"label": "Langue",
+		"toast": {
+			"automatic": "La langue fut changée pour suivre les paramètres de votre navigateur!",
+			"targetted": "La langue fut changée au Français!"
+		}
+	}
+}

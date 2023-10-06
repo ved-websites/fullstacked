@@ -1,4 +1,6 @@
 <script lang="ts" generics="T extends UserFormSchemaType">
+	import { t } from '$i18n';
+
 	import { Button, Helper, Input, Label } from 'flowbite-svelte';
 	import type { SuperForm } from 'sveltekit-superforms/client';
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -29,6 +31,6 @@
 
 		<slot name="below" />
 
-		<Button type="submit" class="mt-3">Submit</Button>
+		<Button type="submit" class="mt-3">{$t('common.submit')}</Button>
 	</div>
 </form>

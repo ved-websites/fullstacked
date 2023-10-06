@@ -1,0 +1,6 @@
+{
+	"last": {
+		"user": "Impossible de supprimer le dernier utilisateur administrateur, assurez-vous d'abord de définir un autre utilisateur avec le rôle d'administrateur!",
+		"role": "Impossible de supprimer le rôle d'administrateur sur le dernier administrateur, assurez-vous d'abord de définir un autre utilisateur avec le rôle d'administrateur!"
+	}
+}

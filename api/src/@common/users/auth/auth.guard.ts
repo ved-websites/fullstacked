@@ -1,10 +1,14 @@
 import { ContextService } from '$graphql/context/context.service';
+import { TypedI18nService } from '$i18n/i18n.service';
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-	constructor(private reflector: Reflector) {}
+	constructor(
+		private reflector: Reflector,
+		private readonly i18n: TypedI18nService,
+	) {}
 
 	async canActivate(context: ExecutionContext) {
 		const isPublic = this.reflector.getAllAndOverride(Public, [context.getHandler(), context.getClass()]);
@@ -21,7 +25,7 @@ export class AuthGuard implements CanActivate {
 		}
 
 		if (session.state !== 'active') {
-			throw new UnauthorizedException('Session is not active anymore!');
+			throw new UnauthorizedException(this.i18n.t('auth.errors.session.inactive'));
 		}
 
 		return true;

@@ -63,6 +63,7 @@
     "graphql-ws": "5.14.0",
     "lucia": "2.6.0",
     "nest-typed-config": "2.8.0",
+    "nestjs-i18n": "10.3.5",
     "nestjs-minio-client": "2.1.0",
     "reflect-metadata": "0.1.13",
     "rxjs": "7.8.1",

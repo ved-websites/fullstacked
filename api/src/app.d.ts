@@ -11,6 +11,7 @@ declare global {
 			lastName?: string;
 			registerToken?: string | null;
 			profilePictureRef?: string;
+			emailLang?: string;
 		};
 		// type DatabaseSessionAttributes = {};
 	}
@@ -23,6 +24,7 @@ declare global {
 		interface Request {
 			session: Session | null;
 			sessionId: string | null;
+			i18nLang?: string;
 		}
 	}
 }

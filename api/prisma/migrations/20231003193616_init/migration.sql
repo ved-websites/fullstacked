@@ -4,6 +4,8 @@ CREATE TABLE "users" (
     "email" TEXT NOT NULL,
     "first_name" TEXT,
     "last_name" TEXT,
+    "lang" TEXT,
+    "emailLang" TEXT NOT NULL,
     "profile_picture_ref" TEXT,
     "register_token" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

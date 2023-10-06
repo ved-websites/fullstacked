@@ -1,0 +1,50 @@
+<script lang="ts" context="module">
+	export const icon = 'i-mdi-face-man-shimmer';
+	export const order = 10;
+</script>
+
+<script lang="ts">
+	import VSelect from '$/lib/components/flowbite-custom/VSelect/VSelect.svelte';
+	import type { VSelectOptionType } from '$/lib/components/flowbite-custom/VSelect/types';
+	import { locales, t } from '$i18n';
+	import { Button, Helper, Label } from 'flowbite-svelte';
+	import { superForm } from 'sveltekit-superforms/client';
+
+	export let data;
+
+	const { form, errors, constraints, enhance } = superForm(data.form);
+
+	$: allowedLocales = [null, ...$locales];
+
+	$: selectableLocales = allowedLocales.map<VSelectOptionType>((l) => ({
+		name: $t(`settings.experience.lang.map.${l}`),
+		value: l as string,
+		selected: $form.lang === l,
+	}));
+
+	function handleAutoSubmit(e: Event) {
+		const selectElement = e.target as HTMLSelectElement;
+
+		const formElement = selectElement.form;
+
+		formElement?.requestSubmit();
+	}
+</script>
+
+<form method="POST" use:enhance class="w-auto lg:w-[50%] flex flex-col">
+	<Label>
+		<span>{$t('settings.experience.lang.label')}</span>
+		<VSelect
+			on:change={handleAutoSubmit}
+			name="lang"
+			placeholder=""
+			class="mt-2"
+			items={selectableLocales}
+			bind:value={$form.lang}
+			{...$constraints.lang}
+		/>
+		{#if $errors.lang}<Helper class="mt-2" color="red">{$errors.lang}</Helper>{/if}
+	</Label>
+
+	<Button type="submit" class="mt-3 {data.userHasJs ? 'hidden' : ''}">{$t('common.submit')}</Button>
+</form>

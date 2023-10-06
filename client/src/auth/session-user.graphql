@@ -7,5 +7,6 @@ query GetUserFromSession {
 			text
 		}
 		profilePictureRef
+		lang
 	}
 }

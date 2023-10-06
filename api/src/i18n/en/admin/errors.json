@@ -1,0 +1,6 @@
+{
+	"last": {
+		"user": "Cannot delete the last admin user, make sure to define another user with the admin role first!",
+		"role": "Cannot remove the admin role on the last admin, make sure to define another user with the admin role first!"
+	}
+}

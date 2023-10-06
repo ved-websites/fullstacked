@@ -10,7 +10,11 @@ export const plugins: UserConfig['plugins'] = [
 	// @ts-ignore Ignoring plugin version incompat
 	houdini(),
 	sveltekit(),
-	purgeCss(),
+	purgeCss({
+		safelist: {
+			greedy: [/^mt-/],
+		},
+	}),
 	nodeLoaderPlugin(),
 ];
 

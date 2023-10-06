@@ -27,26 +27,16 @@
 		<img src="/images/logo.svg" width="30px" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
 		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Flowbite</span>
 	</NavBrand>
-	<div class="flex items-center md:order-2">
-		<DarkMode class="mr-3 hidden md:flex" />
+	<div class="flex gap-3 items-center md:order-2">
+		<DarkMode class="hidden md:flex" />
 		{#if sessionUser}
 			<Avatar class="cursor-pointer" id="avatar-menu" src={getProfilePictureImageUrl(sessionUser.profilePictureRef)} />
 
 			<form method="POST" action="/?/logout" use:enhance>
-				<Button type="submit" outline={true} class="!p-2 ml-3" size="lg">
+				<Button type="submit" outline={true} class="!p-2" size="lg">
 					<Icon class="i-mdi-logout" />
 				</Button>
 			</form>
-
-			{#if browser}
-				<Dropdown placement="bottom" triggeredBy="#avatar-menu" class="py-2">
-					<DropdownHeader>
-						<span class="block text-sm">{sessionUser.firstName} {sessionUser.lastName}</span>
-						<span class="block truncate text-sm font-light"> {sessionUser.email} </span>
-					</DropdownHeader>
-					<DropdownItem href="/settings">Settings</DropdownItem>
-				</Dropdown>
-			{/if}
 		{:else}
 			<Button href="/login" class={sessionUser ? 'hidden' : ''}>Login</Button>
 		{/if}
@@ -79,5 +69,15 @@
 		{/each}
 	</NavUl>
 </Navbar>
+
+{#if browser && sessionUser}
+	<Dropdown placement="bottom" triggeredBy="#avatar-menu" class="py-2">
+		<DropdownHeader>
+			<span class="block text-sm">{sessionUser.firstName} {sessionUser.lastName}</span>
+			<span class="block truncate text-sm font-light"> {sessionUser.email} </span>
+		</DropdownHeader>
+		<DropdownItem href="/settings">Settings</DropdownItem>
+	</Dropdown>
+{/if}
 
 <Drawer {sessionUser} />

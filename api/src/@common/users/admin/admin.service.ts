@@ -1,3 +1,5 @@
+import { I18nException } from '$i18n/i18n.error';
+import { TypedI18nService } from '$i18n/i18n.service';
 import { UserCreateInput, UserUpdateInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { AuthService } from '$users/auth/auth.service';
@@ -19,6 +21,7 @@ export class AdminService {
 		private eventEmitter: EventEmitter2,
 		private readonly email: EmailService,
 		private readonly env: EnvironmentConfig,
+		private readonly i18n: TypedI18nService,
 	) {}
 
 	async getUsers(select: PrismaSelector, where?: UserWhereInput) {
@@ -43,11 +46,12 @@ export class AdminService {
 	}
 
 	async createUser(data: UserCreateInput, origin: ADMIN_CREATE_USER_EVENT_TYPE[1]) {
-		const { email, firstName, lastName, roles } = data;
+		const { email, firstName, lastName, roles, emailLang } = data;
 
 		const user = (await this.authService.createUser(email, null, {
 			firstName,
 			lastName,
+			emailLang,
 		})) satisfies User as Omit<User, 'registerToken'> & { registerToken: NonNullable<User['registerToken']> };
 
 		if (roles) {
@@ -78,7 +82,7 @@ export class AdminService {
 			});
 
 			if (!otherAdminsCount) {
-				throw new Error('Cannot remove the admin role on the last admin, make sure to define another user with the admin role first!');
+				throw new I18nException('admin.errors.last.role');
 			}
 		}
 
@@ -106,7 +110,7 @@ export class AdminService {
 		});
 
 		if (!otherAdminsCount) {
-			throw new Error('Cannot delete the last admin user, make sure to define another user with the admin role first!');
+			throw new I18nException('admin.errors.last.user');
 		}
 
 		const deletedUser = await this.prisma.user.delete({
@@ -122,16 +126,19 @@ export class AdminService {
 			return;
 		}
 
+		const lang = user.emailLang;
+
 		const templateData = {
 			name: user.fullName ?? user.email,
 			url: `${origin.url}/register?token=${user.registerToken}`,
+			i18nLang: lang,
 		};
 
 		return this.email.renderAndSend(['./emails/RegisterEmail.hbs', templateData], {
 			to: { email: user.email, name: user.fullName },
 			from: { email: this.env.EMAIL_FROM, name: origin.user.fullName },
 			replyTo: { email: origin.user.email, name: origin.user.fullName },
-			subject: `You have been invited to join the Fullstacked website!`,
+			subject: this.i18n.t('admin.emails.register.subject', { lang }),
 		});
 	}
 }

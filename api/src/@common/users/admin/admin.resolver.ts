@@ -1,3 +1,4 @@
+import { getErrorMessage } from '$i18n/i18n.error';
 import { User, UserCreateInput, UserUpdateInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
@@ -7,6 +8,7 @@ import { AuthSession, LuciaSession } from '$users/auth/session.decorator';
 import { Origin } from '$utils/origin.decorator';
 import { ForbiddenException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { I18n, I18nContext } from 'nestjs-i18n';
 import { ADMIN } from '~/@utils/roles';
 import { AdminService } from './admin.service';
 import { CreateUserOutput } from './dtos/create-user.output';
@@ -42,26 +44,31 @@ export class AdminResolver {
 	}
 
 	@Mutation(() => User)
-	async editUser(@SelectQL() select: PrismaSelector, @Args('where') where: UserWhereUniqueInput, @Args('data') data: UserUpdateInput) {
+	async editUser(
+		@I18n() i18n: I18nContext,
+		@SelectQL() select: PrismaSelector,
+		@Args('where') where: UserWhereUniqueInput,
+		@Args('data') data: UserUpdateInput,
+	) {
 		try {
 			const editedUser = await this.adminService.editUser(select, where, data);
 
 			return editedUser;
 		} catch (error) {
-			const message = error instanceof Error ? error.message : 'Unhandled exception.';
+			const message = getErrorMessage(error, i18n);
 
 			throw new ForbiddenException(message);
 		}
 	}
 
 	@Mutation(() => GetUserOutput, { nullable: true })
-	async deleteUser(@SelectQL() select: PrismaSelector, @Args('where') where: UserWhereUniqueInput) {
+	async deleteUser(@I18n() i18n: I18nContext, @SelectQL() select: PrismaSelector, @Args('where') where: UserWhereUniqueInput) {
 		try {
 			const deletedUser = await this.adminService.deleteUser(select, where);
 
 			return deletedUser;
 		} catch (error) {
-			const message = error instanceof Error ? error.message : 'Unhandled exception.';
+			const message = getErrorMessage(error, i18n);
 
 			throw new ForbiddenException(message);
 		}

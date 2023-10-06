@@ -1,9 +1,10 @@
 <script lang="ts" context="module">
-	export const name = 'Security';
 	export const icon = 'i-mdi-security';
 </script>
 
 <script lang="ts">
+	import { t } from '$i18n';
+
 	import { Button, Helper, Input, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 
@@ -38,5 +39,5 @@
 		{#if $errors.confirm}<Helper class="mt-2" color="red">{$errors.confirm}</Helper>{/if}
 	</Label>
 
-	<Button type="submit" class="mt-3 col-span-1 sm:col-span-2">Submit</Button>
+	<Button type="submit" class="mt-3 col-span-1 sm:col-span-2">{$t('common.submit')}</Button>
 </form>

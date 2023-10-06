@@ -1,5 +1,4 @@
 <script lang="ts" context="module">
-	export const name = 'Profile';
 	export const icon = 'i-mdi-account';
 </script>
 
@@ -14,7 +13,7 @@
 </script>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-y-5 lg:gap-10">
-	<UserForm action="?/basicUserInfo" {superFormData} class="col-span-2 order-1 lg:order-none"></UserForm>
+	<UserForm action="?/basicUserInfo" {superFormData} class="col-span-2 order-1 lg:order-none" />
 	<ProfilePictureForm
 		hasJs={data.userHasJs}
 		class="col-span-1 order-2 lg:order-none"

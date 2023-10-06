@@ -6,6 +6,7 @@ import { AUTH_COOKIE_NAME, getAuthUser } from './auth/auth-handler';
 import { createHoudiniHelpers } from './lib/houdini/helper';
 import { themeCookieName, themes, type Theme } from './lib/stores';
 import { HASJS_COOKIE_NAME } from './lib/utils/js-handling';
+import { getBrowserLang } from './lib/utils/lang';
 import { verifyUserAccess } from './navigation/permissions';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -20,6 +21,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	verifyUserAccess(event);
+
+	event.locals.browserLang = getBrowserLang(event.request);
 
 	event.locals.userHasJs = !!event.cookies.get(HASJS_COOKIE_NAME);
 
@@ -46,11 +49,15 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 	if (request.url.startsWith(PUBLIC_API_ADDR)) {
-		const cookieHeader = event.request.headers.get('cookie');
+		const passedHeaders: string[] = ['cookie', 'accept-language'];
 
-		if (cookieHeader) {
-			request.headers.set('cookie', cookieHeader);
-		}
+		passedHeaders.forEach((header) => {
+			const headerValue = event.request.headers.get(header);
+
+			if (headerValue) {
+				request.headers.set(header, headerValue);
+			}
+		});
 	}
 
 	const response = await fetch(request);

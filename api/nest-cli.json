@@ -4,7 +4,7 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "manualRestart": true,
-    "assets": ["**/*.hbs"],
+    "assets": ["**/*.hbs", "i18n/**/*"],
     "watchAssets": true
   }
 }
