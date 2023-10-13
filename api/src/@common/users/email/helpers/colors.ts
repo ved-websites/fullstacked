@@ -17,7 +17,7 @@ export const colors = {
 export function color(...args: unknown[]): ColorString {
 	const [[value]] = extractValuesAndOptions(args);
 
-	const colorName = value as string;
+	const colorName = value as keyof typeof colors;
 
-	return (colors as Record<string, ColorString>)[colorName] ?? colors.black;
+	return colors[colorName] ?? colors.black;
 }
