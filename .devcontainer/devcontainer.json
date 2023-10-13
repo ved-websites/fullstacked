@@ -25,7 +25,8 @@
 				"ZixuanChen.vitest-explorer",
 				"mtxr.sqltools",
 				"mtxr.sqltools-driver-pg",
-				"lokalise.i18n-ally"
+				"lokalise.i18n-ally",
+				"antfu.iconify"
 			]
 		}
 	},
