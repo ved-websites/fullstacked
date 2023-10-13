@@ -3,3 +3,5 @@ alias client="cd ~/workspace/client"
 alias root="cd ~/workspace"
 
 alias update-pnpm="npm update -g pnpm"
+
+alias prisma="nlx prisma"
