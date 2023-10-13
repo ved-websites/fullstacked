@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
+import { browser } from '$app/environment';
 import { MutationStore, QueryStore, type QueryResult, type SubscriptionStore } from '$houdini';
 import type { RequestEvent } from '@sveltejs/kit';
 import { onDestroy } from 'svelte';
@@ -56,6 +57,10 @@ export function subscribe<T extends new (...args: never[]) => SubscriptionStore<
 	store: T,
 	...params: Parameters<InstanceType<T>['subscribe']>
 ) {
+	if (!browser) {
+		return;
+	}
+
 	const storeInstance = new store();
 
 	let unsubscriber: () => void;
