@@ -47,4 +47,4 @@ const config: Config<Params> = {
 	fallbackLocale,
 };
 
-export const { t, locale, locales, loading, loadTranslations, setLocale } = new i18n(config);
+export const { t, l, locale, locales, loading, loadTranslations, setLocale } = new i18n(config);

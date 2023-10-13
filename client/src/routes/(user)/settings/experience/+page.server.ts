@@ -1,7 +1,7 @@
 import { createToasts } from '$/lib/components/ToastManager/helper';
 import { createPageDataObject } from '$/lib/utils/page-data-object';
 import { ChangeLangStore } from '$houdini';
-import { locales, setLocale, t } from '$i18n';
+import { l, locales, setLocale } from '$i18n';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
@@ -26,6 +26,7 @@ export const actions = {
 		locals: {
 			gql: { mutate },
 			userHasJs,
+			browserLang,
 		},
 	}) => {
 		const form = await superValidate(request, langSchema);
@@ -51,7 +52,9 @@ export const actions = {
 		}
 
 		const toasts = (() => {
-			const text = lang ? t.get('settings.experience.lang.toast.targetted') : t.get('settings.experience.lang.toast.automatic');
+			const text = lang
+				? l.get(browserLang, 'settings.experience.lang.toast.targetted')
+				: l.get(browserLang, 'settings.experience.lang.toast.automatic');
 
 			return createToasts([
 				{
