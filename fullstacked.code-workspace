@@ -14,7 +14,7 @@
 		}
 	],
     "settings": {
-		"window.title": "${dirty}${activeEditorMedium}${separator}Fullstacked${separator}${appName}",
+		"window.title": "${rootNameShort}${separator}${folderName}${separator}${appName}",
 		"[json]": {
 			"editor.defaultFormatter": "vscode.json-language-features",
 			"editor.codeActionsOnSave": {
