@@ -14,11 +14,7 @@
 
 	export let data;
 
-	$: {
-		let i18n = data.i18n;
-
-		setContext(i18nContextKey, i18n);
-	}
+	$: setContext(i18nContextKey, data.i18n);
 
 	$: themeStore.set(data.theme ?? null);
 
@@ -31,7 +27,7 @@
 
 <Navbar sessionUser={data.sessionUser} />
 
-<ToastManager data={toasts} />
+<ToastManager data={toasts} t={data.i18n.t} />
 
 <main class="container mx-auto mt-20 py-3 px-5 flex flex-col gap-3">
 	<LayoutAlert data={layoutAlert} />

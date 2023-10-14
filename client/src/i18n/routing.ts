@@ -7,8 +7,8 @@ import type { Config } from 'sveltekit-i18n';
  */
 export const routing: Record<string, NonNullable<Config['loaders']>[number]['routes']> = {
 	home: ['/'],
-	'settings.profil': [/\/settings\/.+/],
-	'settings.security': [/\/settings\/.+/],
-	'settings.experience': [/\/settings\/.+/],
+	'settings.profil': [/\/settings.*/],
+	'settings.security': [/\/settings.*/],
+	'settings.experience': [/\/settings.*/],
 	'admin.users.new': ['/admin/users/new'],
 };
