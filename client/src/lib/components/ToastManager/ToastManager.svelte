@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { twMerge } from '$/lib/twMerge';
+	import { getI18n } from '$/lib/utils/lang';
 	import { browser } from '$app/environment';
 	import { Toast } from 'flowbite-svelte';
 	import { onDestroy } from 'svelte';
 	import Icon from '../Icon.svelte';
 	import { toastBorderColorMapping, toastColorMapping, type ToastData } from './helper';
+	const { t } = getI18n();
 
 	const toastOffTimeout = 500;
 
@@ -14,6 +16,8 @@
 		if (toasts.some((existingToast) => toast.id === existingToast.id)) {
 			return;
 		}
+
+		toast.text = t.get(toast.text);
 
 		toasts = [...toasts, toast];
 	});

@@ -7,10 +7,18 @@
 	import HasJs from '$/lib/components/head/HasJS.svelte';
 	import InitialTheme from '$/lib/components/head/InitialTheme.svelte';
 	import { layoutAlertStore, themeStore, toastsStore } from '$/lib/stores';
+	import { i18nContextKey } from '$/lib/utils/lang';
 	import { page } from '$app/stores';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
+	import { setContext } from 'svelte';
 
 	export let data;
+
+	$: {
+		let i18n = data.i18n;
+
+		setContext(i18nContextKey, i18n);
+	}
 
 	$: themeStore.set(data.theme ?? null);
 

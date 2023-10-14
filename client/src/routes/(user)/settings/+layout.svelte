@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { t } from '$/i18n/translations.js';
 	import Icon from '$/lib/components/Icon.svelte';
 	import { getProfilePictureImageUrl } from '$/lib/utils/images';
+	import { getI18n } from '$/lib/utils/lang.js';
 	import { page } from '$app/stores';
 	import { Avatar, Heading, P, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
+	const { t } = getI18n();
 
 	export let data;
 

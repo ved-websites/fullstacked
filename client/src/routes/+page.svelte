@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { t } from '$i18n';
+	import { getI18n } from '$/lib/utils/lang';
 	import { Alert } from 'flowbite-svelte';
+	const { t } = getI18n();
 
 	const sections: { text: string; color: string }[] = [
 		{ text: 'teal', color: 'bg-teal-400' },

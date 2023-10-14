@@ -34,17 +34,25 @@ export type Params = {
 	[x: string]: unknown;
 };
 
+export const locales = Array.from(new Set(translationFiles.map((loader) => loader.locale)));
+
 export const fallbackLocale = 'en';
 
 const config: Config<Params> = {
-	loaders: translationFiles.map(({ locale, routes, key, loader }) => ({
-		locale,
-		key,
-		routes,
-		loader,
-	})),
-	fallbackValue: 'MISSING TRANSLATION',
+	loaders: translationFiles,
 	fallbackLocale,
 };
 
-export const { t, l, locale, locales, loading, loadTranslations, setLocale } = new i18n(config);
+export async function loadI18n(locale: string, route: string) {
+	const i18nInstance = new i18n(config);
+
+	await i18nInstance.loadTranslations(locale, route);
+
+	return {
+		t: i18nInstance.t,
+		locale: i18nInstance.locale,
+		setLocale: i18nInstance.setLocale,
+	};
+}
+
+export type I18nInstanceType = Awaited<ReturnType<typeof loadI18n>>;

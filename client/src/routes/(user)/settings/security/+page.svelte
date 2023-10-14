@@ -3,10 +3,10 @@
 </script>
 
 <script lang="ts">
-	import { t } from '$i18n';
-
+	import { getI18n } from '$/lib/utils/lang.js';
 	import { Button, Helper, Input, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
+	const { t } = getI18n();
 
 	export let data;
 
