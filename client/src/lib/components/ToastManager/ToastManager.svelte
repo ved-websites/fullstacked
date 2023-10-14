@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { twMerge } from '$/lib/twMerge';
-	import { getI18n } from '$/lib/utils/lang';
 	import { browser } from '$app/environment';
+	import { getI18n } from '$i18n';
+	import { twMerge } from '$lib/twMerge';
 	import { Toast } from 'flowbite-svelte';
 	import { onDestroy } from 'svelte';
 	import Icon from '../Icon.svelte';

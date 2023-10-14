@@ -1,5 +1,5 @@
-import { createPageDataObject } from '$/lib/utils/page-data-object';
 import { GetChatMessagesStore, SendMessageStore } from '$houdini';
+import { createPageDataObject } from '$lib/utils/page-data-object';
 import { fail } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';

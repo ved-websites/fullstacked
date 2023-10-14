@@ -1,7 +1,7 @@
-import { createToasts } from '$/lib/components/ToastManager/helper';
-import { emailSchema } from '$/lib/schemas/auth';
-import type { PageDataObject } from '$/lib/utils/page-data-object';
 import { DeleteSpecificUserStore } from '$houdini';
+import { createToasts } from '$lib/components/ToastManager/helper';
+import { emailSchema } from '$lib/schemas/auth';
+import type { PageDataObject } from '$lib/utils/page-data-object';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import type { Actions } from '../$types';

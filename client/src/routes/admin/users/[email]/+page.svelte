@@ -1,5 +1,5 @@
 <script lang="ts">
-	import UserForm from '$/lib/components/UserForm/UserForm.svelte';
+	import UserForm from '$lib/components/UserForm/UserForm.svelte';
 	import { Heading, Helper, Label, MultiSelect } from 'flowbite-svelte';
 	import type { SelectOptionType } from 'flowbite-svelte/dist/types';
 	import { superForm } from 'sveltekit-superforms/client';

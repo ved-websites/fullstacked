@@ -1,4 +1,4 @@
-import { convertRawRoutesInfo } from '$/lib/utils/routes';
+import { convertRawRoutesInfo } from '$lib/utils/routes';
 import type { LayoutServerLoad } from './$types';
 
 export type RouteInfo = {

@@ -1,5 +1,5 @@
-import { themeCookieName, themes } from '$/lib/stores';
 import { LogoutStore } from '$houdini';
+import { themeCookieName, themes } from '$lib/stores';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 

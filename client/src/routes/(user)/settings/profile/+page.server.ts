@@ -1,6 +1,6 @@
-import { createToasts } from '$/lib/components/ToastManager/helper';
-import { userFormSchema } from '$/lib/components/UserForm/userform.schema';
 import { DeleteUserProfilePictureStore, EditSettingsBasicInfoStore, EditUserProfilePictureStore } from '$houdini';
+import { createToasts } from '$lib/components/ToastManager/helper';
+import { userFormSchema } from '$lib/components/UserForm/userform.schema';
 import { fail, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';

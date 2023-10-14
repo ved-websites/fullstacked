@@ -1,4 +1,4 @@
-import { userFormSchema } from '$/lib/components/UserForm/userform.schema';
+import { userFormSchema } from '$lib/components/UserForm/userform.schema';
 import { z } from 'zod';
 
 export const adminUserFormSchema = userFormSchema.augment({

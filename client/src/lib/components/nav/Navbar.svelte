@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { SessionUser } from '$/auth/auth-handler';
-	import { twMerge } from '$/lib/twMerge';
-	import { getProfilePictureImageUrl } from '$/lib/utils/images';
-	import { navElements } from '$/navigation/routes';
 	import { browser } from '$app/environment';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
+	import type { SessionUser } from '$auth/auth-handler';
 	import { isDrawerHidden } from '$lib/stores';
+	import { twMerge } from '$lib/twMerge';
+	import { getProfilePictureImageUrl } from '$lib/utils/images';
+	import { navElements } from '$navigation/routes';
 	import { Avatar, Button, Dropdown, DropdownHeader, DropdownItem, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
 	import DarkMode from '../DarkMode.svelte';
 	import Icon from '../Icon.svelte';

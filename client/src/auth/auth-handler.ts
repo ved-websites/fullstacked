@@ -1,4 +1,4 @@
-import type { GraphQLQuery } from '$/lib/houdini/helper';
+import type { GraphQLQuery } from '$lib/houdini/helper';
 import { GetUserFromSessionStore, type GetUserFromSession$result } from '$houdini';
 
 export const AUTH_COOKIE_NAME = 'auth_session';

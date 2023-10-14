@@ -1,7 +1,7 @@
-import type { AppPageData } from '$/app';
-import { createLayoutAlert } from '$/lib/components/LayoutAlert/helper';
-import type { ToastData } from '$/lib/components/ToastManager/helper';
-import { HASJS_COOKIE_NAME } from '$/lib/utils/js-handling';
+import type { AppPageData } from '$app-types';
+import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
+import type { ToastData } from '$lib/components/ToastManager/helper';
+import { HASJS_COOKIE_NAME } from '$lib/utils/js-handling';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async (event) => {

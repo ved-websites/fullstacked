@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-	import UserForm from '$/lib/components/UserForm/UserForm.svelte';
+	import UserForm from '$lib/components/UserForm/UserForm.svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import ProfilePictureForm from './ProfilePictureForm.svelte';
 

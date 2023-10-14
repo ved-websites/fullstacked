@@ -1,5 +1,5 @@
-import { firstNameSchema, lastNameSchema, passwordSchema } from '$/lib/schemas/auth';
 import { GetUnregisteredUserStore, RegisterNewUserStore } from '$houdini';
+import { firstNameSchema, lastNameSchema, passwordSchema } from '$lib/schemas/auth';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';

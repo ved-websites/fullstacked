@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { createToasts } from '$/lib/components/ToastManager/helper';
-	import { toastsStore } from '$/lib/stores';
+	import { createToasts } from '$lib/components/ToastManager/helper';
+	import { toastsStore } from '$lib/stores';
 	import { Button } from 'flowbite-svelte';
 	import type { BaseUser } from '../../types';
 

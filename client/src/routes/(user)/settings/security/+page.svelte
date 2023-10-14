@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-	import { getI18n } from '$/lib/utils/lang.js';
+	import { getI18n } from '$i18n';
 	import { Button, Helper, Input, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	const { t } = getI18n();

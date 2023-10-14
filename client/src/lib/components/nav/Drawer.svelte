@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { SessionUser } from '$/auth/auth-handler';
-	import { navElements } from '$/navigation/routes';
 	import { page } from '$app/stores';
+	import type { SessionUser } from '$auth/auth-handler';
 	import { isDrawerHidden } from '$lib/stores';
+	import { navElements } from '$navigation/routes';
 	import { CloseButton, Drawer, Sidebar, SidebarDropdownWrapper, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
 	import DarkMode from '../DarkMode.svelte';

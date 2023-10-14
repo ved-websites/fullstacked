@@ -1,15 +1,15 @@
 <script lang="ts">
 	import '../app.postcss';
 
-	import type { AppPageData } from '$/app.d';
-	import LayoutAlert from '$/lib/components/LayoutAlert/LayoutAlert.svelte';
-	import ToastManager from '$/lib/components/ToastManager/ToastManager.svelte';
-	import HasJs from '$/lib/components/head/HasJS.svelte';
-	import InitialTheme from '$/lib/components/head/InitialTheme.svelte';
-	import { layoutAlertStore, themeStore, toastsStore } from '$/lib/stores';
-	import { i18nContextKey } from '$/lib/utils/lang';
+	import type { AppPageData } from '$app-types';
 	import { page } from '$app/stores';
+	import { i18nContextKey } from '$i18n';
+	import LayoutAlert from '$lib/components/LayoutAlert/LayoutAlert.svelte';
+	import ToastManager from '$lib/components/ToastManager/ToastManager.svelte';
+	import HasJs from '$lib/components/head/HasJS.svelte';
+	import InitialTheme from '$lib/components/head/InitialTheme.svelte';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
+	import { layoutAlertStore, themeStore, toastsStore } from '$lib/stores';
 	import { setContext } from 'svelte';
 
 	export let data;

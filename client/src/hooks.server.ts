@@ -1,12 +1,12 @@
 import { PUBLIC_API_ADDR } from '$env/static/public';
 import { setSession } from '$houdini';
+import { getBrowserLang } from '$i18n';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 import { parseString } from 'set-cookie-parser';
 import { AUTH_COOKIE_NAME, getAuthUser } from './auth/auth-handler';
 import { createHoudiniHelpers } from './lib/houdini/helper';
 import { themeCookieName, themes, type Theme } from './lib/stores';
 import { HASJS_COOKIE_NAME } from './lib/utils/js-handling';
-import { getBrowserLang } from './lib/utils/lang';
 import { verifyUserAccess } from './navigation/permissions';
 
 export const handle: Handle = async ({ event, resolve }) => {

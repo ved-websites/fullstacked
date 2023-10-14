@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { locales } from '$/i18n/translations';
-	import UserForm from '$/lib/components/UserForm/UserForm.svelte';
-	import VSelect from '$/lib/components/flowbite-custom/VSelect/VSelect.svelte';
-	import type { VSelectOptionType } from '$/lib/components/flowbite-custom/VSelect/types';
-	import { getI18n } from '$/lib/utils/lang';
+	import { getI18n } from '$i18n';
+	import { locales } from '$i18n-config';
+	import UserForm from '$lib/components/UserForm/UserForm.svelte';
+	import VSelect from '$lib/components/flowbite-custom/VSelect/VSelect.svelte';
+	import type { VSelectOptionType } from '$lib/components/flowbite-custom/VSelect/types';
 	import { Heading, Helper, Input, Label, MultiSelect } from 'flowbite-svelte';
 	import type { SelectOptionType } from 'flowbite-svelte/dist/types';
 	import { superForm } from 'sveltekit-superforms/client';

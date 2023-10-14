@@ -1,4 +1,4 @@
-import { loadI18n } from '$i18n';
+import { loadI18n } from '$i18n-config';
 import type { LayoutLoad } from './$types';
 
 export const load = (async ({ url, data }) => {

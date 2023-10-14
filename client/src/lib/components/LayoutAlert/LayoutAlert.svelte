@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Icon from '$/lib/components/Icon.svelte';
-	import { alertColorMapping, type LayoutAlertData } from '$/lib/components/LayoutAlert/helper';
+	import Icon from '$lib/components/Icon.svelte';
+	import { alertColorMapping, type LayoutAlertData } from '$lib/components/LayoutAlert/helper';
 	import { Alert } from 'flowbite-svelte';
 
 	export let data: LayoutAlertData | undefined;

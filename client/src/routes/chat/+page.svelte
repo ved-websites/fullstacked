@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Icon from '$/lib/components/Icon.svelte';
-	import { subscribe } from '$/lib/houdini/helper';
 	import { NewMessageStore } from '$houdini';
+	import Icon from '$lib/components/Icon.svelte';
+	import { subscribe } from '$lib/houdini/helper';
 	import { Button, Helper, Input, Label } from 'flowbite-svelte';
 	import { onMount, tick } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';

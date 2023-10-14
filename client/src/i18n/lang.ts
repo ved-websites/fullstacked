@@ -1,4 +1,4 @@
-import { fallbackLocale, locales, type I18nInstanceType } from '$i18n';
+import { fallbackLocale, locales, type I18nInstanceType } from '$i18n-config';
 import { pick } from 'accept-language-parser';
 import { getContext } from 'svelte';
 

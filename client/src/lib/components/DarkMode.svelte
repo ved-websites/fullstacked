@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { themeStore, useMediaQuery } from '$/lib/stores';
+	import { themeStore, useMediaQuery } from '$lib/stores';
 	import { Button, ButtonGroup } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { derived } from 'svelte/store';

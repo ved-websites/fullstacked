@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Icon from '$/lib/components/Icon.svelte';
-	import VDropzone from '$/lib/components/flowbite-custom/VDropzone.svelte';
-	import { getProfilePictureImageUrl } from '$/lib/utils/images';
 	import { applyAction, enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
+	import Icon from '$lib/components/Icon.svelte';
+	import VDropzone from '$lib/components/flowbite-custom/VDropzone.svelte';
+	import { getProfilePictureImageUrl } from '$lib/utils/images';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { Button, Label } from 'flowbite-svelte';
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getI18n } from '$/lib/utils/lang';
+	import { getI18n } from '$i18n';
 	import { Alert } from 'flowbite-svelte';
 	const { t } = getI18n();
 

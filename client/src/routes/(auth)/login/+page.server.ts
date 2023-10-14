@@ -1,8 +1,8 @@
-import { createLayoutAlert } from '$/lib/components/LayoutAlert/helper';
-import { createToasts } from '$/lib/components/ToastManager/helper';
-import { emailSchema, passwordSchema } from '$/lib/schemas/auth';
-import { createPageDataObject } from '$/lib/utils/page-data-object';
 import { LoginStore } from '$houdini';
+import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
+import { createToasts } from '$lib/components/ToastManager/helper';
+import { emailSchema, passwordSchema } from '$lib/schemas/auth';
+import { createPageDataObject } from '$lib/utils/page-data-object';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';

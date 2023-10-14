@@ -1,7 +1,7 @@
-import type { SessionUser } from '$/auth/auth-handler';
-import { getNavElement, rolesIntersect } from '$/lib/components/nav/nav-elements';
-import { handleLoginRedirect } from '$/lib/utils/login';
-import { navElements } from '$/navigation/routes';
+import type { SessionUser } from '$auth/auth-handler';
+import { getNavElement, rolesIntersect } from '$lib/components/nav/nav-elements';
+import { handleLoginRedirect } from '$lib/utils/login';
+import { navElements } from '$navigation/routes';
 import type { RequestEvent } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';

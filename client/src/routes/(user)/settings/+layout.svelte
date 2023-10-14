@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Icon from '$/lib/components/Icon.svelte';
-	import { getProfilePictureImageUrl } from '$/lib/utils/images';
-	import { getI18n } from '$/lib/utils/lang.js';
 	import { page } from '$app/stores';
+	import { getI18n } from '$i18n';
+	import Icon from '$lib/components/Icon.svelte';
+	import { getProfilePictureImageUrl } from '$lib/utils/images';
 	import { Avatar, Heading, P, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
 	const { t } = getI18n();
 

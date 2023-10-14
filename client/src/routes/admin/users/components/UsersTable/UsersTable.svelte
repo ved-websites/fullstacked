@@ -1,5 +1,5 @@
 <script lang="ts" generics="T extends BaseUser = BaseUser">
-	import { getProfilePictureImageUrl } from '$/lib/utils/images';
+	import { getProfilePictureImageUrl } from '$lib/utils/images';
 	import {
 		Avatar,
 		Badge,

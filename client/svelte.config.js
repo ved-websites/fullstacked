@@ -11,9 +11,13 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			$: './src',
+			$auth: './src/auth',
+			$navigation: './src/navigation',
+			$routes: './src/routes',
 			$houdini: path.resolve('.', '$houdini'),
-			$i18n: './src/i18n/translations.ts',
+			$i18n: './src/i18n/lang.ts',
+			'$i18n-config': './src/i18n/translations.ts',
+			'$app-types': './src/app.d.ts',
 		},
 	},
 };

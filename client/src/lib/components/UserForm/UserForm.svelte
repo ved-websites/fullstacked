@@ -1,5 +1,5 @@
 <script lang="ts" generics="T extends UserFormSchemaType">
-	import { getI18n } from '$lib/utils/lang';
+	import { getI18n } from '$i18n';
 	import { Button, Helper, Input, Label } from 'flowbite-svelte';
 	import type { SuperForm } from 'sveltekit-superforms/client';
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -1,8 +1,8 @@
-import { createToasts } from '$/lib/components/ToastManager/helper';
-import { createPageDataObject } from '$/lib/utils/page-data-object';
 import { ChangeLangStore } from '$houdini';
-import { locales } from '$i18n';
-import { k } from '$lib/utils/lang';
+import { k } from '$i18n';
+import { locales } from '$i18n-config';
+import { createToasts } from '$lib/components/ToastManager/helper';
+import { createPageDataObject } from '$lib/utils/page-data-object';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { HASJS_COOKIE_NAME } from '$/lib/utils/js-handling';
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
+	import { HASJS_COOKIE_NAME } from '$lib/utils/js-handling';
 
 	$: {
 		$page.form;

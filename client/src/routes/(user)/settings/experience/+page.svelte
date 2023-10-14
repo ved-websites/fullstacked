@@ -4,9 +4,9 @@
 </script>
 
 <script lang="ts">
-	import VSelect from '$/lib/components/flowbite-custom/VSelect/VSelect.svelte';
-	import type { VSelectOptionType } from '$/lib/components/flowbite-custom/VSelect/types';
-	import { getI18n } from '$/lib/utils/lang.js';
+	import { getI18n } from '$i18n';
+	import VSelect from '$lib/components/flowbite-custom/VSelect/VSelect.svelte';
+	import type { VSelectOptionType } from '$lib/components/flowbite-custom/VSelect/types';
 	import { Button, Helper, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	const { t, locales, setLocale } = getI18n();
