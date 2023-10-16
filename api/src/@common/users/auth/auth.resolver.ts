@@ -9,7 +9,6 @@ import { Public } from './auth.guard';
 import { AuthService } from './auth.service';
 import { LoggedUserOutput } from './dtos/logged-user.output';
 import { LoginUserInput } from './dtos/login-user.input';
-import { LogoutOutput } from './dtos/logout.output';
 import { RegisterInput } from './dtos/register.input';
 import { RenewedSessionOutput } from './dtos/renewed-session.output';
 import { UnregisteredUserOutput } from './dtos/unregistered-user.output';
@@ -72,21 +71,17 @@ export class AuthResolver {
 		}
 	}
 
-	@Mutation(() => LogoutOutput)
+	@Mutation(() => Boolean)
 	async logout(@LuciaAuth() authRequest: LuciaAuthRequest, @AuthSession() session: LuciaSession | null) {
 		if (session) {
 			await this.authService.logout(session.sessionId);
 
 			authRequest.setSession(null);
 
-			return {
-				loggedOut: true,
-			} as LogoutOutput;
+			return true;
 		}
 
-		return {
-			loggedOut: false,
-		} as LogoutOutput;
+		return false;
 	}
 
 	@Mutation(() => RenewedSessionOutput, { nullable: true })
