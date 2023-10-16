@@ -1,7 +1,7 @@
+import { EmailModule } from '$email/email.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { AuthModule } from '$users/auth/auth.module';
 import { RolesService } from '$users/auth/roles/roles.service';
-import { EmailModule } from '$users/email/email.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TestManager } from '~/@utils/tests/TestManager';
