@@ -2,7 +2,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { engine } from 'express-handlebars';
 import { ConfigOptions } from 'express-handlebars/types';
 import { resolve } from 'path';
-import * as helpers from '../users/email/helpers';
+import * as helpers from '../email/helpers';
 
 export function getHbsConfigs(config?: ConfigOptions): ConfigOptions {
 	return {

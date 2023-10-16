@@ -1,4 +1,5 @@
 import { ConfigModule } from '$configs/config.module';
+import { EmailModule } from '$email/email.module';
 import { ContextModule } from '$graphql/context/context.module';
 import { GraphQLModule } from '$graphql/graphql.module';
 import { TypedI18nModule } from '$i18n/i18n.module';
@@ -18,6 +19,7 @@ export const BaseModules = [
 		verboseMemoryLeak: true,
 	}),
 	UsersModule,
+	EmailModule,
 	HomeModule,
 	TypedI18nModule,
 ] satisfies ModuleMetadata['imports'];
