@@ -84,9 +84,7 @@ export class ContextService {
 			return context.switchToHttp().getRequest<Request>();
 		}
 
-		const gqlContext = GqlExecutionContext.create(context);
-
-		return gqlContext.getContext().req as Request;
+		return this.getGraphQLRequest(context);
 	}
 
 	static getGraphQLResponse(context: ExecutionContext) {
