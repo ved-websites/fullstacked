@@ -7,7 +7,9 @@ import { PrismaModule } from '$prisma/prisma.module';
 import { UsersModule } from '$users/users.module';
 import { ModuleMetadata } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ThrottlerModule, seconds } from '@nestjs/throttler';
 import { HomeModule } from './home/home.module';
+import { throttlerConf } from './throttler.guard';
 
 export const BaseModules = [
 	ConfigModule,
@@ -18,6 +20,12 @@ export const BaseModules = [
 		global: true,
 		verboseMemoryLeak: true,
 	}),
+	ThrottlerModule.forRoot(
+		throttlerConf.map((conf) => ({
+			...conf,
+			ttl: typeof conf.ttl === 'number' ? seconds(conf.ttl) : conf.ttl,
+		})),
+	),
 	UsersModule,
 	EmailModule,
 	HomeModule,
