@@ -4,4 +4,4 @@ alias root="cd ~/workspace"
 
 alias update-pnpm="npm update -g pnpm"
 
-alias prisma="nlx prisma"
+alias prisma="pnpm exec prisma"
