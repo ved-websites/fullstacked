@@ -1,0 +1,12 @@
+{
+	"labels": {
+		"email": "Email",
+		"password": "Mot de passe"
+	},
+	"email-placeover": "exemple@exemple.com",
+	"forgot": {
+		"password": {
+			"text": "Mot de passe oublié?"
+		}
+	}
+}

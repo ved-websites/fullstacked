@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { createToasts } from '$lib/components/ToastManager/helper';
-	import { toastsStore } from '$lib/stores';
+	import { createToasts, setPageToasts } from '$lib/components/ToastManager/helper';
 	import { Button } from 'flowbite-svelte';
 	import type { BaseUser } from '../../types';
 
@@ -13,15 +12,14 @@
 	on:click={() => {
 		navigator.clipboard.writeText(`${window.location.origin}/register?token=${user.registerToken}`);
 
-		$toastsStore = [
-			...$toastsStore,
-			...createToasts([
+		setPageToasts(
+			createToasts([
 				{
 					text: `Copied link to register user ${user.email}!`,
 					timeout: showCopiedTextDuration,
 				},
 			]),
-		];
+		);
 	}}
 	color="green"
 >

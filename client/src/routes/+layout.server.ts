@@ -1,10 +1,14 @@
 import type { AppPageData } from '$app-types';
 import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
-import type { ToastData } from '$lib/components/ToastManager/helper';
 import { HASJS_COOKIE_NAME } from '$lib/utils/js-handling';
+import { _loadFlash } from 'sveltekit-flash-message/server';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async (event) => {
+	// TODO: Change to using proper loadFlash load wrapper
+	// when https://github.com/HoudiniGraphql/houdini/issues/1137 is fixed
+	const flash = _loadFlash(event).flash;
+
 	const {
 		cookies,
 		isDataRequest,
@@ -35,8 +39,8 @@ export const load = (async (event) => {
 		sessionUser,
 		theme,
 		layoutAlert,
-		toasts: [] as ToastData[],
 		userHasJs,
 		browserLang,
+		flash,
 	};
 }) satisfies LayoutServerLoad;

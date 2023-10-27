@@ -1,0 +1,7 @@
+{
+	"forgot_password_request": {
+		"body": {
+			"preview": "Mot de passe oublié?"
+		}
+	}
+}
