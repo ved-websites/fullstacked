@@ -25,6 +25,17 @@ export class ThrottlerGuard extends NestThrottlerGuard {
 		return { req, res };
 	}
 
+	protected override async handleRequest(context: ExecutionContext, limit: number, ttl: number, throttler: ThrottlerOptions) {
+		const res = ContextService.getResponse(context);
+
+		if (!res) {
+			// Do not restrict WebSockets / Subscriptions yet.
+			return true;
+		}
+
+		return super.handleRequest(context, limit, ttl, throttler);
+	}
+
 	protected override async throwThrottlingException(context: ExecutionContext, _throttlerLimitDetail: ThrottlerLimitDetail): Promise<void> {
 		const { i18nContext: i18n } = ContextService.getRequest(context);
 
