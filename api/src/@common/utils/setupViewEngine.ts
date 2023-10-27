@@ -12,8 +12,8 @@ export function getHbsConfigs(config?: ConfigOptions): ConfigOptions {
 			...config?.helpers,
 			...helpers,
 		},
-		layoutsDir: config?.layoutsDir || resolve(__dirname, '../users/email/layouts'),
-		partialsDir: config?.partialsDir || resolve(__dirname, '../users/email/partials'),
+		layoutsDir: config?.layoutsDir || resolve(__dirname, '../email/layouts'),
+		partialsDir: config?.partialsDir || resolve(__dirname, '../email/partials'),
 	};
 }
 
