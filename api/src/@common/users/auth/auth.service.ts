@@ -233,7 +233,7 @@ export class AuthService {
 		const pswResetAttempt = await this.getPasswordResetAttempt(token);
 
 		if (pswResetAttempt === null) {
-			throw new I18nException('');
+			throw new I18nException('auth.errors.password.reset.no-attempt-found');
 		}
 
 		const { user, id } = pswResetAttempt;
