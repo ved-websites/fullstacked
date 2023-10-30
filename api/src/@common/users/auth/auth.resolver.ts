@@ -1,3 +1,4 @@
+import { sensitiveThrottlerConf } from '$app/throttler.guard';
 import { getErrorMessage } from '$i18n/i18n.error';
 import { Session } from '$prisma-graphql/session';
 import { User } from '$prisma-graphql/user';
@@ -117,7 +118,7 @@ export class AuthResolver {
 		} satisfies ForgotPasswordRequestOutput;
 	}
 
-	@Throttle({ short: { limit: 5, ttl: 5000 }, long: { limit: 15, ttl: 10000 } })
+	@Throttle(...sensitiveThrottlerConf)
 	@Public()
 	@Query(() => User, { nullable: true })
 	async verifyPasswordResetAttempt(@Args('token') token: string) {
@@ -130,6 +131,7 @@ export class AuthResolver {
 		return pswResetAttempt.user satisfies User;
 	}
 
+	@Throttle(...sensitiveThrottlerConf)
 	@Public()
 	@Mutation(() => Boolean)
 	async resetPassword(@I18n() i18n: I18nContext, @Args('data') { token, password }: ResetPasswordInput, @Origin() origin: string) {

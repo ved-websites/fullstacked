@@ -1,8 +1,9 @@
 import { ContextService } from '$graphql/context/context.service';
 import { ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
-import { ThrottlerGuard as NestThrottlerGuard, ThrottlerOptions } from '@nestjs/throttler';
+import { ThrottlerGuard as NestThrottlerGuard, Throttle, ThrottlerOptions } from '@nestjs/throttler';
 import { ThrottlerLimitDetail } from '@nestjs/throttler/dist/throttler.guard.interface';
 
+// limits here are transformed in seconds automatically
 export const throttlerConf: ThrottlerOptions[] = [
 	{
 		name: 'short',
@@ -15,6 +16,8 @@ export const throttlerConf: ThrottlerOptions[] = [
 		limit: 500,
 	},
 ];
+
+export const sensitiveThrottlerConf: Parameters<typeof Throttle> = [{ short: { limit: 5, ttl: 5000 }, long: { limit: 15, ttl: 10000 } }];
 
 @Injectable()
 export class ThrottlerGuard extends NestThrottlerGuard {
