@@ -170,26 +170,29 @@ export class AuthService {
 				expiryDate: {
 					gt: currentDate,
 				},
+				used: {
+					equals: false,
+				},
 			},
 			select: {
+				id: true,
 				user: true,
 			},
 		});
 
-		// extend attempt(s) expiry date to give time for password update
-		await this.prisma.passwordResetAttempt.updateMany({
-			where: {
-				token: {
-					equals: token,
+		if (passwordAttempt) {
+			// extend attempt(s) expiry date to give time for password update
+			await this.prisma.passwordResetAttempt.updateMany({
+				where: {
+					id: {
+						equals: passwordAttempt.id,
+					},
 				},
-				expiryDate: {
-					gt: currentDate,
+				data: {
+					expiryDate: this.createPasswordResetExpiryDate(),
 				},
-			},
-			data: {
-				expiryDate: this.createPasswordResetExpiryDate(),
-			},
-		});
+			});
+		}
 
 		return passwordAttempt;
 	}
@@ -233,10 +236,23 @@ export class AuthService {
 			throw new I18nException('');
 		}
 
-		const { user } = pswResetAttempt;
+		const { user, id } = pswResetAttempt;
 
 		try {
-			await this.auth.updateKeyPassword(this.providerId, user.email, password);
+			await this.prisma.$transaction(async (tx) => {
+				await tx.passwordResetAttempt.update({
+					data: {
+						used: {
+							set: true,
+						},
+					},
+					where: {
+						id,
+					},
+				});
+
+				await this.auth.updateKeyPassword(this.providerId, user.email, password);
+			});
 
 			await this.auth.invalidateAllUserSessions(user.id);
 		} catch (error) {
