@@ -3,8 +3,9 @@ import { k } from '$i18n';
 import { locales } from '$i18n-config';
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { createPageDataObject } from '$lib/utils/page-data-object';
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { fail, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
+import { redirect } from 'sveltekit-flash-message/server';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
@@ -22,13 +23,15 @@ export const load = (async ({ locals: { sessionUser } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({
-		request,
-		locals: {
-			gql: { mutate },
-			userHasJs,
-		},
-	}) => {
+	default: async (event) => {
+		const {
+			request,
+			locals: {
+				gql: { mutate },
+				userHasJs,
+			},
+		} = event;
+
 		const form = await superValidate(request, langSchema);
 
 		if (!form.valid) {
@@ -45,10 +48,6 @@ export const actions = {
 			return result.kitHandler('error');
 		}
 
-		if (!userHasJs) {
-			throw redirect(StatusCodes.MOVED_TEMPORARILY, request.url);
-		}
-
 		const toasts = (() => {
 			const text = lang ? k('settings.experience.lang.toast.targetted') : k('settings.experience.lang.toast.automatic');
 
@@ -59,6 +58,10 @@ export const actions = {
 				},
 			]);
 		})();
+
+		if (!userHasJs) {
+			throw redirect({ toasts }, event);
+		}
 
 		return createPageDataObject({ form, toasts });
 	},

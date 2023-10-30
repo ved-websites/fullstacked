@@ -1,8 +1,13 @@
+import { EmailService } from '$email/email.service';
+import { I18nException } from '$i18n/i18n.error';
 import { fallbackLanguage } from '$i18n/i18n.module';
+import { TypedI18nService } from '$i18n/i18n.service';
+import { User } from '$prisma-client';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { loadLuciaUtils } from '$users/auth/lucia/modules-compat';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes } from 'lucia';
+import { EnvironmentConfig } from '~/env.validation';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';
 
 @Injectable()
@@ -10,6 +15,9 @@ export class AuthService {
 	constructor(
 		@Inject(LuciaFactory) private readonly auth: Auth,
 		private readonly prisma: PrismaService,
+		private readonly email: EmailService,
+		private readonly i18n: TypedI18nService,
+		private readonly env: EnvironmentConfig,
 	) {}
 
 	readonly providerId = 'email';
@@ -133,5 +141,142 @@ export class AuthService {
 
 	async logout(sessionId: string) {
 		return await this.auth.invalidateSession(sessionId);
+	}
+
+	async getForgotPasswordRequestToken() {
+		const forgotPasswordTokenLength = 16;
+		const forgotPasswordToken = (await loadLuciaUtils()).generateRandomString(forgotPasswordTokenLength);
+
+		return forgotPasswordToken;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-magic-numbers
+	protected createPasswordResetExpiryDate(maxTimeInMinutes = 15) {
+		const expiryDate = new Date();
+
+		expiryDate.setMinutes(expiryDate.getMinutes() + maxTimeInMinutes);
+
+		return expiryDate;
+	}
+
+	async getPasswordResetAttempt(token: string) {
+		const currentDate = new Date();
+
+		const passwordAttempt = await this.prisma.passwordResetAttempt.findFirst({
+			where: {
+				token: {
+					equals: token,
+				},
+				expiryDate: {
+					gt: currentDate,
+				},
+				used: {
+					equals: false,
+				},
+			},
+			select: {
+				id: true,
+				user: true,
+			},
+		});
+
+		if (passwordAttempt) {
+			// extend attempt(s) expiry date to give time for password update
+			await this.prisma.passwordResetAttempt.updateMany({
+				where: {
+					id: {
+						equals: passwordAttempt.id,
+					},
+				},
+				data: {
+					expiryDate: this.createPasswordResetExpiryDate(),
+				},
+			});
+		}
+
+		return passwordAttempt;
+	}
+
+	async sendPasswordResetRequestEmail(email: string, token: string, origin: { url: string }) {
+		const { user } = await this.prisma.passwordResetAttempt.create({
+			data: {
+				user: {
+					connect: {
+						email,
+					},
+				},
+				token,
+				expiryDate: this.createPasswordResetExpiryDate(),
+			},
+			select: {
+				user: true,
+			},
+		});
+
+		const lang = user.emailLang;
+
+		const userFullName = `${user.firstName} ${user.lastName}`;
+
+		const templateData = {
+			url: `${origin.url}/forgot_password?resetToken=${token}`,
+			i18nLang: lang,
+		};
+
+		return this.email.renderAndSend(['./emails/ForgotPasswordRequest.hbs', templateData], {
+			to: { email: user.email, name: userFullName },
+			from: { email: this.env.EMAIL_FROM },
+			subject: this.i18n.t('auth.emails.forgot_password_request.subject', { lang }),
+		});
+	}
+
+	async resetPassword(token: string, password: string) {
+		const pswResetAttempt = await this.getPasswordResetAttempt(token);
+
+		if (pswResetAttempt === null) {
+			throw new I18nException('auth.errors.password.reset.no-attempt-found');
+		}
+
+		const { user, id } = pswResetAttempt;
+
+		try {
+			await this.prisma.$transaction(async (tx) => {
+				await tx.passwordResetAttempt.update({
+					data: {
+						used: {
+							set: true,
+						},
+					},
+					where: {
+						id,
+					},
+				});
+
+				await this.auth.updateKeyPassword(this.providerId, user.email, password);
+			});
+
+			await this.auth.invalidateAllUserSessions(user.id);
+		} catch (error) {
+			// eh
+		}
+
+		return { user };
+	}
+
+	async sendPasswordResetSuccessEmail(user: User, _origin: { url: string }) {
+		const lang = user.emailLang;
+
+		const userFullName = `${user.firstName} ${user.lastName}`;
+
+		const templateData = {
+			i18nLang: lang,
+		};
+
+		// TODO: Add website origin in email
+
+		return this.email.renderAndSend(['./emails/PasswordResetSuccessful.hbs', templateData], {
+			to: { email: user.email, name: userFullName },
+			from: { email: this.env.EMAIL_FROM },
+			subject: this.i18n.t('auth.emails.password_reset.subject', { lang }),
+		});
 	}
 }

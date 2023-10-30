@@ -11,4 +11,5 @@ export const routing: Record<string, NonNullable<Config['loaders']>[number]['rou
 	'settings.security': [/\/settings.*/],
 	'settings.experience': [/\/settings.*/],
 	'admin.users.new': ['/admin/users/new'],
+	'(auth).forgot_password': ['/forgot_password', '/login'],
 };

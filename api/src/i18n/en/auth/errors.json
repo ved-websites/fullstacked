@@ -1,0 +1,10 @@
+{
+	"session": {
+		"inactive": "Session is not active anymore!"
+	},
+	"password": {
+		"reset": {
+			"no-attempt-found": "No password reset attempt was found with given token ; token might be invalid or expired."
+		}
+	}
+}

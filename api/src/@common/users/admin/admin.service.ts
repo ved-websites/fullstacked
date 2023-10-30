@@ -5,9 +5,9 @@ import { UserCreateInput, UserUpdateInput, UserWhereInput, UserWhereUniqueInput 
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { AuthService } from '$users/auth/auth.service';
 import { RolesService } from '$users/auth/roles/roles.service';
+import { LuciaUser } from '$users/auth/session.decorator';
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { User } from 'lucia';
 import { ADMIN } from '~/@utils/roles';
 import { EnvironmentConfig } from '~/env.validation';
 import { ADMIN_CREATE_USER_EVENT_KEY, ADMIN_CREATE_USER_EVENT_TYPE } from './listeners/admin.events';
@@ -52,7 +52,7 @@ export class AdminService {
 			firstName,
 			lastName,
 			emailLang,
-		})) satisfies User as Omit<User, 'registerToken'> & { registerToken: NonNullable<User['registerToken']> };
+		})) satisfies LuciaUser as Omit<LuciaUser, 'registerToken'> & { registerToken: NonNullable<LuciaUser['registerToken']> };
 
 		if (roles) {
 			await this.rolesService.setUserRoles(user, roles);
@@ -121,7 +121,7 @@ export class AdminService {
 		return deletedUser;
 	}
 
-	async sendNewUserRegistrationEmail(user: Omit<User, 'userId'>, origin: { url: string; user: User }) {
+	async sendNewUserRegistrationEmail(user: Omit<LuciaUser, 'userId'>, origin: { url: string; user: LuciaUser }) {
 		if (!user.registerToken) {
 			return;
 		}

@@ -1,0 +1,18 @@
+{
+	"forgot_password_request": {
+		"subject": "Password Reset Request",
+		"body": {
+			"preview": "Forgot password?",
+			"cta-button": "Reset password",
+			"details": "A request to reset your password was made. If you did not make this request, you can safely ignore this email."
+		}
+	},
+	"password_reset": {
+		"subject": "Password update",
+		"body": {
+			"preview": "You password has been updated!",
+			"wrong-change-note": "Didn't do this change yourself? Contact guillaumemarcoux@gmail.com directly to get this resolved as quickly as possible.",
+			"details": "This is a simple email to inform you that you have changed your email for the Fullstacked website!"
+		}
+	}
+}

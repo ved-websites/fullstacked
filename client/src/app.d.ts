@@ -16,11 +16,15 @@ export interface AppLocals {
 	browserLang: string;
 }
 
-export interface AppPageData {
+export interface PageMessages {
+	toasts?: ToastData[];
+	layoutAlert?: LayoutAlertData;
+}
+
+export interface AppPageData extends PageMessages {
 	sessionUser: SessionUser;
-	layoutAlert: LayoutAlertData | undefined;
-	toasts: ToastData[];
 	userHasJs: boolean;
+	flash?: PageMessages;
 }
 
 export interface HoudiniSession {

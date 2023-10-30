@@ -1,16 +1,23 @@
+import { sensitiveThrottlerConf } from '$app/throttler.guard';
+import { getErrorMessage } from '$i18n/i18n.error';
 import { Session } from '$prisma-graphql/session';
 import { User } from '$prisma-graphql/user';
 import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
-import { InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { Origin } from '$utils/origin.decorator';
+import { ForbiddenException, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Throttle } from '@nestjs/throttler';
 import { ErrorMessage } from 'lucia/dist/auth/error';
+import { I18n, I18nContext } from 'nestjs-i18n';
 import { Public } from './auth.guard';
 import { AuthService } from './auth.service';
+import { ForgotPasswordRequestOutput } from './dtos/forgot-password-request.output';
 import { LoggedUserOutput } from './dtos/logged-user.output';
 import { LoginUserInput } from './dtos/login-user.input';
 import { RegisterInput } from './dtos/register.input';
 import { RenewedSessionOutput } from './dtos/renewed-session.output';
+import { ResetPasswordInput } from './dtos/reset-password.input';
 import { UnregisteredUserOutput } from './dtos/unregistered-user.output';
 import { LuciaAuth, LuciaAuthRequest } from './lucia/lucia.decorator';
 import { loadLuciaModule } from './lucia/modules-compat';
@@ -97,5 +104,47 @@ export class AuthResolver {
 		return {
 			accessToken: session.sessionId,
 		} as RenewedSessionOutput;
+	}
+
+	@Public()
+	@Mutation(() => ForgotPasswordRequestOutput)
+	async forgotPasswordRequest(@Args('email') email: string, @Origin() origin: string) {
+		const token = await this.authService.getForgotPasswordRequestToken();
+
+		this.authService.sendPasswordResetRequestEmail(email, token, { url: origin });
+
+		return {
+			token,
+		} satisfies ForgotPasswordRequestOutput;
+	}
+
+	@Throttle(...sensitiveThrottlerConf)
+	@Public()
+	@Query(() => User, { nullable: true })
+	async verifyPasswordResetAttempt(@Args('token') token: string) {
+		const pswResetAttempt = await this.authService.getPasswordResetAttempt(token);
+
+		if (!pswResetAttempt) {
+			return null;
+		}
+
+		return pswResetAttempt.user satisfies User;
+	}
+
+	@Throttle(...sensitiveThrottlerConf)
+	@Public()
+	@Mutation(() => Boolean)
+	async resetPassword(@I18n() i18n: I18nContext, @Args('data') { token, password }: ResetPasswordInput, @Origin() origin: string) {
+		try {
+			const { user } = await this.authService.resetPassword(token, password);
+
+			this.authService.sendPasswordResetSuccessEmail(user, { url: origin });
+
+			return true satisfies boolean;
+		} catch (error) {
+			const message = getErrorMessage(error, i18n);
+
+			throw new ForbiddenException(message);
+		}
 	}
 }

@@ -1,10 +1,10 @@
 import type { AppPageData } from '$app-types';
 import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
-import type { ToastData } from '$lib/components/ToastManager/helper';
 import { HASJS_COOKIE_NAME } from '$lib/utils/js-handling';
+import { loadFlash } from 'sveltekit-flash-message/server';
 import type { LayoutServerLoad } from './$types';
 
-export const load = (async (event) => {
+export const load = loadFlash(async (event) => {
 	const {
 		cookies,
 		isDataRequest,
@@ -35,7 +35,6 @@ export const load = (async (event) => {
 		sessionUser,
 		theme,
 		layoutAlert,
-		toasts: [] as ToastData[],
 		userHasJs,
 		browserLang,
 	};
