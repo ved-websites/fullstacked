@@ -12,6 +12,7 @@ export const load = (async ({
 	locals: {
 		gql: { query },
 	},
+	setHeaders,
 }) => {
 	const resetToken = url.searchParams.get('resetToken');
 
@@ -35,6 +36,10 @@ export const load = (async ({
 
 	if (resetToken && user) {
 		const form = await superValidate(resetPasswordSchema);
+
+		setHeaders({
+			'Referrer-Policy': 'no-referrer',
+		});
 
 		return createPageDataObject({ form, resetToken, user });
 	}
