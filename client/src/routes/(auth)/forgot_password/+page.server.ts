@@ -94,7 +94,7 @@ export const actions = {
 			throw redirect(
 				{
 					layoutAlert: createLayoutAlert({
-						text: `No reset token provided!`,
+						text: k('(auth).forgot_password.reset.action.no-token'),
 					}),
 				},
 				event,
@@ -110,6 +110,14 @@ export const actions = {
 			return result.kitHandler('error');
 		}
 
-		throw redirect('/login', {}, event);
+		throw redirect(
+			'/login',
+			{
+				layoutAlert: createLayoutAlert({
+					text: k('(auth).forgot_password.reset.action.success'),
+				}),
+			},
+			event,
+		);
 	},
 } satisfies Actions;
