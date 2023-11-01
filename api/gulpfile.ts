@@ -30,14 +30,12 @@ function buildPrisma() {
 
 // Creation Tasks
 
-function setupEnv() {
+async function setupEnv() {
 	const devEnvName = '.env';
 
 	if (!fs.existsSync(devEnvName)) {
 		throw `Project not initialized! Make sure to run "pnpm run init" in the project's folder root.`;
 	}
-
-	return Promise.resolve();
 }
 
 function generateGraphQLSchema() {
