@@ -13,6 +13,7 @@
   ],
   "scripts": {
     "init": "ts-node ./scripts/init.ts",
+    "init:name": "ts-node ./scripts/project-name.ts",
     "gql": "graphql-codegen --config .graphqlrc.ts",
     "gql:watch": "pnpm gql --watch"
   },

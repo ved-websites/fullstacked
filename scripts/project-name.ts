@@ -1,9 +1,9 @@
 import fs from 'fs';
 import { rename } from 'fs/promises';
-import { stdin as input, stdout as output } from 'node:process';
+import { stdin, stdout } from 'node:process';
 import readline, { type Interface } from 'readline/promises';
 import replace from 'replace-in-file';
-import { capitalize } from '../utils/index.js';
+import { capitalize } from './utils/index.js';
 
 const { replaceInFile } = replace;
 
@@ -36,7 +36,7 @@ async function getOldProjectName(rl: Interface) {
 }
 
 export async function replaceProjectNames() {
-	const rl = readline.createInterface({ input, output, removeHistoryDuplicates: true });
+	const rl = readline.createInterface({ input: stdin, output: stdout, removeHistoryDuplicates: true });
 
 	const oldProjectName = await getOldProjectName(rl);
 
@@ -116,18 +116,16 @@ export async function replaceProjectNames() {
 //    Renaming Files
 // =====================
 
-export async function renameProjectFiles(oldProjectName: string, cleanProjectName: string) {
+async function renameProjectFiles(oldProjectName: string, cleanProjectName: string) {
 	await rename(`${oldProjectName}.code-workspace`, `${cleanProjectName}.code-workspace`);
 }
 
 // =====================
-//        Helper
+//      Setup Names
 // =====================
 
-export async function setupProjectName() {
-	const { oldProjectName, cleanProjectName } = await replaceProjectNames();
+const { oldProjectName, cleanProjectName } = await replaceProjectNames();
 
-	if (cleanProjectName) {
-		await renameProjectFiles(oldProjectName, cleanProjectName);
-	}
+if (cleanProjectName) {
+	await renameProjectFiles(oldProjectName, cleanProjectName);
 }

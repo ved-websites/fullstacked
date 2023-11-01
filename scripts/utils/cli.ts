@@ -38,15 +38,20 @@ export function formatRawArgs(rawArgs: string[]): Arg[] {
 	return unFlattenArgs.flat();
 }
 
-export function getCliArgs() {
+export function getCli() {
 	const [executable, file, ...rawArgs] = process.argv;
 
 	const args = formatRawArgs(rawArgs);
+
+	function hasArg(arg: string) {
+		return args.some(({ name }) => name === arg);
+	}
 
 	return {
 		executable,
 		file,
 		args,
 		rawArgs,
+		hasArg,
 	};
 }
