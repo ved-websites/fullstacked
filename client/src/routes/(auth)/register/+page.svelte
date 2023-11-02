@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Alert, Button, Heading, Helper, Input, Label } from 'flowbite-svelte';
+	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
+	import { Alert, Button, Heading, Input, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 
 	export let data;
@@ -22,21 +23,21 @@
 			<Input let:props>
 				<input {...props} type="password" name="password" bind:value={$form.password} {...$constraints.password} />
 			</Input>
-			{#if $errors.password}<Helper color="red">{$errors.password}</Helper>{/if}
+			<ValidationErrors errors={$errors.password} />
 		</div>
 		<div>
 			<Label for="firstName" class="mb-2">What is your first name?</Label>
 			<Input let:props>
 				<input {...props} type="text" name="firstName" bind:value={$form.firstName} {...$constraints.firstName} />
 			</Input>
-			{#if $errors.firstName}<Helper color="red">{$errors.firstName}</Helper>{/if}
+			<ValidationErrors errors={$errors.firstName} />
 		</div>
 		<div>
 			<Label for="lastName" class="mb-2">What is your last name?</Label>
 			<Input let:props>
 				<input {...props} type="text" name="lastName" bind:value={$form.lastName} {...$constraints.lastName} />
 			</Input>
-			{#if $errors.lastName}<Helper color="red">{$errors.lastName}</Helper>{/if}
+			<ValidationErrors errors={$errors.lastName} />
 		</div>
 
 		<Button type="submit" class="mt-5">Submit</Button>

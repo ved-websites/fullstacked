@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { getI18n } from '$i18n';
-	import { Button, Heading, Helper, Input, Label, P } from 'flowbite-svelte';
+	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
+	import { Button, Heading, Input, Label, P } from 'flowbite-svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { resetPasswordSchema } from './schemas';
@@ -32,7 +33,7 @@
 				</Input>
 			</Label>
 
-			{#if $errors.password}<Helper color="red" class="mt-1">{$errors.password}</Helper>{/if}
+			<ValidationErrors errors={$errors.password} />
 		</div>
 
 		<input name="token" type="hidden" value={$page.url.searchParams.get('resetToken')} />

@@ -5,9 +5,10 @@
 
 <script lang="ts">
 	import { getI18n } from '$i18n';
+	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import VSelect from '$lib/components/flowbite-custom/VSelect/VSelect.svelte';
 	import type { VSelectOptionType } from '$lib/components/flowbite-custom/VSelect/types';
-	import { Button, Helper, Label } from 'flowbite-svelte';
+	import { Button, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	const { t, locales, setLocale } = getI18n();
 
@@ -48,7 +49,7 @@
 			bind:value={$form.lang}
 			{...$constraints.lang}
 		/>
-		{#if $errors.lang}<Helper class="mt-2" color="red">{$errors.lang}</Helper>{/if}
+		<ValidationErrors errors={$errors.lang} />
 	</Label>
 
 	<Button type="submit" class="mt-3 {data.userHasJs ? 'hidden' : ''}">{$t('common.submit')}</Button>

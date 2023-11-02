@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { getI18n } from '$i18n';
+	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import { Button, Helper, Input, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	const { t } = getI18n();
@@ -25,7 +26,7 @@
 			</Input>
 		</Label>
 
-		{#if $errors.email}<Helper color="red" class="mt-1">{$errors.email}</Helper>{/if}
+		<ValidationErrors errors={$errors.email} />
 	</div>
 	<div>
 		<Label for="password">
@@ -35,7 +36,8 @@
 			</Input>
 		</Label>
 
-		{#if $errors.password}<Helper color="red" class="mt-1">{$errors.password}</Helper>{/if}
+		<ValidationErrors errors={$errors.password} />
+
 		<Helper class="mt-3">
 			<a href="/forgot_password" class="hover:underline">{$t('(auth).login.forgot.password.text')}</a>
 		</Helper>

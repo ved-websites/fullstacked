@@ -1,7 +1,8 @@
 <script lang="ts" generics="T extends UserFormSchemaType">
 	import { getI18n } from '$i18n';
-	import { Button, Helper, Input, Label } from 'flowbite-svelte';
+	import { Button, Input, Label } from 'flowbite-svelte';
 	import type { SuperForm } from 'sveltekit-superforms/client';
+	import ValidationErrors from '../ValidationErrors.svelte';
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	import type { UserFormSchemaType } from './userform.schema';
 	const { t } = getI18n();
@@ -20,12 +21,12 @@
 			<Label>
 				<span> First Name </span>
 				<Input name="firstName" class="mt-2" type="text" bind:value={$form.firstName} {...$constraints.firstName} />
-				{#if $errors.firstName}<Helper class="mt-2" color="red">{$errors.firstName}</Helper>{/if}
+				<ValidationErrors errors={$errors.firstName} />
 			</Label>
 			<Label>
 				<span> Last Name </span>
 				<Input name="lastName" class="mt-2" type="text" bind:value={$form.lastName} {...$constraints.lastName} />
-				{#if $errors.lastName}<Helper class="mt-2" color="red">{$errors.lastName}</Helper>{/if}
+				<ValidationErrors errors={$errors.lastName} />
 			</Label>
 		</div>
 

@@ -6,5 +6,10 @@
 			"fr": "Français",
 			"en": "English"
 		}
+	},
+	"errors": {
+		"validation": {
+			"email-schema": "Email invalide!"
+		}
 	}
 }

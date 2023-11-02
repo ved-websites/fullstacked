@@ -4,7 +4,8 @@
 
 <script lang="ts">
 	import { getI18n } from '$i18n';
-	import { Button, Helper, Input, Label } from 'flowbite-svelte';
+	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
+	import { Button, Input, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	const { t } = getI18n();
 
@@ -24,7 +25,7 @@
 			color={$errors.password ? 'red' : 'base'}
 			{...$constraints.password}
 		/>
-		{#if $errors.password}<Helper class="mt-2" color="red">{$errors.password}</Helper>{/if}
+		<ValidationErrors errors={$errors.password} />
 	</Label>
 	<Label>
 		<span> Confirm New Password </span>
@@ -36,7 +37,7 @@
 			color={$errors.confirm ? 'red' : 'base'}
 			{...$constraints.confirm}
 		/>
-		{#if $errors.confirm}<Helper class="mt-2" color="red">{$errors.confirm}</Helper>{/if}
+		<ValidationErrors errors={$errors.confirm} />
 	</Label>
 
 	<Button type="submit" class="mt-3 col-span-1 sm:col-span-2">{$t('common.submit')}</Button>

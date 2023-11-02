@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { NewMessageStore } from '$houdini';
 	import Icon from '$lib/components/Icon.svelte';
+	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import { subscribe } from '$lib/houdini/helper';
-	import { Button, Helper, Input, Label } from 'flowbite-svelte';
+	import { Button, Input, Label } from 'flowbite-svelte';
 	import { onMount, tick } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { ChatMessageType } from './types';
@@ -110,8 +111,8 @@
 	<Label>
 		<span>Message</span>
 		<Input type="text" class="mt-2" name="message" disabled={isSending} bind:value={$form.message} autocomplete="off" {...$constraints} />
-		{#if $errors.message}<Helper class="mt-2" color="red">{$errors.message}</Helper>{/if}
 	</Label>
+	<ValidationErrors errors={$errors.message} />
 
 	<Button type="submit" disabled={!canSend}>
 		Send

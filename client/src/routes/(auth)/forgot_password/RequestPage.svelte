@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getI18n } from '$i18n';
-	import { Alert, Button, Heading, Helper, Input, Label, P } from 'flowbite-svelte';
+	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
+	import { Alert, Button, Heading, Input, Label, P } from 'flowbite-svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { requestPasswordSchema } from './schemas';
@@ -39,7 +40,7 @@
 				</Input>
 			</Label>
 
-			{#if $errors.email}<Helper color="red" class="mt-1">{$errors.email}</Helper>{/if}
+			<ValidationErrors errors={$errors.email} />
 		</div>
 
 		<Button type="submit" class="mt-2">{$t('common.submit')}</Button>
