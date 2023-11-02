@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import type { ConfirmedSessionUser } from '$auth/auth-handler.js';
 	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
+	import { getSessionUser } from '$lib/stores/index.js';
 	import { getProfilePictureImageUrl } from '$lib/utils/images';
 	import { Avatar, Heading, P, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
 	const i18n = getI18n();
@@ -12,18 +14,18 @@
 	$: activeUrl = $page.url.pathname;
 	$: currentRoute = routesInfo.find(({ url }) => url === activeUrl);
 
-	$: sessionUser = data.sessionUser!;
+	let sessionUser = getSessionUser<ConfirmedSessionUser>();
 	$: routesInfo = data.routesInfo;
 	$: label = currentRoute && ($t(`settings.${currentRoute.name}.name`) as string);
 </script>
 
 <header class="flex gap-5 mb-5">
-	<Avatar id="settings-avatar" src={getProfilePictureImageUrl(sessionUser.profilePictureRef)} />
+	<Avatar id="settings-avatar" src={getProfilePictureImageUrl($sessionUser.profilePictureRef)} />
 	<P size="lg" class="self-center">
-		{#if sessionUser.firstName}
-			{sessionUser.firstName}{sessionUser.lastName ? ` ${sessionUser.lastName}` : ''} ({sessionUser.email})
+		{#if $sessionUser.firstName}
+			{$sessionUser.firstName}{$sessionUser.lastName ? ` ${$sessionUser.lastName}` : ''} ({$sessionUser.email})
 		{:else}
-			{sessionUser.email}
+			{$sessionUser.email}
 		{/if}
 	</P>
 </header>

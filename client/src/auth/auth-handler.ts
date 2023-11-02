@@ -1,5 +1,5 @@
-import type { GraphQLQuery } from '$lib/houdini/helper';
 import { GetUserFromSessionStore, type GetUserFromSession$result } from '$houdini';
+import type { GraphQLQuery } from '$lib/houdini/helper';
 
 export const AUTH_COOKIE_NAME = 'auth_session';
 
@@ -15,4 +15,5 @@ export async function getAuthUser(query: GraphQLQuery): Promise<SessionUser> {
 	return sessionUser;
 }
 
-export type SessionUser = GetUserFromSession$result['getSessionUser'] | null;
+export type SessionUser = ConfirmedSessionUser | null;
+export type ConfirmedSessionUser = GetUserFromSession$result['getSessionUser'];

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import type { SessionUser } from '$auth/auth-handler';
-	import { isDrawerHidden } from '$lib/stores';
+	import { getSessionUser, isDrawerHidden } from '$lib/stores';
 	import { navElements } from '$navigation/routes';
 	import { CloseButton, Drawer, Sidebar, SidebarDropdownWrapper, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
 	import { sineIn } from 'svelte/easing';
@@ -9,13 +8,13 @@
 	import Icon from '../Icon.svelte';
 	import { isNavElemVisible } from './utils';
 
+	let sessionUser = getSessionUser();
+
 	let transitionParams = {
 		x: -320,
 		duration: 200,
 		easing: sineIn,
 	};
-
-	export let sessionUser: SessionUser;
 </script>
 
 <Drawer transitionType="fly" {transitionParams} bind:hidden={$isDrawerHidden} id="main-drawer" class="max-w-max">
@@ -29,7 +28,7 @@
 	<Sidebar>
 		<SidebarWrapper>
 			<SidebarGroup>
-				{#each navElements.filter((navElement) => isNavElemVisible(navElement, sessionUser)) as navElement}
+				{#each navElements.filter((navElement) => isNavElemVisible(navElement, $sessionUser)) as navElement}
 					{#if 'url' in navElement}
 						<SidebarItem
 							label={navElement.title}
@@ -59,7 +58,7 @@
 							<svelte:fragment slot="arrowdown">
 								<Icon class="i-mdi-chevron-down" />
 							</svelte:fragment>
-							{#each navElement.elements.filter((navSubElement) => navSubElement.isPublic || sessionUser) as navSubElement}
+							{#each navElement.elements.filter((navSubElement) => navSubElement.isPublic || $sessionUser) as navSubElement}
 								<SidebarItem
 									label={navSubElement.title}
 									active={$page.url.pathname == navSubElement.url}

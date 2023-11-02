@@ -1,15 +1,19 @@
 <script lang="ts">
+	import type { ConfirmedSessionUser } from '$auth/auth-handler';
 	import { NewMessageStore } from '$houdini';
 	import Icon from '$lib/components/Icon.svelte';
 	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import { subscribe } from '$lib/houdini/helper';
+	import { getSessionUser } from '$lib/stores';
 	import { Button, Input, Label } from 'flowbite-svelte';
 	import { onMount, tick } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { ChatMessageType } from './types';
 
 	export let data;
-	$: ({ sessionUser, chatMessages } = data);
+	$: ({ chatMessages } = data);
+
+	let sessionUser = getSessionUser<ConfirmedSessionUser>();
 
 	let isSending = false;
 	let messageViewElement: HTMLDivElement;
@@ -27,7 +31,7 @@
 
 			const newMessage: ChatMessageType = {
 				active: false,
-				user: { email: sessionUser!.email },
+				user: { email: $sessionUser.email },
 				text: message!,
 				time: new Date(),
 			};
@@ -53,7 +57,7 @@
 			return;
 		}
 
-		if (data.messageAdded.user.email == sessionUser?.email) {
+		if (data.messageAdded.user.email == $sessionUser.email) {
 			messages = messages.map((m) => {
 				if (!m.id && m.text == data.messageAdded.text) {
 					m = { ...data.messageAdded, active: true };

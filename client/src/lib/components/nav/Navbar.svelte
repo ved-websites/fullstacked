@@ -2,8 +2,7 @@
 	import { browser } from '$app/environment';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
-	import type { SessionUser } from '$auth/auth-handler';
-	import { isDrawerHidden } from '$lib/stores';
+	import { getSessionUser, isDrawerHidden } from '$lib/stores';
 	import { twMerge } from '$lib/twMerge';
 	import { getProfilePictureImageUrl } from '$lib/utils/images';
 	import { navElements } from '$navigation/routes';
@@ -13,7 +12,7 @@
 	import Drawer from './Drawer.svelte';
 	import { isNavElemVisible } from './utils';
 
-	export let sessionUser: SessionUser;
+	let sessionUser = getSessionUser();
 
 	$: activeUrl = $page.url.pathname;
 </script>
@@ -30,8 +29,8 @@
 	</NavBrand>
 	<div class="flex gap-3 items-center md:order-2">
 		<DarkMode class="hidden md:flex" />
-		{#if sessionUser}
-			<Avatar class="cursor-pointer" id="avatar-menu" src={getProfilePictureImageUrl(sessionUser.profilePictureRef)} />
+		{#if $sessionUser}
+			<Avatar class="cursor-pointer" id="avatar-menu" src={getProfilePictureImageUrl($sessionUser.profilePictureRef)} />
 
 			<form method="POST" action="/?/logout" use:enhance>
 				<Button type="submit" outline={true} class="!p-2" size="lg">
@@ -39,12 +38,12 @@
 				</Button>
 			</form>
 		{:else}
-			<Button href="/login" class={sessionUser ? 'hidden' : ''}>Login</Button>
+			<Button href="/login" class={$sessionUser ? 'hidden' : ''}>Login</Button>
 		{/if}
 	</div>
 	<NavUl {hidden} {activeUrl}>
 		{#each navElements as navElement}
-			{#if isNavElemVisible(navElement, sessionUser)}
+			{#if isNavElemVisible(navElement, $sessionUser)}
 				{#if 'url' in navElement}
 					<NavLi href={navElement.url}>
 						{navElement.title}
@@ -71,14 +70,14 @@
 	</NavUl>
 </Navbar>
 
-{#if browser && sessionUser}
+{#if browser && $sessionUser}
 	<Dropdown placement="bottom" triggeredBy="#avatar-menu" class="py-2">
 		<DropdownHeader>
-			<span class="block text-sm">{sessionUser.firstName} {sessionUser.lastName}</span>
-			<span class="block truncate text-sm font-light"> {sessionUser.email} </span>
+			<span class="block text-sm">{$sessionUser.firstName} {$sessionUser.lastName}</span>
+			<span class="block truncate text-sm font-light"> {$sessionUser.email} </span>
 		</DropdownHeader>
 		<DropdownItem href="/settings">Settings</DropdownItem>
 	</Dropdown>
 {/if}
 
-<Drawer {sessionUser} />
+<Drawer />

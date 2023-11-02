@@ -10,12 +10,13 @@
 	import InitialTheme from '$lib/components/head/InitialTheme.svelte';
 	import LanguageChecker from '$lib/components/head/LanguageChecker.svelte';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
-	import { themeStore } from '$lib/stores';
+	import { setSessionUser, themeStore } from '$lib/stores';
 	import { getFlash } from 'sveltekit-flash-message/client';
 
 	export let data;
 
 	$: setI18n(data.i18n);
+	$: setSessionUser(data.sessionUser);
 
 	$: flash = getFlash(page);
 
@@ -31,7 +32,7 @@
 <InitialTheme />
 <LanguageChecker />
 
-<Navbar sessionUser={data.sessionUser} />
+<Navbar />
 
 <ToastManager data={toasts} />
 

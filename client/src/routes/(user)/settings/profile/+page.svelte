@@ -4,10 +4,13 @@
 
 <script lang="ts">
 	import UserForm from '$lib/components/UserForm/UserForm.svelte';
+	import { getSessionUser } from '$lib/stores';
 	import { superForm } from 'sveltekit-superforms/client';
 	import ProfilePictureForm from './ProfilePictureForm.svelte';
 
 	export let data;
+
+	let sessionUser = getSessionUser();
 
 	const superFormData = superForm(data.form, { dataType: 'json' });
 </script>
@@ -17,6 +20,6 @@
 	<ProfilePictureForm
 		hasJs={data.userHasJs}
 		class="col-span-1 order-2 lg:order-none"
-		currentProfilePictureRef={data.sessionUser?.profilePictureRef}
+		currentProfilePictureRef={$sessionUser?.profilePictureRef}
 	/>
 </div>
