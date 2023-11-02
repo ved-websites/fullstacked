@@ -1,11 +1,12 @@
 <script lang="ts">
-	import type { I18nInstanceType } from '$i18n-config';
+	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
 	import { alertColorMapping, type LayoutAlertData } from '$lib/components/LayoutAlert/helper';
 	import { Alert } from 'flowbite-svelte';
+	const i18n = getI18n();
+	$: ({ t } = $i18n);
 
 	export let data: LayoutAlertData | undefined;
-	export let t: I18nInstanceType['t'];
 </script>
 
 {#if data}

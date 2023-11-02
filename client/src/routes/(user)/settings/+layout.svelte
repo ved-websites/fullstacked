@@ -4,7 +4,8 @@
 	import Icon from '$lib/components/Icon.svelte';
 	import { getProfilePictureImageUrl } from '$lib/utils/images';
 	import { Avatar, Heading, P, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
-	const { t } = getI18n();
+	const i18n = getI18n();
+	$: ({ t } = $i18n);
 
 	export let data;
 

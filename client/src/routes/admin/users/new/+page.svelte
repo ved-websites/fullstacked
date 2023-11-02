@@ -8,7 +8,8 @@
 	import { Heading, Input, Label, MultiSelect } from 'flowbite-svelte';
 	import type { SelectOptionType } from 'flowbite-svelte/dist/types';
 	import { superForm } from 'sveltekit-superforms/client';
-	const { t, locale } = getI18n();
+	const i18n = getI18n();
+	$: ({ t, locale } = $i18n);
 
 	export let data;
 	$: ({ roles } = data);

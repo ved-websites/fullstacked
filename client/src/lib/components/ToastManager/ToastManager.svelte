@@ -1,16 +1,17 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import type { I18nInstanceType } from '$i18n-config';
+	import { getI18n } from '$i18n';
 	import { twMerge } from '$lib/twMerge';
 	import { Toast } from 'flowbite-svelte';
 	import { onDestroy } from 'svelte';
 	import Icon from '../Icon.svelte';
 	import { toastBorderColorMapping, toastColorMapping, type ToastData } from './helper';
+	const i18n = getI18n();
+	$: ({ t } = $i18n);
 
 	const toastOffTimeout = 500;
 
 	export let data: ToastData[];
-	export let t: I18nInstanceType['t'];
 
 	$: data.forEach((toast) => {
 		if (toasts.some((existingToast) => toast.id === existingToast.id)) {

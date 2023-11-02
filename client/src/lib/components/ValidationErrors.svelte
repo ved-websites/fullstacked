@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { getI18n } from '$i18n';
 	import { Helper } from 'flowbite-svelte';
-	const { t } = getI18n();
+	const i18n = getI18n();
+	$: ({ t } = $i18n);
 
 	type ZodArrayErrors = {
 		_errors?: string[] | undefined;

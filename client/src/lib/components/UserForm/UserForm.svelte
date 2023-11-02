@@ -5,7 +5,8 @@
 	import ValidationErrors from '../ValidationErrors.svelte';
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	import type { UserFormSchemaType } from './userform.schema';
-	const { t } = getI18n();
+	const i18n = getI18n();
+	$: ({ t } = $i18n);
 
 	// eslint-disable-next-line no-undef
 	export let superFormData: SuperForm<T>;

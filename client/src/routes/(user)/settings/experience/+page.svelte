@@ -5,12 +5,14 @@
 
 <script lang="ts">
 	import { getI18n } from '$i18n';
+	import { locales } from '$i18n-config';
 	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import VSelect from '$lib/components/flowbite-custom/VSelect/VSelect.svelte';
 	import type { VSelectOptionType } from '$lib/components/flowbite-custom/VSelect/types';
 	import { Button, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
-	const { t, locales, setLocale } = getI18n();
+	const i18n = getI18n();
+	$: ({ t, setLocale } = $i18n);
 
 	export let data;
 
