@@ -23,7 +23,7 @@
 
 	$: formData = $page.form as PageMessages | undefined;
 
-	$: layoutAlert = $flash?.layoutAlert || $page.data.layoutAlert;
+	$: layoutAlert = $flash?.layoutAlert || $page.data.layoutAlert || formData?.layoutAlert;
 	$: toasts = [...($page.data.toasts ?? []), ...($flash?.toasts ?? []), ...(formData?.toasts ?? [])];
 </script>
 
