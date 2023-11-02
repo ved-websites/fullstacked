@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
 	import { themeStore, useMediaQuery } from '$lib/stores';
 	import { Button, ButtonGroup } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
@@ -45,7 +47,7 @@
 	$: classListStore?.update(`${$isDark ? 'dark' : ''}`);
 </script>
 
-<form method="POST" on:submit|preventDefault={handleThemeSubmit}>
+<form method="POST" use:enhance on:submit|preventDefault={handleThemeSubmit}>
 	<ButtonGroup {...$$restProps}>
 		<Button
 			data-theme="dark"
@@ -78,4 +80,5 @@
 			<Icon class="i-mdi-white-balance-sunny s-4" />
 		</Button>
 	</ButtonGroup>
+	<input type="hidden" name="redirectTo" value={$page.url.href.replace($page.url.origin, '')} />
 </form>
