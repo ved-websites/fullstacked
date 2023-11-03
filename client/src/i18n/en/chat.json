@@ -1,0 +1,10 @@
+{
+	"empty": {
+		"header": "No messages yet!",
+		"subheader": "Be the first?"
+	},
+	"form": {
+		"label": "Message",
+		"send": "Send"
+	}
+}

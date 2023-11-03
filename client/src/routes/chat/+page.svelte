@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { ConfirmedSessionUser } from '$auth/auth-handler';
 	import { NewMessageStore } from '$houdini';
+	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
 	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import { subscribe } from '$lib/houdini/helper';
@@ -9,6 +10,8 @@
 	import { onMount, tick } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { ChatMessageType } from './types';
+	const i18n = getI18n();
+	$: ({ t } = $i18n);
 
 	export let data;
 	$: ({ chatMessages } = data);
@@ -105,21 +108,21 @@
 		</div>
 	{:else}
 		<div class="self-center text-center">
-			<p>No messages yet!</p>
-			<p class="italic">Be the first?</p>
+			<p>{$t('chat.empty.header')}</p>
+			<p class="italic">{$t('chat.empty.subheader')}</p>
 		</div>
 	{/each}
 </div>
 
 <form method="POST" use:enhance class="flex flex-col gap-3">
 	<Label>
-		<span>Message</span>
+		<span>{$t('chat.form.label')}</span>
 		<Input type="text" class="mt-2" name="message" disabled={isSending} bind:value={$form.message} autocomplete="off" {...$constraints} />
 	</Label>
 	<ValidationErrors errors={$errors.message} />
 
 	<Button type="submit" disabled={!canSend}>
-		Send
+		{$t('chat.form.send')}
 		<Icon class="i-mdi-send ml-2" />
 	</Button>
 </form>

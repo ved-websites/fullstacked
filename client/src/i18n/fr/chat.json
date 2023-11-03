@@ -1,0 +1,10 @@
+{
+	"empty": {
+		"header": "Aucun message pour l'instant!",
+		"subheader": "Soyez le premier?"
+	},
+	"form": {
+		"label": "Message",
+		"send": "Envoyer"
+	}
+}

@@ -4,6 +4,7 @@
 # You can check available language ids here: https://code.visualstudio.com/docs/languages/identifiers
 languageIds:
   - typescript
+  - svelte
 
 # An array of RegExes to find the key usage. **The key should be captured in the first match group**.
 usageMatchRegex:
@@ -20,8 +21,9 @@ usageMatchRegex:
 # An array of strings containing refactor templates.
 # The "$1" will be replaced by the keypath specified.
 # Optional: uncomment the following two lines to use
-# refactorTemplates:
-#  - t.get("$1")
+refactorTemplates:
+  - "{$t('$1')}"
+  - "t.get('$1')"
 
 # If set to true, only enables this custom framework (will disable all built-in frameworks)
 # monopoly: true
