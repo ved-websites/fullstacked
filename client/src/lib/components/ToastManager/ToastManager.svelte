@@ -6,7 +6,7 @@
 	import { onDestroy } from 'svelte';
 	import Icon from '../Icon.svelte';
 	import { toastBorderColorMapping, toastColorMapping, type ToastData } from './helper';
-	const i18n = getI18n();
+	let i18n = getI18n();
 	$: ({ t } = $i18n);
 
 	const toastOffTimeout = 500;

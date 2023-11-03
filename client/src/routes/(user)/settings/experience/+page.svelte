@@ -11,7 +11,7 @@
 	import type { VSelectOptionType } from '$lib/components/flowbite-custom/VSelect/types';
 	import { Button, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
-	const i18n = getI18n();
+	let i18n = getI18n();
 	$: ({ t, setLocale } = $i18n);
 
 	export let data;

@@ -6,7 +6,7 @@
 	import { getSessionUser } from '$lib/stores/index.js';
 	import { getProfilePictureImageUrl } from '$lib/utils/images';
 	import { Avatar, Heading, P, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
-	const i18n = getI18n();
+	let i18n = getI18n();
 	$: ({ t } = $i18n);
 
 	export let data;

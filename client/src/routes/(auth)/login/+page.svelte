@@ -3,7 +3,7 @@
 	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import { Button, Helper, Input, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
-	const i18n = getI18n();
+	let i18n = getI18n();
 	$: ({ t } = $i18n);
 
 	export let data;

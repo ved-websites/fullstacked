@@ -6,7 +6,7 @@
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { resetPasswordSchema } from './schemas';
-	const i18n = getI18n();
+	let i18n = getI18n();
 	$: ({ t } = $i18n);
 
 	export let sForm: SuperValidated<typeof resetPasswordSchema>;
