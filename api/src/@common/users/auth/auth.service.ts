@@ -198,20 +198,28 @@ export class AuthService {
 	}
 
 	async sendPasswordResetRequestEmail(email: string, token: string, origin: { url: string }) {
-		const { user } = await this.prisma.passwordResetAttempt.create({
-			data: {
-				user: {
-					connect: {
-						email,
+		const { user } = await this.prisma.passwordResetAttempt
+			.create({
+				data: {
+					user: {
+						connect: {
+							email,
+						},
 					},
+					token,
+					expiryDate: this.createPasswordResetExpiryDate(),
 				},
-				token,
-				expiryDate: this.createPasswordResetExpiryDate(),
-			},
-			select: {
-				user: true,
-			},
-		});
+				select: {
+					user: true,
+				},
+			})
+			.catch(() => {
+				return { user: null };
+			});
+
+		if (!user) {
+			return;
+		}
 
 		const lang = user.emailLang;
 
