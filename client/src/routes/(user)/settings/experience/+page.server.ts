@@ -14,12 +14,12 @@ const langSchema = z.object({
 	lang: z.nullable(z.string()),
 });
 
-export const load = (async ({ locals: { sessionUser } }) => {
+export const load = (async ({ locals: { sessionUser, browserLang } }) => {
 	const lang = sessionUser!.lang;
 
 	const form = await superValidate<typeof langSchema, string>({ lang }, langSchema);
 
-	return { form };
+	return { form, browserLang };
 }) satisfies PageServerLoad;
 
 export const actions = {

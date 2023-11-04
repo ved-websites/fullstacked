@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { getI18n } from '$i18n';
-	import { locales } from '$i18n-config';
 	import UserForm from '$lib/components/UserForm/UserForm.svelte';
 	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import VSelect from '$lib/components/flowbite-custom/VSelect/VSelect.svelte';
@@ -9,7 +8,7 @@
 	import type { SelectOptionType } from 'flowbite-svelte/dist/types';
 	import { superForm } from 'sveltekit-superforms/client';
 	let i18n = getI18n();
-	$: ({ t, locale } = $i18n);
+	$: ({ t, locale, locales } = $i18n);
 
 	export let data;
 	$: ({ roles } = data);
@@ -24,7 +23,7 @@
 		value: role.text,
 	}));
 
-	$: selectableLocales = locales.map<VSelectOptionType>((l) => ({
+	$: selectableLocales = $locales.map<VSelectOptionType>((l) => ({
 		name: $t(`common.lang.map.${l}`),
 		value: l as string,
 		selected: $locale === l,

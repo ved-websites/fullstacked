@@ -5,14 +5,13 @@
 
 <script lang="ts">
 	import { getI18n } from '$i18n';
-	import { locales } from '$i18n-config';
 	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import VSelect from '$lib/components/flowbite-custom/VSelect/VSelect.svelte';
 	import type { VSelectOptionType } from '$lib/components/flowbite-custom/VSelect/types';
 	import { Button, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	let i18n = getI18n();
-	$: ({ t, setLocale } = $i18n);
+	$: ({ t, setLocale, locales } = $i18n);
 
 	export let data;
 
@@ -22,7 +21,7 @@
 		},
 	});
 
-	$: allowedLocales = [null, ...locales];
+	$: allowedLocales = [null, ...$locales];
 
 	$: selectableLocales = allowedLocales.map<VSelectOptionType>((l) => ({
 		name: $t(`settings.experience.lang.map.${l}`),
