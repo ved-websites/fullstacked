@@ -34,7 +34,7 @@
 						{...props}
 						type="email"
 						name="email"
-						placeholder={$t('(auth).login.email-placeover')}
+						placeholder={$t('(auth).forgot_password.request.email-placeover')}
 						bind:value={$form.email}
 						{...$constraints.email}
 					/>

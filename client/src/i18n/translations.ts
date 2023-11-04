@@ -4,24 +4,49 @@ import { routing } from './routing';
 const rawTranslationImports = import.meta.glob('./*/**/*.json', { import: 'default' });
 
 const translationFiles = Object.entries(rawTranslationImports).map(([path, getFile]) => {
-	const [, lang, ...keys] = path.split('/');
+	const [, lang, ...keys] = path.split('/') as ['.', string, ...string[]];
 
-	if (!lang) {
-		throw `No key given for file "${path}"!`;
-	}
+	const fileName = keys.pop()!;
 
-	const key = (() => {
-		const fileName = keys.pop()!;
+	const cleanKeys = [...keys, fileName.replace('.json', '')];
 
-		const cleanKeys = [...keys, fileName.replace('.json', '')];
+	const key = cleanKeys.join('.');
 
-		return cleanKeys.join('.');
+	const routes = (() => {
+		const greedyManualRoutes = routing[`${key}!`];
+
+		const manualRoutes = greedyManualRoutes ?? routing[key];
+
+		if (manualRoutes === true) {
+			// Load this file for all routes
+			return;
+		}
+
+		if (Array.isArray(greedyManualRoutes)) {
+			return greedyManualRoutes;
+		}
+
+		// allow to match filesystem of sveltekit (ignore "(group)" and dyanmic "[param]")
+		const kitKeys = cleanKeys
+			.filter((k) => !(k.startsWith('(') && k.endsWith(')')))
+			.map((k) => {
+				// handle cases with `[param]`
+				if (!(k.startsWith('[') && k.endsWith(']'))) {
+					return k;
+				}
+
+				return '.*';
+			});
+
+		const routePath = new RegExp(`/${kitKeys.join('/')}`);
+
+		return [routePath, ...(manualRoutes ?? [])];
 	})();
 
 	return {
 		locale: lang,
 		key,
-		routes: routing[key],
+		routes,
 		loader: async () => {
 			const file = (await getFile()) as Record<string, { link: string }>;
 
@@ -51,6 +76,7 @@ export async function loadI18n(locale: string, route: string) {
 	return {
 		t: i18nInstance.t,
 		locale: i18nInstance.locale,
+		locales: i18nInstance.locales,
 		setLocale: i18nInstance.setLocale,
 	};
 }

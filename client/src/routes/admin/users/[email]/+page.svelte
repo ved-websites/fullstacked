@@ -1,9 +1,12 @@
 <script lang="ts">
+	import { getI18n } from '$i18n';
 	import UserForm from '$lib/components/UserForm/UserForm.svelte';
 	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import { Heading, Label, MultiSelect } from 'flowbite-svelte';
 	import type { SelectOptionType } from 'flowbite-svelte/dist/types';
 	import { superForm } from 'sveltekit-superforms/client';
+	const i18n = getI18n();
+	$: ({ t } = $i18n);
 
 	export let data;
 
@@ -20,7 +23,7 @@
 
 <UserForm {superFormData} class="col-span-2 order-1 sm:order-none">
 	<div slot="below">
-		<Label>Roles</Label>
+		<Label>{$t('admin.users.[email].labels.roles')}</Label>
 		<MultiSelect name="roles" class="mt-2" items={availableRoles} bind:value={$form.roles} />
 		<ValidationErrors errors={$errors.roles} />
 	</div>
