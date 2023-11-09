@@ -2,11 +2,11 @@ import { PrismaModule } from '$prisma/prisma.module';
 import { RolesModule } from '$users/auth/roles/roles.module';
 import { Module } from '@nestjs/common';
 import { ProfilePictureModule } from './profile-picture/profile-picture.module';
-import { UserSettingsResolver } from './settings.resolver';
-import { UserSettingsService } from './settings.service';
+import { UserProfileResolver } from './profile.resolver';
+import { UserProfileService } from './profile.service';
 
 @Module({
 	imports: [PrismaModule, RolesModule, ProfilePictureModule],
-	providers: [UserSettingsResolver, UserSettingsService],
+	providers: [UserProfileResolver, UserProfileService],
 })
-export class UserSettingsModule {}
+export class UserProfileModule {}

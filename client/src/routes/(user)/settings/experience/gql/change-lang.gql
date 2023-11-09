@@ -1,5 +1,5 @@
 mutation ChangeLang($lang: String) {
-	editUserSettings(data: { lang: { set: $lang } }) {
+	editUserProfile(data: { lang: { set: $lang } }) {
 		lang
 	}
 }

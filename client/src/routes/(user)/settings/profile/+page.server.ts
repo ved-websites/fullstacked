@@ -1,4 +1,4 @@
-import { DeleteUserProfilePictureStore, EditSettingsBasicInfoStore, EditUserProfilePictureStore } from '$houdini';
+import { DeleteUserProfilePictureStore, EditProfileBasicInfoStore, EditUserProfilePictureStore } from '$houdini';
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { userFormSchema } from '$lib/components/UserForm/userform.schema';
 import { fail, type Actions } from '@sveltejs/kit';
@@ -25,7 +25,7 @@ export const actions = {
 
 		const { firstName, lastName } = form.data;
 
-		const result = await mutate(EditSettingsBasicInfoStore, {
+		const result = await mutate(EditProfileBasicInfoStore, {
 			firstName,
 			lastName,
 		});
