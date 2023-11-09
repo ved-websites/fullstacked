@@ -10,7 +10,7 @@
 	import { onMount, tick } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { ChatMessageType } from './types';
-	const i18n = getI18n();
+	let i18n = getI18n();
 	$: ({ t } = $i18n);
 
 	export let data;

@@ -26,17 +26,16 @@ export function styles(...args: unknown[]) {
 		}).filter(([_, v]) => !!v || v === 0),
 	);
 
-	const styleString = Object.entries(computedStyles).reduce(
-		(acc, [key, value]) => {
+	const styleString = Object.entries(computedStyles)
+		.map(([key, value]) => {
 			const formattedKey = key
 				.split(/(?=[A-Z])/)
 				.join('-')
 				.toLowerCase();
 
-			return `${formattedKey}:${value}${acc ? `;${acc}` : ''}`;
-		},
-		null as null | string,
-	);
+			return `${formattedKey}:${value}`;
+		})
+		.join(';');
 
 	return styleString;
 }

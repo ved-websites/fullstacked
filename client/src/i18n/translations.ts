@@ -26,7 +26,7 @@ const translationFiles = Object.entries(rawTranslationImports).map(([path, getFi
 			return greedyManualRoutes;
 		}
 
-		// allow to match filesystem of sveltekit (ignore "(group)" and dyanmic "[param]")
+		// allow to match filesystem of sveltekit (ignore "(group)" and dynamic "[param]")
 		const kitKeys = cleanKeys
 			.filter((k) => !(k.startsWith('(') && k.endsWith(')')))
 			.map((k) => {

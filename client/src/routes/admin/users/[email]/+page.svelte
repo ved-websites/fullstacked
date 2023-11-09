@@ -5,7 +5,7 @@
 	import { Heading, Label, MultiSelect } from 'flowbite-svelte';
 	import type { SelectOptionType } from 'flowbite-svelte/dist/types';
 	import { superForm } from 'sveltekit-superforms/client';
-	const i18n = getI18n();
+	let i18n = getI18n();
 	$: ({ t } = $i18n);
 
 	export let data;
