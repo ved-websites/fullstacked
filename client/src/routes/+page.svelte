@@ -14,7 +14,7 @@
 </script>
 
 <h1 class="text-3xl">Welcome to SvelteKit</h1>
-<p class="dark:text-white">{@html $t('home.visit', { link: '<a href="https://kit.svelte.dev">kit.svelte.dev</a>' })}</p>
+<p class="dark:text-white">{@html $t('home.visit', { link: '<a href="https://kit.svelte.dev" class="link">kit.svelte.dev</a>' })}</p>
 
 <div class="self-center flex gap-3">
 	{#each sections as section}
