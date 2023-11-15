@@ -3,37 +3,36 @@ import { subscription } from '$houdini/plugins';
 import { createClient as createWSClient } from 'graphql-ws';
 import { getApiUrl } from '../utils';
 
-const apiUrl = getApiUrl();
+const apiUrl = getApiUrl('/graphql');
+
+function createHeaders(token?: string) {
+	return {
+		Authorization: `Bearer ${token}`,
+		'apollo-require-preflight': 'true',
+	} satisfies HeadersInit;
+}
 
 export default new HoudiniClient({
-	url: `${apiUrl.origin}/graphql`,
+	url: apiUrl.href,
 	fetchParams({ session }) {
 		if (!session?.token) {
 			return {};
 		}
 
 		return {
-			headers: {
-				Authorization: `Bearer ${session.token}`,
-				'apollo-require-preflight': 'true',
-			},
+			headers: createHeaders(session.token),
 		};
 	},
 	plugins: [
 		subscription(({ session }) => {
-			const wsProtocol = apiUrl.protocol == 'https:' ? 'wss' : 'ws';
-
 			const wsClient = createWSClient({
-				url: `${wsProtocol}://${apiUrl.host}/graphql`,
+				url: apiUrl.href.replace('http', 'ws'),
 				connectionParams() {
 					if (!session?.token) {
 						return {};
 					}
 
-					return {
-						Authorization: `Bearer ${session.token}`,
-						'apollo-require-preflight': 'true',
-					};
+					return createHeaders(session.token);
 				},
 			});
 
