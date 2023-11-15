@@ -11,5 +11,29 @@
 		"validation": {
 			"email-schema": "Email invalide!"
 		}
+	},
+	"errorpage": {
+		"types": {
+			"404": {
+				"explanation": "Il n'y a pas de page à {{pathname}} !",
+				"summary": "404 Page non trouvée"
+			},
+			"server": {
+				"explanation": "Il n'y a pas de page à {{pathname}} !",
+				"summary": "{{errorCode}} Erreur de serveur ({{errorMessage}})...",
+				"details": {
+					"500": "Une erreur inconnue s'est produite...",
+					"501": "La méthode de requête n'est pas prise en charge.",
+					"503": "Le système n'est pas disponible, réessayez dans quelques secondes.",
+					"504": "La réponse n'a pas pu être récupérée à temps, veuillez réessayer.",
+					"default": "Une erreur inconnue s'est produite..."
+				}
+			}
+		},
+		"home-button": "Aller à la page d'accueil",
+		"already-home": {
+			"summary": "Habituellement, il y a un bouton ici vous indiquant d'aller à la page d'accueil, mais il semble que vous soyez déjà dans la page d'accueil...",
+			"detail": "Cependant, ne vous inquiétez pas, ce problème est actuellement en train de se faire réparer!"
+		}
 	}
 }

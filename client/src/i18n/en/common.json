@@ -11,5 +11,29 @@
 		"validation": {
 			"email-schema": "Invalid email!"
 		}
+	},
+	"errorpage": {
+		"home-button": "Go to Home Page",
+		"already-home": {
+			"summary": "Usually there would be a button right here telling you to go to the home page, but it looks like you already are in the home page...",
+			"detail": "However, don't worry, this issue is being looked at!"
+		},
+		"types": {
+			"404": {
+				"summary": "404 Page Not Found",
+				"explanation": "There is no page at {{pathname}} !"
+			},
+			"server": {
+				"summary": "{{errorCode}} Server Error ({{errorMessage}})...",
+				"explanation": "There is no page at {{pathname}} !",
+				"details": {
+					"default": "An unknown error as happened...",
+					"500": "An unknown error as happened...",
+					"501": "The request method is not supported.",
+					"503": "The system is unavailable, try again in a few seconds.",
+					"504": "The response couldn't be fetched in time, please try again."
+				}
+			}
+		}
 	}
 }
