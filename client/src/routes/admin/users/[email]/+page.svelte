@@ -13,7 +13,7 @@
 	const superFormData = superForm(data.form);
 	const { form, errors } = superFormData;
 
-	$: availableRoles = data.roles.map<SelectOptionType>((role) => ({
+	$: availableRoles = data.roles.map<SelectOptionType<string>>((role) => ({
 		name: role.text,
 		value: role.text,
 	}));

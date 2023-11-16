@@ -18,7 +18,7 @@
 
 	$: $form.emailLang = $locale;
 
-	$: availableRoles = roles.map<SelectOptionType>((role) => ({
+	$: availableRoles = roles.map<SelectOptionType<string>>((role) => ({
 		name: role.text,
 		value: role.text,
 	}));
