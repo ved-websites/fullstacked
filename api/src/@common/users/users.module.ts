@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { LangInterceptor } from './lang.interceptor';
 import { OnboardingModule } from './onboarding/onboarding.module';
 import { UserModule } from './user/user.module';
+import { UsersService } from './users.service';
 
 /**
  * The module responsible to handle all common users handling.
@@ -17,7 +18,8 @@ import { UserModule } from './user/user.module';
 			provide: APP_INTERCEPTOR,
 			useClass: LangInterceptor,
 		},
+		UsersService,
 	],
-	exports: [AuthModule],
+	exports: [AuthModule, UsersService],
 })
 export class UsersModule {}

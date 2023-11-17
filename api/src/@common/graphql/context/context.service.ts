@@ -33,41 +33,64 @@ export class ContextService {
 		return list;
 	}
 
-	async setupGqlContext(context: TypedSubscriptionContext | CommonContext) {
+	extractRawGqlContext(context: TypedSubscriptionContext | CommonContext) {
 		if ('extra' in context && context?.extra?.request) {
-			const request = context?.extra?.request;
+			const req = context?.extra?.request;
 
-			const cookies = this.parseCookies(request);
-
-			const authSessionCookieToken = cookies[COOKIE_NAME];
-			const authSessionHeader = context.connectionParams?.Authorization as string | undefined;
-
-			request.headers.authorization ??= authSessionHeader ?? (authSessionCookieToken ? `Bearer ${authSessionCookieToken}` : undefined);
-
-			await setupRequest(request, this.auth);
-
-			return {
-				req: {
-					...request,
-					headers: {
-						...request.headers,
-						...context.connectionParams,
-					},
-				},
-			};
+			return { req, isExtra: true };
 		}
 
 		if (!('req' in context)) {
 			throw 'Internal server error';
 		}
 
-		const req = context?.req;
+		const req = context.req;
 
-		if (req) {
+		return { req, res: context?.res, isExtra: false };
+	}
+
+	async setupGqlContext(context: TypedSubscriptionContext | CommonContext) {
+		const { req, res, isExtra } = this.extractRawGqlContext(context);
+
+		if (isExtra) {
+			const { connectionParams } = context as TypedSubscriptionContext;
+
+			// Casting to workaround TS type narrowing
+			if ('session' in (req as typeof req)) {
+				return {
+					req: {
+						...req,
+						headers: {
+							...req.headers,
+							...connectionParams,
+						},
+					},
+				};
+			}
+
+			const cookies = this.parseCookies(req);
+
+			const authSessionCookieToken = cookies[COOKIE_NAME];
+			const authSessionHeader = connectionParams?.Authorization as string | undefined;
+
+			req.headers.authorization ??= authSessionHeader ?? (authSessionCookieToken ? `Bearer ${authSessionCookieToken}` : undefined);
+
 			await setupRequest(req, this.auth);
+
+			return {
+				req: {
+					...req,
+					headers: {
+						...req.headers,
+						...connectionParams,
+					},
+				},
+			};
 		}
 
-		return { req, res: context?.res };
+		await setupRequest(req, this.auth);
+
+		return { req, res };
 	}
 
 	static getGraphQLRequest(context: ExecutionContext) {

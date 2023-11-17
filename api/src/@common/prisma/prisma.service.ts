@@ -11,6 +11,9 @@ export type PublishParamType = Parameters<PubSub['publish']>[0];
 export type PrismaSelector = {
 	[x: string]: never;
 };
+export type ExtractedPrismaSelector = {
+	selector: PrismaSelector;
+};
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
@@ -72,5 +75,28 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 		fullTriggers.forEach((triggerName) => this.pubSub.publish(triggerName, { [triggerName]: returnValue }));
 
 		return returnValue;
+	}
+
+	extractSelectors<K extends string[]>(select: PrismaSelector, ...keysToExtract: K): Record<K[number], unknown> & ExtractedPrismaSelector;
+	extractSelectors<T extends Record<string, unknown>>(select: PrismaSelector, ...keysToExtract: (keyof T)[]): T & ExtractedPrismaSelector;
+
+	extractSelectors<T extends Record<string, unknown>>(select: PrismaSelector, ...keysToExtract: (keyof T)[]) {
+		const extractedKeys: Record<string, unknown> = {};
+		const selector: Record<string, unknown> = {};
+
+		const originalSelect = select.select as unknown as Record<string, unknown>;
+
+		for (const key of Object.keys(originalSelect)) {
+			if (keysToExtract.includes(key)) {
+				extractedKeys[key] = originalSelect[key];
+			} else {
+				selector[key] = originalSelect[key];
+			}
+		}
+
+		return {
+			...(extractedKeys as T),
+			selector: { select: selector } as unknown as PrismaSelector,
+		};
 	}
 }

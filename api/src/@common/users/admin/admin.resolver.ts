@@ -5,6 +5,7 @@ import { SelectQL } from '$prisma/select-ql.decorator';
 import { AuthService } from '$users/auth/auth.service';
 import { Roles } from '$users/auth/roles/roles.guard';
 import { AuthSession, LuciaSession } from '$users/auth/session.decorator';
+import { LiveUser } from '$users/dtos/LiveUser.dto';
 import { Origin } from '$utils/origin.decorator';
 import { ForbiddenException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
@@ -22,7 +23,7 @@ export class AdminResolver {
 		private readonly authService: AuthService,
 	) {}
 
-	@Query(() => [User])
+	@Query(() => [LiveUser])
 	async getUsers(@SelectQL() select: PrismaSelector, @Args('where', { nullable: true }) where?: UserWhereInput) {
 		const users = await this.adminService.getUsers(select, where);
 

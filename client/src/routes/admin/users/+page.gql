@@ -7,6 +7,7 @@ query ManageGetUsers {
 			text
 		}
 		profilePictureRef
+		online
 	}
 	unregisteredUsers: getUsers(where: { registerToken: { not: null } }) {
 		email

@@ -5,6 +5,7 @@ import { TypedI18nService } from '$i18n/i18n.service';
 import { User } from '$prisma-client';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { loadLuciaUtils } from '$users/auth/lucia/modules-compat';
+import { UserOnlineSelector, UsersService } from '$users/users.service';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes } from 'lucia';
 import { EnvironmentConfig } from '~/env.validation';
@@ -18,6 +19,7 @@ export class AuthService {
 		private readonly email: EmailService,
 		private readonly i18n: TypedI18nService,
 		private readonly env: EnvironmentConfig,
+		private readonly usersService: UsersService,
 	) {}
 
 	readonly providerId = 'email';
@@ -46,12 +48,18 @@ export class AuthService {
 	}
 
 	async getAuthUser(email: string, select: PrismaSelector) {
-		const user = await this.prisma.user.findUnique({
+		const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(select, 'online');
+
+		const user = (await this.prisma.user.findUnique({
 			where: {
 				email,
 			},
-			...select,
-		});
+			...selector,
+		})) as (User & UserOnlineSelector) | null;
+
+		if (user && online) {
+			user['online'] = this.usersService.isUserConnected(user.email);
+		}
 
 		return user;
 	}

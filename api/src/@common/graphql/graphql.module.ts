@@ -1,3 +1,5 @@
+import { UsersModule } from '$users/users.module';
+import { UsersService } from '$users/users.service';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';
@@ -12,15 +14,34 @@ export const schemaPath = join(process.cwd(), 'src/_generated/nestjs-graphql/sch
 
 export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>({
 	driver: ApolloDriver,
-	imports: [ConfigModule, ContextModule],
-	useFactory: (env: EnvironmentConfig, contextService: ContextService) => {
+	imports: [ConfigModule, ContextModule, UsersModule],
+	useFactory: (env: EnvironmentConfig, contextService: ContextService, usersService: UsersService) => {
 		const isDev = env.NODE_ENV == Environment.Development;
 
 		return {
 			autoSchemaFile: schemaPath,
 			installSubscriptionHandlers: true,
 			subscriptions: {
-				'graphql-ws': true,
+				'graphql-ws': {
+					onConnect: async (context) => {
+						const {
+							req: { session },
+						} = await contextService.setupGqlContext(context as TypedSubscriptionContext | CommonContext);
+
+						if (session) {
+							usersService.onConnect(session);
+						}
+					},
+					onDisconnect: async (context) => {
+						const {
+							req: { session },
+						} = contextService.extractRawGqlContext(context as TypedSubscriptionContext | CommonContext);
+
+						if (session) {
+							usersService.onDisconnect(session);
+						}
+					},
+				},
 			},
 			debug: isDev,
 			playground: false,
@@ -29,5 +50,5 @@ export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>(
 			context: (context: TypedSubscriptionContext | CommonContext) => contextService.setupGqlContext(context),
 		};
 	},
-	inject: [EnvironmentConfig, ContextService],
+	inject: [EnvironmentConfig, ContextService, UsersService],
 });

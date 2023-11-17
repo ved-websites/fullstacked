@@ -45,9 +45,13 @@
 				<TableBodyRow>
 					<TableBodyCell>
 						<slot name="user" {user} {popoverId}>
-							<div id="info-{name}{i}" class="inline-flex gap-2">
-								<Avatar class="hidden sm:block lg:hidden xl:block" src={getProfilePictureImageUrl(user.profilePictureRef)}></Avatar>
-								<span class="self-center">{user.email}</span>
+							<div id="info-{name}{i}" class="inline-flex items-center gap-2">
+								<Avatar
+									dot={user.online != undefined ? { color: user.online ? 'green' : undefined } : undefined}
+									class="hidden sm:block lg:hidden xl:block"
+									src={getProfilePictureImageUrl(user.profilePictureRef)}
+								/>
+								<span>{user.email}</span>
 							</div>
 						</slot>
 					</TableBodyCell>

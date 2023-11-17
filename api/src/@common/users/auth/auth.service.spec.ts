@@ -1,6 +1,7 @@
 import { ConfigModule } from '$configs/config.module';
 import { EmailModule } from '$email/email.module';
 import { PrismaModule } from '$prisma/prisma.module';
+import { UsersService } from '$users/users.service';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TestManager } from '~/@utils/tests/TestManager';
 import { AuthService } from './auth.service';
@@ -11,7 +12,7 @@ describe('AuthService', () => {
 	const manager = new TestManager({
 		metadata: {
 			imports: [ConfigModule, PrismaModule, RolesModule, EmailModule],
-			providers: [AuthService, { provide: LuciaFactory, useValue: {} }],
+			providers: [AuthService, { provide: LuciaFactory, useValue: {} }, UsersService],
 		},
 	});
 	let service: AuthService;

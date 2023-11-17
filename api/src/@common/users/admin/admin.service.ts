@@ -1,11 +1,13 @@
 import { EmailService } from '$email/email.service';
 import { I18nException } from '$i18n/i18n.error';
 import { TypedI18nService } from '$i18n/i18n.service';
+import { User } from '$prisma-client';
 import { UserCreateInput, UserUpdateInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { AuthService } from '$users/auth/auth.service';
 import { RolesService } from '$users/auth/roles/roles.service';
 import { LuciaUser } from '$users/auth/session.decorator';
+import { UserOnlineSelector, UsersService } from '$users/users.service';
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ADMIN } from '~/@utils/roles';
@@ -22,25 +24,37 @@ export class AdminService {
 		private readonly email: EmailService,
 		private readonly env: EnvironmentConfig,
 		private readonly i18n: TypedI18nService,
+		private readonly usersService: UsersService,
 	) {}
 
 	async getUsers(select: PrismaSelector, where?: UserWhereInput) {
+		const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(select, 'online');
+
 		const users = await this.prisma.user.findMany({
 			where,
-			...select,
+			...selector,
 			orderBy: {
 				createdAt: 'asc',
 			},
 		});
 
-		return users;
+		return users.map((user) => ({
+			...user,
+			online: online && this.usersService.isUserConnected(user.email),
+		}));
 	}
 
 	async getUser(select: PrismaSelector, where: UserWhereUniqueInput) {
-		const user = await this.prisma.user.findFirst({
+		const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(select, 'online');
+
+		const user = (await this.prisma.user.findFirst({
 			where,
-			...select,
-		});
+			...selector,
+		})) as (User & UserOnlineSelector) | null;
+
+		if (user && online) {
+			user['online'] = this.usersService.isUserConnected(user.email);
+		}
 
 		return user;
 	}
