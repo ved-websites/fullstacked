@@ -54,13 +54,17 @@
 				bind:open={toast.open}
 				color={toastColorMapping[toast.type]}
 				class={twMerge('border-b-2', toastBorderColorMapping[toast.type], toast.classes)}
+				contentClass="w-full text-sm font-normal flex flex-col"
 			>
 				<svelte:fragment slot="icon">
 					{#if toast.icon}
 						<Icon class={toast.icon} />
 					{/if}
 				</svelte:fragment>
-				{toast.text}
+				<span>{toast.text}</span>
+				{#if toast.extraData}
+					{@html toast.extraData}
+				{/if}
 			</Toast>
 		{/each}
 	</div>

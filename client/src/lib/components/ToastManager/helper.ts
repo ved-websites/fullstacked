@@ -12,6 +12,8 @@ export type ToastManagerData = {
 	icon?: string;
 	classes?: string;
 	timeout?: number;
+	/** Adds extra data under the main text. Warning: Data formatted as html. */
+	extraData?: string;
 };
 
 export type ToastData = ToastManagerData & {
