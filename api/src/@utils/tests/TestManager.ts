@@ -3,6 +3,7 @@ import { isLocal } from '$configs/helpers';
 import { LocalEnvironmentConfig } from '$configs/local-env.validation';
 import { TypedI18nModule } from '$i18n/i18n.module';
 import { type ModuleMetadata } from '@nestjs/common';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { Test, TestingModule, TestingModuleBuilder } from '@nestjs/testing';
 import { EnvironmentConfig } from '~/env.validation';
 
@@ -22,7 +23,14 @@ export class TestManager<Options extends TestOptions = TestOptions> {
 	async setupTestModule(): Promise<void> {
 		const metadata = this.options?.metadata;
 
-		const sharedImports: NonNullable<typeof metadata>['imports'] = [ConfigModule, TypedI18nModule];
+		const sharedImports: NonNullable<typeof metadata>['imports'] = [
+			ConfigModule,
+			TypedI18nModule,
+			EventEmitterModule.forRoot({
+				global: true,
+				verboseMemoryLeak: true,
+			}),
+		];
 
 		const sharedProviders: NonNullable<typeof metadata>['providers'] = [
 			{
