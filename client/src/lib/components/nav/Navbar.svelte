@@ -4,11 +4,11 @@
 	import { page } from '$app/stores';
 	import { getSessionUser, isDrawerHidden } from '$lib/stores';
 	import { twMerge } from '$lib/twMerge';
-	import { getProfilePictureImageUrl } from '$lib/utils/images';
 	import { navElements } from '$navigation/routes';
-	import { Avatar, Button, Dropdown, DropdownHeader, DropdownItem, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
+	import { Button, Dropdown, DropdownHeader, DropdownItem, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
 	import DarkMode from '../DarkMode.svelte';
 	import Icon from '../Icon.svelte';
+	import UserAvatar from '../UserAvatar.svelte';
 	import Drawer from './Drawer.svelte';
 	import { isNavElemVisible } from './utils';
 
@@ -17,11 +17,6 @@
 	$: activeUrl = $page.url.pathname;
 </script>
 
-<!-- <Navbar
-	let:hidden
-	navClass="pl-1 pr-4 sm:px-3 py-2.5 fixed w-[100vw] z-20 top-0 left-0 border-b"
-	navDivClass="mx-auto flex justify-between items-center"
-> -->
 <Navbar let:hidden let:NavContainer class="pl-1 pr-4 sm:px-3 py-2.5 fixed w-[100vw] z-20 top-0 left-0 border-b">
 	<NavContainer>
 		<NavHamburger onClick={isDrawerHidden.toggle} />
@@ -32,7 +27,7 @@
 		<div class="flex gap-3 items-center md:order-2">
 			<DarkMode class="hidden md:flex" />
 			{#if $sessionUser}
-				<Avatar class="cursor-pointer" id="avatar-menu" src={getProfilePictureImageUrl($sessionUser.profilePictureRef)} />
+				<UserAvatar {...$sessionUser} class="cursor-pointer" id="avatar-menu" />
 
 				<form method="POST" action="/?/logout" use:enhance>
 					<Button type="submit" outline={true} class="!p-2" size="lg">

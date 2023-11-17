@@ -8,6 +8,14 @@ const config = {
 			client: './src/lib/houdini/client.ts',
 		},
 	},
+	types: {
+		User: {
+			keys: ['email'],
+		},
+		LiveUser: {
+			keys: ['email'],
+		},
+	},
 	scalars: {
 		DateTime: {
 			type: 'Date',

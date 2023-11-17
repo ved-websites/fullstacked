@@ -1,4 +1,4 @@
-query GetUserFromSession {
+query GetUserFromSession @cache(policy: NetworkOnly) {
 	getSessionUser {
 		email
 		firstName

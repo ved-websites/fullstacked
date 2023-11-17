@@ -12,11 +12,12 @@
 	export let currentProfilePictureRef: string | undefined | null;
 	export let hasJs: boolean;
 
-	$: !currentProfilePictureRef && (profilePictureFile = undefined);
-
 	let inputRef: HTMLInputElement;
 	let profilePictureFile: File | undefined;
 	let isSendingProfilePicture = false;
+
+	$: !currentProfilePictureRef && (profilePictureFile = undefined);
+	$: profilePictureSrc = profilePictureFile ? URL.createObjectURL(profilePictureFile) : getProfilePictureImageUrl(currentProfilePictureRef);
 
 	const handlePictureDrop = (event: DragEvent) => {
 		event.preventDefault();
@@ -121,11 +122,11 @@
 			</div>
 
 			<div class="flex justify-center items-center">
-				<img
-					src={profilePictureFile ? URL.createObjectURL(profilePictureFile) : getProfilePictureImageUrl(currentProfilePictureRef)}
-					alt="user profile"
-					class="max-h-36"
-				/>
+				{#if profilePictureSrc}
+					<img src={profilePictureSrc} alt="user profile" class="max-h-36" />
+				{:else}
+					<Icon class="i-mdi-account-off-outline s-36"></Icon>
+				{/if}
 			</div>
 		</div>
 	</VDropzone>

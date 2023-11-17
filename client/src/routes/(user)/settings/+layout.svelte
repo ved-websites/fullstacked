@@ -3,9 +3,9 @@
 	import type { ConfirmedSessionUser } from '$auth/auth-handler.js';
 	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
+	import UserAvatar from '$lib/components/UserAvatar.svelte';
 	import { getSessionUser } from '$lib/stores/index.js';
-	import { getProfilePictureImageUrl } from '$lib/utils/images';
-	import { Avatar, Heading, P, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
+	import { Heading, P, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);
 
@@ -20,7 +20,7 @@
 </script>
 
 <header class="flex gap-5 mb-5">
-	<Avatar id="settings-avatar" src={getProfilePictureImageUrl($sessionUser.profilePictureRef)} />
+	<UserAvatar {...$sessionUser} />
 	<P size="lg" class="self-center">
 		{#if $sessionUser.firstName}
 			{$sessionUser.firstName}{$sessionUser.lastName ? ` ${$sessionUser.lastName}` : ''} ({$sessionUser.email})

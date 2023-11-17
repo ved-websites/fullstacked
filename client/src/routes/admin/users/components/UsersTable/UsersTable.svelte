@@ -1,7 +1,7 @@
 <script lang="ts" generics="T extends BaseUser = BaseUser">
-	import { getProfilePictureImageUrl } from '$lib/utils/images';
+	import UserAvatar from '$lib/components/UserAvatar.svelte';
+
 	import {
-		Avatar,
 		Badge,
 		Button,
 		Hr,
@@ -46,11 +46,7 @@
 					<TableBodyCell>
 						<slot name="user" {user} {popoverId}>
 							<div id="info-{name}{i}" class="inline-flex items-center gap-2">
-								<Avatar
-									dot={user.online != undefined ? { color: user.online ? 'green' : undefined } : undefined}
-									class="hidden sm:block lg:hidden xl:block"
-									src={getProfilePictureImageUrl(user.profilePictureRef)}
-								/>
+								<UserAvatar {...user} class="hidden sm:flex lg:hidden xl:flex" />
 								<span>{user.email}</span>
 							</div>
 						</slot>
@@ -82,7 +78,7 @@
 	<Popover defaultClass="p-3 flex flex-col gap-3" class="w-64 text-sm font-light" triggeredBy="#info-{name}{i}">
 		<div slot="title" class="font-semibold text-gray-900 dark:text-white text-center">Info Card</div>
 		<div class="flex justify-between gap-3">
-			<Avatar src={getProfilePictureImageUrl(user.profilePictureRef)}></Avatar>
+			<UserAvatar {...user} />
 			<div class="self-center text-right min-w-0">
 				<div class="text-base font-semibold leading-none text-gray-900 dark:text-white">
 					{user.firstName}
