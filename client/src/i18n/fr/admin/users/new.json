@@ -1,7 +1,6 @@
 {
 	"labels": {
-		"email": "Courriel",
-		"email-lang": "Langue de Courriels",
-		"roles": "Rôles"
-	}
+		"email-lang": "Langue de Courriels"
+	},
+	"heading": "Création d'un nouvel utilisateur"
 }

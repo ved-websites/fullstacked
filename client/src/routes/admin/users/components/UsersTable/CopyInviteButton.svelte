@@ -1,7 +1,10 @@
 <script lang="ts">
+	import { getI18n } from '$i18n';
 	import { createToasts, setPageToasts } from '$lib/components/ToastManager/helper';
 	import { Button } from 'flowbite-svelte';
 	import type { BaseUser } from '../../types';
+	let i18n = getI18n();
+	$: ({ t } = $i18n);
 
 	export let user: BaseUser & { registerToken: string | null };
 	export let showCopiedTextDuration: number = 3000;
@@ -15,7 +18,7 @@
 		setPageToasts(
 			createToasts([
 				{
-					text: `Copied link to register user ${user.email}!`,
+					text: $t('admin.users.tables.actions.copy-invite.toast', { email: user.email }),
 					timeout: showCopiedTextDuration,
 				},
 			]),
@@ -23,5 +26,5 @@
 	}}
 	color="green"
 >
-	Copy invite link
+	{$t('admin.users.tables.actions.copy-invite.button')}
 </Button>

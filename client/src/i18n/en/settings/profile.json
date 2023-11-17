@@ -1,3 +1,15 @@
 {
-	"name": "Profile"
+	"name": "Profile",
+	"picture": {
+		"label": "Profile Picture",
+		"zone": {
+			"instructions": "<span class=\"font-semibold\">Click to upload</span> {{hasJs; true:or drag and drop}}",
+			"formats": "Accepted formats: {{formats}}.",
+			"dragging": "Yes, right here!"
+		},
+		"buttons": {
+			"delete": "Delete",
+			"upload": "Submit Profile Picture"
+		}
+	}
 }

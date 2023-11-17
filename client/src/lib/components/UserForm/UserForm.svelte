@@ -20,12 +20,12 @@
 
 		<div class="grid gap-3 sm:grid-cols-2">
 			<Label>
-				<span> First Name </span>
+				<span>{$t('shared.userform.labels.firstname')}</span>
 				<Input name="firstName" class="mt-2" type="text" bind:value={$form.firstName} {...$constraints.firstName} />
 				<ValidationErrors errors={$errors.firstName} />
 			</Label>
 			<Label>
-				<span> Last Name </span>
+				<span>{$t('shared.userform.labels.lastname')}</span>
 				<Input name="lastName" class="mt-2" type="text" bind:value={$form.lastName} {...$constraints.lastName} />
 				<ValidationErrors errors={$errors.lastName} />
 			</Label>

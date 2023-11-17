@@ -35,5 +35,6 @@
 			"summary": "Habituellement, il y a un bouton ici vous indiquant d'aller à la page d'accueil, mais il semble que vous soyez déjà dans la page d'accueil...",
 			"detail": "Cependant, ne vous inquiétez pas, ce problème est actuellement en train de se faire réparer!"
 		}
-	}
+	},
+	"confirm": "Confirmer"
 }

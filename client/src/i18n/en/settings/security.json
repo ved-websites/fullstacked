@@ -1,3 +1,9 @@
 {
-	"name": "Security"
+	"name": "Security",
+	"labels": {
+		"new-password": {
+			"password": "New Password",
+			"confirmation": "Confirm New Password"
+		}
+	}
 }

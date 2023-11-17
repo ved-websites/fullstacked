@@ -17,7 +17,7 @@
 
 <form method="POST" use:enhance class="grid gap-3 grid-cols-1 sm:grid-cols-2">
 	<Label>
-		<span> New Password </span>
+		<span>{$t('settings.security.labels.new-password.password')}</span>
 		<Input
 			name="password"
 			class="mt-2"
@@ -29,7 +29,7 @@
 		<ValidationErrors errors={$errors.password} />
 	</Label>
 	<Label>
-		<span> Confirm New Password </span>
+		<span>{$t('settings.security.labels.new-password.confirmation')}</span>
 		<Input
 			name="confirm"
 			class="mt-2"

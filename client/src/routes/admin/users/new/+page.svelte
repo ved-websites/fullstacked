@@ -19,7 +19,7 @@
 	$: $form.emailLang = $locale;
 
 	$: availableRoles = roles.map<SelectOptionType<string>>((role) => ({
-		name: role.text,
+		name: $t(`shared.userform.roles.${role.text}`),
 		value: role.text,
 	}));
 
@@ -30,21 +30,28 @@
 	}));
 </script>
 
-<Heading tag="h2">Creating New User</Heading>
+<Heading tag="h2">{$t('admin.users.new.heading')}</Heading>
 
 <UserForm {superFormData}>
 	<svelte:fragment slot="above">
 		<div>
 			<Label>
-				<span>{$t('admin.users.new.labels.email')}</span>
-				<Input name="email" class="mt-2" type="email" placeholder="example@example.com" bind:value={$form.email} {...$constraints.email} />
+				<span>{$t('shared.userform.labels.email')}</span>
+				<Input
+					name="email"
+					class="mt-2"
+					type="email"
+					placeholder={$t('shared.userform.placeholders.email')}
+					bind:value={$form.email}
+					{...$constraints.email}
+				/>
 			</Label>
 			<ValidationErrors errors={$errors.email} />
 		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="below">
 		<div>
-			<Label>{$t('admin.users.new.labels.roles')}</Label>
+			<Label>{$t('shared.userform.labels.roles')}</Label>
 			<MultiSelect name="roles" class="mt-2" items={availableRoles} bind:value={$form.roles} />
 			<ValidationErrors errors={$errors.roles} />
 		</div>

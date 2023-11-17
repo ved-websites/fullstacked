@@ -1,0 +1,49 @@
+{
+	"heading": "User Management",
+	"create-button": "Create New User",
+	"tables": {
+		"columns": {
+			"user": "User",
+			"actions": "Actions"
+		},
+		"registered": {
+			"heading": "Registered Users"
+		},
+		"unregistered": {
+			"heading": "Unregistered Users List",
+			"nobody": "No unregistered Users!"
+		},
+		"actions": {
+			"edit": "Edit",
+			"delete": "Delete",
+			"resend-invite": {
+				"button": "Resend invite email",
+				"toasts": {
+					"success": "A new invite email has been sent to {{email}}!",
+					"error-server": "The invitation couldn't be sent!",
+					"error-local": "An error happened in your browser while sending the new invitation!"
+				}
+			},
+			"copy-invite": {
+				"button": "Copy invite link",
+				"toast": "Copied link to register user {{email}}!"
+			}
+		},
+		"userinfo": {
+			"heading": "Info Card",
+			"fields": {
+				"roles": {
+					"title": "Roles",
+					"empty": "~ No Roles ~"
+				}
+			}
+		}
+	},
+	"modal": {
+		"title": "Confirmation",
+		"body": {
+			"warning": "Deleting a user is permanent!",
+			"confirmation": "Are you sure you want to delete the user <span class=\"font-bold\">{{email}}</span>?"
+		}
+	}
+}

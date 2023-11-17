@@ -1,7 +1,6 @@
 {
+	"heading": "Creating New User",
 	"labels": {
-		"email": "Email",
-		"email-lang": "Emails Language",
-		"roles": "Roles"
+		"email-lang": "Emails Language"
 	}
 }

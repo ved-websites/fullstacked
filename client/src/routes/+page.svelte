@@ -13,18 +13,18 @@
 	];
 </script>
 
-<h1 class="text-3xl">Welcome to SvelteKit</h1>
+<h1 class="text-3xl">{$t('home.welcome')}</h1>
 <p class="dark:text-white">{@html $t('home.visit', { link: '<a href="https://kit.svelte.dev" class="link">kit.svelte.dev</a>' })}</p>
 
 <div class="self-center flex gap-3">
 	{#each sections as section}
-		<a href="#{section.text}" class="link">{section.text}</a>
+		<a href="#{section.text}" class="link">{$t(`home.colors.${section.text}`)}</a>
 	{/each}
 </div>
 
 <div class="px-2">
 	<Alert color="blue">
-		<span class="font-medium">Info alert!</span> Change a few things up and try submitting again.
+		{@html $t('home.info')}
 	</Alert>
 </div>
 

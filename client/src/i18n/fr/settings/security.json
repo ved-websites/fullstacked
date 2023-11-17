@@ -1,3 +1,9 @@
 {
-	"name": "Sécurité"
+	"name": "Sécurité",
+	"labels": {
+		"new-password": {
+			"confirmation": "Confirmation du nouveau mot de passe",
+			"password": "Nouveau mot de passe"
+		}
+	}
 }

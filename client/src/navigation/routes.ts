@@ -1,30 +1,31 @@
+import { k } from '$i18n';
 import type { NavElement } from '$lib/components/nav/nav-elements';
 
 export const navElements: NavElement[] = [
 	{
-		title: 'About',
+		title: k('navbar.navigation.about'),
 		url: '/about',
 		isPublic: true,
 		drawerIconPath: 'i-mdi-information',
 	},
 	{
-		title: 'Chat',
+		title: k('navbar.navigation.chat'),
 		url: '/chat',
 		drawerIconPath: 'i-mdi-chat',
 	},
 	{
-		title: 'Admin',
+		title: k('navbar.navigation.admin'),
 		id: 'admin',
 		drawerIconPath: 'i-mdi-shield-crown',
 		roles: ['admin'],
 		elements: [
 			{
-				title: 'User Management',
+				title: k('navbar.navigation.admin-users'),
 				url: '/admin/users',
 				drawerIconPath: 'i-mdi-account-details',
 			},
 			{
-				title: 'Data',
+				title: k('navbar.navigation.admin-data'),
 				url: '/admin/data',
 				drawerIconPath: 'i-mdi-abacus',
 			},

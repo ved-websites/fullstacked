@@ -1,0 +1,15 @@
+{
+	"login": "Login",
+	"navigation": {
+		"about": "About",
+		"chat": "Chat",
+		"admin": "Admin",
+		"admin-users": "User Management",
+		"admin-data": "Data"
+	},
+	"user": {
+		"links": {
+			"settings": "Settings"
+		}
+	}
+}

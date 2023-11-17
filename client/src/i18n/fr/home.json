@@ -1,3 +1,12 @@
 {
-	"visit": "Visitez {{link}} pour lire la documentation!"
+	"visit": "Visitez {{link}} pour lire la documentation!",
+	"colors": {
+		"blue": "Bleu",
+		"gray": "Gris",
+		"red": "Rouge",
+		"teal": "Sarcelle",
+		"yellow": "Jaune"
+	},
+	"info": "<span class=\"font-medium\">Alerte info!</span> Modifiez quelques éléments et réessayez de soumettre.",
+	"welcome": "Bienvenue sur SvelteKit"
 }

@@ -1,3 +1,15 @@
 {
-	"name": "Profil"
+	"name": "Profil",
+	"picture": {
+		"buttons": {
+			"delete": "Supprimer",
+			"upload": "Soumettre la photo de profil"
+		},
+		"label": "Photo de profil",
+		"zone": {
+			"dragging": "Oui, juste ici!",
+			"formats": "Formats acceptés: {{formats}}.",
+			"instructions": "<span class=\"font-semibold\">Cliquez pour téléverser</span> {{hasJs; true:ou glisser-déposer}}"
+		}
+	}
 }

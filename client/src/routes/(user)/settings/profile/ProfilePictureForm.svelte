@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
+	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
 	import VDropzone from '$lib/components/flowbite-custom/VDropzone.svelte';
 	import { getProfilePictureImageUrl } from '$lib/utils/images';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { Button, Label } from 'flowbite-svelte';
+	let i18n = getI18n();
+	$: ({ t } = $i18n);
 
 	const ACCEPTED_PROFILE_PICTURE_TYPES = ['jpeg', 'jpg', 'png', 'webp'];
 
@@ -92,7 +95,7 @@
 </script>
 
 <form method="post" enctype="multipart/form-data" use:enhance={handleEnhance} {...$$restProps}>
-	<Label>Profile Picture</Label>
+	<Label>{$t('settings.profile.picture.label')}</Label>
 	<VDropzone
 		id="dropzone"
 		on:drop={handlePictureDrop}
@@ -111,13 +114,15 @@
 			<div class="flex flex-col justify-center items-center">
 				<Icon class="i-mdi-upload"></Icon>
 				<p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-					<span class="font-semibold">Click to upload</span>{hasJs ? ' or drag and drop' : ''}
+					{@html $t('settings.profile.picture.zone.instructions', { hasJs })}
 				</p>
 				<p class="text-xs text-gray-500 dark:text-gray-400">
-					Accepted formats: {new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_PROFILE_PICTURE_TYPES)}.
+					{$t('settings.profile.picture.zone.formats', {
+						formats: new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_PROFILE_PICTURE_TYPES),
+					})}
 				</p>
 				{#if isDraggingOver}
-					<p>Yes, right here!</p>
+					<p>{$t('settings.profile.picture.zone.dragging')}</p>
 				{/if}
 			</div>
 
@@ -132,9 +137,11 @@
 	</VDropzone>
 
 	<div class="mt-5 grid grid-cols-2 gap-5">
-		<Button type="submit" formaction="?/deleteProfilePicture" disabled={!currentProfilePictureRef} color="red">Delete</Button>
+		<Button type="submit" formaction="?/deleteProfilePicture" disabled={!currentProfilePictureRef} color="red">
+			{$t('settings.profile.picture.buttons.delete')}
+		</Button>
 		<Button type="submit" formaction="?/profilePicture" disabled={(hasJs && !profilePictureFile) || isSendingProfilePicture}>
-			Submit Profile Picture
+			{$t('settings.profile.picture.buttons.upload')}
 		</Button>
 	</div>
 </form>

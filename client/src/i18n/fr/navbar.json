@@ -1,0 +1,15 @@
+{
+	"login": "Se connecter",
+	"navigation": {
+		"about": "À propos",
+		"admin": "Administrateur",
+		"admin-data": "Données",
+		"admin-users": "Gestion des utilisateurs",
+		"chat": "Chat"
+	},
+	"user": {
+		"links": {
+			"settings": "Paramètres"
+		}
+	}
+}

@@ -2,6 +2,7 @@
 	import { browser } from '$app/environment';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
+	import { getI18n } from '$i18n';
 	import { getSessionUser, isDrawerHidden } from '$lib/stores';
 	import { twMerge } from '$lib/twMerge';
 	import { navElements } from '$navigation/routes';
@@ -11,6 +12,8 @@
 	import UserAvatar from '../UserAvatar.svelte';
 	import Drawer from './Drawer.svelte';
 	import { isNavElemVisible } from './utils';
+	let i18n = getI18n();
+	$: ({ t } = $i18n);
 
 	let sessionUser = getSessionUser();
 
@@ -35,7 +38,7 @@
 					</Button>
 				</form>
 			{:else}
-				<Button href="/login" class={$sessionUser ? 'hidden' : ''}>Login</Button>
+				<Button href="/login" class={$sessionUser ? 'hidden' : ''}>{$t('navbar.login')}</Button>
 			{/if}
 		</div>
 		<NavUl {hidden} {activeUrl}>
@@ -43,7 +46,7 @@
 				{#if isNavElemVisible(navElement, $sessionUser)}
 					{#if 'url' in navElement}
 						<NavLi href={navElement.url}>
-							{navElement.title}
+							{$t(navElement.title)}
 						</NavLi>
 					{:else}
 						{@const isActive = navElement.elements.some((navSubElement) => $page.url.pathname == navSubElement.url)}
@@ -51,13 +54,13 @@
 							isActive &&
 							`text-white bg-primary-700 md:bg-transparent md:text-primary-700 md:dark:text-white dark:bg-primary-600 md:dark:bg-transparent`}
 						<NavLi id={navElement.id} class={twMerge('cursor-pointer flex items-center', activeClasses)}>
-							{navElement.title}
+							{$t(navElement.title)}
 							<Icon class="i-mdi-chevron-down"></Icon>
 						</NavLi>
 						{#if browser}
 							<Dropdown triggeredBy="#{navElement.id}" class="py-2 w-44 z-20" {activeUrl}>
 								{#each navElement.elements as navSubElement}
-									<DropdownItem href={navSubElement.url}>{navSubElement.title}</DropdownItem>
+									<DropdownItem href={navSubElement.url}>{$t(navSubElement.title)}</DropdownItem>
 								{/each}
 							</Dropdown>
 						{/if}
@@ -74,7 +77,7 @@
 			<span class="block text-sm">{$sessionUser.firstName} {$sessionUser.lastName}</span>
 			<span class="block truncate text-sm font-light"> {$sessionUser.email} </span>
 		</DropdownHeader>
-		<DropdownItem href="/settings">Settings</DropdownItem>
+		<DropdownItem href="/settings">{$t('navbar.user.links.settings')}</DropdownItem>
 	</Dropdown>
 {/if}
 

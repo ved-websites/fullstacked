@@ -1,6 +1,9 @@
 import i18n, { type Config } from 'sveltekit-i18n';
 import { routing } from './routing';
 
+export type ManualRouting = NonNullable<Config['loaders']>[number]['routes'] | true;
+export type RoutingMap = Record<string, ManualRouting>;
+
 const rawTranslationImports = import.meta.glob('./*/**/*.json', { import: 'default' });
 
 const translationFiles = Object.entries(rawTranslationImports).map(([path, getFile]) => {
@@ -13,9 +16,9 @@ const translationFiles = Object.entries(rawTranslationImports).map(([path, getFi
 	const key = cleanKeys.join('.');
 
 	const routes = (() => {
-		const greedyManualRoutes = routing[`${key}!`];
+		const greedyManualRoutes = (routing as RoutingMap)[`${key}!`];
 
-		const manualRoutes = greedyManualRoutes ?? routing[key];
+		const manualRoutes = greedyManualRoutes ?? (routing as RoutingMap)[key];
 
 		if (manualRoutes === true) {
 			// Load this file for all routes
@@ -57,6 +60,7 @@ const translationFiles = Object.entries(rawTranslationImports).map(([path, getFi
 
 export type Params = {
 	[x: string]: unknown;
+	default?: string;
 };
 
 export const locales = Array.from(new Set(translationFiles.map((loader) => loader.locale)));

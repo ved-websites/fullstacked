@@ -1,0 +1,14 @@
+{
+	"labels": {
+		"email": "Email",
+		"firstname": "First Name",
+		"lastname": "Last Name",
+		"roles": "Roles"
+	},
+	"roles": {
+		"admin": "Admin"
+	},
+	"placeholders": {
+		"email": "example@example.com"
+	}
+}

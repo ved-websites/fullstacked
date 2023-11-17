@@ -1,5 +1,3 @@
 {
-	"labels": {
-		"roles": "Roles"
-	}
+	"heading": "Editing user {{email}}"
 }

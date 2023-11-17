@@ -1,0 +1,50 @@
+{
+	"heading": "Gestion des utilisateurs",
+	"create-button": "Créer un nouvel utilisateur",
+	"tables": {
+		"actions": {
+			"copy-invite": {
+				"button": "Copier lien invitation",
+				"toast": "Lien copié pour l'utilisateur {{email}}!"
+			},
+			"delete": "Supprimer",
+			"edit": "Modifier",
+			"resend-invite": {
+				"button": "Renvoyer email d'invitation",
+				"toast": "Un nouvel email d'invitation a été envoyé à {{email}}!",
+				"toasts": {
+					"error-local": "Une erreur s'est produite dans votre navigateur lors de l'envoi de la nouvelle invitation!",
+					"error-server": "L'invitation n'a pas pu être envoyée!",
+					"success": "Un nouvel email d'invitation a été envoyé à {{email}}!"
+				}
+			}
+		},
+		"columns": {
+			"actions": "Actions",
+			"user": "Utilisateur"
+		},
+		"registered": {
+			"heading": "Utilisateurs enregistrés"
+		},
+		"unregistered": {
+			"heading": "Liste des utilisateurs non enregistrés",
+			"nobody": "Aucun utilisateur non enregistré!"
+		},
+		"userinfo": {
+			"fields": {
+				"roles": {
+					"empty": "~ Aucun rôle ~",
+					"title": "Rôles"
+				}
+			},
+			"heading": "Carte d'information"
+		}
+	},
+	"modal": {
+		"body": {
+			"confirmation": "Êtes-vous sûr de vouloir supprimer l'utilisateur <span class=\"font-bold\">{{email}}</span>?",
+			"warning": "La suppression d'un utilisateur est définitive!"
+		},
+		"title": "Confirmation"
+	}
+}

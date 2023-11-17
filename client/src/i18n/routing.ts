@@ -1,6 +1,4 @@
-import type { Config } from 'sveltekit-i18n';
-
-export type ManualRouting = NonNullable<Config['loaders']>[number]['routes'] | true;
+import type { RoutingMap } from '$i18n-config';
 
 /**
  * Map of translation keys to routes data.
@@ -10,10 +8,12 @@ export type ManualRouting = NonNullable<Config['loaders']>[number]['routes'] | t
  * To prevent the default behavior of merging the file path's route, append
  * an exclamation mark to the route key (example: 'home' => 'home!').
  */
-export const routing: Record<string, ManualRouting> = {
+export const routing = {
 	common: true,
+	navbar: true,
 	'home!': ['/'],
+	'shared.userform!': ['/settings/profile', /\/admin\/users.*/],
 	'settings.profile': [/\/settings.*/],
 	'settings.security': [/\/settings.*/],
 	'settings.experience': [/\/settings.*/],
-};
+} satisfies RoutingMap;
