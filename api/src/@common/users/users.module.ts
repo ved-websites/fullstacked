@@ -5,21 +5,20 @@ import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import { LangInterceptor } from './lang.interceptor';
 import { OnboardingModule } from './onboarding/onboarding.module';
+import { PresenceModule } from './presence/presence.module';
 import { UserModule } from './user/user.module';
-import { UsersService } from './users.service';
 
 /**
  * The module responsible to handle all common users handling.
  */
 @Module({
-	imports: [PrismaModule, OnboardingModule, AuthModule, AdminModule, UserModule],
+	imports: [PrismaModule, OnboardingModule, AuthModule, AdminModule, UserModule, PresenceModule],
 	providers: [
 		{
 			provide: APP_INTERCEPTOR,
 			useClass: LangInterceptor,
 		},
-		UsersService,
 	],
-	exports: [AuthModule, UsersService],
+	exports: [AuthModule],
 })
 export class UsersModule {}

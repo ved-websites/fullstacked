@@ -6,13 +6,13 @@ import {
 	USERS_ON_CONNECT_EVENT_TYPE,
 	USERS_ON_DISCONNECT_EVENT_KEY,
 	USERS_ON_DISCONNECT_EVENT_TYPE,
-} from './listeners/users.events';
+} from '../listeners/users.events';
 
 export type UserOnlineSelector = { online: boolean };
 
 @Injectable()
-export class UsersService {
-	private readonly logger = new Logger(UsersService.name);
+export class PresenceService {
+	private readonly logger = new Logger(PresenceService.name);
 
 	private sessions: Map<string, Session> = new Map();
 

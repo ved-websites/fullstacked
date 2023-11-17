@@ -1,19 +1,19 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TestManager } from '~/@utils/tests/TestManager';
-import { UsersService } from './users.service';
+import { PresenceService } from './presence.service';
 
-describe('UsersService', () => {
+describe('PresenceService', () => {
 	const manager = new TestManager({
 		metadata: {
-			providers: [UsersService],
+			providers: [PresenceService],
 		},
 	});
-	let service: UsersService;
+	let service: PresenceService;
 
 	beforeEach(async () => {
 		await manager.setupTestModule();
 
-		service = manager.module.get<UsersService>(UsersService);
+		service = manager.module.get<PresenceService>(PresenceService);
 	});
 
 	it('should be defined', () => {

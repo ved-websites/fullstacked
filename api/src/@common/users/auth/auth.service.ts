@@ -5,7 +5,8 @@ import { TypedI18nService } from '$i18n/i18n.service';
 import { User } from '$prisma-client';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { loadLuciaUtils } from '$users/auth/lucia/modules-compat';
-import { UserOnlineSelector, UsersService } from '$users/users.service';
+import { LiveUser } from '$users/dtos/LiveUser.dto';
+import { PresenceService, UserOnlineSelector } from '$users/presence/presence.service';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes } from 'lucia';
 import { EnvironmentConfig } from '~/env.validation';
@@ -19,7 +20,7 @@ export class AuthService {
 		private readonly email: EmailService,
 		private readonly i18n: TypedI18nService,
 		private readonly env: EnvironmentConfig,
-		private readonly usersService: UsersService,
+		private readonly presenceService: PresenceService,
 	) {}
 
 	readonly providerId = 'email';
@@ -55,10 +56,10 @@ export class AuthService {
 				email,
 			},
 			...selector,
-		})) as (User & UserOnlineSelector) | null;
+		})) as LiveUser | null;
 
 		if (user && online) {
-			user['online'] = this.usersService.isUserConnected(user.email);
+			user.online = this.presenceService.isUserConnected(user.email);
 		}
 
 		return user;

@@ -1,5 +1,5 @@
-import { UsersModule } from '$users/users.module';
-import { UsersService } from '$users/users.service';
+import { PresenceModule } from '$users/presence/presence.module';
+import { PresenceService } from '$users/presence/presence.service';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';
@@ -14,8 +14,8 @@ export const schemaPath = join(process.cwd(), 'src/_generated/nestjs-graphql/sch
 
 export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>({
 	driver: ApolloDriver,
-	imports: [ConfigModule, ContextModule, UsersModule],
-	useFactory: (env: EnvironmentConfig, contextService: ContextService, usersService: UsersService) => {
+	imports: [ConfigModule, ContextModule, PresenceModule],
+	useFactory: (env: EnvironmentConfig, contextService: ContextService, presenceService: PresenceService) => {
 		const isDev = env.NODE_ENV == Environment.Development;
 
 		return {
@@ -29,7 +29,7 @@ export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>(
 						} = await contextService.setupGqlContext(context as TypedSubscriptionContext | CommonContext);
 
 						if (session) {
-							usersService.onConnect(session);
+							presenceService.onConnect(session);
 						}
 					},
 					onDisconnect: async (context) => {
@@ -38,7 +38,7 @@ export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>(
 						} = contextService.extractRawGqlContext(context as TypedSubscriptionContext | CommonContext);
 
 						if (session) {
-							usersService.onDisconnect(session);
+							presenceService.onDisconnect(session);
 						}
 					},
 				},
@@ -50,5 +50,5 @@ export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>(
 			context: (context: TypedSubscriptionContext | CommonContext) => contextService.setupGqlContext(context),
 		};
 	},
-	inject: [EnvironmentConfig, ContextService, UsersService],
+	inject: [EnvironmentConfig, ContextService, PresenceService],
 });
