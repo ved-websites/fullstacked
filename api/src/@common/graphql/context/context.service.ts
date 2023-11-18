@@ -1,3 +1,4 @@
+import { TypedI18nService } from '$i18n/i18n.service';
 import { Auth, LuciaFactory } from '$users/auth/lucia/lucia.factory';
 import { COOKIE_NAME, setupRequest } from '$users/auth/lucia/lucia.middleware';
 import { ExecutionContext, Inject, Injectable } from '@nestjs/common';
@@ -10,7 +11,10 @@ export type CommonContext = { req: Request; res: Response };
 
 @Injectable()
 export class ContextService {
-	constructor(@Inject(LuciaFactory) private readonly auth: Auth) {}
+	constructor(
+		@Inject(LuciaFactory) private readonly auth: Auth,
+		private readonly i18n: TypedI18nService,
+	) {}
 
 	parseCookies(request: Request) {
 		const list: Record<string, string> = {};
@@ -41,7 +45,7 @@ export class ContextService {
 		}
 
 		if (!('req' in context)) {
-			throw 'Internal server error';
+			throw this.i18n.t('common.errors.internal-server-error');
 		}
 
 		const req = context.req;

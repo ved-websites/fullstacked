@@ -1,7 +1,7 @@
 import type { RoutingMap } from '$i18n-config';
 
 /**
- * Map of translation keys to routes data.
+ * Map of translation keys (files) to routes data.
  *
  * Edit this file to make keys only load on specified routes (can be regex).
  *

@@ -1,4 +1,5 @@
 import { ContextService } from '$graphql/context/context.service';
+import { TypedI18nService } from '$i18n/i18n.service';
 import { PrismaService } from '$prisma/prisma.service';
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -10,6 +11,7 @@ export class RolesGuard implements CanActivate {
 		private reflector: Reflector,
 		private readonly prisma: PrismaService,
 		private readonly rolesService: RolesService,
+		private readonly i18n: TypedI18nService,
 	) {}
 
 	async canActivate(context: ExecutionContext) {
@@ -41,7 +43,7 @@ export class RolesGuard implements CanActivate {
 		);
 
 		if (!hasRole) {
-			throw new ForbiddenException('User does not have an appropriate role to access this resource.');
+			throw new ForbiddenException(this.i18n.t('auth.errors.roles.does-not-have-role'));
 		}
 
 		return true;

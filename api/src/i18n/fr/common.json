@@ -2,6 +2,7 @@
 	"errors": {
 		"throttler": {
 			"forbidden": "Vous avez envoyé trop de requêtes et avez été limité. Réessayez dans quelques secondes!"
-		}
+		},
+		"internal-server-error": "Erreur interne du serveur"
 	}
 }

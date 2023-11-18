@@ -1,3 +1,4 @@
+import { TypedI18nService } from '$i18n/i18n.service';
 import { MinioClientService } from '$minio/minio-client.service';
 import { PrismaService } from '$prisma/prisma.service';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
@@ -16,13 +17,14 @@ export class ProfilePictureService {
 		private minioClientService: MinioClientService,
 		private prisma: PrismaService,
 		private eventEmitter: EventEmitter2,
+		private readonly i18n: TypedI18nService,
 	) {}
 
 	readonly acceptedFileExtension: string[] = ['jpeg', 'jpg', 'png', 'webp'];
 
 	async uploadImage(file: FileUpload, user: User) {
 		if (!this.acceptedFileExtension.some((extension) => file.filename.endsWith(extension))) {
-			throw new HttpException('Image type not supported.', HttpStatus.BAD_REQUEST);
+			throw new HttpException(this.i18n.t('files.errors.images.filetype.not-supported'), HttpStatus.BAD_REQUEST);
 		}
 
 		const uploadedImage = await this.minioClientService.upload(file, PROFILE_PICTURE_BUCKET_NAME);

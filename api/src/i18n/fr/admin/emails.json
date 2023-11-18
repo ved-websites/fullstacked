@@ -3,7 +3,7 @@
 		"subject": "Vous avez été invité à rejoindre le site Fullstacked!",
 		"body": {
 			"cta-button": "S'inscrire maintenant!",
-			"greetings": "Bonjour, {name}!",
+			"greetings": "Bonjour, {{name}}!",
 			"preview": "Vous avez été invité à rejoindre le site Fullstacked!"
 		}
 	}

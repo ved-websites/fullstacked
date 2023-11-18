@@ -1,5 +1,6 @@
 import { sensitiveThrottlerConf } from '$app/throttler.guard';
 import { getErrorMessage } from '$i18n/i18n.error';
+import { TypedI18nService } from '$i18n/i18n.service';
 import { Session } from '$prisma-graphql/session';
 import { User } from '$prisma-graphql/user';
 import { PrismaSelector } from '$prisma/prisma.service';
@@ -26,7 +27,10 @@ import { AuthSession, LuciaSession } from './session.decorator';
 
 @Resolver()
 export class AuthResolver {
-	constructor(private readonly authService: AuthService) {}
+	constructor(
+		private readonly authService: AuthService,
+		private readonly i18n: TypedI18nService,
+	) {}
 
 	@Query(() => LiveUser, { nullable: true })
 	async getSessionUser(@AuthSession() { user }: LuciaSession, @SelectQL() select: PrismaSelector) {
@@ -71,11 +75,11 @@ export class AuthResolver {
 				const userPassError: ErrorMessage[] = ['AUTH_INVALID_PASSWORD', 'AUTH_INVALID_KEY_ID'];
 
 				if (userPassError.includes(error.message)) {
-					throw new UnauthorizedException('Invalid username or password!');
+					throw new UnauthorizedException(this.i18n.t('auth.errors.login'));
 				}
 			}
 
-			throw new InternalServerErrorException();
+			throw new InternalServerErrorException(this.i18n.t('common.errors.internal-server-error'));
 		}
 	}
 

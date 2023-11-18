@@ -1,0 +1,8 @@
+{
+	"upload": {
+		"invalid": "Fichier non valide! Assurez-vous que vous envoyez moins de {{count}} fichiers et que les fichiers font moins de {{size}} Mo.",
+		"minio": {
+			"generic": "Erreur lors du téléversement de fichier!"
+		}
+	}
+}

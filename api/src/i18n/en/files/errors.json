@@ -1,0 +1,16 @@
+{
+	"upload": {
+		"invalid": "Invalid file! Make sure that you are sending less than {{count}} files and that the files are less than {{size}} {{size:gt; 1:MBs; default:MB}}.",
+		"minio": {
+			"generic": "Error uploading file!"
+		}
+	},
+	"images": {
+		"filetype": {
+			"not-supported": "Image type not supported."
+		}
+	},
+	"profile-picture": {
+		"nonexistent": "Profile picture does not exist!"
+	}
+}

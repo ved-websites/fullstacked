@@ -4,7 +4,7 @@
 		"body": {
 			"preview": "You have been invited to join the Fullstacked Website!",
 			"cta-button": "Register now!",
-			"greetings": "Hello, {name}!"
+			"greetings": "Hello, {{name}}!"
 		}
 	}
 }

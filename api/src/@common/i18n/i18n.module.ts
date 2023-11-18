@@ -1,4 +1,5 @@
 import { Global, Module } from '@nestjs/common';
+import parserFactory from '@sveltekit-i18n/parser-default';
 import {
 	AcceptLanguageResolver,
 	GraphQLWebsocketResolver,
@@ -13,6 +14,8 @@ import { SessionI18nResolver } from './session.i18n-resolver';
 
 export const fallbackLanguage = 'en';
 
+const templateParser = parserFactory();
+
 @Global()
 @Module({
 	imports: [
@@ -23,6 +26,14 @@ export const fallbackLanguage = 'en';
 					path: path.resolve('.', 'src/i18n'),
 					watch: true,
 					includeSubfolders: true,
+				},
+				formatter: (template: string, ...args: unknown[]) => {
+					const { __lang: lang, ...payload } = args[0] as {
+						__lang: string;
+						[x: string]: unknown;
+					};
+
+					return templateParser.parse(template, [payload], lang, '');
 				},
 				throwOnMissingKey: false,
 				// typesOutputPath: path.resolve('.', 'src/@common/i18n/@generated/i18n.generated.ts'),

@@ -6,5 +6,8 @@
 		"reset": {
 			"no-attempt-found": "Aucune tentative de réinitialisation du mot de passe n'a été trouvée avec le jeton donné ; le jeton est peut être invalide ou expiré."
 		}
+	},
+	"roles": {
+		"does-not-have-role": "L'utilisateur ne dispose pas d'un rôle approprié pour accéder à cette ressource."
 	}
 }

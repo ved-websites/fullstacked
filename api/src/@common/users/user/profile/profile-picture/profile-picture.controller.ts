@@ -1,3 +1,4 @@
+import { TypedI18nService } from '$i18n/i18n.service';
 import { BadRequestException, Controller, Get, Header, Param, StreamableFile } from '@nestjs/common';
 import { ProfilePictureService } from './profile-picture.service';
 
@@ -5,7 +6,10 @@ import { ProfilePictureService } from './profile-picture.service';
 export class ProfilePictureController {
 	static readonly PROFILE_PICTURE_MAX_AGE_MINUTES = 15;
 
-	constructor(private profilePictureService: ProfilePictureService) {}
+	constructor(
+		private profilePictureService: ProfilePictureService,
+		private readonly i18n: TypedI18nService,
+	) {}
 
 	@Get(':ref')
 	@Header('Cache-Control', `max-age=${ProfilePictureController.PROFILE_PICTURE_MAX_AGE_MINUTES * 60 * 1000}`)
@@ -19,7 +23,7 @@ export class ProfilePictureController {
 				type: `image/${extension}`,
 			});
 		} catch (error) {
-			throw new BadRequestException('Profile picture does not exist!');
+			throw new BadRequestException(this.i18n.t('files.errors.profile-picture.nonexistent'));
 		}
 	}
 }

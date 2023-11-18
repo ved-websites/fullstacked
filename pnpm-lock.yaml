@@ -119,6 +119,9 @@ importers:
       '@prisma/client':
         specifier: 4.16.2
         version: 4.16.2(prisma@4.16.2)
+      '@sveltekit-i18n/parser-default':
+        specifier: 1.1.1
+        version: 1.1.1
       axios:
         specifier: 1.5.0
         version: 1.5.0
@@ -6446,7 +6449,7 @@ packages:
       normalize-path: 3.0.0
       readdirp: 3.6.0
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
 
   /chownr@2.0.0:
     resolution: {integrity: sha512-bIomtDF5KGpdogkLd9VspvFzk9KfpyyGlS8YFVZl7TGPBHL5snIOnxeshwVgPteQ9b4Eydl+pVbIyE1DcvCWgQ==}
@@ -8480,6 +8483,7 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
     requiresBuild: true
+    dev: true
     optional: true
 
   /fsevents@2.3.3:
@@ -12441,7 +12445,7 @@ packages:
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
     dev: true
 
   /rollup@4.4.1:
@@ -14531,7 +14535,7 @@ packages:
       postcss: 8.4.31
       rollup: 3.27.2
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
     dev: true
 
   /vite@4.5.0(@types/node@18.16.18):
@@ -14567,7 +14571,7 @@ packages:
       postcss: 8.4.31
       rollup: 3.27.2
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
     dev: true
 
   /vite@5.0.0(@types/node@18.16.18):

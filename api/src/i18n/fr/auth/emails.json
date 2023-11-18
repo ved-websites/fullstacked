@@ -1,7 +1,18 @@
 {
 	"forgot_password_request": {
 		"body": {
-			"preview": "Mot de passe oublié?"
-		}
+			"preview": "Mot de passe oublié?",
+			"cta-button": "Réinitialiser le mot de passe",
+			"details": "Une demande de réinitialisation de votre mot de passe a été effectuée. Si vous n'avez pas fait cette demande, vous pouvez ignorer ce courriel."
+		},
+		"subject": "Demande de réinitialisation du mot de passe"
+	},
+	"password_reset": {
+		"body": {
+			"details": "Ceci s'agit d'un simple courriel pour vous informer que vous avez modifié votre email pour le site Fullstacked!",
+			"preview": "Votre mot de passe a été mis à jour!",
+			"wrong-change-note": "Vous n'avez pas fait ce changement vous-même? Contactez directement guillaumemarcoux@gmail.com pour résoudre ce problème le plus rapidement possible."
+		},
+		"subject": "Mise à jour de mot de passe"
 	}
 }
