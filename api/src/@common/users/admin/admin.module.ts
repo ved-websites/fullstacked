@@ -1,5 +1,4 @@
 import { EmailModule } from '$email/email.module';
-import { TypedI18nModule } from '$i18n/i18n.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { AuthModule } from '$users/auth/auth.module';
 import { RolesModule } from '$users/auth/roles/roles.module';
@@ -10,7 +9,7 @@ import { AdminService } from './admin.service';
 import { AdminListener } from './listeners/admin.listener';
 
 @Module({
-	imports: [TypedI18nModule, PrismaModule, AuthModule, RolesModule, EmailModule, PresenceModule],
+	imports: [PrismaModule, AuthModule, RolesModule, EmailModule, PresenceModule],
 	providers: [AdminResolver, AdminService, AdminListener],
 })
 export class AdminModule {}

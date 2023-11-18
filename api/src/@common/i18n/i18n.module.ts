@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import {
 	AcceptLanguageResolver,
 	GraphQLWebsocketResolver,
@@ -13,6 +13,7 @@ import { SessionI18nResolver } from './session.i18n-resolver';
 
 export const fallbackLanguage = 'en';
 
+@Global()
 @Module({
 	imports: [
 		NestI18nModule.forRootAsync({
