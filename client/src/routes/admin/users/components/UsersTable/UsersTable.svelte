@@ -27,6 +27,8 @@
 	export let tableClass: string = '';
 	export let tableBodyClass: string = 'divide-y';
 
+	$: sortedUsers = (users ?? []).sort((a, b) => a.email.localeCompare(b.email));
+
 	type Events = {
 		// eslint-disable-next-line no-undef
 		deleteUser: T;
@@ -41,8 +43,8 @@
 		<TableHeadCell>{$t('admin.users.tables.columns.actions')}</TableHeadCell>
 	</TableHead>
 	<TableBody {tableBodyClass}>
-		{#if users?.length}
-			{#each users as user, i}
+		{#if sortedUsers.length}
+			{#each sortedUsers as user, i (user.email)}
 				{@const popoverId = `info-${name}${i}`}
 				<TableBodyRow>
 					<TableBodyCell>
@@ -76,7 +78,7 @@
 	</TableBody>
 </Table>
 
-{#each users ?? [] as user, i}
+{#each sortedUsers as user, i (user.email)}
 	<Popover defaultClass="p-3 flex flex-col gap-3" class="w-64 text-sm font-light" triggeredBy="#info-{name}{i}">
 		<div slot="title" class="font-semibold text-gray-900 dark:text-white text-center">{$t('admin.users.tables.userinfo.heading')}</div>
 		<div class="flex justify-between gap-3">

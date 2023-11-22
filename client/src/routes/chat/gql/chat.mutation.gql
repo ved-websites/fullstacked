@@ -1,5 +1,5 @@
 mutation SendMessage($message: String!) {
 	addMessage(data: { text: $message }) {
-		text
+		...All_Messages_insert
 	}
 }

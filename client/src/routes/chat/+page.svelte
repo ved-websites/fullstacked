@@ -55,15 +55,17 @@
 		},
 	});
 
-	subscribe(NewMessageStore, ({ data }) => {
+	subscribe([NewMessageStore], ({ data }) => {
 		if (!data) {
 			return;
 		}
 
-		if (data.messageAdded.user.email == $sessionUser.email) {
+		const newMessage = data.messageAdded;
+
+		if (newMessage.user.email == $sessionUser.email) {
 			messages = messages.map((m) => {
-				if (!m.id && m.text == data.messageAdded.text) {
-					m = { ...data.messageAdded, active: true };
+				if (!m.id && m.text == newMessage.text) {
+					m = { ...newMessage, active: true };
 				}
 				return m;
 			});
@@ -71,7 +73,7 @@
 			messages = [
 				...messages.filter((m) => m.active),
 				{
-					...data.messageAdded,
+					...newMessage,
 					active: true,
 				},
 				...messages.filter((m) => !m.active),

@@ -2,18 +2,19 @@ import { sensitiveThrottlerConf } from '$app/throttler.guard';
 import { getErrorMessage } from '$i18n/i18n.error';
 import { TypedI18nService } from '$i18n/i18n.service';
 import { Session } from '$prisma-graphql/session';
-import { User } from '$prisma-graphql/user';
+import { User, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
 import { LiveUser } from '$users/dtos/LiveUser.dto';
 import { Origin } from '$utils/origin.decorator';
 import { ForbiddenException, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { Throttle } from '@nestjs/throttler';
 import { ErrorMessage } from 'lucia/dist/auth/error';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { Public } from './auth.guard';
 import { AuthService } from './auth.service';
+import { USER_EDITED } from './constants/triggers';
 import { ForgotPasswordRequestOutput } from './dtos/forgot-password-request.output';
 import { LoggedUserOutput } from './dtos/logged-user.output';
 import { LoginUserInput } from './dtos/login-user.input';
@@ -86,7 +87,7 @@ export class AuthResolver {
 	@Mutation(() => Boolean)
 	async logout(@LuciaAuth() authRequest: LuciaAuthRequest, @AuthSession() session: LuciaSession | null) {
 		if (session) {
-			await this.authService.logout(session.sessionId);
+			await this.authService.logout(session);
 
 			authRequest.setSession(null);
 
@@ -151,5 +152,25 @@ export class AuthResolver {
 
 			throw new ForbiddenException(message);
 		}
+	}
+
+	@Subscription(() => LiveUser, {
+		name: USER_EDITED,
+		filter: (payload: { [USER_EDITED]: LiveUser }, variables) => {
+			const { id, email } = variables.where as UserWhereUniqueInput;
+
+			if (id) {
+				return id === payload[USER_EDITED].id;
+			}
+
+			if (email) {
+				return email === payload[USER_EDITED].email;
+			}
+
+			return false;
+		},
+	})
+	subscribeUserEdited(@SelectQL() select: PrismaSelector, @Args('where') _where: UserWhereUniqueInput) {
+		return this.authService.subscribeUserEdited(select, USER_EDITED);
 	}
 }

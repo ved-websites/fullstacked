@@ -4,6 +4,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import { LangInterceptor } from './lang.interceptor';
+import { UsersListener } from './listeners/users.listener';
 import { OnboardingModule } from './onboarding/onboarding.module';
 import { PresenceModule } from './presence/presence.module';
 import { UserModule } from './user/user.module';
@@ -18,6 +19,7 @@ import { UserModule } from './user/user.module';
 			provide: APP_INTERCEPTOR,
 			useClass: LangInterceptor,
 		},
+		UsersListener,
 	],
 	exports: [AuthModule],
 })

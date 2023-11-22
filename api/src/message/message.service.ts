@@ -3,7 +3,7 @@ import type {
 	MessageUpdateWithWhereUniqueWithoutUserInput,
 	MessageWhereInput,
 } from '$prisma-graphql/message';
-import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
+import { PrismaSelector, PrismaService, PrismaSubscribeTriggers } from '$prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import type { User } from 'lucia';
 import { MESSAGE_ADDED, MESSAGE_UPDATED } from './constants/triggers';
@@ -43,7 +43,7 @@ export class MessageService {
 		return updatedMessage;
 	}
 
-	subscribeAdded(select: PrismaSelector, triggers: Parameters<PrismaService['subscribe']>[0]) {
+	subscribeAdded(select: PrismaSelector, triggers: PrismaSubscribeTriggers) {
 		return this.prisma.subscribe(triggers, select);
 	}
 }

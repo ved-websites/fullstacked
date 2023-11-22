@@ -1,0 +1,12 @@
+subscription AdminUserData($email: String!) {
+	userEdited(where: { email: $email }) {
+		email
+		firstName
+		lastName
+		roles {
+			text
+		}
+		profilePictureRef
+		online
+	}
+}

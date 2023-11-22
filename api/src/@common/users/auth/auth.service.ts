@@ -3,14 +3,14 @@ import { I18nException } from '$i18n/i18n.error';
 import { fallbackLanguage } from '$i18n/i18n.module';
 import { TypedI18nService } from '$i18n/i18n.service';
 import { User } from '$prisma-client';
-import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
+import { PrismaSelector, PrismaService, PrismaSubscribeTriggers } from '$prisma/prisma.service';
 import { loadLuciaUtils } from '$users/auth/lucia/modules-compat';
-import { LiveUser } from '$users/dtos/LiveUser.dto';
 import { PresenceService, UserOnlineSelector } from '$users/presence/presence.service';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes } from 'lucia';
 import { EnvironmentConfig } from '~/env.validation';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';
+import { LuciaSession } from './session.decorator';
 
 @Injectable()
 export class AuthService {
@@ -51,18 +51,14 @@ export class AuthService {
 	async getAuthUser(email: string, select: PrismaSelector) {
 		const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(select, 'online');
 
-		const user = (await this.prisma.user.findUnique({
+		const user = await this.prisma.user.findUnique({
 			where: {
 				email,
 			},
 			...selector,
-		})) as LiveUser | null;
+		});
 
-		if (user && online) {
-			user.online = this.presenceService.isUserConnected(user.email);
-		}
-
-		return user;
+		return this.presenceService.convertUserToLiveUser(user, online);
 	}
 
 	async getUnregisteredUser(registerToken: string) {
@@ -139,7 +135,11 @@ export class AuthService {
 	async login(email: string, password: string) {
 		const key = await this.auth.useKey(this.providerId, email, password);
 
-		return this.loginUser(key.userId);
+		const session = await this.loginUser(key.userId);
+
+		this.presenceService.onConnect(session);
+
+		return session;
 	}
 
 	async loginUser(userId: string) {
@@ -148,8 +148,10 @@ export class AuthService {
 		return session;
 	}
 
-	async logout(sessionId: string) {
-		return await this.auth.invalidateSession(sessionId);
+	async logout(session: LuciaSession) {
+		await this.auth.invalidateSession(session.sessionId);
+
+		this.presenceService.onDisconnect(session);
 	}
 
 	async getForgotPasswordRequestToken() {
@@ -295,5 +297,9 @@ export class AuthService {
 			from: { email: this.env.EMAIL_FROM },
 			subject: this.i18n.t('auth.emails.password_reset.subject', { lang }),
 		});
+	}
+
+	subscribeUserEdited(select: PrismaSelector, triggers: PrismaSubscribeTriggers) {
+		return this.prisma.subscribe(triggers, select);
 	}
 }

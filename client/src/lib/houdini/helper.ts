@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { browser } from '$app/environment';
 import { MutationStore, QueryStore, type QueryResult, type SubscriptionStore } from '$houdini';
@@ -12,7 +11,7 @@ export type GraphQLQuery = <T extends (new (...args: never[]) => QueryStore<any,
 	...options: Parameters<(T extends QueryStore<any, any> ? T : T extends new () => QueryStore<any, any> ? InstanceType<T> : never)['fetch']>
 ) => Promise<
 	GraphQLOperationResult<
-		// @ts-ignore oh yeah btw `infer D extends any` doesn't work, love it
+		// @ts-expect-error oh yeah btw `infer D extends any` doesn't work, love it
 		T extends new () => QueryStore<infer D extends any, any> ? D : T extends QueryStore<infer D extends any, any> ? D : never
 	>
 >;
@@ -53,26 +52,47 @@ export function createHoudiniHelpers(event: RequestEvent) {
 	};
 }
 
+/**
+ * Easily subscribes to the SubscriptionStore provided.
+ *
+ * This function handles unsubscriptions automatically when called in the
+ * component initialization, but otherwise you need to handle the returned
+ * unsubscriber yourself.
+ */
 export function subscribe<T extends new (...args: never[]) => SubscriptionStore<any, any>>(
-	store: T,
+	storeData: [T, ...Parameters<InstanceType<T>['listen']>],
 	...params: Parameters<InstanceType<T>['subscribe']>
 ) {
 	if (!browser) {
-		return;
+		return () => {
+			// Do nothing when not on browser
+		};
 	}
+
+	const [store, ...storeListenParams] = storeData;
 
 	const storeInstance = new store();
 
-	let unsubscriber: () => void;
+	let unsubscriber: ReturnType<(typeof storeInstance)['subscribe']>;
 
-	storeInstance.listen().then(() => {
+	// NEED TO ADD VARIABLES TO LISTEN METHOD
+	storeInstance.listen(...storeListenParams).then(() => {
 		// @ts-expect-error TS no likey rest Parameters
 		unsubscriber = storeInstance.subscribe(...params);
 	});
 
-	onDestroy(() => {
-		storeInstance.unlisten().then(() => {
-			unsubscriber?.();
+	const unsubscribe = () => {
+		unsubscriber?.();
+		storeInstance.unlisten();
+	};
+
+	try {
+		onDestroy(() => {
+			unsubscribe();
 		});
-	});
+	} catch (error) {
+		// Do nothing on error, that is probably called outside component initialization
+	}
+
+	return unsubscribe;
 }

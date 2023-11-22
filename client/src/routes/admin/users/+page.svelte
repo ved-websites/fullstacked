@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { AdminUserDataStore } from '$houdini';
 	import { getI18n } from '$i18n';
+	import { subscribe } from '$lib/houdini/helper';
 	import { Button, Heading, Modal } from 'flowbite-svelte';
 	import type { ComponentEvents } from 'svelte';
 	import type { PageData } from './$houdini';
@@ -13,13 +15,35 @@
 
 	export let data: PageData;
 
+	let usersSubMap = new Map<string, ReturnType<typeof subscribe>>();
+
 	$: ({ ManageGetUsers } = data);
 
-	$: users = $ManageGetUsers.data?.users;
+	$: registeredUser = $ManageGetUsers.data?.users;
 	$: unregisteredUsers = $ManageGetUsers.data?.unregisteredUsers.map((u) => ({ ...u, sendingNewInvite: false as boolean }));
+
+	$: registeredUser?.forEach((user) => {
+		usersSubMap.get(user.email)?.();
+
+		const unsubscriber = subscribe([AdminUserDataStore, { email: user.email }], ({ data }) => {
+			if (!data) {
+				return;
+			}
+
+			const editedUser = data.userEdited;
+
+			onUserUpdated(editedUser);
+		});
+
+		usersSubMap.set(user.email, unsubscriber);
+	});
 
 	let deleteModalOpen = false;
 	let deletionUser: BaseUser | undefined;
+
+	function onUserUpdated(user: NonNullable<typeof registeredUser>[number]) {
+		registeredUser = [...registeredUser!.filter((u) => u.email !== user.email), user];
+	}
 
 	function onDeleteUser(event: ComponentEvents<UsersTable>['deleteUser']) {
 		const { detail: user } = event;
@@ -39,10 +63,8 @@
 	<div>
 		<Heading tag="h4" class="mb-2">{$t('admin.users.tables.registered.heading')}</Heading>
 
-		<UsersTable {users} on:deleteUser={onDeleteUser} />
+		<UsersTable users={registeredUser} on:deleteUser={onDeleteUser} />
 	</div>
-
-	<!-- <Hr /> -->
 
 	<div>
 		<Heading tag="h4" class="mb-2">{$t('admin.users.tables.unregistered.heading')}</Heading>

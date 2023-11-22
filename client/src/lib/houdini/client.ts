@@ -34,6 +34,7 @@ export default new HoudiniClient({
 
 					return createHeaders(session.token);
 				},
+				lazy: false,
 			});
 
 			return wsClient;

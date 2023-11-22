@@ -1,11 +1,12 @@
 import type { SessionUser } from '$auth/auth-handler';
-import { getNavElement, rolesIntersect } from '$lib/components/nav/nav-elements';
-import { handleLoginRedirect } from '$lib/utils/login';
+import { getNavElement, rolesIntersect, type NavElement } from '$lib/components/nav/nav-elements';
+import { handleAccessRedirect, handleLoginRedirect } from '$lib/utils/login';
 import { navElements } from '$navigation/routes';
 import type { RequestEvent } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 
+/** List of urls available to logged out users. */
 export const urlsWhitelist: string[] = ['/', '/login', '/register', '/forgot_password'] satisfies `/${string}`[];
 
 export function verifyUserAccess(event: RequestEvent) {
@@ -17,11 +18,27 @@ export function verifyUserAccess(event: RequestEvent) {
 
 	// if no route id, this allow user to see 404 page
 	if (!route.id) {
-		return;
+		return true;
 	}
 
-	if (userCanAccessNav(sessionUser, navElements, url.pathname)) {
-		return;
+	if (userCanAccessNav(sessionUser, navElements, url)) {
+		if (url.pathname == '/no_access') {
+			const pathTo = url.searchParams.get('pathTo');
+
+			if (pathTo) {
+				throw redirect(StatusCodes.SEE_OTHER, pathTo);
+			}
+		}
+
+		return true;
+	}
+
+	if (sessionUser) {
+		if (url.pathname == '/no_access') {
+			return true;
+		} else {
+			throw redirect(StatusCodes.SEE_OTHER, handleAccessRedirect(url));
+		}
 	}
 
 	throw redirect(StatusCodes.SEE_OTHER, handleLoginRedirect(url));
@@ -37,35 +54,40 @@ export function verifyUserAccess(event: RequestEvent) {
  *
  * Finally, check roles for both user and nav element.
  */
-export function userCanAccessNav(user: SessionUser, ...getNavElementArgs: Parameters<typeof getNavElement>) {
-	const userToCheck = user;
-	const currentNav = getNavElement(...getNavElementArgs);
+export function userCanAccessNav(user: SessionUser, navElements: NavElement[], url: URL) {
+	const pathname = (() => {
+		if (url.pathname === '/no_access' && url.searchParams.has('pathTo')) {
+			return url.searchParams.get('pathTo')!;
+		}
+
+		return url.pathname;
+	})();
+
+	const currentNav = getNavElement(navElements, pathname);
 
 	if (!currentNav) {
-		if (!userToCheck) {
+		if (!user) {
 			// allow logged-out users to access whitelisted urls
-			const [, route] = getNavElementArgs;
-
-			return urlsWhitelist.includes(route);
+			return urlsWhitelist.includes(pathname);
 		}
 
 		return true;
 	}
 
-	if (!userToCheck) {
-		return currentNav.isPublic;
+	if (!user) {
+		return Boolean(currentNav.isPublic);
 	}
 
 	if (!currentNav.roles || currentNav.roles.length === 0) {
 		return true;
 	}
 
-	if (!userToCheck.roles?.length) {
+	if (!user.roles?.length) {
 		return false;
 	}
 
 	return rolesIntersect(
 		currentNav.roles,
-		userToCheck.roles.map((role) => role.text),
+		user.roles.map((role) => role.text),
 	);
 }

@@ -7,6 +7,7 @@ export type BaseNavElement = {
 
 export type LinkNavElement = BaseNavElement & {
 	url: `/${string}`;
+	matches?: (`/${string}` | RegExp)[];
 };
 export type GroupNavElement = BaseNavElement & {
 	id: string;
@@ -21,7 +22,11 @@ export function getNavElement(navElements: NavElement[], route: string) {
 			return getNavElement(navElem.elements, route);
 		}
 
-		return navElem.url === route;
+		const navElemMatches = [navElem.url, ...(navElem.matches ?? [])];
+
+		const result = navElemMatches.some((matcher) => route.match(matcher));
+
+		return result;
 	}) as LinkNavElement | undefined;
 
 	return navElemFound;

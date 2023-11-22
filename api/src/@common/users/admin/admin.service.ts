@@ -4,6 +4,7 @@ import { TypedI18nService } from '$i18n/i18n.service';
 import { UserCreateInput, UserUpdateInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { AuthService } from '$users/auth/auth.service';
+import { USER_EDITED } from '$users/auth/constants/triggers';
 import { RolesService } from '$users/auth/roles/roles.service';
 import { LuciaUser } from '$users/auth/session.decorator';
 import { LiveUser } from '$users/dtos/LiveUser.dto';
@@ -47,16 +48,12 @@ export class AdminService {
 	async getUser(select: PrismaSelector, where: UserWhereUniqueInput) {
 		const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(select, 'online');
 
-		const user = (await this.prisma.user.findFirst({
+		const user = await this.prisma.user.findFirst({
 			where,
 			...selector,
-		})) as LiveUser | null;
+		});
 
-		if (user && online) {
-			user.online = this.presenceService.isUserConnected(user.email);
-		}
-
-		return user;
+		return this.presenceService.convertUserToLiveUser(user, online);
 	}
 
 	async createUser(data: UserCreateInput, origin: ADMIN_CREATE_USER_EVENT_TYPE[1]) {
@@ -100,8 +97,12 @@ export class AdminService {
 			}
 		}
 
-		const updatedUser = await this.prisma.mutate(['USER_EDITED'], select, (allSelect) => {
-			return this.prisma.user.update({ where, data, ...allSelect });
+		const updatedUser = await this.prisma.mutate([USER_EDITED], select, async (allSelect) => {
+			const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(allSelect, 'online');
+
+			const user = await this.prisma.user.update({ where, data, ...selector });
+
+			return this.presenceService.convertUserToLiveUser(user, online);
 		});
 
 		return updatedUser;

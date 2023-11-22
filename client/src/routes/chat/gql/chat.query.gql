@@ -1,5 +1,5 @@
 query GetChatMessages @blocking {
-	messages {
+	messages @list(name: "All_Messages") {
 		id
 		text
 		time

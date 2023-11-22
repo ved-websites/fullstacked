@@ -23,6 +23,7 @@ export const navElements: NavElement[] = [
 				title: k('navbar.navigation.admin-users'),
 				url: '/admin/users',
 				drawerIconPath: 'i-mdi-account-details',
+				matches: [/\/admin\/users\/.+/],
 			},
 			{
 				title: k('navbar.navigation.admin-data'),

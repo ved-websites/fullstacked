@@ -11,7 +11,6 @@
 			"edit": "Modifier",
 			"resend-invite": {
 				"button": "Renvoyer email d'invitation",
-				"toast": "Un nouvel email d'invitation a été envoyé à {{email}}!",
 				"toasts": {
 					"error-local": "Une erreur s'est produite dans votre navigateur lors de l'envoi de la nouvelle invitation!",
 					"error-server": "L'invitation n'a pas pu être envoyée!",

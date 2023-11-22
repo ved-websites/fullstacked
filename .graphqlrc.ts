@@ -13,6 +13,7 @@ const tsCommonConfig: RawTypesConfig = {
 const clientDocuments = [
 	'client/$houdini/graphql/documents.gql',
 	'client/src/**/*.graphql',
+	'client/src/**/*.gql',
 	'client/src/**/*.svelte',
 	'client/src/**/*.server.ts',
 ];

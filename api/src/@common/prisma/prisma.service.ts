@@ -15,6 +15,8 @@ export type ExtractedPrismaSelector = {
 	selector: PrismaSelector;
 };
 
+export type PrismaSubscribeTriggers = Parameters<PrismaService['subscribe']>[0];
+
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
 	private eventSubsSelectors: Record<string, unknown[] | undefined> = {};
@@ -72,9 +74,15 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
 		const returnValue = await mutator(allSelect);
 
-		fullTriggers.forEach((triggerName) => this.pubSub.publish(triggerName, { [triggerName]: returnValue }));
+		this.publishSubs(fullTriggers, returnValue);
 
 		return returnValue;
+	}
+
+	publishSubs(triggers: PublishParamType | PublishParamType[], value: unknown) {
+		const fullTriggers = Array.isArray(triggers) ? triggers : [triggers];
+
+		fullTriggers.forEach((triggerName) => this.pubSub.publish(triggerName, { [triggerName]: value }));
 	}
 
 	extractSelectors<K extends string[]>(select: PrismaSelector, ...keysToExtract: K): Record<K[number], unknown> & ExtractedPrismaSelector;
