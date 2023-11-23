@@ -11,5 +11,8 @@
 		"links": {
 			"settings": "Paramètres"
 		}
+	},
+	"drawer": {
+		"header": "Navigation"
 	}
 }
