@@ -1,6 +1,9 @@
 /** @type {import('houdini').ConfigFile} */
 const config = {
-	schemaPath: '../api/src/_generated/nestjs-graphql/schema.gql',
+	schemaPath: './$houdini/graphql/generated-api-schema.gql',
+	watchSchema: {
+		url: 'http://localhost:3000/graphql',
+	},
 	defaultCachePolicy: 'NetworkOnly',
 	plugins: {
 		'houdini-svelte': {
