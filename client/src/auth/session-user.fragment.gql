@@ -1,0 +1,10 @@
+fragment SessionUserFragment on LiveUser {
+	email
+	firstName
+	lastName
+	roles {
+		text
+	}
+	profilePictureRef
+	lang
+}

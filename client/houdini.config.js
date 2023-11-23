@@ -11,6 +11,7 @@ const config = {
 			client: './src/lib/houdini/client.ts',
 		},
 	},
+	defaultFragmentMasking: 'disable',
 	types: {
 		User: {
 			keys: ['email'],

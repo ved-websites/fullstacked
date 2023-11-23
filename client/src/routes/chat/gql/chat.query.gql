@@ -1,12 +1,5 @@
 query GetChatMessages @blocking {
 	messages @list(name: "All_Messages") {
-		id
-		text
-		time
-		user {
-			email
-			firstName
-			lastName
-		}
+		...ChatMessageFragment
 	}
 }

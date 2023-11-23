@@ -1,12 +1,5 @@
 query GetUserFromSession @cache(policy: NetworkOnly) {
 	getSessionUser {
-		email
-		firstName
-		lastName
-		roles {
-			text
-		}
-		profilePictureRef
-		lang
+		...SessionUserFragment
 	}
 }
