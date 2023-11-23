@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { getI18n } from '$i18n';
 	import { getSessionUser, isDrawerHidden } from '$lib/stores';
 	import { navElements } from '$navigation/routes';
 	import { CloseButton, Drawer, Sidebar, SidebarDropdownWrapper, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
@@ -7,6 +8,8 @@
 	import DarkMode from '../DarkMode.svelte';
 	import Icon from '../Icon.svelte';
 	import { isNavElemVisible } from './utils';
+	let i18n = getI18n();
+	$: ({ t } = $i18n);
 
 	let sessionUser = getSessionUser();
 
@@ -21,7 +24,7 @@
 	<div class="flex items-center">
 		<h5 id="drawer-label" class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400">
 			<Icon class="i-mdi-information mr-3" />
-			Navigation
+			{$t('navbar.drawer.header')}
 		</h5>
 		<CloseButton on:click={isDrawerHidden.toggle} class="mb-4" />
 	</div>
@@ -31,7 +34,7 @@
 				{#each navElements.filter((navElement) => isNavElemVisible(navElement, $sessionUser)) as navElement}
 					{#if 'url' in navElement}
 						<SidebarItem
-							label={navElement.title}
+							label={$t(navElement.title)}
 							active={$page.url.pathname == navElement.url}
 							href={navElement.url}
 							on:click={() => isDrawerHidden.set(true)}
@@ -44,7 +47,7 @@
 						</SidebarItem>
 					{:else}
 						<SidebarDropdownWrapper
-							label={navElement.title}
+							label={$t(navElement.title)}
 							isOpen={navElement.elements.some((navSubElement) => $page.url.pathname == navSubElement.url)}
 						>
 							<svelte:fragment slot="icon">
@@ -60,7 +63,7 @@
 							</svelte:fragment>
 							{#each navElement.elements.filter((navSubElement) => navSubElement.isPublic || $sessionUser) as navSubElement}
 								<SidebarItem
-									label={navSubElement.title}
+									label={$t(navSubElement.title)}
 									active={$page.url.pathname == navSubElement.url}
 									href={navSubElement.url}
 									class="pl-8"
