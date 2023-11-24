@@ -23,6 +23,7 @@
 	// eslint-disable-next-line no-undef
 	export let users: T[] | undefined;
 	export let name: string = '';
+	export let showUserAvatars = false;
 
 	export let tableClass: string = '';
 	export let tableBodyClass: string = 'divide-y';
@@ -40,7 +41,7 @@
 <Table class={tableClass}>
 	<TableHead>
 		<TableHeadCell>{$t('admin.users.tables.columns.user')}</TableHeadCell>
-		<TableHeadCell>{$t('admin.users.tables.columns.actions')}</TableHeadCell>
+		<TableHeadCell class="text-right">{$t('admin.users.tables.columns.actions')}</TableHeadCell>
 	</TableHead>
 	<TableBody {tableBodyClass}>
 		{#if sortedUsers.length}
@@ -48,17 +49,21 @@
 				{@const popoverId = `info-${name}${i}`}
 				<TableBodyRow>
 					<TableBodyCell>
-						<slot name="user" {user} {popoverId}>
-							<div id="info-{name}{i}" class="inline-flex items-center gap-2">
+						{#if showUserAvatars}
+							<div id={popoverId} class="inline-flex items-center gap-2">
 								<UserAvatar {...user} class="hidden sm:flex lg:hidden xl:flex" />
 								<span>{user.email}</span>
 							</div>
-						</slot>
+						{:else}
+							<span id={popoverId}>{user.email}</span>
+						{/if}
 					</TableBodyCell>
 					<TableBodyCell>
-						<Button size="xs" href="/admin/users/{user.email}">{$t('admin.users.tables.actions.edit')}</Button>
-						<Button size="xs" on:click={() => dispatch('deleteUser', user)} color="red">{$t('admin.users.tables.actions.delete')}</Button>
-						<slot name="more-actions" {user} {popoverId} />
+						<div class="flex justify-end gap-1">
+							<Button size="xs" href="/admin/users/{user.email}">{$t('admin.users.tables.actions.edit')}</Button>
+							<Button size="xs" on:click={() => dispatch('deleteUser', user)} color="red">{$t('admin.users.tables.actions.delete')}</Button>
+							<slot name="more-actions" {user} {popoverId} />
+						</div>
 					</TableBodyCell>
 				</TableBodyRow>
 			{/each}

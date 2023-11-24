@@ -63,18 +63,17 @@
 	<div>
 		<Heading tag="h4" class="mb-2">{$t('admin.users.tables.registered.heading')}</Heading>
 
-		<UsersTable users={registeredUser} on:deleteUser={onDeleteUser} />
+		<UsersTable users={registeredUser} showUserAvatars on:deleteUser={onDeleteUser} />
 	</div>
 
 	<div>
 		<Heading tag="h4" class="mb-2">{$t('admin.users.tables.unregistered.heading')}</Heading>
 
 		<UsersTable name="unregistered" users={unregisteredUsers} on:deleteUser={onDeleteUser}>
-			<span slot="user" let:user let:popoverId id={popoverId}>{user.email}</span>
-			<svelte-fragment slot="more-actions" let:user>
+			<svelte:fragment slot="more-actions" let:user>
 				<ResendInviteButton {user} />
 				<CopyInviteButton {user} />
-			</svelte-fragment>
+			</svelte:fragment>
 		</UsersTable>
 	</div>
 </div>
