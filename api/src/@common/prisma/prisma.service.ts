@@ -85,8 +85,14 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 		fullTriggers.forEach((triggerName) => this.pubSub.publish(triggerName, { [triggerName]: value }));
 	}
 
-	extractSelectors<K extends string[]>(select: PrismaSelector, ...keysToExtract: K): Record<K[number], unknown> & ExtractedPrismaSelector;
-	extractSelectors<T extends Record<string, unknown>>(select: PrismaSelector, ...keysToExtract: (keyof T)[]): T & ExtractedPrismaSelector;
+	extractSelectors<K extends string[]>(
+		select: PrismaSelector,
+		...keysToExtract: K
+	): Partial<Record<K[number], unknown>> & ExtractedPrismaSelector;
+	extractSelectors<T extends Record<string, unknown>>(
+		select: PrismaSelector,
+		...keysToExtract: (keyof T)[]
+	): Partial<T> & ExtractedPrismaSelector;
 
 	extractSelectors<T extends Record<string, unknown>>(select: PrismaSelector, ...keysToExtract: (keyof T)[]) {
 		const extractedKeys: Record<string, unknown> = {};
@@ -103,7 +109,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 		}
 
 		return {
-			...(extractedKeys as T),
+			...(extractedKeys as Partial<T>),
 			selector: { select: selector } as unknown as PrismaSelector,
 		};
 	}
