@@ -33,7 +33,7 @@ export class AuthResolver {
 		private readonly i18n: TypedI18nService,
 	) {}
 
-	@Query(() => LiveUser, { nullable: true })
+	@Query(() => LiveUser)
 	async getSessionUser(@AuthSession() { user }: LuciaSession, @SelectQL() select: PrismaSelector) {
 		const authUser = await this.authService.getAuthUser(user.email, select);
 
