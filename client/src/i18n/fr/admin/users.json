@@ -34,6 +34,9 @@
 				"roles": {
 					"empty": "~ Aucun rôle ~",
 					"title": "Rôles"
+				},
+				"name": {
+					"none": "(sans nom)"
 				}
 			},
 			"heading": "Carte d'information"

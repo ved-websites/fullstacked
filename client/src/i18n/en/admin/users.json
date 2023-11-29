@@ -32,6 +32,9 @@
 		"userinfo": {
 			"heading": "Info Card",
 			"fields": {
+				"name": {
+					"none": "(no name)"
+				},
 				"roles": {
 					"title": "Roles",
 					"empty": "~ No Roles ~"
