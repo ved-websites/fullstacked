@@ -87,8 +87,8 @@ importers:
         specifier: 4.9.3
         version: 4.9.3(graphql@16.8.0)
       '@lucia-auth/adapter-prisma':
-        specifier: 3.0.1
-        version: 3.0.1(@prisma/client@4.16.2)(lucia@2.6.0)
+        specifier: 3.0.2
+        version: 3.0.2(@prisma/client@4.16.2)(lucia@2.7.4)
       '@nestjs/apollo':
         specifier: 12.0.9
         version: 12.0.9(@apollo/server@4.9.3)(@nestjs/common@10.2.5)(@nestjs/core@10.2.5)(@nestjs/graphql@12.0.9)(graphql@16.8.0)
@@ -159,8 +159,8 @@ importers:
         specifier: 5.14.0
         version: 5.14.0(graphql@16.8.0)
       lucia:
-        specifier: 2.6.0
-        version: 2.6.0
+        specifier: 2.7.4
+        version: 2.7.4
       nest-typed-config:
         specifier: 2.8.0
         version: 2.8.0(@nestjs/common@10.2.5)(axios@1.5.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
@@ -3162,14 +3162,14 @@ packages:
       esm-env: 1.0.0
     dev: true
 
-  /@lucia-auth/adapter-prisma@3.0.1(@prisma/client@4.16.2)(lucia@2.6.0):
-    resolution: {integrity: sha512-JZNl+721M5ApjtNiH+WUYstiC8cffcI/Y9IzKsa0uUhQMIHl2ObCrgO0R3fgHnjWHBjhQoK36g/r/iSJIDppBA==}
+  /@lucia-auth/adapter-prisma@3.0.2(@prisma/client@4.16.2)(lucia@2.7.4):
+    resolution: {integrity: sha512-EyJWZene1/zasPwPctv8wwNErZt5mwwm5JATbhg+kXr3R8pbC7lJfVzDTAeeFClVH5k/FywRcsBl3JkPaNIcow==}
     peerDependencies:
       '@prisma/client': ^4.2.0 || ^5.0.0
       lucia: ^2.0.0
     dependencies:
       '@prisma/client': 4.16.2(prisma@4.16.2)
-      lucia: 2.6.0
+      lucia: 2.7.4
     dev: false
 
   /@lukeed/csprng@1.1.0:
@@ -10375,8 +10375,8 @@ packages:
     resolution: {integrity: sha512-ERJq3FOzJTxBbFjZ7iDs+NiK4VI9Wz+RdrrAB8dio1oV+YvdPzUEE4QNiT2VD51DkIbCYRUUzCRkssXCHqSnKQ==}
     engines: {node: 14 || >=16.14}
 
-  /lucia@2.6.0:
-    resolution: {integrity: sha512-9GfRmEkhJ68EMAEOI6EKwnkHmQpEXeqRuP9ew+UhuZEmTCHrsTqwJ9f6pffEg7Im3BRBPlBlWzH5pxtjI+9OXQ==}
+  /lucia@2.7.4:
+    resolution: {integrity: sha512-do6Aah5kX2DUl7N0CvELWV1/b+qZGF0AUmUrkthYeNfXfgx4RAkWi4BkAlgGDBB/0c1WApb18mUD1pA5qTaWmw==}
     dev: false
 
   /macos-release@2.5.1:

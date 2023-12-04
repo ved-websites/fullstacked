@@ -8,7 +8,7 @@ import { join } from 'path';
 import { Environment, EnvironmentConfig } from '~/env.validation';
 import { ConfigModule } from '../configs/config.module';
 import { ContextModule } from './context/context.module';
-import { ContextService, type CommonContext, type TypedSubscriptionContext } from './context/context.service';
+import { ContextService, type CommonGQLContext, type TypedSubscriptionContext } from './context/context.service';
 
 export const schemaPath = join(process.cwd(), 'src/_generated/nestjs-graphql/schema.gql');
 
@@ -26,7 +26,7 @@ export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>(
 					onConnect: async (context) => {
 						const {
 							req: { session },
-						} = await contextService.setupGqlContext(context as TypedSubscriptionContext | CommonContext);
+						} = await contextService.setupGqlContext(context as TypedSubscriptionContext | CommonGQLContext);
 
 						if (session) {
 							presenceService.onConnect(session);
@@ -35,7 +35,7 @@ export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>(
 					onDisconnect: async (context) => {
 						const {
 							req: { session },
-						} = contextService.extractRawGqlContext(context as TypedSubscriptionContext | CommonContext);
+						} = contextService.extractRawGqlContext(context as TypedSubscriptionContext | CommonGQLContext);
 
 						if (session) {
 							presenceService.onDisconnect(session);
@@ -47,7 +47,7 @@ export const GraphQLModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>(
 			playground: false,
 			plugins: isDev ? [ApolloServerPluginLandingPageLocalDefault()] : undefined,
 			validationRules: [depthLimit(env.GRAPHQL_DEPTH_LIMIT)],
-			context: (context: TypedSubscriptionContext | CommonContext) => contextService.setupGqlContext(context),
+			context: (context: TypedSubscriptionContext | CommonGQLContext) => contextService.setupGqlContext(context),
 		};
 	},
 	inject: [EnvironmentConfig, ContextService, PresenceService],

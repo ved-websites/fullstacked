@@ -137,7 +137,7 @@ export class AuthService {
 
 		const session = await this.loginUser(key.userId);
 
-		this.presenceService.onConnect(session);
+		// this.presenceService.onConnect(session);
 
 		return session;
 	}
@@ -151,7 +151,9 @@ export class AuthService {
 	async logout(session: LuciaSession) {
 		await this.auth.invalidateSession(session.sessionId);
 
-		this.presenceService.onDisconnect(session);
+		// this.presenceService.onDisconnect(session);
+
+		return this.auth.createSessionCookie(null);
 	}
 
 	async getForgotPasswordRequestToken() {

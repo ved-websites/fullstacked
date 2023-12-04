@@ -7,7 +7,7 @@ import type { Request, Response } from 'express';
 import { ConnectionInitMessage, Context } from 'graphql-ws';
 
 export type TypedSubscriptionContext = Context<ConnectionInitMessage['payload'], { request?: Request }>;
-export type CommonContext = { req: Request; res: Response };
+export type CommonGQLContext = { req: Request; res: Response };
 
 @Injectable()
 export class ContextService {
@@ -37,7 +37,7 @@ export class ContextService {
 		return list;
 	}
 
-	extractRawGqlContext(context: TypedSubscriptionContext | CommonContext) {
+	extractRawGqlContext(context: TypedSubscriptionContext | CommonGQLContext) {
 		if ('extra' in context && context?.extra?.request) {
 			const req = context?.extra?.request;
 
@@ -53,7 +53,7 @@ export class ContextService {
 		return { req, res: context?.res, isExtra: false };
 	}
 
-	async setupGqlContext(context: TypedSubscriptionContext | CommonContext) {
+	async setupGqlContext(context: TypedSubscriptionContext | CommonGQLContext) {
 		const { req, res, isExtra } = this.extractRawGqlContext(context);
 
 		if (isExtra) {
@@ -100,7 +100,7 @@ export class ContextService {
 	static getGraphQLRequest(context: ExecutionContext) {
 		const gqlContext = GqlExecutionContext.create(context);
 
-		return gqlContext.getContext().req as Request;
+		return gqlContext.getContext<CommonGQLContext>().req;
 	}
 
 	/**
@@ -115,7 +115,7 @@ export class ContextService {
 	}
 
 	static getGraphQLResponse(context: ExecutionContext) {
-		return this.getGraphQLRequest(context).res as Response;
+		return this.getGraphQLRequest(context).res!;
 	}
 
 	static getResponse(context: ExecutionContext) {
@@ -123,6 +123,6 @@ export class ContextService {
 			return context.switchToHttp().getResponse<Response>();
 		}
 
-		return this.getGraphQLRequest(context).res as Response;
+		return this.getGraphQLRequest(context).res!;
 	}
 }

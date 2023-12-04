@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@apollo/server": "4.9.3",
-    "@lucia-auth/adapter-prisma": "3.0.1",
+    "@lucia-auth/adapter-prisma": "3.0.2",
     "@nestjs/apollo": "12.0.9",
     "@nestjs/axios": "3.0.0",
     "@nestjs/common": "10.2.5",
@@ -63,7 +63,7 @@
     "graphql-subscriptions": "2.0.0",
     "graphql-upload": "15.0.2",
     "graphql-ws": "5.14.0",
-    "lucia": "2.6.0",
+    "lucia": "2.7.4",
     "nest-typed-config": "2.8.0",
     "nestjs-i18n": "10.3.5",
     "nestjs-minio-client": "2.1.0",

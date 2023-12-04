@@ -1,4 +1,5 @@
 import { sensitiveThrottlerConf } from '$app/throttler.guard';
+import { CommonGQLContext } from '$graphql/context/context.service';
 import { getErrorMessage } from '$i18n/i18n.error';
 import { TypedI18nService } from '$i18n/i18n.service';
 import { Session } from '$prisma-graphql/session';
@@ -8,7 +9,7 @@ import { SelectQL } from '$prisma/select-ql.decorator';
 import { LiveUser } from '$users/dtos/LiveUser.dto';
 import { Origin } from '$utils/origin.decorator';
 import { ForbiddenException, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { Throttle } from '@nestjs/throttler';
 import { ErrorMessage } from 'lucia/dist/auth/error';
 import { I18n, I18nContext } from 'nestjs-i18n';
@@ -85,11 +86,11 @@ export class AuthResolver {
 	}
 
 	@Mutation(() => Boolean)
-	async logout(@LuciaAuth() authRequest: LuciaAuthRequest, @AuthSession() session: LuciaSession | null) {
+	async logout(@AuthSession() session: LuciaSession | null, @Context() { res }: CommonGQLContext) {
 		if (session) {
-			await this.authService.logout(session);
+			const sessionCookie = await this.authService.logout(session);
 
-			authRequest.setSession(null);
+			res.cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 
 			return true;
 		}
