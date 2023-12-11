@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cwd="~/workspace"
+cwd="/home/node/workspace"
 
 cd $cwd
 
@@ -22,7 +22,7 @@ fi
 
 pnpm install --frozen-lockfile
 
-pnpx playwright install > /tmp/playwright-install.log & # Put in background to allow other things to resolve in parallel
+pnpm --silent dlx playwright install > /tmp/playwright-install.log & # Put in background to allow other things to resolve in parallel
 playwrightInstallPID=$!
 
 # Init Project

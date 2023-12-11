@@ -4,7 +4,7 @@
   "description": "NestJS API implementing GraphQL and Prisma with auto generated queries.",
   "private": true,
   "engines": {
-    "node": "^18.0.0",
+    "node": "^20.0.0",
     "npm": "^8.1.0"
   },
   "scripts": {
@@ -35,7 +35,7 @@
     "studio": "prisma studio"
   },
   "prisma": {
-    "seed": "ts-node --project tsconfig.seed.json prisma/seed.ts"
+    "seed": "tsx --tsconfig tsconfig.seed.json prisma/seed.ts"
   },
   "dependencies": {
     "@apollo/server": "4.9.3",
@@ -97,7 +97,8 @@
     "prisma-nestjs-graphql": "18.0.2",
     "supertest": "6.3.3",
     "supertest-graphql": "1.1.4",
-    "ts-node": "10.9.1",
+    "ts-node": "10.9.2",
+    "tsx": "4.6.2",
     "typescript": "5.2.2",
     "unplugin-swc": "1.4.2",
     "vitest": "0.34.4"

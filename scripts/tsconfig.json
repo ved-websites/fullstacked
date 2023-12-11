@@ -1,17 +1,9 @@
 {
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "module": "es2022",
-    "lib": ["es2022"],
-    "target": "es2022",
-  },
-  "include": ["./**/*.ts"],
-	"ts-node": {
-		"esm": true,
-		"experimentalSpecifierResolution": "node",
-		"moduleTypes": {
-			"**/*.ts": "esm"
-		},
-		"require": ["tsconfig-paths/register"],
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"module": "es2022",
+		"lib": ["es2022"],
+		"target": "es2022",
 	},
+	"include": ["./**/*.ts"],
 }

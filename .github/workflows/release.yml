@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - uses: GoogleCloudPlatform/release-please-action@v3
-        if: false && github.event_name != 'workflow_dispatch'
+        if: github.event_name != 'workflow_dispatch'
         id: release-please
         with:
           token: '${{ secrets.GH_BOT_TOKEN }}'
