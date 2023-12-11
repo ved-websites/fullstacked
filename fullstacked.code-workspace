@@ -18,7 +18,7 @@
 		"[json]": {
 			"editor.defaultFormatter": "vscode.json-language-features",
 			"editor.codeActionsOnSave": {
-				"source.fixAll": true
+				"source.fixAll": "explicit"
 			},
 		},
 		"[yaml]": {
@@ -29,22 +29,22 @@
 			"editor.defaultFormatter": "esbenp.prettier-vscode",
 			"editor.formatOnSave": true,
 			"editor.codeActionsOnSave": {
-				"source.organizeImports": true,
-				"source.fixAll.eslint": true
+				"source.organizeImports": "explicit",
+				"source.fixAll.eslint": "explicit"
 			},
 		},
 		"[javascript]": {
 			"editor.defaultFormatter": "esbenp.prettier-vscode",
 			"editor.formatOnSave": true,
 			"editor.codeActionsOnSave": {
-				"source.fixAll.eslint": true
+				"source.fixAll.eslint": "explicit"
 			}
 		},
 		"[svelte]": {
 			"editor.defaultFormatter": "svelte.svelte-vscode",
 			"editor.formatOnSave": true,
 			"editor.codeActionsOnSave": {
-				"source.organizeImports": true,
+				"source.organizeImports": "explicit"
 			},
 		},
 		"[css]": {
