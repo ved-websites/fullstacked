@@ -4,5 +4,5 @@ export type BaseUser = {
 	lastName: string | null;
 	roles: { text: string }[] | null;
 	profilePictureRef: string | null;
-	online?: boolean;
+	online?: boolean | null;
 };

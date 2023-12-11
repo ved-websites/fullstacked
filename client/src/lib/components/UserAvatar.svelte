@@ -3,7 +3,7 @@
 	import { Avatar } from 'flowbite-svelte';
 
 	export let profilePictureRef: string | undefined | null;
-	export let online: boolean | undefined = undefined;
+	export let online: boolean | undefined | null = undefined;
 
 	export let firstName: string | null = null;
 	export let lastName: string | null = null;
@@ -11,7 +11,7 @@
 	$: profilePictureSrc = getProfilePictureImageUrl(profilePictureRef);
 
 	$: dot = (() => {
-		if (online === undefined) {
+		if (typeof online !== 'boolean') {
 			return;
 		}
 

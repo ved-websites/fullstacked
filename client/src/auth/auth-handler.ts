@@ -15,5 +15,5 @@ export async function getAuthUser(query: GraphQLQuery): Promise<SessionUser> {
 	return sessionUser;
 }
 
-export type SessionUser = GetUserFromSession$result['getSessionUser'];
+export type SessionUser = GetUserFromSession$result['getSessionUser'] | null;
 export type ConfirmedSessionUser = NonNullable<SessionUser>;
