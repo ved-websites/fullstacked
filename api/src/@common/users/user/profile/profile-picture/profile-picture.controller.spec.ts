@@ -1,5 +1,4 @@
 import { MinioClientModule } from '$minio/minio-client.module';
-import { PrismaModule } from '$prisma/prisma.module';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TestManager } from '~/@utils/tests/TestManager';
 import { ProfilePictureController } from './profile-picture.controller';
@@ -8,7 +7,7 @@ import { ProfilePictureService } from './profile-picture.service';
 describe('ProfilePictureController', () => {
 	const manager = new TestManager({
 		metadata: {
-			imports: [PrismaModule, MinioClientModule],
+			imports: [MinioClientModule],
 			controllers: [ProfilePictureController],
 			providers: [ProfilePictureService],
 		},

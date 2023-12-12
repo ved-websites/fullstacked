@@ -1,4 +1,3 @@
-import { PrismaModule } from '$prisma/prisma.module';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TestManager } from '~/@utils/tests/TestManager';
 import { MessageResolver } from './message.resolver';
@@ -7,7 +6,6 @@ import { MessageService } from './message.service';
 describe('MessageResolver', () => {
 	const manager = new TestManager({
 		metadata: {
-			imports: [PrismaModule],
 			providers: [MessageResolver, MessageService],
 		},
 	});

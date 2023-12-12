@@ -1,12 +1,10 @@
 import { getSchema } from '$configs/helpers';
-import { PrismaModule } from '$prisma/prisma.module';
 import { PrismaService } from '$prisma/prisma.service';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { LuciaFactory, luciaFactory } from './lucia.factory';
 import { LuciaMiddleware } from './lucia.middleware';
 
 @Module({
-	imports: [PrismaModule],
 	providers: [
 		{
 			provide: LuciaFactory,

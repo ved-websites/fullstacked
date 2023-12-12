@@ -1,4 +1,3 @@
-import { PrismaModule } from '$prisma/prisma.module';
 import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AdminModule } from './admin/admin.module';
@@ -13,7 +12,7 @@ import { UserModule } from './user/user.module';
  * The module responsible to handle all common users handling.
  */
 @Module({
-	imports: [PrismaModule, OnboardingModule, AuthModule, AdminModule, UserModule, PresenceModule],
+	imports: [OnboardingModule, AuthModule, AdminModule, UserModule, PresenceModule],
 	providers: [
 		{
 			provide: APP_INTERCEPTOR,

@@ -1,5 +1,4 @@
 import { EmailModule } from '$email/email.module';
-import { PrismaModule } from '$prisma/prisma.module';
 import { AuthModule } from '$users/auth/auth.module';
 import { RolesService } from '$users/auth/roles/roles.service';
 import { PresenceModule } from '$users/presence/presence.module';
@@ -10,7 +9,7 @@ import { AdminService } from './admin.service';
 describe('AdminService', () => {
 	const manager = new TestManager({
 		metadata: {
-			imports: [PrismaModule, AuthModule, EmailModule, PresenceModule],
+			imports: [AuthModule, EmailModule, PresenceModule],
 			providers: [AdminService, RolesService],
 		},
 	});
