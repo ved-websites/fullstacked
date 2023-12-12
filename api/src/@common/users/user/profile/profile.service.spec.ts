@@ -1,4 +1,5 @@
 import { PrismaModule } from '$prisma/prisma.module';
+import { PresenceModule } from '$users/presence/presence.module';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TestManager } from '~/@utils/tests/TestManager';
 import { UserProfileService } from './profile.service';
@@ -6,7 +7,7 @@ import { UserProfileService } from './profile.service';
 describe('UserProfileService', () => {
 	const manager = new TestManager({
 		metadata: {
-			imports: [PrismaModule],
+			imports: [PrismaModule, PresenceModule],
 			providers: [UserProfileService],
 		},
 	});

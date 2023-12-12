@@ -1,3 +1,4 @@
+import { TypedI18nModule } from '$i18n/i18n.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import { MinioModule } from 'nestjs-minio-client';
@@ -9,6 +10,7 @@ export const GRAPHQL_MAX_FILE_COUNT = 10;
 
 @Module({
 	imports: [
+		TypedI18nModule,
 		MinioModule.registerAsync({
 			useFactory: async (configService: EnvironmentConfig) => ({
 				endPoint: configService.MINIO_ENDPOINT,

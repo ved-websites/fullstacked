@@ -1,4 +1,4 @@
-import { Global, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import parserFactory from '@sveltekit-i18n/parser-default';
 import {
 	AcceptLanguageResolver,
@@ -16,7 +16,6 @@ export const fallbackLanguage = 'en';
 
 const templateParser = parserFactory();
 
-@Global()
 @Module({
 	imports: [
 		NestI18nModule.forRootAsync({
