@@ -1,5 +1,0 @@
-query GetChatMessages @blocking {
-	messages @list(name: "All_Messages") {
-		...ChatMessageFragment
-	}
-}

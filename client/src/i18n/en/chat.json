@@ -6,5 +6,10 @@
 	"form": {
 		"label": "Message",
 		"send": "Send"
+	},
+	"errors": {
+		"message": {
+			"empty": "You cannot send empty messages!"
+		}
 	}
 }

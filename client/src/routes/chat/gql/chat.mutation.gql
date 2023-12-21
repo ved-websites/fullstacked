@@ -1,5 +1,0 @@
-mutation SendMessage($message: String!) {
-	addMessage(data: { text: $message }) {
-		...All_Messages_insert
-	}
-}

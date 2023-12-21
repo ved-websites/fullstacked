@@ -65,7 +65,7 @@
 		if (newMessage.user.email == $sessionUser.email) {
 			messages = messages.map((m) => {
 				if (!m.id && m.text == newMessage.text) {
-					m = { ...newMessage, active: true };
+					m = { ...newMessage, id: +newMessage.id, active: true };
 				}
 				return m;
 			});
@@ -73,7 +73,10 @@
 			messages = [
 				...messages.filter((m) => m.active),
 				{
-					...newMessage,
+					...{
+						...newMessage,
+						id: +newMessage.id,
+					},
 					active: true,
 				},
 				...messages.filter((m) => !m.active),
@@ -123,7 +126,7 @@
 	</Label>
 	<ValidationErrors errors={$errors.message} />
 
-	<Button type="submit" disabled={!canSend}>
+	<Button type="submit" disabled={false && !canSend}>
 		{$t('chat.form.send')}
 		<Icon class="i-mdi-send ml-2" />
 	</Button>

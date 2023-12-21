@@ -2,23 +2,19 @@
 
 import type { QueryResult as HoudiniQueryResult } from '../$houdini/runtime/lib';
 import type { SessionUser } from './auth/auth-handler';
-import type { LayoutAlertData } from './lib/components/LayoutAlert/helper';
-import type { ToastData } from './lib/components/ToastManager/helper';
 import type { createHoudiniHelpers } from './lib/houdini/helper';
 import type { Theme } from './lib/stores';
-import type { GraphQLError } from './lib/types';
+import type { createTsRestClient } from './lib/ts-rest/client';
+import type { EventStep, GraphQLError, PageMessages } from './lib/types';
 
 export interface AppLocals {
 	gql: ReturnType<typeof createHoudiniHelpers>;
+	tsrest: ReturnType<typeof createTsRestClient>;
 	sessionUser: SessionUser;
 	theme?: Theme;
 	userHasJs: boolean;
 	browserLang: string;
-}
-
-export interface PageMessages {
-	toasts?: ToastData[];
-	layoutAlert?: LayoutAlertData;
+	step: EventStep;
 }
 
 export interface AppPageData extends PageMessages {

@@ -1,46 +1,33 @@
-import { GetChatMessagesStore, SendMessageStore } from '$houdini';
-import { createPageDataObject } from '$lib/utils/page-data-object';
-import { fail } from '@sveltejs/kit';
-import { StatusCodes } from 'http-status-codes';
+import { assertFormValid, assertTsRestResultOK } from '$lib/utils/assertions';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { Actions, PageServerLoad } from './$types';
 import { schema } from './schema';
 
-export const load = (async ({
-	locals: {
-		gql: { query },
-	},
-}) => {
+export const load = (async ({ locals: { tsrest } }) => {
 	const form = await superValidate(schema);
 
-	const result = await query(GetChatMessagesStore);
+	const result = await tsrest.messages.list({
+		errPageData: { form },
+	});
 
-	if (result.type === 'failure') {
-		throw fail(StatusCodes.BAD_REQUEST, createPageDataObject({ form }));
-	}
+	assertTsRestResultOK(result);
 
-	return { form, chatMessages: result.data.messages };
+	return { form, chatMessages: result.body };
 }) satisfies PageServerLoad;
 
 export const actions = {
-	async default({
-		request,
-		locals: {
-			gql: { mutate },
-		},
-	}) {
+	async default({ request, locals: { tsrest } }) {
 		const form = await superValidate(request, schema);
 
-		if (!form.valid) {
-			return fail(StatusCodes.BAD_REQUEST, createPageDataObject({ form }));
-		}
+		return assertFormValid(form, async () => {
+			const result = await tsrest.messages.new({
+				body: { text: form.data.message },
+				errPageData: { form },
+			});
 
-		const result = await mutate(SendMessageStore, { message: form.data.message });
+			assertTsRestResultOK(result);
 
-		if (result.type === 'failure') {
-			return result.kitHandler('error');
-		}
-
-		return { form };
+			return { form };
+		});
 	},
 } satisfies Actions;

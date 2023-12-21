@@ -5,7 +5,6 @@
 	import { subscribe } from '$lib/houdini/helper';
 	import { Button, Heading, Modal } from 'flowbite-svelte';
 	import type { ComponentEvents } from 'svelte';
-	import type { PageData } from './$houdini';
 	import CopyInviteButton from './components/UsersTable/CopyInviteButton.svelte';
 	import ResendInviteButton from './components/UsersTable/ResendInviteButton.svelte';
 	import UsersTable from './components/UsersTable/UsersTable.svelte';
@@ -13,37 +12,38 @@
 	let i18n = getI18n();
 	$: ({ t } = $i18n);
 
-	export let data: PageData;
+	export let data;
 
 	let usersSubMap = new Map<string, ReturnType<typeof subscribe>>();
 
-	$: ({ ManageGetUsers } = data);
+	$: ({ registeredUsers, unregisteredUsers } = data.streamed);
 
-	$: registeredUser = $ManageGetUsers.data?.users;
-	$: unregisteredUsers = $ManageGetUsers.data?.unregisteredUsers.map((u) => ({ ...u, sendingNewInvite: false as boolean }));
+	$: registeredUsers.then((users) =>
+		// eslint-disable-next-line implicit-arrow-linebreak
+		users?.forEach((user) => {
+			usersSubMap.get(user.email)?.();
 
-	$: registeredUser?.forEach((user) => {
-		usersSubMap.get(user.email)?.();
+			const unsubscriber = subscribe([AdminUserDataStore, { email: user.email }], ({ data }) => {
+				if (!data) {
+					return;
+				}
 
-		const unsubscriber = subscribe([AdminUserDataStore, { email: user.email }], ({ data }) => {
-			if (!data) {
-				return;
-			}
+				const editedUser = data.userEdited;
 
-			const editedUser = data.userEdited;
+				// onUserUpdated(editedUser);
+				console.log({ editedUser });
+			});
 
-			onUserUpdated(editedUser);
-		});
-
-		usersSubMap.set(user.email, unsubscriber);
-	});
+			usersSubMap.set(user.email, unsubscriber);
+		}),
+	);
 
 	let deleteModalOpen = false;
 	let deletionUser: BaseUser | undefined;
 
-	function onUserUpdated(user: NonNullable<typeof registeredUser>[number]) {
-		registeredUser = [...registeredUser!.filter((u) => u.email !== user.email), user];
-	}
+	// function onUserUpdated(user: NonNullable<typeof registeredUsers>[number]) {
+	// 	registeredUsers = [...registeredUsers.filter((u) => u.email !== user.email), user];
+	// }
 
 	function onDeleteUser(event: ComponentEvents<UsersTable>['deleteUser']) {
 		const { detail: user } = event;
@@ -63,7 +63,7 @@
 	<div>
 		<Heading tag="h4" class="mb-2">{$t('admin.users.tables.registered.heading')}</Heading>
 
-		<UsersTable users={registeredUser} showUserAvatars on:deleteUser={onDeleteUser} />
+		<UsersTable users={registeredUsers} showUserAvatars on:deleteUser={onDeleteUser} />
 	</div>
 
 	<div>

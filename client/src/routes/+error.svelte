@@ -9,7 +9,7 @@
 </script>
 
 {#if $page.status == StatusCodes.NOT_FOUND}
-	<PageError icon="i-mdi-emoticon-sad-outline" errorMessage={$t('common.errorpage.types.404.summary')}>
+	<PageError icon="i-mdi-select-search" errorMessage={$t('common.errorpage.types.404.summary')}>
 		<P>{@html $t('common.errorpage.types.404.explanation', { pathname: `<span class="italic">${$page.url.pathname}</span>` })}</P>
 	</PageError>
 {:else if $page.status.toString().startsWith('5')}
@@ -22,4 +22,6 @@
 
 		<span>{statusDetail !== statusDetailsKey ? statusDetail : $t(`common.errorpage.types.server.details.default`)}</span>
 	</PageError>
+{:else}
+	<PageError icon="i-mdi-emoticon-sad-outline" errorMessage={$page.error?.message ?? 'Unknown error'}></PageError>
 {/if}

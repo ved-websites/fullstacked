@@ -2,6 +2,13 @@ import adapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import path from 'path';
 
+/** @type {NonNullable<import('@sveltejs/kit').Config['kit']>['alias']} */
+const apiAliases = {
+	'~contract': '../api/src/@contract',
+	'$prisma-client': '../api/src/_generated/prisma/client',
+	$zod: '../api/src/_generated/zod',
+};
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
@@ -18,6 +25,7 @@ const config = {
 			$i18n: './src/i18n/lang.ts',
 			'$i18n-config': './src/i18n/translations.ts',
 			'$app-types': './src/app.d.ts',
+			...apiAliases,
 		},
 	},
 };

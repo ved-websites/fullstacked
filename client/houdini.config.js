@@ -1,9 +1,9 @@
 /** @type {import('houdini').ConfigFile} */
 const config = {
 	schemaPath: './$houdini/graphql/generated-api-schema.gql',
-	watchSchema: {
-		url: 'http://localhost:3000/graphql',
-	},
+	// watchSchema: {
+	// 	url: 'http://localhost:3000/graphql',
+	// },
 	defaultCachePolicy: 'NetworkOnly',
 	plugins: {
 		'houdini-svelte': {

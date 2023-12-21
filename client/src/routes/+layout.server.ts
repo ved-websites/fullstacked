@@ -14,6 +14,8 @@ export const load = loadFlash(async (event) => {
 		locals: { sessionUser, theme, userHasJs, browserLang },
 	} = event;
 
+	event.locals.step = 'layout';
+
 	depends('data:sessionUser');
 
 	if (!isDataRequest && !isSubRequest) {
@@ -30,6 +32,8 @@ export const load = loadFlash(async (event) => {
 			level: 'error',
 		});
 	}
+
+	event.locals.step = 'page';
 
 	return {
 		sessionUser,

@@ -1,4 +1,5 @@
 import { loadI18n } from '$i18n-config';
+import { createTsRestClient } from '$lib/ts-rest/client';
 import type { LayoutLoad } from './$types';
 
 export const load = (async ({ url, data }) => {
@@ -14,5 +15,6 @@ export const load = (async ({ url, data }) => {
 		layoutAlert,
 		userHasJs,
 		i18n: i18nInstance,
+		tsrest: createTsRestClient(),
 	};
 }) satisfies LayoutLoad;

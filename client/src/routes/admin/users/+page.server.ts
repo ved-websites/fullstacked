@@ -1,10 +1,42 @@
 import { DeleteSpecificUserStore } from '$houdini';
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { emailSchema } from '$lib/schemas/auth';
+import { assertTsRestResultOK } from '$lib/utils/assertions';
 import type { PageDataObject } from '$lib/utils/page-data-object';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import type { Actions } from '../$types';
+import type { PageServerLoad } from './$types';
+
+export const load = (async ({ locals: { tsrest } }) => {
+	const getUsers = async () => {
+		const result = await tsrest.users.admin.listUsers();
+
+		assertTsRestResultOK(result);
+
+		return result.body.reduce(
+			([regUsers, unregUsers], user) => {
+				if (user.registerToken) {
+					unregUsers!.push(user);
+				} else {
+					regUsers!.push(user);
+				}
+
+				return [regUsers!, unregUsers!];
+			},
+			[[] as typeof result.body, [] as typeof result.body],
+		);
+	};
+
+	const users = getUsers();
+
+	return {
+		streamed: {
+			registeredUsers: users.then(([registeredUsers]) => registeredUsers),
+			unregisteredUsers: users.then(([_, unregisteredUsers]) => unregisteredUsers),
+		},
+	};
+}) satisfies PageServerLoad;
 
 export const actions = {
 	delete: async ({
