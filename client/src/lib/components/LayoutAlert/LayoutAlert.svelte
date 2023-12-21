@@ -6,7 +6,7 @@
 	let i18n = getI18n();
 	$: ({ t } = $i18n);
 
-	export let data: LayoutAlertData | undefined;
+	export let data: LayoutAlertData | null | undefined;
 </script>
 
 {#if data}

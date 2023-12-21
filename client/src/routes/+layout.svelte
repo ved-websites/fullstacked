@@ -1,7 +1,6 @@
 <script lang="ts">
 	import '../app.postcss';
 
-	import type { PageMessages } from '$app-types';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { SessionUserDataStore } from '$houdini';
@@ -14,6 +13,7 @@
 	import Navbar from '$lib/components/nav/Navbar.svelte';
 	import { subscribe } from '$lib/houdini/helper';
 	import { setSessionUser, themeStore } from '$lib/stores';
+	import type { PageMessages } from '$lib/types';
 	import { getFlash } from 'sveltekit-flash-message/client';
 
 	export let data;
