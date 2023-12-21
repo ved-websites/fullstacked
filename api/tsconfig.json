@@ -13,7 +13,10 @@
       "$prisma-client": ["./src/_generated/prisma/client/index"],
       "$prisma-graphql/*": ["./src/_generated/prisma-nestjs-graphql/*"],
       "$*": ["./src/@common/*"],
-      "~/*": ["./src/*"],
+      "~utils/*": ["./src/@utils/*"],
+      "~env": ["./src/env.validation"],
+      "~app-module": ["./src/app.module"],
+      // "~/*": ["./src/*"],
     },
     
     "typeRoots": [

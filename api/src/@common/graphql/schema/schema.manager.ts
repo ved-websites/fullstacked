@@ -1,7 +1,7 @@
 import { schemaPath } from '$graphql/graphql.module';
 import { NestFactory } from '@nestjs/core';
 import { existsSync } from 'fs';
-import { AppModule } from '~/app.module';
+import { AppModule } from '~app-module';
 
 export async function ensureGraphQLSchema() {
 	if (!existsSync(schemaPath)) {

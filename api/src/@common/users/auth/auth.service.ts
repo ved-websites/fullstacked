@@ -8,7 +8,7 @@ import { loadLuciaUtils } from '$users/auth/lucia/modules-compat';
 import { PresenceService, UserOnlineSelector } from '$users/presence/presence.service';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes } from 'lucia';
-import { EnvironmentConfig } from '~/env.validation';
+import { EnvironmentConfig } from '~env';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';
 import { LuciaSession } from './session.decorator';
 

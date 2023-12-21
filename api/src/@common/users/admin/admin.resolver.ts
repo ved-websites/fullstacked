@@ -10,7 +10,7 @@ import { Origin } from '$utils/origin.decorator';
 import { ForbiddenException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { I18n, I18nContext } from 'nestjs-i18n';
-import { ADMIN } from '~/@utils/roles';
+import { ADMIN } from '~utils/roles';
 import { AdminService } from './admin.service';
 import { CreateUserOutput } from './dtos/create-user.output';
 import { GetUserOutput } from './dtos/getUser.output';

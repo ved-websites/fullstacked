@@ -1,13 +1,13 @@
 import { ConfigModule } from '$configs/config.module';
 import { ContextModule } from '$graphql/context/context.module';
-import { CommonContext, ContextService, TypedSubscriptionContext } from '$graphql/context/context.service';
+import { CommonGQLContext, ContextService, TypedSubscriptionContext } from '$graphql/context/context.service';
 import { schemaPath } from '$graphql/graphql.module';
 import { PresenceModule } from '$users/presence/presence.module';
 import { PresenceService } from '$users/presence/presence.service';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';
 import depthLimit from 'graphql-depth-limit';
-import { EnvironmentConfig } from '~/env.validation';
+import { EnvironmentConfig } from '~env';
 
 export const TestGraphqlModule = NestGraphQLModule.forRootAsync<ApolloDriverConfig>({
 	driver: ApolloDriver,
@@ -21,7 +21,7 @@ export const TestGraphqlModule = NestGraphQLModule.forRootAsync<ApolloDriverConf
 					onConnect: async (context) => {
 						const {
 							req: { session },
-						} = await contextService.setupGqlContext(context as TypedSubscriptionContext | CommonContext);
+						} = await contextService.setupGqlContext(context as TypedSubscriptionContext | CommonGQLContext);
 
 						if (session) {
 							presenceService.onConnect(session);
@@ -30,7 +30,7 @@ export const TestGraphqlModule = NestGraphQLModule.forRootAsync<ApolloDriverConf
 					onDisconnect: async (context) => {
 						const {
 							req: { session },
-						} = contextService.extractRawGqlContext(context as TypedSubscriptionContext | CommonContext);
+						} = contextService.extractRawGqlContext(context as TypedSubscriptionContext | CommonGQLContext);
 
 						if (session) {
 							presenceService.onDisconnect(session);
@@ -40,7 +40,7 @@ export const TestGraphqlModule = NestGraphQLModule.forRootAsync<ApolloDriverConf
 			},
 			playground: false,
 			validationRules: [depthLimit(env.GRAPHQL_DEPTH_LIMIT)],
-			context: (context: TypedSubscriptionContext | CommonContext) => contextService.setupGqlContext(context),
+			context: (context: TypedSubscriptionContext | CommonGQLContext) => contextService.setupGqlContext(context),
 		};
 	},
 	inject: [EnvironmentConfig, ContextService, PresenceService],

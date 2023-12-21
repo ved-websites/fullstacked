@@ -1,6 +1,6 @@
 import { PresenceModule } from '$users/presence/presence.module';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { TestManager } from '~/@utils/tests/TestManager';
+import { TestManager } from '~utils/tests/TestManager';
 import { UserProfileResolver } from './profile.resolver';
 import { UserProfileService } from './profile.service';
 

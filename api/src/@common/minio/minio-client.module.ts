@@ -2,7 +2,7 @@ import { TypedI18nModule } from '$i18n/i18n.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import { MinioModule } from 'nestjs-minio-client';
-import { EnvironmentConfig } from '~/env.validation';
+import { EnvironmentConfig } from '~env';
 import { MinioClientService } from './minio-client.service';
 
 export const GRAPHQL_MAX_FILE_SIZE_MB = 10;

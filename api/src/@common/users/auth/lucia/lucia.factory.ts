@@ -1,6 +1,6 @@
 import type { PrismaClient, User } from '$prisma-client';
 import { loadLuciaCryptoNode18, loadLuciaMiddleware, loadLuciaModule, loadPrismaAdapterModule } from '$users/auth/lucia/modules-compat';
-import { Environment, type EnvironmentConfig } from '~/env.validation';
+import { Environment, type EnvironmentConfig } from '~env';
 
 export async function luciaFactory(prisma: PrismaClient, env: EnvironmentConfig) {
 	await loadLuciaCryptoNode18();

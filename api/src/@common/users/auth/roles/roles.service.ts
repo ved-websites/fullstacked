@@ -2,7 +2,7 @@ import { RoleCreateNestedManyWithoutUsersInput, RoleWhereInput } from '$prisma-g
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { User } from 'lucia';
-import { ADMIN } from '~/@utils/roles';
+import { ADMIN } from '~utils/roles';
 
 @Injectable()
 export class RolesService {

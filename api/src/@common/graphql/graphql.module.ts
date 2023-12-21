@@ -5,7 +5,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';
 import depthLimit from 'graphql-depth-limit';
 import { join } from 'path';
-import { Environment, EnvironmentConfig } from '~/env.validation';
+import { Environment, EnvironmentConfig } from '~env';
 import { ConfigModule } from '../configs/config.module';
 import { ContextModule } from './context/context.module';
 import { ContextService, type CommonGQLContext, type TypedSubscriptionContext } from './context/context.service';

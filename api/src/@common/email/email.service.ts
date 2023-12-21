@@ -5,7 +5,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { create as createHandlebars, type ExpressHandlebars } from 'express-handlebars';
 import { firstValueFrom } from 'rxjs';
-import { Environment, EnvironmentConfig } from '~/env.validation';
+import { Environment, EnvironmentConfig } from '~env';
 import { sendEmailSchema, SendMailData } from './schemas';
 
 type HbsRenderViewParameters = Parameters<ExpressHandlebars['renderView']>;

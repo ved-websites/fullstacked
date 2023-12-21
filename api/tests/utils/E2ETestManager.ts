@@ -12,9 +12,9 @@ import { TestingModuleBuilder } from '@nestjs/testing';
 import { User } from 'lucia';
 import supertest from 'supertest';
 import supertestGQL, { Variables } from 'supertest-graphql';
-import { ADMIN } from '~/@utils/roles';
-import { TestManager, type TestOptions } from '~/@utils/tests/TestManager';
-import { AppModule } from '~/app.module';
+import { AppModule } from '~app-module';
+import { ADMIN } from '~utils/roles';
+import { TestManager, type TestOptions } from '~utils/tests/TestManager';
 import { prepareTestDb } from '../../prisma/utils/functions';
 import { TestGraphqlModule } from '../mocks/graphql.module';
 

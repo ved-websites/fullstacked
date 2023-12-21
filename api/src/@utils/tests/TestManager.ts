@@ -6,7 +6,7 @@ import { PrismaModule } from '$prisma/prisma.module';
 import { type ModuleMetadata } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { Test, TestingModule, TestingModuleBuilder } from '@nestjs/testing';
-import { EnvironmentConfig } from '~/env.validation';
+import { EnvironmentConfig } from '~env';
 
 export interface TestOptions {
 	metadata?: ModuleMetadata;

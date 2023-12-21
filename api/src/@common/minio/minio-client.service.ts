@@ -3,7 +3,7 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { FileUpload } from 'graphql-upload/Upload.js';
 import { MinioService } from 'nestjs-minio-client';
-import { EnvironmentConfig } from '~/env.validation';
+import { EnvironmentConfig } from '~env';
 import { GRAPHQL_MAX_FILE_COUNT, GRAPHQL_MAX_FILE_SIZE_MB } from './minio-client.module';
 
 @Injectable()

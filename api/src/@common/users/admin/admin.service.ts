@@ -11,8 +11,8 @@ import { LiveUser } from '$users/dtos/LiveUser.dto';
 import { PresenceService, UserOnlineSelector } from '$users/presence/presence.service';
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { ADMIN } from '~/@utils/roles';
-import { EnvironmentConfig } from '~/env.validation';
+import { EnvironmentConfig } from '~env';
+import { ADMIN } from '~utils/roles';
 import { ADMIN_CREATE_USER_EVENT_KEY, ADMIN_CREATE_USER_EVENT_TYPE } from './listeners/admin.events';
 
 @Injectable()

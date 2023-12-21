@@ -3,7 +3,7 @@ import { AuthModule } from '$users/auth/auth.module';
 import { RolesService } from '$users/auth/roles/roles.service';
 import { PresenceModule } from '$users/presence/presence.module';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { TestManager } from '~/@utils/tests/TestManager';
+import { TestManager } from '~utils/tests/TestManager';
 import { AdminService } from './admin.service';
 
 describe('AdminService', () => {

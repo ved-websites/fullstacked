@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { TestManager } from '~/@utils/tests/TestManager';
+import { TestManager } from '~utils/tests/TestManager';
 import { MessageResolver } from './message.resolver';
 import { MessageService } from './message.service';
 

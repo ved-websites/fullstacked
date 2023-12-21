@@ -1,6 +1,6 @@
 import { MinioClientModule } from '$minio/minio-client.module';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { TestManager } from '~/@utils/tests/TestManager';
+import { TestManager } from '~utils/tests/TestManager';
 import { ProfilePictureService } from './profile-picture.service';
 
 describe('ProfilePictureService', () => {
