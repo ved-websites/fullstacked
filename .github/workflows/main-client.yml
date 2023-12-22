@@ -95,7 +95,7 @@ jobs:
         run: pnpm install
 
       - name: Init
-        run: pnpm run init --no-api
+        run: pnpm run init --no-db-push
 
       - name: Build
         run: pnpm run --filter ./client build
@@ -108,8 +108,8 @@ jobs:
             client/.vercel
             client/.svelte-kit
             client/$houdini
-            api/src/_generated/nestjs-graphql
-          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/package.json', 'client/.vercel/**', 'client/.svelte-kit/**', 'client/$houdini/**', 'api/src/_generated/nestjs-graphql/**') }}
+            api/src/_generated
+          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/package.json', 'client/.vercel/**', 'client/.svelte-kit/**', 'client/$houdini/**', 'api/src/_generated/**') }}
 
   validate:
     name: Validate
@@ -141,8 +141,8 @@ jobs:
             client/.vercel
             client/.svelte-kit
             client/$houdini
-            api/src/_generated/nestjs-graphql
-          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/package.json', 'client/.vercel/**', 'client/.svelte-kit/**', 'client/$houdini/**', 'api/src/_generated/nestjs-graphql/**') }}
+            api/src/_generated
+          key: client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-${{ hashFiles('client/package.json', 'client/.vercel/**', 'client/.svelte-kit/**', 'client/$houdini/**', 'api/src/_generated/**') }}
           restore-keys: |
             client~build-${{ env.NODE_VERSION }}-${{ runner.os }}-
 
