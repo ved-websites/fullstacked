@@ -41,8 +41,10 @@ if (!cli.hasArg('no-api')) {
 		// Do nothing on api kill error
 	}
 
+	const apiInitScript = cli.hasArg('no-db-push') ? 'init:no-db-push' : 'init';
+
 	await progresser('Setting up api', async () => {
-		await exec('pnpm run --filter ./api init');
+		await exec(`pnpm run --filter ./api ${apiInitScript}`);
 		await exec('pnpm run gql');
 	});
 } else if (!cli.hasArg('no-gql')) {

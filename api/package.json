@@ -9,6 +9,7 @@
   },
   "scripts": {
     "init": "gulp init",
+    "init:no-db-push": "gulp initNoDbPush",
     "build": "gulp build",
     "start": "nest start",
     "start:dev": "nest start --watch",
