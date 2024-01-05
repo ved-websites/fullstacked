@@ -22,9 +22,9 @@ export function createStoreContext<T>(options?: Partial<StoreContextOptions<T>>)
 		const contextStore = getStore() as ReturnType<typeof getStore> | undefined;
 
 		if (!contextStore) {
-			const i18nContext = writable<T>(storeValue);
+			const keyStoreContext = writable<T>(storeValue);
 
-			setContext(key, i18nContext);
+			setContext(key, keyStoreContext);
 
 			return;
 		}
