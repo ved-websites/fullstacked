@@ -1,7 +1,7 @@
 import { User, UserUpdateInput } from '$prisma-graphql/user';
 import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
-import { AuthSession, LuciaSession } from '$users/auth/session.decorator';
+import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
 import { ForbiddenException } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { UserProfileService } from './profile.service';
@@ -11,7 +11,7 @@ export class UserProfileResolver {
 	constructor(private readonly profileService: UserProfileService) {}
 
 	@Mutation(() => User)
-	async editUserProfile(@SelectQL() select: PrismaSelector, @Args('data') data: UserUpdateInput, @AuthSession() { user }: LuciaSession) {
+	async editUserProfile(@SelectQL() select: PrismaSelector, @Args('data') data: UserUpdateInput, @AuthUser() user: LuciaUser) {
 		try {
 			const editedUser = await this.profileService.editUser(select, user, data);
 

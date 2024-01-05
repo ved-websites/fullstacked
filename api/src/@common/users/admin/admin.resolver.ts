@@ -4,7 +4,7 @@ import { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
 import { AuthService } from '$users/auth/auth.service';
 import { Roles } from '$users/auth/roles/roles.guard';
-import { AuthSession, LuciaSession } from '$users/auth/session.decorator';
+import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
 import { LiveUser } from '$users/dtos/LiveUser.dto';
 import { Origin } from '$utils/origin.decorator';
 import { ForbiddenException } from '@nestjs/common';
@@ -38,7 +38,7 @@ export class AdminResolver {
 	}
 
 	@Mutation(() => CreateUserOutput)
-	async createUser(@Args('data') data: UserCreateInput, @AuthSession() { user }: LuciaSession, @Origin() origin: string) {
+	async createUser(@Args('data') data: UserCreateInput, @AuthUser() user: LuciaUser, @Origin() origin: string) {
 		const newUser = await this.adminService.createUser(data, { url: origin, user });
 
 		return newUser satisfies CreateUserOutput;
@@ -76,7 +76,7 @@ export class AdminResolver {
 	}
 
 	@Mutation(() => Boolean)
-	async resendNewUserEmail(@Args('where') where: UserWhereUniqueInput, @AuthSession() { user }: LuciaSession, @Origin() origin: string) {
+	async resendNewUserEmail(@Args('where') where: UserWhereUniqueInput, @AuthUser() user: LuciaUser, @Origin() origin: string) {
 		try {
 			const dbUserToResendTo = await this.adminService.getUser({}, where);
 

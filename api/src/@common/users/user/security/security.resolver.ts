@@ -1,4 +1,4 @@
-import { AuthSession, LuciaSession } from '$users/auth/session.decorator';
+import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
 import { ForbiddenException } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { UserSecurityService } from './security.service';
@@ -8,9 +8,9 @@ export class UserSecurityResolver {
 	constructor(private readonly securityService: UserSecurityService) {}
 
 	@Mutation(() => Boolean, { nullable: true })
-	async editSelfPassword(@Args('password') password: string, @AuthSession() session: LuciaSession) {
+	async editSelfPassword(@Args('password') password: string, @AuthUser() user: LuciaUser) {
 		try {
-			await this.securityService.editSelfPassword(session, password);
+			await this.securityService.editSelfPassword(user, password);
 
 			return true;
 		} catch (error) {

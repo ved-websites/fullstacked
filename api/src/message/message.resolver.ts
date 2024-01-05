@@ -6,9 +6,8 @@ import {
 } from '$prisma-graphql/message';
 import type { PrismaSelector } from '$prisma/prisma.service';
 import { SelectQL } from '$prisma/select-ql.decorator';
-import { AuthSession } from '$users/auth/session.decorator';
+import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
-import type { Session } from 'lucia';
 import { MESSAGE_ADDED } from './constants/triggers';
 import { MessageService } from './message.service';
 
@@ -22,7 +21,7 @@ export class MessageResolver {
 	}
 
 	@Mutation(() => Message, { nullable: true })
-	addMessage(@AuthSession() { user }: Session, @SelectQL() select: PrismaSelector, @Args('data') data: MessageCreateWithoutUserInput) {
+	addMessage(@AuthUser() user: LuciaUser, @SelectQL() select: PrismaSelector, @Args('data') data: MessageCreateWithoutUserInput) {
 		return this.messageService.create(select, data, user);
 	}
 

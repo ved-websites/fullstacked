@@ -25,7 +25,7 @@ import { ResetPasswordInput } from './dtos/reset-password.input';
 import { UnregisteredUserOutput } from './dtos/unregistered-user.output';
 import { LuciaAuth, LuciaAuthRequest } from './lucia/lucia.decorator';
 import { loadLuciaModule } from './lucia/modules-compat';
-import { AuthSession, LuciaSession } from './session.decorator';
+import { AuthSession, AuthUser, LuciaSession, LuciaUser } from './session.decorator';
 
 @Resolver()
 export class AuthResolver {
@@ -35,7 +35,7 @@ export class AuthResolver {
 	) {}
 
 	@Query(() => LiveUser)
-	async getSessionUser(@AuthSession() { user }: LuciaSession, @SelectQL() select: PrismaSelector) {
+	async getSessionUser(@AuthUser() user: LuciaUser, @SelectQL() select: PrismaSelector) {
 		const authUser = await this.authService.getAuthUser(user.email, select);
 
 		return authUser satisfies LiveUser | null;
@@ -86,16 +86,12 @@ export class AuthResolver {
 	}
 
 	@Mutation(() => Boolean)
-	async logout(@AuthSession() session: LuciaSession | null, @Context() { res }: CommonGQLContext) {
-		if (session) {
-			const sessionCookie = await this.authService.logout(session);
+	async logout(@AuthSession() session: LuciaSession, @Context() { res }: CommonGQLContext) {
+		const sessionCookie = await this.authService.logout(session);
 
-			res.cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+		res.cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 
-			return true;
-		}
-
-		return false;
+		return true;
 	}
 
 	@Mutation(() => RenewedSessionOutput, { nullable: true })

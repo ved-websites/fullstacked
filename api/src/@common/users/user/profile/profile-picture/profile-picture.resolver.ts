@@ -1,4 +1,4 @@
-import { AuthSession, LuciaSession } from '$users/auth/session.decorator';
+import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { FileUpload } from 'graphql-upload/Upload.js';
@@ -13,7 +13,7 @@ export class ProfilePictureResolver {
 	async uploadProfilePicture(
 		@Args({ name: 'profilePicture', type: () => GraphQLUpload })
 		file: FileUpload,
-		@AuthSession() { user }: LuciaSession,
+		@AuthUser() user: LuciaUser,
 	) {
 		const uploadedImage = await this.profilePictureService.uploadImage(file, user);
 
@@ -23,7 +23,7 @@ export class ProfilePictureResolver {
 	}
 
 	@Mutation(() => Boolean)
-	async deleteProfilePicture(@AuthSession() { user }: LuciaSession) {
+	async deleteProfilePicture(@AuthUser() user: LuciaUser) {
 		return this.profilePictureService.deleteUserImage(user);
 	}
 }

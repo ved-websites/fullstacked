@@ -7,6 +7,11 @@ export const AuthSession = createParamDecorator(async (_data, context: Execution
 
 	return session;
 });
+export const AuthUser = createParamDecorator(async (_data, context: ExecutionContext) => {
+	const { session } = ContextService.getRequest(context);
+
+	return session?.user;
+});
 
 export type LuciaSession = Session;
 export type LuciaUser = User;
