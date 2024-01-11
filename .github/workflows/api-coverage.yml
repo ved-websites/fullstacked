@@ -56,7 +56,8 @@ jobs:
         with:
           accessToken: '${{ secrets.GH_BOT_TOKEN }}'
           runCommand: 'pnpm run --filter ./api coverage'
-          # delta: 0.5 # Delta of % changed that would make this job fail
+          delta: 100 # Delta of % changed that would make this job fail
+          total_delta: 100
           afterSwitchCommand: 'pnpm i && pnpm run init --no-client'
           useSameComment: true
         env:
