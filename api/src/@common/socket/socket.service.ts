@@ -4,10 +4,11 @@ import { parseCookies } from '$utils/cookies';
 import { Inject, Injectable } from '@nestjs/common';
 import type { IncomingMessage } from 'http';
 import { Server, WebSocket } from 'ws';
-import { EventRoute, EventRouteOutput, EventUID, extractEventRouteKey } from '~contract';
+import { EventRouteOutput, EventUID, RawEventRoute, extractEventRouteKey } from '~contract';
 import { WsEventEmitter } from './ts-ws/ws-event.emitter';
 
 export type TypedWebSocket = WebSocket & SessionContainer;
+export type SocketOrSessionId = TypedWebSocket | string;
 
 @Injectable()
 export class SocketService {
@@ -53,13 +54,13 @@ export class SocketService {
 		console.log('hai from SocketService.onClientDisconnect!', socket.session?.user.email);
 	}
 
-	sendMessage(socketOrSessionId: TypedWebSocket | string, message: string, uid?: EventUID) {
+	sendMessage(socketOrSessionId: SocketOrSessionId, message: string, uid?: EventUID) {
 		const formattedMessage = this.formatData(message, uid);
 
 		return this.sendBlob(socketOrSessionId, formattedMessage);
 	}
 
-	sendData(socketOrSessionId: TypedWebSocket | string, data: EventRouteOutput<unknown>) {
+	sendData(socketOrSessionId: SocketOrSessionId, data: EventRouteOutput<unknown>) {
 		return this.sendBlob(socketOrSessionId, data);
 	}
 
@@ -75,7 +76,7 @@ export class SocketService {
 		} satisfies EventRouteOutput<unknown>;
 	}
 
-	sendError(socketOrSessionId: TypedWebSocket | string, error: string | object, uid?: EventUID) {
+	sendError(socketOrSessionId: SocketOrSessionId, error: string | object, uid?: EventUID) {
 		const errorData = this.formatErrorMessage(error, uid);
 
 		return this.sendBlob(socketOrSessionId, errorData);
@@ -93,7 +94,7 @@ export class SocketService {
 		} satisfies EventRouteOutput<unknown>;
 	}
 
-	protected sendBlob(socketOrSessionId: TypedWebSocket | string, data: EventRouteOutput<unknown>) {
+	protected sendBlob(socketOrSessionId: SocketOrSessionId, data: EventRouteOutput<unknown>) {
 		const socket = this.getSocket(socketOrSessionId);
 
 		if (!socket) {
@@ -119,13 +120,13 @@ export class SocketService {
 		});
 	}
 
-	emit<E extends EventRoute>(event: E, data: E['emitted']) {
+	emit<E extends RawEventRoute>(event: E, data: E['emitted']) {
 		const key = extractEventRouteKey(event);
 
 		return this.wsEmitter.emit(key, data);
 	}
 
-	createFlushPattern(socketOrSessionId: TypedWebSocket | string) {
+	createFlushPattern(socketOrSessionId: SocketOrSessionId) {
 		const sessionId = this.getSessionId(socketOrSessionId);
 
 		if (!sessionId) {
@@ -135,7 +136,7 @@ export class SocketService {
 		return `flush:${sessionId}`;
 	}
 
-	flush(socketOrSessionId: TypedWebSocket | string) {
+	flush(socketOrSessionId: SocketOrSessionId) {
 		const event = this.createFlushPattern(socketOrSessionId);
 
 		if (!event) {
@@ -145,13 +146,13 @@ export class SocketService {
 		return this.wsEmitter.emit(event);
 	}
 
-	protected getSessionId(socketOrSessionId: TypedWebSocket | string) {
+	protected getSessionId(socketOrSessionId: SocketOrSessionId) {
 		const sessionId = typeof socketOrSessionId === 'string' ? socketOrSessionId : socketOrSessionId.sessionId;
 
 		return sessionId;
 	}
 
-	protected getSocket(socketOrSessionId: TypedWebSocket | string) {
+	protected getSocket(socketOrSessionId: SocketOrSessionId) {
 		if (typeof socketOrSessionId !== 'string') {
 			return socketOrSessionId;
 		}

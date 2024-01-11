@@ -5,7 +5,7 @@ import { RolesModule } from '$users/auth/roles/roles.module';
 import { CanActivate, SetMetadata, UseFilters, UseGuards, UseInterceptors, applyDecorators } from '@nestjs/common';
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import type { ClassConstructor } from 'class-transformer';
-import { EventRoute, extractEventRouteKey } from 'src/@contract/ws-events';
+import { RawEventRoute, extractEventRouteKey } from '~contract';
 import { WsEventExceptionsFilter } from './ws-event.filter';
 import { WsEventInterceptor } from './ws-event.interceptor';
 
@@ -29,7 +29,7 @@ const socketGuards = socketDependencies.map((dep) => dep.guard);
 
 export const EVENT_ROUTE_METADATA_KEY = '__wsEventRoute';
 
-export const WsEventSub = (event: EventRoute) => {
+export const WsEventSub = (event: RawEventRoute) => {
 	const key = extractEventRouteKey(event);
 
 	return applyDecorators(
