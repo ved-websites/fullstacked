@@ -107,6 +107,7 @@
     "tsx": "4.6.2",
     "typescript": "5.2.2",
     "unplugin-swc": "1.4.2",
+    "vite-tsconfig-paths": "4.2.1",
     "vitest": "0.34.4",
     "ws": "8.14.2",
     "zod-prisma-types": "3.1.6"

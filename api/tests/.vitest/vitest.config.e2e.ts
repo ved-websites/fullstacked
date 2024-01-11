@@ -1,14 +1,11 @@
 import swc from 'unplugin-swc';
 import { defineConfig, mergeConfig } from 'vitest/config';
-import vitestBaseConfig from './base';
+import vitestBaseConfig, { VitePlugin } from './base';
 
 const e2eConfigs = mergeConfig(
 	vitestBaseConfig,
 	defineConfig({
-		plugins: [
-			// @ts-ignore
-			swc.vite(),
-		],
+		plugins: [swc.vite() as VitePlugin],
 		ssr: {
 			noExternal: ['prisma-fixtures', 'class-importer'],
 		},
