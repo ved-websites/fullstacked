@@ -1,8 +1,14 @@
 import type { Auth as ApiAuth } from '$users/auth/lucia/lucia.factory';
-import type { AuthRequest, Session } from 'lucia';
-import { I18nContext } from 'nestjs-i18n';
+import type { SessionContainer } from '$users/auth/lucia/lucia.middleware';
+import type { AuthRequest } from 'lucia';
+import type { I18nContext } from 'nestjs-i18n';
 
 declare global {
+	type Awaitable<T> = T | PromiseLike<T>;
+	type Prettify<T> = {
+		[K in keyof T]: T[K];
+	} & unknown;
+
 	declare namespace Lucia {
 		type Auth = ApiAuth;
 
@@ -22,9 +28,7 @@ declare global {
 			authRequest: AuthRequest<ApiAuth>;
 		}
 
-		interface Request {
-			session: Session | null;
-			sessionId: string | null;
+		interface Request extends SessionContainer {
 			i18nLang: string;
 			i18nContext: I18nContext;
 		}

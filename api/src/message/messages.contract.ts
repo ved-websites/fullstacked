@@ -1,6 +1,7 @@
+import { Message } from '$prisma-client';
 import { MessageSchema, UserSchema } from '$zod';
 import { z } from 'zod';
-import { c, createResponses } from '~contract';
+import { c, createResponses, wsC } from '~contract';
 
 export const messagesContract = c.router(
 	{
@@ -35,3 +36,13 @@ export const messagesContract = c.router(
 	},
 	{ pathPrefix: '/messages' },
 );
+
+export const wsMessagesContract = wsC.router({
+	chat: {
+		type: 'create',
+		input: z.object({
+			filter: z.string(),
+		}),
+		emitted: wsC.type<Message>(),
+	},
+});

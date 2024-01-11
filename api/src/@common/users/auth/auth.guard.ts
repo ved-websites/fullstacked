@@ -1,7 +1,8 @@
-import { ContextService } from '$graphql/context/context.service';
+import { ContextService } from '$context/context.service';
 import { TypedI18nService } from '$i18n/i18n.service';
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { WsException } from '@nestjs/websockets';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -17,9 +18,13 @@ export class AuthGuard implements CanActivate {
 			return true;
 		}
 
-		const { session } = ContextService.getRequest(context);
+		const session = await ContextService.getSession(context);
 
 		if (!session) {
+			if (context.getType() === 'ws') {
+				throw new WsException('No session dummy');
+			}
+
 			// Unauthorized == Unauthenticated
 			throw new UnauthorizedException();
 		}
@@ -37,4 +42,4 @@ export class AuthGuard implements CanActivate {
  *
  * Pass in any falsy value (except `undefined`) to disable this decorator at runtime.
  */
-export const Public = Reflector.createDecorator<unknown, boolean>({ transform: (arg) => arg === undefined || !!arg });
+export const Public = Reflector.createDecorator<unknown, boolean>({ transform: (arg = true) => !!arg });

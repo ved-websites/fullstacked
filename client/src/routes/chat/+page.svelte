@@ -1,10 +1,8 @@
 <script lang="ts">
 	import type { ConfirmedSessionUser } from '$auth/auth-handler';
-	import { NewMessageStore } from '$houdini';
 	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
 	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
-	import { subscribe } from '$lib/houdini/helper';
 	import { getSessionUser } from '$lib/stores';
 	import { Button, Input, Label } from 'flowbite-svelte';
 	import { onMount, tick } from 'svelte';
@@ -55,34 +53,34 @@
 		},
 	});
 
-	subscribe([NewMessageStore], ({ data }) => {
-		if (!data) {
-			return;
-		}
+	// subscribe([NewMessageStore], ({ data }) => {
+	// 	if (!data) {
+	// 		return;
+	// 	}
 
-		const newMessage = data.messageAdded;
+	// 	const newMessage = data.messageAdded;
 
-		if (newMessage.user.email == $sessionUser.email) {
-			messages = messages.map((m) => {
-				if (!m.id && m.text == newMessage.text) {
-					m = { ...newMessage, id: +newMessage.id, active: true };
-				}
-				return m;
-			});
-		} else {
-			messages = [
-				...messages.filter((m) => m.active),
-				{
-					...{
-						...newMessage,
-						id: +newMessage.id,
-					},
-					active: true,
-				},
-				...messages.filter((m) => !m.active),
-			];
-		}
-	});
+	// 	if (newMessage.user.email == $sessionUser.email) {
+	// 		messages = messages.map((m) => {
+	// 			if (!m.id && m.text == newMessage.text) {
+	// 				m = { ...newMessage, id: +newMessage.id, active: true };
+	// 			}
+	// 			return m;
+	// 		});
+	// 	} else {
+	// 		messages = [
+	// 			...messages.filter((m) => m.active),
+	// 			{
+	// 				...{
+	// 					...newMessage,
+	// 					id: +newMessage.id,
+	// 				},
+	// 				active: true,
+	// 			},
+	// 			...messages.filter((m) => !m.active),
+	// 		];
+	// 	}
+	// });
 
 	$: messages = chatMessages.map<ChatMessageType>((rawMessage) => ({
 		id: rawMessage.id,

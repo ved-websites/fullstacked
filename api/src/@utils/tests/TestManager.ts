@@ -3,6 +3,7 @@ import { isLocal } from '$configs/helpers';
 import { LocalEnvironmentConfig } from '$configs/local-env.validation';
 import { TypedI18nModule } from '$i18n/i18n.module';
 import { PrismaModule } from '$prisma/prisma.module';
+import { SocketModule } from '$socket/socket.module';
 import { type ModuleMetadata } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { Test, TestingModule, TestingModuleBuilder } from '@nestjs/testing';
@@ -32,6 +33,7 @@ export class TestManager<Options extends TestOptions = TestOptions> {
 				global: true,
 				verboseMemoryLeak: true,
 			}),
+			SocketModule,
 		];
 
 		const sharedProviders: NonNullable<typeof metadata>['providers'] = [

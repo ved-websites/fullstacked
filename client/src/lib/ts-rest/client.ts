@@ -5,7 +5,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { initClient, type ApiFetcherArgs } from '@ts-rest/core';
 import { checkForApiErrors } from './errorHandler';
 
-export type ErrorPageMessagesData = PageMessages | ((args: OnErrorFunctionArgs) => PageMessages | PromiseLike<PageMessages>);
+export type ErrorPageMessagesData = PageMessages | ((args: OnErrorFunctionArgs) => Awaitable<PageMessages>);
 
 export type OnErrorFunctionArgs<T = unknown> = {
 	/** The error message. Usually a stringified `data.body.message`, but could be other things depending on the error. */
@@ -39,13 +39,13 @@ export type ApiResponseHandlerOptions = {
 	 *
 	 * If this function returns a truthy value, the default error logic will be skipped ("it is true that the error has been handled").
 	 */
-	onBadRequest?: (args: OnErrorFunctionArgs<CommonError>) => PromiseLike<unknown> | unknown;
+	onBadRequest?: (args: OnErrorFunctionArgs<CommonError>) => Awaitable<unknown>;
 	/**
 	 * Called before the common error logic is handled.
 	 *
 	 * If this function returns a truthy value, the default error logic will be skipped ("it is true that the error has been handled").
 	 */
-	onCommonError?: (args: OnErrorFunctionArgs<CommonError>) => PromiseLike<unknown> | unknown;
+	onCommonError?: (args: OnErrorFunctionArgs<CommonError>) => Awaitable<unknown>;
 };
 
 const apiUrl = getApiUrl();

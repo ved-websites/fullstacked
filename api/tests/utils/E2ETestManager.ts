@@ -1,12 +1,11 @@
 import 'lucia/polyfill/node';
 
+import { setupApp } from '$app/setupApp';
 import { GraphQLModule } from '$graphql/graphql.module';
 import { ensureGraphQLSchema } from '$graphql/schema/schema.manager';
 import { PrismaService } from '$prisma/prisma.service';
 import { AuthModule } from '$users/auth/auth.module';
 import { AuthService } from '$users/auth/auth.service';
-import { setupViewEngine } from '$utils/setupViewEngine';
-import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { TestingModuleBuilder } from '@nestjs/testing';
 import { User } from 'lucia';
@@ -84,9 +83,8 @@ export class E2ETestManager extends TestManager<E2ETestOptions> {
 		await ensureGraphQLSchema();
 
 		this.app = this.module.createNestApplication();
-		this.app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-		setupViewEngine(this.app);
+		setupApp(this.app);
 
 		await this.app.init();
 

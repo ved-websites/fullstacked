@@ -15,6 +15,7 @@
 	import { setSessionUser, themeStore } from '$lib/stores';
 	import type { PageMessages } from '$lib/types';
 	import { getFlash } from 'sveltekit-flash-message/client';
+	import WebSocketTest from './WebSocketTest.svelte';
 
 	export let data;
 
@@ -47,6 +48,8 @@
 		}
 	});
 </script>
+
+<WebSocketTest></WebSocketTest>
 
 <HasJs />
 <InitialTheme />

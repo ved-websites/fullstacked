@@ -1,16 +1,19 @@
 import { PrismaService } from '$prisma/prisma.service';
+import { SocketService } from '$socket/socket.service';
 import { AuthSession, LuciaSession } from '$users/auth/session.decorator';
 import { Controller } from '@nestjs/common';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
-import { r } from '~contract';
-import { MESSAGE_ADDED } from './constants/triggers';
+import { r, wsR } from '~contract';
 
 @Controller()
 export class MessageController {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly sockets: SocketService,
+	) {}
 
 	@TsRestHandler(r.messages.list)
-	async getMessages() {
+	getMessages() {
 		return tsRestHandler(r.messages.list, async () => {
 			const messages = await this.prisma.message.findMany({
 				select: {
@@ -36,16 +39,16 @@ export class MessageController {
 	}
 
 	@TsRestHandler(r.messages.new)
-	async newMessage(@AuthSession() { user }: LuciaSession) {
+	newMessage(@AuthSession() { user }: LuciaSession) {
 		return tsRestHandler(r.messages.new, async ({ body: { text } }) => {
-			await this.prisma.mutate([MESSAGE_ADDED], {}, () => {
-				return this.prisma.message.create({
-					data: {
-						text,
-						user: { connect: { email: user.email } },
-					},
-				});
+			const message = await this.prisma.message.create({
+				data: {
+					text,
+					user: { connect: { email: user.email } },
+				},
 			});
+
+			this.sockets.emit(wsR.messages.chat, message);
 
 			return {
 				status: 200,

@@ -1,4 +1,5 @@
 import { TypedI18nService } from '$i18n/i18n.service';
+import { SocketService, TypedWebSocket } from '$socket/socket.service';
 import { Auth, LuciaFactory } from '$users/auth/lucia/lucia.factory';
 import { COOKIE_NAME, setupRequest } from '$users/auth/lucia/lucia.middleware';
 import { parseCookies } from '$utils/cookies';
@@ -42,7 +43,7 @@ export class ContextService {
 		const { req, res } = this.extractRawGqlContext(context);
 
 		if (this.isSubscriptionContext(context)) {
-			const { connectionParams } = context;
+			const { connectionParams } = context as TypedSubscriptionContext;
 
 			// Casting to workaround TS type narrowing
 			if ('session' in (req as typeof req)) {
@@ -82,7 +83,7 @@ export class ContextService {
 		return { req, res };
 	}
 
-	static getGraphQLRequest(context: ExecutionContext) {
+	protected static getGraphQLRequest(context: ExecutionContext) {
 		const gqlContext = GqlExecutionContext.create(context);
 
 		return gqlContext.getContext<CommonGQLContext>().req;
@@ -96,10 +97,14 @@ export class ContextService {
 			return context.switchToHttp().getRequest<Request>();
 		}
 
+		if (context.getType() === 'ws') {
+			return {} as Request;
+		}
+
 		return this.getGraphQLRequest(context);
 	}
 
-	static getGraphQLResponse(context: ExecutionContext) {
+	protected static getGraphQLResponse(context: ExecutionContext) {
 		return this.getGraphQLRequest(context).res!;
 	}
 
@@ -108,6 +113,30 @@ export class ContextService {
 			return context.switchToHttp().getResponse<Response>();
 		}
 
+		if (context.getType() === 'ws') {
+			return {} as Response;
+		}
+
 		return this.getGraphQLRequest(context).res!;
+	}
+
+	static async getSession(context: ExecutionContext) {
+		if (context.getType() === 'ws') {
+			const socket = context.switchToWs().getClient<TypedWebSocket>();
+
+			await SocketService.finishInitialization(socket);
+
+			return socket.session;
+		}
+
+		const request = ContextService.getRequest(context);
+
+		return request.session;
+	}
+
+	static async getUser(context: ExecutionContext) {
+		const session = await this.getSession(context);
+
+		return session?.user;
 	}
 }

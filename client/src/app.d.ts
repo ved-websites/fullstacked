@@ -30,6 +30,11 @@ export interface HoudiniSession {
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
+	type Awaitable<T> = T | PromiseLike<T>;
+	type Prettify<T> = {
+		[K in keyof T]: T[K];
+	} & unknown;
+
 	namespace App {
 		interface Locals extends AppLocals {}
 		interface PageData extends AppPageData {}
