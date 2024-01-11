@@ -1,5 +1,5 @@
 import type { ZodType, z } from 'zod';
-import type { TypedWebSocket } from '../../@common/socket/socket.service';
+import type { TypedWebSocket } from '../../@common/socket/types';
 import type { EventRouteInput, EventRouteOutput, RawEventRoute } from './eventRoute';
 
 export type RouteEventHandler<E extends RawEventRoute = RawEventRoute> = (

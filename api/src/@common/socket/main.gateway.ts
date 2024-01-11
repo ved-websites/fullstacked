@@ -1,8 +1,9 @@
-import { SocketService, TypedWebSocket } from '$socket/socket.service';
+import { SocketService } from '$socket/socket.service';
 import { OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, WebSocketGateway } from '@nestjs/websockets';
 import type { IncomingMessage } from 'http';
 import { Server } from 'ws';
 import { WsStatusCodes } from '~contract';
+import type { TypedWebSocket } from './types';
 
 @WebSocketGateway({
 	transports: ['websocket'],

@@ -1,14 +1,12 @@
 import { Auth, LuciaFactory } from '$users/auth/lucia/lucia.factory';
-import { COOKIE_NAME, setupSessionContainer, type SessionContainer } from '$users/auth/lucia/lucia.middleware';
+import { COOKIE_NAME, setupSessionContainer } from '$users/auth/lucia/lucia.middleware';
 import { parseCookies } from '$utils/cookies';
 import { Inject, Injectable } from '@nestjs/common';
 import type { IncomingMessage } from 'http';
 import { Server, WebSocket } from 'ws';
-import { EventRouteOutput, EventUID, RawEventRoute, extractEventRouteKey } from '~contract';
+import { EventRouteOutput, EventUID, extractEventRouteKey, type RawEventRoute } from '~contract';
 import { WsEventEmitter } from './ts-ws/ws-event.emitter';
-
-export type TypedWebSocket = WebSocket & SessionContainer;
-export type SocketOrSessionId = TypedWebSocket | string;
+import type { SocketOrSessionId, TypedWebSocket } from './types';
 
 @Injectable()
 export class SocketService {

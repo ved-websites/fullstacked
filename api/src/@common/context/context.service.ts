@@ -1,5 +1,6 @@
 import { TypedI18nService } from '$i18n/i18n.service';
-import { SocketService, TypedWebSocket } from '$socket/socket.service';
+import { SocketService } from '$socket/socket.service';
+import type { TypedWebSocket } from '$socket/types';
 import { Auth, LuciaFactory } from '$users/auth/lucia/lucia.factory';
 import { COOKIE_NAME, setupRequest } from '$users/auth/lucia/lucia.middleware';
 import { parseCookies } from '$utils/cookies';

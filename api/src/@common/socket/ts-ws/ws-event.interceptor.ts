@@ -1,4 +1,5 @@
-import { SocketService, TypedWebSocket } from '$socket/socket.service';
+import { SocketService } from '$socket/socket.service';
+import type { TypedWebSocket } from '$socket/types';
 import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable, of, switchMap } from 'rxjs';

@@ -1,4 +1,5 @@
-import { SocketService, TypedWebSocket } from '$socket/socket.service';
+import { SocketService } from '$socket/socket.service';
+import type { TypedWebSocket } from '$socket/types';
 import { ArgumentsHost, Catch, HttpException } from '@nestjs/common';
 import { BaseWsExceptionFilter, WsException } from '@nestjs/websockets';
 

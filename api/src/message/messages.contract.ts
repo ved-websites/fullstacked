@@ -1,4 +1,4 @@
-import { Message } from '$prisma-client';
+import type { Message } from '$prisma-client';
 import { MessageSchema, UserSchema } from '$zod';
 import { z } from 'zod';
 import { c, createResponses, wsC } from '~contract';
