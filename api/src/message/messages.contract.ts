@@ -38,10 +38,10 @@ export const messagesContract = c.router(
 );
 
 export const wsMessagesContract = wsC.router({
-	chat: {
+	new: {
 		type: 'create',
 		input: z.object({
-			filter: z.string(),
+			closeOnIncludes: z.string(),
 		}),
 		emitted: wsC.type<Message>(),
 	},

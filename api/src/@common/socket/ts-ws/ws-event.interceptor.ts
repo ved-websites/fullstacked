@@ -73,7 +73,6 @@ export class WsEventInterceptor implements NestInterceptor {
 								try {
 									const partialImplOutput = await impl({
 										socket,
-										type,
 										uid,
 										input,
 										data: emittedData,

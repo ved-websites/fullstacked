@@ -48,7 +48,7 @@ export class MessageController {
 				},
 			});
 
-			this.sockets.emit(wsR.messages.chat, message);
+			this.sockets.emit(wsR.messages.new, message);
 
 			return {
 				status: 200,

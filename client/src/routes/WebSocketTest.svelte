@@ -27,9 +27,9 @@
 					type: 'subscribe',
 					uid: 'my-uid',
 					input: {
-						filter: 'ok',
+						closeOnIncludes: 'ok',
 					},
-				} satisfies EventRouteInput<typeof wsR.messages.chat>,
+				} satisfies EventRouteInput<typeof wsR.messages.new>,
 			});
 
 			// setTimeout(() => {

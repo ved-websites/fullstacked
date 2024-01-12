@@ -7,12 +7,12 @@ export type EventRouteDataCommon<T extends string = string> = {
 	uid?: EventUID;
 };
 
-export type EventRouteSubscribeInput<E extends RawEventRoute> = EventRouteDataCommon<'subscribe'> & {
+export type EventRouteSubscribeInput<E extends EventRouteConfig> = EventRouteDataCommon<'subscribe'> & {
 	input: E['input'] extends ZodType ? z.output<E['input']> : undefined;
 };
 export type EventRouteUnsubscribeInput = EventRouteDataCommon<'unsubscribe'>;
 
-export type EventRouteInput<E extends RawEventRoute = RawEventRoute> = EventRouteDataCommon &
+export type EventRouteInput<E extends EventRouteConfig = EventRouteConfig> = EventRouteDataCommon &
 	(EventRouteSubscribeInput<E> | EventRouteUnsubscribeInput);
 
 export type EventRouteType = 'create' | 'update' | 'delete';
@@ -22,23 +22,27 @@ export type EventRouteOutput<T, O extends string = string> = EventRouteDataCommo
 	data: T;
 };
 
-export type RawEventRoute = {
+export type EventRoute<C extends EventRouteConfig = EventRouteConfig> = C & {
+	key: string;
+};
+export type EventRouteConfig = {
 	type: EventRouteType;
 	input?: ZodSchema;
 	emitted: unknown;
 };
-export type EventRoute = RawEventRoute & {
-	key: string;
+
+export type EventRouter = {
+	[key: string]: EventRouteConfig | EventRouter;
 };
 
-export type EventRouter<R extends RawEventRoute = RawEventRoute> = {
-	[key: string]: R | EventRouter;
-};
-
-export function isRawEventRoute(obj: RawEventRoute | EventRouter): obj is RawEventRoute {
-	return 'emitted' in obj;
+function isBaseEventRouteConfig(obj: Record<string, unknown>) {
+	return 'emitted' in obj && 'type' in obj;
 }
 
-export function isEventRoute(obj: RawEventRoute): obj is EventRoute {
-	return 'key' in obj;
+export function isEventRouteConfig(obj: EventRouteConfig | EventRouter): obj is EventRouteConfig {
+	return isBaseEventRouteConfig(obj) && !('key' in obj);
+}
+
+export function isEventRoute(obj: EventRouteConfig): obj is EventRoute {
+	return isBaseEventRouteConfig(obj) && 'key' in obj;
 }
