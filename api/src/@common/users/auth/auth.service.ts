@@ -5,7 +5,7 @@ import { TypedI18nService } from '$i18n/i18n.service';
 import { User } from '$prisma-client';
 import { PrismaSelector, PrismaService, PrismaSubscribeTriggers } from '$prisma/prisma.service';
 import { loadLuciaUtils } from '$users/auth/lucia/modules-compat';
-import { PresenceService, UserOnlineSelector } from '$users/presence/presence.service';
+import { PresenceService } from '$users/presence/presence.service';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes } from 'lucia';
 import { EnvironmentConfig } from '~env';
@@ -48,17 +48,19 @@ export class AuthService {
 		return this.auth.getUser(userId);
 	}
 
-	async getAuthUser(email: string, select: PrismaSelector) {
-		const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(select, 'online');
+	async getAuthUser(email: string) {
+		// const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(select, 'online');
 
 		const user = await this.prisma.user.findUnique({
 			where: {
 				email,
 			},
-			...selector,
+			include: {
+				roles: true,
+			},
 		});
 
-		return this.presenceService.convertUserToLiveUser(user, online);
+		return user;
 	}
 
 	async getUnregisteredUser(registerToken: string) {

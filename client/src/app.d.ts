@@ -4,12 +4,12 @@ import type { QueryResult as HoudiniQueryResult } from '../$houdini/runtime/lib'
 import type { SessionUser } from './auth/auth-handler';
 import type { createHoudiniHelpers } from './lib/houdini/helper';
 import type { Theme } from './lib/stores';
-import type { createTsRestClient } from './lib/ts-rest/client';
+import type { TsRestClient } from './lib/ts-rest/client';
 import type { EventStep, GraphQLError, PageMessages } from './lib/types';
 
 export interface AppLocals {
 	gql: ReturnType<typeof createHoudiniHelpers>;
-	tsrest: ReturnType<typeof createTsRestClient>;
+	tsrest: TsRestClient;
 	sessionUser: SessionUser;
 	theme?: Theme;
 	userHasJs: boolean;

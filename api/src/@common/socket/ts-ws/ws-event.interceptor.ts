@@ -75,7 +75,7 @@ export class WsEventInterceptor implements NestInterceptor {
 										socket,
 										uid,
 										input,
-										data: emittedData,
+										data: emittedData as object,
 									});
 
 									if (!partialImplOutput) {

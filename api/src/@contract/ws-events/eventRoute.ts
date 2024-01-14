@@ -19,7 +19,7 @@ export type EventRouteType = 'create' | 'update' | 'delete';
 
 export type EventRouteOutput<T, O extends string = string> = EventRouteDataCommon<O> & {
 	uid: EventUID | undefined;
-	data: T;
+	data: Prettify<T>;
 };
 
 export type EventRoute<C extends EventRouteConfig = EventRouteConfig> = C & {
@@ -43,6 +43,10 @@ export function isEventRouteConfig(obj: EventRouteConfig | EventRouter): obj is 
 	return isBaseEventRouteConfig(obj) && !('key' in obj);
 }
 
-export function isEventRoute(obj: EventRouteConfig): obj is EventRoute {
+export function isEventRoute(obj: EventRouteConfig | EventRouter): obj is EventRoute {
 	return isBaseEventRouteConfig(obj) && 'key' in obj;
 }
+
+export type PrettifyRouter<T> = {
+	[K in keyof T]: T[K] extends EventRouter ? PrettifyRouter<T[K]> : T[K] extends EventRouteConfig ? Prettify<T[K]> : T[K];
+} & unknown;

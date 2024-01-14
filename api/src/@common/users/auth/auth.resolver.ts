@@ -35,10 +35,10 @@ export class AuthResolver {
 	) {}
 
 	@Query(() => LiveUser)
-	async getSessionUser(@AuthUser() user: LuciaUser, @SelectQL() select: PrismaSelector) {
-		const authUser = await this.authService.getAuthUser(user.email, select);
+	async getSessionUser(@AuthUser() user: LuciaUser) {
+		const authUser = await this.authService.getAuthUser(user.email);
 
-		return authUser satisfies LiveUser | null;
+		return authUser;
 	}
 
 	@Public()

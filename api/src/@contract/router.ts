@@ -1,3 +1,4 @@
+import { authContract, wsAuthContract } from '../@common/users/auth/auth.contract';
 import { usersContract } from '../@common/users/users.contract';
 import { messagesContract, wsMessagesContract } from '../message/messages.contract';
 import { c, wsC } from './utils/contract';
@@ -7,17 +8,20 @@ import { mapContractsToEndpoints, mapWsContractsToEndpoints } from './utils/cont
 const activeRestContracts = {
 	messagesContract,
 	usersContract,
+	authContract,
 };
 // === IMPORT CUSTOM REST CONTRACTS ABOVE ===
 
 // === IMPORT CUSTOM EVENTS CONTRACTS BELOW ===
 const activeEventsContracts = {
 	wsMessagesContract,
+	wsAuthContract,
 };
 // === IMPORT CUSTOM REST CONTRACTS ABOVE ===
 
 export const routes = c.router(mapContractsToEndpoints(activeRestContracts), {
 	strictStatusCodes: true,
+	pathPrefix: '/api',
 });
 
 /** Shorthand for {@link routes} */

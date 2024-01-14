@@ -46,6 +46,9 @@ export class MessageController {
 					text,
 					user: { connect: { email: user.email } },
 				},
+				include: {
+					user: true,
+				},
 			});
 
 			this.sockets.emit(wsR.messages.new, message);

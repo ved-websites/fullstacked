@@ -21,7 +21,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	setSession(event, { token });
 
 	if (token) {
-		event.locals.sessionUser = await getAuthUser(event.locals.gql.query);
+		event.locals.sessionUser = await getAuthUser(event.locals.tsrest);
 	}
 
 	verifyUserAccess(event);

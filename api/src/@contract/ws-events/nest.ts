@@ -5,7 +5,7 @@ import type { EventRoute, EventRouteConfig, EventRouteInput, EventRouteOutput } 
 export type RouteEventHandler<E extends EventRouteConfig = EventRouteConfig> = (
 	event: Omit<EventRouteInput<E>, 'data' | 'type'> & {
 		socket: TypedWebSocket;
-		data: E['emitted'];
+		data: Prettify<E['emitted']>;
 		input: E['input'] extends ZodType ? z.output<E['input']> : undefined;
 	},
 ) => Awaitable<Partial<Omit<EventRouteOutput<E['emitted']>, 'type'>> | undefined | void>;
@@ -22,3 +22,8 @@ export type RouteEventHandler<E extends EventRouteConfig = EventRouteConfig> = (
 export function tsWsHandler<E extends EventRoute>(_event: E, implementation: RouteEventHandler<E>) {
 	return implementation;
 }
+
+export type NestWsIncomingMessage<TRoute extends EventRouteConfig = EventRouteConfig> = {
+	event: string;
+	data: EventRouteInput<TRoute>;
+};

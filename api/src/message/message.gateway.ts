@@ -1,7 +1,7 @@
 import { WsEventSub, WsGateway } from '$socket/ts-ws/ws-event.decorator';
 import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
 import { Logger } from '@nestjs/common';
-import { WsStatusCodes, tsWsHandler, wsR } from '~contract';
+import { tsWsHandler, wsR } from '~contract';
 
 @WsGateway()
 export class MessageGateway {
@@ -13,16 +13,16 @@ export class MessageGateway {
 
 		this.logger.debug(`User subbed to chat : ${user.email}`);
 
-		return tsWsHandler(wsR.messages.new, ({ socket, data, input }) => {
+		return tsWsHandler(wsR.messages.new, ({ data }) => {
 			// Code here only runs on emitted event data.
 			// You could use it to filter out unwanted events from being sent.
 
 			this.logger.debug(`Chat Message sent to : ${user.email}`);
 
-			if (data.text.includes(input.closeOnIncludes)) {
-				socket.close(WsStatusCodes.CLOSE_NORMAL, 'Provided filter made you close the socket!');
-				return;
-			}
+			// if (data.text.includes(input.closeOnIncludes)) {
+			// 	socket.close(WsStatusCodes.CLOSE_NORMAL, 'Provided filter made you close the socket!');
+			// 	return;
+			// }
 
 			return { data };
 		});

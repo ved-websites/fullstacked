@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { AdminUserDataStore } from '$houdini';
+	// import { AdminUserDataStore } from '$houdini';
 	import { getI18n } from '$i18n';
-	import { subscribe } from '$lib/houdini/helper';
+	// import { subscribe } from '$lib/houdini/helper';
 	import { Button, Heading, Modal } from 'flowbite-svelte';
 	import type { ComponentEvents } from 'svelte';
 	import CopyInviteButton from './components/UsersTable/CopyInviteButton.svelte';
@@ -14,29 +14,29 @@
 
 	export let data;
 
-	let usersSubMap = new Map<string, ReturnType<typeof subscribe>>();
+	// let usersSubMap = new Map<string, ReturnType<typeof subscribe>>();
 
 	$: ({ registeredUsers, unregisteredUsers } = data.streamed);
 
-	$: registeredUsers.then((users) =>
-		// eslint-disable-next-line implicit-arrow-linebreak
-		users?.forEach((user) => {
-			usersSubMap.get(user.email)?.();
+	// $: registeredUsers.then((users) =>
+	// 	// eslint-disable-next-line implicit-arrow-linebreak
+	// 	users?.forEach((user) => {
+	// 		// usersSubMap.get(user.email)?.();
 
-			const unsubscriber = subscribe([AdminUserDataStore, { email: user.email }], ({ data }) => {
-				if (!data) {
-					return;
-				}
+	// 		const unsubscriber = subscribe([AdminUserDataStore, { email: user.email }], ({ data }) => {
+	// 			if (!data) {
+	// 				return;
+	// 			}
 
-				const editedUser = data.userEdited;
+	// 			const editedUser = data.userEdited;
 
-				// onUserUpdated(editedUser);
-				console.log({ editedUser });
-			});
+	// 			// onUserUpdated(editedUser);
+	// 			console.log({ editedUser });
+	// 		});
 
-			usersSubMap.set(user.email, unsubscriber);
-		}),
-	);
+	// 		usersSubMap.set(user.email, unsubscriber);
+	// 	}),
+	// );
 
 	let deleteModalOpen = false;
 	let deletionUser: BaseUser | undefined;

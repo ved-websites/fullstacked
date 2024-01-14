@@ -1,4 +1,11 @@
-import { isEventRoute, isEventRouteConfig, type EventRoute, type EventRouteConfig, type EventRouter } from './eventRoute';
+import {
+	isEventRoute,
+	isEventRouteConfig,
+	type EventRoute,
+	type EventRouteConfig,
+	type EventRouter,
+	type PrettifyRouter,
+} from './eventRoute';
 
 export function createEventContract() {
 	return {
@@ -17,15 +24,11 @@ export function createEventContract() {
 }
 
 export function processEventRouter<TRouter extends EventRouter>(router: TRouter, prevKey = '') {
-	type ExtendedEventRoute<T> = {
-		[K in keyof T]: T[K] extends EventRouteConfig ? EventRoute<T[K]> : ExtendedEventRoute<T[K]>;
+	type NestEventRouter<T extends EventRouter> = {
+		[K in keyof T]: T[K] extends EventRouteConfig ? EventRoute<T[K]> : T[K] extends EventRouter ? NestEventRouter<T[K]> : T[K];
 	};
 
-	type PrettifyRouter<T> = {
-		[K in keyof T]: T[K] extends EventRouter ? PrettifyRouter<T[K]> : T[K] extends EventRouteConfig ? Prettify<T[K]> : T[K];
-	} & unknown;
-
-	const processedRouter: PrettifyRouter<TRouter & ExtendedEventRoute<TRouter>> = Object.fromEntries(
+	const processedRouter: PrettifyRouter<NestEventRouter<TRouter>> = Object.fromEntries(
 		Object.entries(router).map(([key, subRouter]) => {
 			const routeKey = prevKey ? `${prevKey}.${key}` : key;
 
@@ -47,7 +50,7 @@ export function processEventRouter<TRouter extends EventRouter>(router: TRouter,
 
 export function extractEventRouteKey(event: EventRouteConfig) {
 	if (!isEventRoute(event)) {
-		throw new Error(`Event was not processed! Did you forget to use the 'masterRouter' method?`);
+		throw new Error(`Event route was not processed! Did you forget to use the 'masterRouter' method?`);
 	}
 
 	return event.key;

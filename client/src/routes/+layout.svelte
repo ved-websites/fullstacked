@@ -1,9 +1,9 @@
 <script lang="ts">
 	import '../app.postcss';
 
-	import { afterNavigate, invalidateAll } from '$app/navigation';
+	// import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { SessionUserDataStore } from '$houdini';
+	// import { SessionUserDataStore } from '$houdini';
 	import { setI18n } from '$i18n';
 	import LayoutAlert from '$lib/components/LayoutAlert/LayoutAlert.svelte';
 	import ToastManager from '$lib/components/ToastManager/ToastManager.svelte';
@@ -11,11 +11,12 @@
 	import InitialTheme from '$lib/components/head/InitialTheme.svelte';
 	import LanguageChecker from '$lib/components/head/LanguageChecker.svelte';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
-	import { subscribe } from '$lib/houdini/helper';
+	// import { subscribe } from '$lib/houdini/helper';
+	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { setSessionUser, themeStore } from '$lib/stores';
+	import { wsClient } from '$lib/ts-ws/client';
 	import type { PageMessages } from '$lib/types';
 	import { getFlash } from 'sveltekit-flash-message/client';
-	import WebSocketTest from './WebSocketTest.svelte';
 
 	export let data;
 
@@ -31,25 +32,24 @@
 	$: layoutAlert = $flash?.layoutAlert || $page.data.layoutAlert || formData?.layoutAlert;
 	$: toasts = [...($page.data.toasts ?? []), ...($flash?.toasts ?? []), ...(formData?.toasts ?? [])];
 
-	let sessionUnsubscriber: ReturnType<typeof subscribe>;
+	let sessionUnsubscriber: ReturnType<typeof wsClient.auth.update> | undefined;
 
 	afterNavigate(() => {
-		if (data.sessionUser) {
-			sessionUnsubscriber = subscribe([SessionUserDataStore, { email: data.sessionUser.email }], ({ data: editedUserData }) => {
-				if (!editedUserData) {
-					return;
-				}
+		if (!sessionUnsubscriber && data.sessionUser) {
+			sessionUnsubscriber = wsClient.auth.update(undefined, ({ data: editedUserData }) => {
+				data.sessionUser = editedUserData;
 
-				data.sessionUser = editedUserData.userEdited;
+				console.log({ ctx: 'session update' });
+
 				invalidateAll();
 			});
-		} else {
+		} else if (!data.sessionUser) {
 			sessionUnsubscriber?.();
+
+			sessionUnsubscriber = undefined;
 		}
 	});
 </script>
-
-<WebSocketTest></WebSocketTest>
 
 <HasJs />
 <InitialTheme />

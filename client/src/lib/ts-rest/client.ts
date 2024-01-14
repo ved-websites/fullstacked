@@ -67,3 +67,5 @@ export function createTsRestClient(event?: RequestEvent) {
 
 	return client;
 }
+
+export type TsRestClient = ReturnType<typeof createTsRestClient>;

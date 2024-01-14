@@ -1,31 +1,12 @@
 import { AuthGuard } from '$users/auth/auth.guard';
-import { AuthModule } from '$users/auth/auth.module';
 import { RolesGuard } from '$users/auth/roles/roles.guard';
-import { RolesModule } from '$users/auth/roles/roles.module';
-import { CanActivate, SetMetadata, UseFilters, UseGuards, UseInterceptors, applyDecorators } from '@nestjs/common';
+import { SetMetadata, UseFilters, UseGuards, UseInterceptors, applyDecorators } from '@nestjs/common';
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
-import type { ClassConstructor } from 'class-transformer';
 import { EventRoute, extractEventRouteKey } from '~contract';
 import { WsEventExceptionsFilter } from './ws-event.filter';
 import { WsEventInterceptor } from './ws-event.interceptor';
 
-export type SocketDepType = {
-	module: ClassConstructor<unknown>;
-	guard: ClassConstructor<CanActivate>;
-};
-
-export const socketDependencies = [
-	{
-		module: AuthModule,
-		guard: AuthGuard,
-	},
-	{
-		module: RolesModule,
-		guard: RolesGuard,
-	},
-] as const satisfies ReadonlyArray<SocketDepType>;
-
-const socketGuards = socketDependencies.map((dep) => dep.guard);
+export const socketGuards = [AuthGuard, RolesGuard] as const;
 
 export const EVENT_ROUTE_METADATA_KEY = '__ts-ws_wsEventRoute';
 
