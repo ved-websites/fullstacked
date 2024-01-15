@@ -1,8 +1,10 @@
-import type { Role } from '$prisma-client';
 import { RoleSchema, UserSchema } from '$zod';
 import { z } from 'zod';
 import { c, createResponses, wsC } from '~contract';
-import type { LiveUser } from './types';
+
+export const SessionUserSchema = UserSchema.extend({
+	roles: RoleSchema.omit({ createdAt: true }).array(),
+});
 
 export const authContract = c.router(
 	{
@@ -11,11 +13,7 @@ export const authContract = c.router(
 			path: '/session',
 			summary: 'Get the current user session.',
 			responses: createResponses({
-				200: z.null().or(
-					UserSchema.extend({
-						roles: RoleSchema.array(),
-					}),
-				),
+				200: z.null().or(SessionUserSchema),
 			}),
 		},
 	},
@@ -23,13 +21,8 @@ export const authContract = c.router(
 );
 
 export const wsAuthContract = wsC.router({
-	update: {
+	session: {
 		type: 'update',
-		input: z
-			.object({
-				email: z.string().optional(),
-			})
-			.optional(),
-		emitted: wsC.type<LiveUser & { roles: Role[] }>(),
+		emitted: SessionUserSchema,
 	},
 });

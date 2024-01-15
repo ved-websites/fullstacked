@@ -114,7 +114,7 @@ export class AdminService {
 
 		// });
 
-		this.sockets.emit(wsR.auth.update, liveUser);
+		this.sockets.emit(wsR.auth.session, liveUser);
 
 		return liveUser;
 	}

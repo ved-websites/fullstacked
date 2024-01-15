@@ -28,7 +28,7 @@ export type EventRoute<C extends EventRouteConfig = EventRouteConfig> = C & {
 export type EventRouteConfig = {
 	type: EventRouteType;
 	input?: ZodSchema;
-	emitted: unknown;
+	emitted: ZodSchema;
 };
 
 export type EventRouter = {

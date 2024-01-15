@@ -16,7 +16,7 @@ import {
 
 export type SubscriptionEventValue<TRoute extends EventRoute = EventRoute> = {
 	subscriptionRequest: NestWsIncomingMessage<TRoute>;
-	subscriber: (args: { data: Prettify<TRoute['emitted']> }) => Awaitable<unknown>;
+	subscriber: (args: { data: z.output<TRoute['emitted']> }) => Awaitable<unknown>;
 };
 
 type FullRouteArgs<I extends ZodType, TRoute extends EventRoute> = [
@@ -129,7 +129,6 @@ class KitSocket extends SuperSocket {
 
 		const subscriptionValue: SubscriptionEventValue = {
 			subscriptionRequest,
-			// @ts-expect-error Prettify shenanigans
 			subscriber: args.subscriber,
 		};
 

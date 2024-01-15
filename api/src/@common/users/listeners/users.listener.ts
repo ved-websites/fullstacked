@@ -34,7 +34,7 @@ export class UsersListener {
 			},
 		});
 
-		this.sockets.emit(wsR.auth.update, { ...liveUser, ...rolesData });
+		this.sockets.emit(wsR.auth.session, { ...liveUser, ...rolesData });
 	}
 
 	@OnEvent(USERS_ON_DISCONNECT_EVENT_KEY, { async: true })
@@ -50,6 +50,6 @@ export class UsersListener {
 			},
 		});
 
-		this.sockets.emit(wsR.auth.update, { ...liveUser, ...rolesData });
+		this.sockets.emit(wsR.auth.session, { ...liveUser, ...rolesData });
 	}
 }

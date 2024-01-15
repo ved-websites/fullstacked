@@ -32,14 +32,12 @@
 	$: layoutAlert = $flash?.layoutAlert || $page.data.layoutAlert || formData?.layoutAlert;
 	$: toasts = [...($page.data.toasts ?? []), ...($flash?.toasts ?? []), ...(formData?.toasts ?? [])];
 
-	let sessionUnsubscriber: ReturnType<typeof wsClient.auth.update> | undefined;
+	let sessionUnsubscriber: ReturnType<typeof wsClient.auth.session> | undefined;
 
 	afterNavigate(() => {
 		if (!sessionUnsubscriber && data.sessionUser) {
-			sessionUnsubscriber = wsClient.auth.update(undefined, ({ data: editedUserData }) => {
+			sessionUnsubscriber = wsClient.auth.session(({ data: editedUserData }) => {
 				data.sessionUser = editedUserData;
-
-				console.log({ ctx: 'session update' });
 
 				invalidateAll();
 			});

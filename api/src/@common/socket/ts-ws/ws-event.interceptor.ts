@@ -67,7 +67,14 @@ export class WsEventInterceptor implements NestInterceptor {
 				return new Observable<EventRouteOutput<unknown>>((observer) => {
 					const listener = async (emittedData: unknown) => {
 						const getFormattedValue = async () => {
-							const formattedData = this.socketService.formatData(emittedData, uid, eventRoute.type);
+							const parseOutput = await eventRoute.emitted.safeParseAsync(emittedData);
+
+							if (!parseOutput.success) {
+								this.logger.error(`Wrong value passed to emitted data structure, what's that about?`, parseOutput.error);
+								return;
+							}
+
+							const formattedData = this.socketService.formatData(parseOutput.data, uid, eventRoute.type);
 
 							if (impl && typeof impl === 'function') {
 								try {

@@ -1,4 +1,3 @@
-import type { Message, User } from '$prisma-client';
 import { MessageSchema, UserSchema } from '$zod';
 import { z } from 'zod';
 import { c, createResponses, wsC } from '~contract';
@@ -40,6 +39,9 @@ export const messagesContract = c.router(
 export const wsMessagesContract = wsC.router({
 	new: {
 		type: 'create',
-		emitted: wsC.type<Message & { user: User }>(),
+		// emitted: wsC.type<Message & { user: User }>(),
+		emitted: MessageSchema.extend({
+			user: UserSchema,
+		}),
 	},
 });

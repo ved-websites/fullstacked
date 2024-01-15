@@ -5,10 +5,10 @@ import type { EventRoute, EventRouteConfig, EventRouteInput, EventRouteOutput } 
 export type RouteEventHandler<E extends EventRouteConfig = EventRouteConfig> = (
 	event: Omit<EventRouteInput<E>, 'data' | 'type'> & {
 		socket: TypedWebSocket;
-		data: Prettify<E['emitted']>;
+		data: z.output<E['emitted']>;
 		input: E['input'] extends ZodType ? z.output<E['input']> : undefined;
 	},
-) => Awaitable<Partial<Omit<EventRouteOutput<E['emitted']>, 'type'>> | undefined | void>;
+) => Awaitable<Partial<Omit<EventRouteOutput<z.output<E['emitted']>>, 'type'>> | undefined | void>;
 
 /**
  * Allows to easily manipulate individual transmitted events.

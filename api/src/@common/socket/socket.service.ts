@@ -4,6 +4,7 @@ import { parseCookies } from '$utils/cookies';
 import { Inject, Injectable } from '@nestjs/common';
 import type { IncomingMessage } from 'http';
 import { Server, WebSocket } from 'ws';
+import type { z } from 'zod';
 import { EventRouteOutput, EventUID, extractEventRouteKey, type EventRoute } from '~contract';
 import { WsEventEmitter } from './ts-ws/ws-event.emitter';
 import type { SocketOrSessionId, TypedWebSocket } from './types';
@@ -118,7 +119,7 @@ export class SocketService {
 		});
 	}
 
-	emit<E extends EventRoute>(event: E, data: E['emitted']) {
+	emit<E extends EventRoute>(event: E, data: z.output<E['emitted']>) {
 		const key = extractEventRouteKey(event);
 
 		return this.wsEmitter.emit(key, data);
