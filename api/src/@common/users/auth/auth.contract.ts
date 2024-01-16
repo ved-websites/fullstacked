@@ -16,6 +16,29 @@ export const authContract = c.router(
 				200: z.null().or(SessionUserSchema),
 			}),
 		},
+		login: {
+			method: 'POST',
+			body: z.object({
+				email: z.string().email(),
+				password: z.string(),
+			}),
+			path: '/login',
+			summary: 'Login.',
+			responses: createResponses({
+				200: z.object({
+					accessToken: z.string(),
+				}),
+			}),
+		},
+		logout: {
+			method: 'POST',
+			body: null,
+			path: '/logout',
+			summary: 'Logout of the current user session.',
+			responses: createResponses({
+				200: z.boolean(),
+			}),
+		},
 	},
 	{ pathPrefix: '/auth' },
 );

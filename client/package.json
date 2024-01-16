@@ -39,7 +39,7 @@
 	},
 	"dependencies": {
 		"@app/contract": "workspace:*",
-		"@shippr/supersocket": "1.0.6",
+		"@shippr/supersocket": "github:V-ed/supersocket",
 		"@ts-rest/core": "3.30.5",
 		"accept-language-parser": "1.5.0",
 		"graphql-ws": "^5.13.1",

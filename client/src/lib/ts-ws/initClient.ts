@@ -1,6 +1,7 @@
 import { browser, dev } from '$app/environment';
 import SuperSocket from '@shippr/supersocket';
 import { onDestroy } from 'svelte';
+import { get, writable, type Readable, type Writable } from 'svelte/store';
 import type { ZodType, z } from 'zod';
 import {
 	WsStatusCodes,
@@ -27,15 +28,17 @@ type RouteArgs<TRoute extends EventRoute> = TRoute['input'] extends ZodType
 	? FullRouteArgs<TRoute['input'], TRoute>
 	: [subscriber: SubscriptionEventValue<TRoute>['subscriber']];
 
-function initRoute<TRoute extends EventRoute>(route: TRoute, socket: KitSocket | undefined) {
-	if (!socket) {
-		return () => {
-			return () => {
-				// servers should not connect to websocket, only clients
-			};
-		};
-	}
+type ClientEventRouter<T extends EventRouter> = {
+	[K in keyof T]: T[K] extends EventRoute
+		? ReturnType<typeof initRoute<T[K]>>
+		: T[K] extends EventRouter
+		  ? ClientEventRouter<T[K]>
+		  : unknown;
+};
 
+type PrettyClientEventRouter<TRouter extends EventRouter> = PrettifyRouter<ClientEventRouter<TRouter>> & { $socket?: KitSocket };
+
+function initRoute<TRoute extends EventRoute>(route: TRoute, getSocket: () => KitSocket | undefined) {
 	/**
 	 * Subscribes to the given event.
 	 *
@@ -43,6 +46,22 @@ function initRoute<TRoute extends EventRoute>(route: TRoute, socket: KitSocket |
 	 * otherwise, you will need to handle it yourself by using the returned unsubscriber function.
 	 */
 	return (...args: RouteArgs<TRoute>) => {
+		let socket: KitSocket | undefined = undefined;
+
+		try {
+			socket = getSocket();
+		} catch (error) {
+			// trying to use the socket before it is connected
+		}
+
+		if (!socket) {
+			return () => {
+				return () => {
+					// servers should not connect to websocket, only clients
+				};
+			};
+		}
+
 		const [input, subscriber] = (typeof args[0] === 'function' ? [undefined, args[0]] : args) as FullRouteArgs<
 			TRoute['input'] extends ZodType ? TRoute['input'] : never,
 			TRoute
@@ -172,52 +191,85 @@ class KitSocket extends SuperSocket {
 	}
 }
 
-export function initClient<TRouter extends EventRouter>(
-	router: TRouter,
-	args: {
-		url: string;
-		socket?: KitSocket;
-	},
-) {
-	type ClientEventRouter<T extends EventRouter> = {
-		[K in keyof T]: T[K] extends EventRoute
-			? ReturnType<typeof initRoute<T[K]>>
-			: T[K] extends EventRouter
-			  ? ClientEventRouter<T[K]>
-			  : unknown;
-	};
-
-	const socket = (() => {
-		if (!browser) {
-			return undefined;
-		}
-
-		if (args.socket) {
-			return args.socket;
-		}
-
-		return new KitSocket(args.url, [], {
-			secureOnly: !dev,
-			reconnectDelay: 1000 * 1000,
-		});
-	})();
-
-	const processedRouter: PrettifyRouter<ClientEventRouter<TRouter>> = Object.fromEntries(
+function initRouter<TRouter extends EventRouter>(router: TRouter, routeStore: Writable<PrettyClientEventRouter<TRouter>>) {
+	const processedRouter: PrettyClientEventRouter<TRouter> = Object.fromEntries(
 		Object.entries(router).map(([key, subRouter]) => {
-			// const routeKey = prevKey ? `${prevKey}.${key}` : key;
-
 			if (isEventRoute(subRouter)) {
-				return [key, initRoute(subRouter, socket)];
+				return [key, initRoute(subRouter, () => get(routeStore)?.$socket)];
 			} else if (isEventRouteConfig(subRouter)) {
 				throw new Error(`Event route was not processed! Did you forget to use the 'masterRouter' method?`);
 			} else {
-				return [key, initClient(subRouter, { ...args, socket: socket })];
+				return [key, initRouter(subRouter, routeStore)];
 			}
 		}),
 	);
 
-	return {
-		$socket: socket as KitSocket,
-		...processedRouter,
+	return processedRouter;
+}
+
+export function initClient<TRouter extends EventRouter>(
+	router: TRouter,
+	args: {
+		url: string;
+	},
+) {
+	type ReadableSocket = {
+		$connect: () => void;
+		$disconnect: () => void;
 	};
+
+	const routeStore = writable<PrettyClientEventRouter<TRouter>>(undefined);
+
+	const $connect = () => {
+		if (!browser) {
+			return;
+		}
+
+		routeStore.update((prevStore) => {
+			if (prevStore?.$socket) {
+				return prevStore;
+			}
+
+			const $socket = new KitSocket(args.url, [], {
+				secureOnly: !dev,
+				pingData: {
+					event: 'ping',
+					data: {
+						type: 'ping',
+					},
+				} satisfies NestWsIncomingMessage,
+			});
+
+			return {
+				$socket,
+				...processedRouter,
+			} as PrettyClientEventRouter<TRouter>;
+		});
+	};
+	const $disconnect = () => {
+		if (!browser) {
+			return;
+		}
+
+		routeStore.update((prevStore) => {
+			const { $socket, ...routes } = prevStore;
+
+			$socket?.close({ skipReconnect: true });
+
+			return {
+				$socket: undefined,
+				...routes,
+			} as PrettyClientEventRouter<TRouter>;
+		});
+	};
+
+	const processedRouter = initRouter(router, routeStore);
+
+	routeStore.set(processedRouter);
+
+	return {
+		subscribe: routeStore.subscribe,
+		$connect,
+		$disconnect,
+	} as Readable<PrettyClientEventRouter<TRouter>> & ReadableSocket;
 }

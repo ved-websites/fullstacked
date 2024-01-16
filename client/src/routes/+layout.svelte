@@ -32,19 +32,17 @@
 	$: layoutAlert = $flash?.layoutAlert || $page.data.layoutAlert || formData?.layoutAlert;
 	$: toasts = [...($page.data.toasts ?? []), ...($flash?.toasts ?? []), ...(formData?.toasts ?? [])];
 
-	let sessionUnsubscriber: ReturnType<typeof wsClient.auth.session> | undefined;
+	afterNavigate(async () => {
+		if (!$wsClient.$socket && data.sessionUser) {
+			wsClient.$connect();
 
-	afterNavigate(() => {
-		if (!sessionUnsubscriber && data.sessionUser) {
-			sessionUnsubscriber = wsClient.auth.session(({ data: editedUserData }) => {
+			$wsClient.auth.session(({ data: editedUserData }) => {
 				data.sessionUser = editedUserData;
 
 				invalidateAll();
 			});
 		} else if (!data.sessionUser) {
-			sessionUnsubscriber?.();
-
-			sessionUnsubscriber = undefined;
+			wsClient.$disconnect();
 		}
 	});
 </script>

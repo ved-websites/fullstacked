@@ -1,21 +1,13 @@
-import { LogoutStore } from '$houdini';
 import { themeCookieName, themes } from '$lib/stores';
+import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 
 export const actions = {
-	async logout({
-		locals: {
-			gql: { mutate },
-		},
-	}) {
-		const result = await mutate(LogoutStore, null);
-
-		if (result.type === 'failure') {
-			return;
-		}
-
-		throw redirect(StatusCodes.SEE_OTHER, '/login');
+	async logout({ locals: { tsrest } }) {
+		return assertTsRestActionResultOK({ layoutAlert: undefined, result: () => tsrest.auth.logout() }, () => {
+			throw redirect(StatusCodes.SEE_OTHER, '/login');
+		});
 	},
 	async theme({ cookies, url: { searchParams }, request }) {
 		const theme = searchParams.get('value');

@@ -32,6 +32,10 @@ export class WsEventInterceptor implements NestInterceptor {
 
 		const { type, uid } = wsData;
 
+		if (type === 'ping') {
+			return of();
+		}
+
 		const pattern = wsContext.getPattern();
 		const unsubPattern = `unsub:${socket.sessionId}:${pattern}${uid ? `:${uid}` : ''}`;
 

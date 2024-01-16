@@ -11,9 +11,10 @@ export type EventRouteSubscribeInput<E extends EventRouteConfig> = EventRouteDat
 	input: E['input'] extends ZodType ? z.output<E['input']> : undefined;
 };
 export type EventRouteUnsubscribeInput = EventRouteDataCommon<'unsubscribe'>;
+export type EventRoutePingInput = EventRouteDataCommon<'ping'>;
 
 export type EventRouteInput<E extends EventRouteConfig = EventRouteConfig> = EventRouteDataCommon &
-	(EventRouteSubscribeInput<E> | EventRouteUnsubscribeInput);
+	(EventRouteSubscribeInput<E> | EventRouteUnsubscribeInput | EventRoutePingInput);
 
 export type EventRouteType = 'create' | 'update' | 'delete';
 

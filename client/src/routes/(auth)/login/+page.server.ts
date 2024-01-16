@@ -1,7 +1,6 @@
-import { LoginStore } from '$houdini';
 import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
-import { createToasts } from '$lib/components/ToastManager/helper';
 import { emailSchema, passwordSchema } from '$lib/schemas/auth';
+import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { createPageDataObject } from '$lib/utils/page-data-object';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
@@ -38,54 +37,23 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({
-		request,
-		url,
-		locals: {
-			gql: { mutate },
-		},
-	}) => {
+	default: async ({ request, url, locals: { tsrest } }) => {
 		const form = await superValidate(request, schema);
-
-		if (!form.valid) return { form };
 
 		const { email, password } = form.data;
 
-		const result = await mutate(LoginStore, { email, password });
+		return assertTsRestActionResultOK(
+			{
+				form,
+				result: () => tsrest.auth.login({ body: { email, password } }),
+			},
+			() => {
+				const redirectTo = getRedirectTo(url) || '/';
 
-		if (result.type === 'failure') {
-			const invalidUserPassErrorCatcher = 'Invalid';
-
-			const { errors } = result;
-
-			const allErrors = createToasts(
-				errors
-					?.filter(({ message }) => !message.includes(invalidUserPassErrorCatcher))
-					.map(({ message }) => ({
-						text: message,
-						type: 'error',
-					})),
-			);
-
-			const gqlUserPassError = errors && errors.find(({ message }) => message.includes(invalidUserPassErrorCatcher));
-
-			const userPassError =
-				gqlUserPassError &&
-				createLayoutAlert({
-					text: gqlUserPassError.message,
-					level: 'error',
-				});
-
-			return result.kitHandler('failure', {
-				code: StatusCodes.UNAUTHORIZED,
-				data: createPageDataObject({ form, toasts: allErrors, layoutAlert: userPassError }),
-			});
-		}
-
-		const redirectTo = getRedirectTo(url) || '/';
-
-		// Successful login
-		throw redirect(StatusCodes.SEE_OTHER, redirectTo);
+				// Successful login
+				throw redirect(StatusCodes.SEE_OTHER, redirectTo);
+			},
+		);
 	},
 } satisfies Actions;
 

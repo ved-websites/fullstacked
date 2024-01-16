@@ -2,7 +2,7 @@ import { page } from '$app/stores';
 import { createToasts } from '$lib/components/ToastManager/helper';
 import type { PageMessages } from '$lib/types';
 import { commonErrors, isCommonError, type ApiFetcherData, type CommonError } from '@app/contract';
-import { error, fail, type RequestEvent } from '@sveltejs/kit';
+import { error, type RequestEvent } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { getFlash } from 'sveltekit-flash-message/client';
 import { redirect } from 'sveltekit-flash-message/server';
@@ -114,10 +114,11 @@ export function routeError(status: number, message: string, options?: RouteError
 		}
 
 		if (event.locals.step === 'action') {
-			throw fail(status, {
-				toasts: errorToasts,
-				...pageMessagesData,
-			});
+			return;
+			// throw fail(status, {
+			// 	toasts: errorToasts,
+			// 	...pageMessagesData,
+			// });
 		}
 
 		throw redirect(
