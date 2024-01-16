@@ -55,7 +55,7 @@
 		},
 	});
 
-	$wsClient.messages.new(({ data }) => {
+	$wsClient.messages.new(async ({ data }) => {
 		if (data.user.email == $sessionUser.email) {
 			messages = messages.map((m) => {
 				if (!m.id && m.text == data.text) {
@@ -73,6 +73,8 @@
 				...messages.filter((m) => !m.active),
 			];
 		}
+
+		await tick();
 
 		messageViewElement.scrollTop = messageViewElement.scrollHeight;
 	});
