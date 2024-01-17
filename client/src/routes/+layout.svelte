@@ -14,7 +14,7 @@
 	// import { subscribe } from '$lib/houdini/helper';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { setSessionUser, themeStore } from '$lib/stores';
-	import { wsClient } from '$lib/ts-ws/client';
+	import { wsClient, type WsClientType } from '$lib/ts-ws/client';
 	import type { PageMessages } from '$lib/types';
 	import { getFlash } from 'sveltekit-flash-message/client';
 
@@ -32,16 +32,23 @@
 	$: layoutAlert = $flash?.layoutAlert || $page.data.layoutAlert || formData?.layoutAlert;
 	$: toasts = [...($page.data.toasts ?? []), ...($flash?.toasts ?? []), ...(formData?.toasts ?? [])];
 
+	let sessionUnsubscriber: ReturnType<WsClientType['auth']['session']> | undefined;
+
 	afterNavigate(async () => {
-		if (!$wsClient.$socket && data.sessionUser) {
+		if (!wsClient.$isConnected() && data.sessionUser) {
 			wsClient.$connect();
 
-			$wsClient.auth.session(({ data: editedUserData }) => {
+			sessionUnsubscriber = $wsClient.auth.session(({ data: editedUserData }) => {
 				data.sessionUser = editedUserData;
 
 				invalidateAll();
 			});
 		} else if (!data.sessionUser) {
+			if (sessionUnsubscriber) {
+				sessionUnsubscriber();
+				sessionUnsubscriber = undefined;
+			}
+
 			wsClient.$disconnect();
 		}
 	});

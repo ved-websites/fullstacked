@@ -14,6 +14,7 @@ import {
 	type NestWsIncomingMessage,
 	type PrettifyRouter,
 } from '~contract';
+import { WS_READY_STATES } from './readyStates';
 
 export type SubscriptionEventValue<TRoute extends EventRoute = EventRoute> = {
 	subscriptionRequest: NestWsIncomingMessage<TRoute>;
@@ -56,9 +57,7 @@ function initRoute<TRoute extends EventRoute>(route: TRoute, getSocket: () => Ki
 
 		if (!socket) {
 			return () => {
-				return () => {
-					// servers should not connect to websocket, only clients
-				};
+				// servers should not connect to websocket, only clients
 			};
 		}
 
@@ -123,7 +122,13 @@ class KitSocket extends SuperSocket {
 
 		this.onclose = (event) => {
 			if (event.code === WsStatusCodes.CLOSE_ABNORMAL) {
-				this.connect();
+				return true;
+			} else if (event.code === WsStatusCodes.FORBIDDEN || event.code === WsStatusCodes.UNAUTHORIZED) {
+				return false;
+			}
+
+			if (event.code === WsStatusCodes.CLOSE_NORMAL && event.reason === 'disconnecting') {
+				return false;
 			}
 		};
 	}
@@ -153,9 +158,7 @@ class KitSocket extends SuperSocket {
 
 		this.subscriptionMap.set(uid, subscriptionValue);
 
-		const OPEN_STATE = 1;
-
-		if (this.readyState === OPEN_STATE) {
+		if (this.readyState === WS_READY_STATES.OPEN) {
 			this.send(subscriptionValue.subscriptionRequest);
 		}
 
@@ -216,6 +219,7 @@ export function initClient<TRouter extends EventRouter>(
 	type ReadableSocket = {
 		$connect: () => void;
 		$disconnect: () => void;
+		$isConnected: () => boolean;
 	};
 
 	const routeStore = writable<PrettyClientEventRouter<TRouter>>(undefined);
@@ -227,11 +231,14 @@ export function initClient<TRouter extends EventRouter>(
 
 		routeStore.update((prevStore) => {
 			if (prevStore?.$socket) {
+				prevStore.$socket.connect();
+
 				return prevStore;
 			}
 
 			const $socket = new KitSocket(args.url, [], {
 				secureOnly: !dev,
+				debug: true,
 				pingData: {
 					event: 'ping',
 					data: {
@@ -252,15 +259,17 @@ export function initClient<TRouter extends EventRouter>(
 		}
 
 		routeStore.update((prevStore) => {
-			const { $socket, ...routes } = prevStore;
+			const { $socket } = prevStore;
 
-			$socket?.close({ skipReconnect: true });
+			$socket?.close();
 
-			return {
-				$socket: undefined,
-				...routes,
-			} as PrettyClientEventRouter<TRouter>;
+			return prevStore;
 		});
+	};
+	const $isConnected = () => {
+		const $routeStore = get(routeStore);
+
+		return $routeStore.$socket?.readyState === WS_READY_STATES.OPEN;
 	};
 
 	const processedRouter = initRouter(router, routeStore);
@@ -271,5 +280,6 @@ export function initClient<TRouter extends EventRouter>(
 		subscribe: routeStore.subscribe,
 		$connect,
 		$disconnect,
+		$isConnected,
 	} as Readable<PrettyClientEventRouter<TRouter>> & ReadableSocket;
 }

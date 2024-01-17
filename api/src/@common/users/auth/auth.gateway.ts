@@ -5,7 +5,7 @@ import { AuthUser, LuciaUser } from './session.decorator';
 @WsGateway()
 export class AuthGateway {
 	@WsEventSub(wsR.auth.session)
-	handleMessage(@AuthUser() user: LuciaUser) {
+	handleSessionUpdate(@AuthUser() user: LuciaUser) {
 		return tsWsHandler(wsR.auth.session, ({ data }) => {
 			if (data.email !== user.email) {
 				return;
