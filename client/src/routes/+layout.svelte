@@ -15,6 +15,7 @@
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { setSessionUser, themeStore } from '$lib/stores';
 	import { wsClient, type WsClientType } from '$lib/ts-ws/client';
+	import { WS_READY_STATES } from '$lib/ts-ws/readyStates';
 	import type { PageMessages } from '$lib/types';
 	import { getFlash } from 'sveltekit-flash-message/client';
 
@@ -35,10 +36,10 @@
 	let sessionUnsubscriber: ReturnType<WsClientType['auth']['session']> | undefined;
 
 	afterNavigate(async () => {
-		if (!wsClient.$isConnected() && data.sessionUser) {
-			wsClient.$connect();
+		if (wsClient.$socket.readyState !== WS_READY_STATES.OPEN && data.sessionUser) {
+			wsClient.$socket.connect();
 
-			sessionUnsubscriber = $wsClient.auth.session(({ data: editedUserData }) => {
+			sessionUnsubscriber = wsClient.auth.session(({ data: editedUserData }) => {
 				data.sessionUser = editedUserData;
 
 				invalidateAll();
@@ -49,7 +50,7 @@
 				sessionUnsubscriber = undefined;
 			}
 
-			wsClient.$disconnect();
+			wsClient.$socket.close();
 		}
 	});
 </script>

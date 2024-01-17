@@ -23,7 +23,11 @@ export function tsWsHandler<E extends EventRoute>(_event: E, implementation: Rou
 	return implementation;
 }
 
-export type NestWsIncomingMessage<TRoute extends EventRouteConfig = EventRouteConfig> = {
-	event: string;
-	data: EventRouteInput<TRoute>;
-};
+export type NestWsIncomingMessage<TRoute extends EventRouteConfig = EventRouteConfig> =
+	| {
+			event: string;
+			data: EventRouteInput<TRoute>;
+	  }
+	| {
+			event: 'ping';
+	  };

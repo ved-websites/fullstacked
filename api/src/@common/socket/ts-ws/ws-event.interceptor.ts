@@ -21,6 +21,12 @@ export class WsEventInterceptor implements NestInterceptor {
 	intercept(context: ExecutionContext, next: CallHandler) {
 		const wsContext = context.switchToWs();
 
+		const pattern = wsContext.getPattern();
+
+		if (pattern === 'ping') {
+			return of();
+		}
+
 		const socket = wsContext.getClient<TypedWebSocket>();
 		const wsData = wsContext.getData<EventRouteInput>();
 
@@ -32,11 +38,6 @@ export class WsEventInterceptor implements NestInterceptor {
 
 		const { type, uid } = wsData;
 
-		if (type === 'ping') {
-			return of();
-		}
-
-		const pattern = wsContext.getPattern();
 		const unsubPattern = `unsub:${socket.sessionId}:${pattern}${uid ? `:${uid}` : ''}`;
 
 		if (type === 'unsubscribe') {
