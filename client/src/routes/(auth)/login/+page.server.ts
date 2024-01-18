@@ -19,7 +19,7 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 	const redirectTo = getRedirectTo(url);
 
 	if (sessionUser) {
-		throw redirect(StatusCodes.SEE_OTHER, redirectTo || '/');
+		throw redirect(StatusCodes.SEE_OTHER, redirectTo);
 	}
 
 	const layoutAlert = (() => {
@@ -28,7 +28,7 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 		}
 
 		return createLayoutAlert({
-			text: `Vous devez être connecté pour accéder à cette ressource!`,
+			text: `Vous devez être connecté pour accéder à cette ressource!`, // TODO : i18n
 			level: 'warning',
 		});
 	})();
@@ -40,15 +40,13 @@ export const actions = {
 	default: async ({ request, url, locals: { tsrest } }) => {
 		const form = await superValidate(request, schema);
 
-		const { email, password } = form.data;
-
 		return assertTsRestActionResultOK(
 			{
 				form,
-				result: () => tsrest.auth.login({ body: { email, password } }),
+				result: () => tsrest.auth.login({ body: form.data }),
 			},
 			() => {
-				const redirectTo = getRedirectTo(url) || '/';
+				const redirectTo = getRedirectTo(url);
 
 				// Successful login
 				throw redirect(StatusCodes.SEE_OTHER, redirectTo);
@@ -61,7 +59,7 @@ function getRedirectTo(url: URL) {
 	const redirectToParam = url.searchParams.get('redirectTo');
 
 	if (redirectToParam === null) {
-		return false;
+		return '/';
 	}
 
 	const redirectTo: `/${string}` = `/${redirectToParam.slice(1)}`;
