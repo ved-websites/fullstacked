@@ -45,12 +45,18 @@
 				invalidateAll();
 			});
 		} else if (!data.sessionUser) {
-			if (sessionUnsubscriber) {
-				sessionUnsubscriber();
+			const hadSession = !!sessionUnsubscriber;
+
+			if (hadSession) {
+				sessionUnsubscriber!();
 				sessionUnsubscriber = undefined;
 			}
 
 			wsClient.$socket.close();
+
+			if (hadSession) {
+				invalidateAll();
+			}
 		}
 	});
 </script>

@@ -7,4 +7,4 @@
 	$: classes = twMerge('s-5', klass);
 </script>
 
-<span class={classes}></span>
+<span {...$$restProps} class={classes}></span>

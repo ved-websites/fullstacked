@@ -1,5 +1,6 @@
 import { browser, dev } from '$app/environment';
 import SuperSocket from '@shippr/supersocket';
+import type { CloseEvent as SuperSocketCloseEvent, Event as SuperSocketEvent } from '@shippr/supersocket/lib/esm/types/events';
 import { onDestroy } from 'svelte';
 import type { ZodType, z } from 'zod';
 import {
@@ -74,10 +75,14 @@ function initRoute<TRoute extends EventRoute>(route: TRoute, socket: KitSocket) 
 class KitSocket extends SuperSocket {
 	protected subscriptionMap = new Map<EventUID | undefined, SubscriptionEventValue>();
 
+	public onConnChange:
+		| null
+		| ((event: (SuperSocketEvent & { type: 'open' }) | (SuperSocketCloseEvent & { type: 'close' })) => Awaitable<unknown>) = null;
+
 	constructor(...args: ConstructorParameters<typeof SuperSocket>) {
 		super(...args);
 
-		this.onopen = () => {
+		this.onopen = (event) => {
 			this.subscriptionMap.forEach((subscription) => {
 				try {
 					this.send(subscription.subscriptionRequest);
@@ -85,6 +90,8 @@ class KitSocket extends SuperSocket {
 					// sending error, do nothing and wait for retry
 				}
 			});
+
+			this.onConnChange?.(event as SuperSocketEvent & { type: 'open' });
 		};
 
 		function dataIsEventRouteOutput(data: unknown): data is EventRouteOutput<unknown> {
@@ -110,6 +117,8 @@ class KitSocket extends SuperSocket {
 		};
 
 		this.onclose = (event) => {
+			this.onConnChange?.(event as SuperSocketCloseEvent & { type: 'close' });
+
 			if (event.code === WsStatusCodes.CLOSE_ABNORMAL) {
 				return true;
 			} else if (event.code === WsStatusCodes.FORBIDDEN || event.code === WsStatusCodes.UNAUTHORIZED) {
