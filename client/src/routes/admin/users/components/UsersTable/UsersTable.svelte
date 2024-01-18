@@ -54,7 +54,7 @@
 				</TableBodyCell>
 			</TableBodyRow>
 		{:then returnedSortedUsers}
-			{#if !returnedSortedUsers}
+			{#if !returnedSortedUsers?.length}
 				<TableBodyRow>
 					<TableBodyCell colspan="2">
 						<div class="flex justify-center py-3">

@@ -22,6 +22,11 @@
     "extends": [
       "@v-ed/eslint-config"
     ],
+    "rules": {
+      "camelcase": ["error", {
+        "allow": ["required_error"]
+      }]
+    },
     "overrides": [
       {
         "files": [

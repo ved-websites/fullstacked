@@ -1,0 +1,8 @@
+{
+	"form": {
+		"firstName": "Quel est votre prénom?",
+		"lastName": "Quel est ton nom de famille?",
+		"password": "Créez votre nouveau mot de passe"
+	},
+	"heading": "Bienvenue, {{email}}!"
+}

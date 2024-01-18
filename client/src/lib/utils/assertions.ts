@@ -12,10 +12,10 @@ export type ValidResult<T extends { status: number }> = T & { status: 200 };
 
 export function assertTsRestResultOK<T extends { status: number }>(
 	result: T,
-	errorArgs?: Parameters<typeof error>,
+	errorArgs?: (result: Exclude<T, { status: StatusCodes.OK }>) => Parameters<typeof error>,
 ): asserts result is ValidResult<T> {
 	if (result.status !== StatusCodes.OK) {
-		const definedErrorArgs = errorArgs ?? [result.status];
+		const definedErrorArgs = errorArgs?.(result as Exclude<T, { status: StatusCodes.OK }>) ?? [result.status];
 
 		throw error(...definedErrorArgs);
 	}
@@ -33,12 +33,14 @@ export function assertTsRestActionResultOK<T extends { status: number; body: unk
 	const checkValidResult = async () => {
 		const result = await args.result();
 
+		console.log({ result });
+
 		try {
 			assertTsRestResultOK(result);
 		} catch (error) {
 			const errorMessage =
-				result.body && typeof result.body === 'object' && 'error' in result.body
-					? String(result.body.error)
+				result.body && typeof result.body === 'object' && 'message' in result.body
+					? String(result.body.message)
 					: k('common.errorpage.types.server.details.500');
 
 			const pageData = (() => {

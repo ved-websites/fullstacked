@@ -22,11 +22,11 @@ export class AuthGuard implements CanActivate {
 
 		if (!session) {
 			if (context.getType() === 'ws') {
-				throw new WsException('No session dummy');
+				throw new WsException(this.i18n.t('auth.errors.session.missing'));
 			}
 
 			// Unauthorized == Unauthenticated
-			throw new UnauthorizedException();
+			throw new UnauthorizedException(this.i18n.t('auth.errors.session.missing'));
 		}
 
 		if (session.state !== 'active') {

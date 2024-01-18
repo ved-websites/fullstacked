@@ -1,0 +1,8 @@
+{
+	"heading": "Welcome, {{email}}!",
+	"form": {
+		"password": "Create your new Password",
+		"firstName": "What is your first name?",
+		"lastName": "What is your last name?"
+	}
+}

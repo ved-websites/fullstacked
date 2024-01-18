@@ -1,5 +1,6 @@
 {
 	"session": {
+		"missing": "You must be connected to access this resource!",
 		"inactive": "Session is not active anymore!"
 	},
 	"password": {

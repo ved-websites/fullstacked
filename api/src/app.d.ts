@@ -14,8 +14,8 @@ declare global {
 
 		type DatabaseUserAttributes = {
 			email: string;
-			firstName?: string;
-			lastName?: string;
+			firstName?: string | null;
+			lastName?: string | null;
 			registerToken?: string | null;
 			profilePictureRef?: string;
 			emailLang?: string;

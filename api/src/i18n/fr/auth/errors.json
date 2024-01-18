@@ -1,6 +1,7 @@
 {
 	"session": {
-		"inactive": "La session n'est plus active!"
+		"inactive": "La session n'est plus active!",
+		"missing": "Vous devez être connecté pour accéder à cette ressource!"
 	},
 	"password": {
 		"reset": {

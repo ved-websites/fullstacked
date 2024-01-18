@@ -10,6 +10,7 @@
 	},
 	"errors": {
 		"validation": {
+			"required": "Required",
 			"email-schema": "Invalid email!"
 		}
 	},

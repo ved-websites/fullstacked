@@ -22,8 +22,6 @@ export class AuthController {
 		return tsRestHandler(r.auth.session, async () => {
 			const user = await this.authService.getAuthUser(authUser.email);
 
-			// this.sockets.emit(wsR.messages.new, message);
-
 			return {
 				status: 200,
 				body: user,
@@ -68,6 +66,34 @@ export class AuthController {
 			const sessionCookie = await this.authService.logout(session);
 
 			res.cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+
+			return {
+				status: 200,
+				body: true,
+			};
+		});
+	}
+
+	@Public()
+	@TsRestHandler(r.auth.initRegistration)
+	initRegistration() {
+		return tsRestHandler(r.auth.initRegistration, async ({ query: { registerToken } }) => {
+			const user = await this.authService.getUnregisteredUser(registerToken);
+
+			return {
+				status: 200,
+				body: user,
+			};
+		});
+	}
+
+	@Public()
+	@TsRestHandler(r.auth.register)
+	register(@LuciaAuth() authRequest: LuciaAuthRequest) {
+		return tsRestHandler(r.auth.register, async ({ body: { registerToken, password, user: userAttributes } }) => {
+			const session = await this.authService.register(registerToken, password, userAttributes);
+
+			authRequest.setSession(session);
 
 			return {
 				status: 200,
