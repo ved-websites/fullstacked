@@ -14,6 +14,7 @@ usageMatchRegex:
   - "[^\\w\\d]new I18nException\\(['\"`]({key})['\"`]"
   - "[^\\w\\d]i18n.t\\(['\"`]({key})['\"`]"
   - "(?:{{ |\\()t ['\"`]({key})['\"`]"
+  - "[^\\w\\d]k\\(['\"`]({key})['\"`]"
 
 # A RegEx to set a custom scope range. This scope will be used as a prefix when detecting keys
 # and works like how the i18next framework identifies the namespace scope from the
@@ -27,6 +28,7 @@ refactorTemplates:
   - i18n.t('$1')
   - this.i18n.t('$1')
   - new I18nException('$1')
+  - "k('$1')"
 
 # If set to true, only enables this custom framework (will disable all built-in frameworks)
 # monopoly: true

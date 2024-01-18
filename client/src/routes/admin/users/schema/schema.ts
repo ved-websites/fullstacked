@@ -1,6 +1,6 @@
 import { userFormSchema } from '$lib/components/UserForm/userform.schema';
-import { emailSchema } from '$lib/schemas/auth';
 import { z } from 'zod';
+import { emailSchema } from '~shared';
 
 export const adminUserFormSchema = userFormSchema.augment({
 	roles: z.array(z.string()),

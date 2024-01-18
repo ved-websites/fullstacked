@@ -297,11 +297,16 @@ importers:
 
   api/src/@contract: {}
 
+  api/src/@shared: {}
+
   client:
     dependencies:
       '@app/contract':
         specifier: workspace:*
         version: link:../api/src/@contract
+      '@app/shared':
+        specifier: workspace:*
+        version: link:../api/src/@shared
       '@shippr/supersocket':
         specifier: github:V-ed/supersocket
         version: github.com/V-ed/supersocket/775edccce1adc86761daeadc2f01f8781b35e137(@babel/core@7.22.5)(@types/node@20.10.4)(typescript@5.2.2)

@@ -1,5 +1,5 @@
-import { k } from '$i18n';
 import type { NavElement } from '$lib/components/nav/nav-elements';
+import { k } from '~shared';
 
 export const navElements: NavElement[] = [
 	{

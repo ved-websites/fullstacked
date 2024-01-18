@@ -1,10 +1,10 @@
 import { DeleteSpecificUserStore } from '$houdini';
 import { createToasts } from '$lib/components/ToastManager/helper';
-import { emailSchema } from '$lib/schemas/auth';
 import { assertTsRestResultOK } from '$lib/utils/assertions';
 import type { PageDataObject } from '$lib/utils/page-data-object';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
+import { emailSchema } from '~shared';
 import type { Actions } from '../$types';
 import type { PageServerLoad } from './$types';
 

@@ -1,10 +1,10 @@
-import { k } from '$i18n';
 import { createLayoutAlert, type LayoutAlertData } from '$lib/components/LayoutAlert/helper';
 import { createToasts, type ToastManagerData } from '$lib/components/ToastManager/helper';
 import { error, fail } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import type { SuperValidated } from 'sveltekit-superforms';
 import type { AnyZodObject } from 'zod';
+import { k } from '~shared';
 import { createPageDataObject } from './page-data-object';
 
 // eslint-disable-next-line @typescript-eslint/no-magic-numbers

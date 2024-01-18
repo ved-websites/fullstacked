@@ -1,9 +1,9 @@
 import { ExecutePasswordResetStore, RequestPasswordResetStore, VerifyPasswordResetAttemptStore } from '$houdini';
-import { k } from '$i18n';
 import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
 import { createPageDataObject } from '$lib/utils/page-data-object';
 import { redirect } from 'sveltekit-flash-message/server';
 import { superValidate } from 'sveltekit-superforms/client';
+import { k } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 import { requestPasswordSchema, resetPasswordSchema } from './schemas';
 

@@ -1,11 +1,11 @@
 import { ChangeSelfPasswordStore } from '$houdini';
 import { createToasts } from '$lib/components/ToastManager/helper';
-import { passwordSchema } from '$lib/schemas/auth';
 import { createPageDataObject } from '$lib/utils/page-data-object';
 import { fail, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
+import { passwordSchema } from '~shared';
 import type { PageServerLoad } from './$types';
 
 const newPasswordFormSchema = z

@@ -1,12 +1,14 @@
 import { RoleSchema, UserSchema } from '$zod';
 import { z } from 'zod';
 import { c, createResponses, wsC } from '~contract';
+import { emailSchema, passwordSchema } from '~shared';
 
 export const SessionUserSchema = UserSchema.extend({
 	roles: RoleSchema.omit({ createdAt: true }).array(),
 });
 
 export const RegisterTokenSchema = z.string({ description: 'Registration Token' });
+export const ResetPasswordTokenSchema = z.string({ description: 'Reset Password Token' });
 
 export const authContract = c.router(
 	{
@@ -68,6 +70,30 @@ export const authContract = c.router(
 			}),
 			path: '/register',
 			summary: 'Sends the registration form.',
+			responses: createResponses({
+				200: z.boolean(),
+			}),
+		},
+		forgotPasswordRequest: {
+			method: 'GET',
+			query: z.object({
+				email: emailSchema,
+			}),
+			path: '/forgot-password-request',
+			summary: 'Request a reset password email.',
+			responses: createResponses({
+				200: z.undefined(),
+			}),
+		},
+		resetPassword: {
+			method: 'POST',
+			body: z.object({
+				resetToken: ResetPasswordTokenSchema,
+				password: passwordSchema,
+				passwordConfirm: passwordSchema,
+			}),
+			path: '/reset-password',
+			summary: 'Sends the reset password data.',
 			responses: createResponses({
 				200: z.boolean(),
 			}),

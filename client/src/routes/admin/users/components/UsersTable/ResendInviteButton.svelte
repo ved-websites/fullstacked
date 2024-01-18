@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { ResendInviteLinkStore } from '$houdini';
-	import { getI18n, k } from '$i18n';
+	import { getI18n } from '$i18n';
 	import { createToasts, setPageToasts, type ToastData } from '$lib/components/ToastManager/helper';
 	import { Button } from 'flowbite-svelte';
+	import { k } from '~shared';
 	import type { BaseUser } from '../../types';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);

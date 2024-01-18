@@ -18,6 +18,7 @@
       "~env": ["./src/env.validation"],
       "~app-module": ["./src/app.module"],
       "~contract": ["./src/@contract/index"],
+      "~shared": ["./src/@shared/index"],
       // "~/*": ["./src/*"],
     },
     

@@ -4,6 +4,7 @@ import path from 'path';
 
 /** @type {NonNullable<import('@sveltejs/kit').Config['kit']>['alias']} */
 const apiAliases = {
+	'~shared': '../api/src/@shared',
 	'~contract': '../api/src/@contract',
 	'$prisma-client': '../api/src/_generated/prisma/client',
 	$zod: '../api/src/_generated/zod',

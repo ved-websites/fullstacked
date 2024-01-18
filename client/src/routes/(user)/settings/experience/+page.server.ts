@@ -1,5 +1,4 @@
 import { ChangeLangStore } from '$houdini';
-import { k } from '$i18n';
 import { locales } from '$i18n-config';
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { createPageDataObject } from '$lib/utils/page-data-object';
@@ -8,6 +7,7 @@ import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
+import { k } from '~shared';
 import type { PageServerLoad } from './$types';
 
 const langSchema = z.object({

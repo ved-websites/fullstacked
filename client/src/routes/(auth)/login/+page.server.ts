@@ -1,11 +1,11 @@
 import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
-import { emailSchema, passwordSchema } from '$lib/schemas/auth';
 import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { createPageDataObject } from '$lib/utils/page-data-object';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
+import { emailSchema, passwordSchema } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({

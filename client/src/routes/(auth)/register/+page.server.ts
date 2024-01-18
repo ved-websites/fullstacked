@@ -1,9 +1,10 @@
-import { firstNameSchema, lastNameSchema, passwordSchema } from '$lib/schemas/auth';
+import { firstNameSchema, lastNameSchema } from '$lib/schemas/auth';
 import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/assertions';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
+import { passwordSchema } from '~shared';
 import type { PageServerLoad } from './$types';
 
 const schema = z.object({
