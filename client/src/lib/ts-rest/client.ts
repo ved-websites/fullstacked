@@ -46,6 +46,10 @@ export type ApiResponseHandlerOptions = {
 	 * If this function returns a truthy value, the default error logic will be skipped ("it is true that the error has been handled").
 	 */
 	onCommonError?: (args: OnErrorFunctionArgs<CommonError>) => Awaitable<unknown>;
+	/**
+	 * Entirely skips the default error checking.
+	 */
+	skipErrorHandling?: boolean;
 };
 
 const apiUrl = getApiUrl();

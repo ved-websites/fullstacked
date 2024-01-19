@@ -19,7 +19,7 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 	const redirectTo = getRedirectTo(url);
 
 	if (sessionUser) {
-		throw redirect(StatusCodes.SEE_OTHER, redirectTo);
+		throw redirect(StatusCodes.SEE_OTHER, redirectTo ?? '/');
 	}
 
 	const layoutAlert = (() => {
@@ -40,18 +40,16 @@ export const actions = {
 	default: async ({ request, url, locals: { tsrest } }) => {
 		const form = await superValidate(request, schema);
 
-		return assertTsRestActionResultOK(
-			{
-				form,
-				result: () => tsrest.auth.login({ body: form.data }),
-			},
-			() => {
-				const redirectTo = getRedirectTo(url);
+		return assertTsRestActionResultOK({
+			form,
+			result: () => tsrest.auth.login({ body: form.data }),
+			onValid: () => {
+				const redirectTo = getRedirectTo(url) ?? '/';
 
 				// Successful login
 				throw redirect(StatusCodes.SEE_OTHER, redirectTo);
 			},
-		);
+		});
 	},
 } satisfies Actions;
 
@@ -59,7 +57,7 @@ function getRedirectTo(url: URL) {
 	const redirectToParam = url.searchParams.get('redirectTo');
 
 	if (redirectToParam === null) {
-		return '/';
+		return null;
 	}
 
 	const redirectTo: `/${string}` = `/${redirectToParam.slice(1)}`;

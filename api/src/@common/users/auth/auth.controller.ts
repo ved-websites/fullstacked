@@ -1,8 +1,13 @@
+import { sensitiveThrottlerConf } from '$app/throttler.guard';
+import { getErrorMessage } from '$i18n/i18n.error';
 import { TypedI18nService } from '$i18n/i18n.service';
-import { Controller, InternalServerErrorException, Res, UnauthorizedException } from '@nestjs/common';
+import { Origin } from '$utils/origin.decorator';
+import { Controller, ForbiddenException, InternalServerErrorException, Res, UnauthorizedException } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import type { Response } from 'express';
 import { ErrorMessage } from 'lucia/dist/auth/error';
+import { I18n, I18nContext } from 'nestjs-i18n';
 import { r } from '~contract';
 import { Public } from './auth.guard';
 import { AuthService } from './auth.service';
@@ -99,6 +104,67 @@ export class AuthController {
 				status: 200,
 				body: true,
 			};
+		});
+	}
+
+	@Public()
+	@Throttle(...sensitiveThrottlerConf)
+	@TsRestHandler(r.auth.forgotPasswordRequest)
+	forgotPasswordRequest(@Origin() origin: string) {
+		return tsRestHandler(r.auth.forgotPasswordRequest, async ({ query: { email } }) => {
+			const token = await this.authService.getForgotPasswordRequestToken();
+
+			this.authService.sendPasswordResetRequestEmail(email, token, { url: origin });
+
+			return {
+				status: 200,
+				body: token,
+			};
+		});
+	}
+
+	@Public()
+	@Throttle(...sensitiveThrottlerConf)
+	@TsRestHandler(r.auth.verifyPasswordResetAttempt)
+	verifyPasswordResetAttempt() {
+		return tsRestHandler(r.auth.verifyPasswordResetAttempt, async ({ query: { resetToken } }) => {
+			const pswResetAttempt = await this.authService.getPasswordResetAttempt(resetToken);
+
+			if (!pswResetAttempt) {
+				return {
+					status: 400,
+					body: {
+						message: 'No password reset attempt',
+					},
+				};
+			}
+
+			return {
+				status: 200,
+				body: pswResetAttempt.user,
+			};
+		});
+	}
+
+	@Public()
+	@Throttle(...sensitiveThrottlerConf)
+	@TsRestHandler(r.auth.resetPassword)
+	resetPassword(@Origin() origin: string, @I18n() i18n: I18nContext) {
+		return tsRestHandler(r.auth.resetPassword, async ({ body: { resetToken, password } }) => {
+			try {
+				const { user } = await this.authService.resetPassword(resetToken, password);
+
+				this.authService.sendPasswordResetSuccessEmail(user, { url: origin });
+
+				return {
+					status: 200,
+					body: true,
+				};
+			} catch (error) {
+				const message = getErrorMessage(error, i18n);
+
+				throw new ForbiddenException(message);
+			}
 		});
 	}
 }

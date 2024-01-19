@@ -41,14 +41,12 @@ export const actions = {
 
 		const { registerToken, password, ...user } = form.data;
 
-		return assertTsRestActionResultOK(
-			{
-				form,
-				result: () => tsrest.auth.register({ body: { registerToken, password, user } }),
-			},
-			() => {
+		return assertTsRestActionResultOK({
+			form,
+			result: () => tsrest.auth.register({ body: { registerToken, password, user } }),
+			onValid: () => {
 				throw redirect(StatusCodes.SEE_OTHER, '/');
 			},
-		);
+		});
 	},
 } satisfies Actions;

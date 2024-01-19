@@ -1,19 +1,16 @@
-import { ExecutePasswordResetStore, RequestPasswordResetStore, VerifyPasswordResetAttemptStore } from '$houdini';
 import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
+import { extractErrorMessageFromApiFetcherData } from '$lib/ts-rest/errorHandler';
+import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { createPageDataObject } from '$lib/utils/page-data-object';
+import { error } from '@sveltejs/kit';
+import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
 import { superValidate } from 'sveltekit-superforms/client';
 import { k } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 import { requestPasswordSchema, resetPasswordSchema } from './schemas';
 
-export const load = (async ({
-	url,
-	locals: {
-		gql: { query },
-	},
-	setHeaders,
-}) => {
+export const load = (async ({ url, locals: { tsrest }, setHeaders }) => {
 	const resetToken = url.searchParams.get('resetToken');
 
 	const user = await (async () => {
@@ -21,17 +18,20 @@ export const load = (async ({
 			return null;
 		}
 
-		const result = await query(VerifyPasswordResetAttemptStore, {
-			variables: {
-				token: resetToken,
-			},
+		const result = await tsrest.auth.verifyPasswordResetAttempt({
+			query: { resetToken },
+			skipErrorHandling: true,
 		});
 
-		if (result.type === 'failure') {
-			throw result.kitHandler('error');
+		if (result.status === StatusCodes.BAD_REQUEST) {
+			return null;
 		}
 
-		return result.data.verifyPasswordResetAttempt;
+		if (result.status === StatusCodes.OK) {
+			return result.body;
+		}
+
+		throw error(result.status, extractErrorMessageFromApiFetcherData(result));
 	})();
 
 	if (resetToken && user) {
@@ -53,71 +53,45 @@ export const actions = {
 	requestPasswordReset: async (event) => {
 		const {
 			request,
-			locals: {
-				gql: { mutate },
-			},
+			locals: { tsrest },
 		} = event;
 
 		const form = await superValidate(request, requestPasswordSchema);
 
-		if (!form.valid) return { form };
+		return assertTsRestActionResultOK({
+			form,
+			result: () => tsrest.auth.forgotPasswordRequest({ query: form.data }),
+			onValid: () => {
+				const layoutAlert = createLayoutAlert({
+					text: k('(auth).forgot_password.request.alert'),
+				});
 
-		const result = await mutate(RequestPasswordResetStore, {
-			email: form.data.email,
+				throw redirect({ layoutAlert }, event);
+			},
 		});
-
-		if (result.type === 'failure') {
-			return result.kitHandler('failure', { data: createPageDataObject({ form }) });
-		}
-
-		const layoutAlert = createLayoutAlert({
-			text: k('(auth).forgot_password.request.alert'),
-		});
-
-		throw redirect({ layoutAlert }, event);
 	},
 	resetPassword: async (event) => {
 		const {
 			request,
-			locals: {
-				gql: { mutate },
-			},
+			locals: { tsrest },
 		} = event;
 
 		const form = await superValidate(request, resetPasswordSchema);
 
-		if (!form.valid) return { form };
-
-		const { token, password } = form.data;
-
-		if (!token) {
-			throw redirect(
-				{
-					layoutAlert: createLayoutAlert({
-						text: k('(auth).forgot_password.reset.action.no-token'),
-					}),
-				},
-				event,
-			);
-		}
-
-		const result = await mutate(ExecutePasswordResetStore, {
-			token,
-			password,
-		});
-
-		if (result.type === 'failure') {
-			return result.kitHandler('error');
-		}
-
-		throw redirect(
-			'/login',
-			{
-				layoutAlert: createLayoutAlert({
-					text: k('(auth).forgot_password.reset.action.success'),
-				}),
+		return assertTsRestActionResultOK({
+			form,
+			result: () => tsrest.auth.resetPassword({ body: form.data }),
+			onValid: () => {
+				throw redirect(
+					'/login',
+					{
+						layoutAlert: createLayoutAlert({
+							text: k('(auth).forgot_password.reset.action.success'),
+						}),
+					},
+					event,
+				);
 			},
-			event,
-		);
+		});
 	},
 } satisfies Actions;

@@ -7,8 +7,7 @@ import type { AnyZodObject } from 'zod';
 import { k } from '~shared';
 import { createPageDataObject } from './page-data-object';
 
-// eslint-disable-next-line @typescript-eslint/no-magic-numbers
-export type ValidResult<T extends { status: number }> = T & { status: 200 };
+export type ValidResult<T extends { status: number }> = T extends { status: StatusCodes.OK } ? T : never;
 
 export function assertTsRestResultOK<T extends { status: number }>(
 	result: T,
@@ -21,19 +20,16 @@ export function assertTsRestResultOK<T extends { status: number }>(
 	}
 }
 
-export type AssertTsRestActionResultOKArgs<T> = {
+export type AssertTsRestActionResultOKArgs<T extends { status: number }> = {
 	form?: SuperValidated<AnyZodObject>;
 	result: () => Awaitable<T>;
+	onValid: (result: ValidResult<T>) => Awaitable<unknown>;
 } & ({ toast?: Partial<ToastManagerData> } | { layoutAlert: Partial<LayoutAlertData> });
 
-export function assertTsRestActionResultOK<T extends { status: number; body: unknown }>(
-	args: AssertTsRestActionResultOKArgs<T>,
-	onValid: (result: ValidResult<T>) => Awaitable<unknown>,
-) {
+export function assertTsRestActionResultOK<T extends { status: number; body: unknown }>(args: AssertTsRestActionResultOKArgs<T>) {
+	// Define checking result function
 	const checkValidResult = async () => {
 		const result = await args.result();
-
-		console.log({ result });
 
 		try {
 			assertTsRestResultOK(result);
@@ -60,7 +56,7 @@ export function assertTsRestActionResultOK<T extends { status: number; body: unk
 			return fail(result.status, pageData);
 		}
 
-		return onValid(result);
+		return args.onValid(result);
 	};
 
 	if (args.form) {

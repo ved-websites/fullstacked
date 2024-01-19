@@ -29,6 +29,10 @@ export function extractErrorMessageFromApiFetcherData(data: ApiFetcherData) {
 }
 
 export async function checkForApiErrors(data: ApiFetcherData, options?: ApiResponseHandlerOptions) {
+	if (options?.skipErrorHandling) {
+		return;
+	}
+
 	const {
 		event,
 		showErrorPageOnBadRequest = false,
@@ -59,6 +63,8 @@ export async function checkForApiErrors(data: ApiFetcherData, options?: ApiRespo
 
 			isErrorHandled = true;
 		}
+
+		return;
 	}
 
 	const handleOtherErrors = data.status !== StatusCodes.OK && autoRouteOtherErrors;

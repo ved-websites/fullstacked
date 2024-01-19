@@ -82,7 +82,20 @@ export const authContract = c.router(
 			path: '/forgot-password-request',
 			summary: 'Request a reset password email.',
 			responses: createResponses({
-				200: z.undefined(),
+				200: ResetPasswordTokenSchema,
+			}),
+		},
+		verifyPasswordResetAttempt: {
+			method: 'GET',
+			query: z.object({
+				resetToken: ResetPasswordTokenSchema,
+			}),
+			path: '/verify-password-reset-token',
+			summary: 'Verifies if the reset token provided is valid or not.',
+			responses: createResponses({
+				200: UserSchema.pick({
+					email: true,
+				}),
 			}),
 		},
 		resetPassword: {
@@ -90,7 +103,6 @@ export const authContract = c.router(
 			body: z.object({
 				resetToken: ResetPasswordTokenSchema,
 				password: passwordSchema,
-				passwordConfirm: passwordSchema,
 			}),
 			path: '/reset-password',
 			summary: 'Sends the reset password data.',
