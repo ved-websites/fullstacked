@@ -1,6 +1,7 @@
 import { AuthModule } from '$users/auth/auth.module';
 import { LuciaModule } from '$users/auth/lucia/lucia.module';
 import { RolesModule } from '$users/auth/roles/roles.module';
+import { PresenceModule } from '$users/presence/presence.module';
 import { Global, Module } from '@nestjs/common';
 import { MainGateway } from './main.gateway';
 import { SocketService } from './socket.service';
@@ -10,7 +11,7 @@ const socketDeps = [AuthModule, RolesModule] as const;
 
 @Global()
 @Module({
-	imports: [LuciaModule, ...socketDeps],
+	imports: [LuciaModule, PresenceModule, ...socketDeps],
 	providers: [WsEventEmitter, SocketService, MainGateway],
 	exports: [WsEventEmitter, SocketService, ...socketDeps],
 })

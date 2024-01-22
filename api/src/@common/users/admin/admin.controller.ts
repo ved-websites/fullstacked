@@ -1,73 +1,70 @@
-import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
-import { AuthService } from '$users/auth/auth.service';
 import { Roles } from '$users/auth/roles/roles.guard';
-import { PresenceService, UserOnlineSelector } from '$users/presence/presence.service';
 import { Controller } from '@nestjs/common';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { r } from '~contract';
 import { ADMIN } from '~utils/roles';
 import { AdminService } from './admin.service';
 
+@Roles([ADMIN])
 @Controller()
-// @TsRest({ jsonQuery: true })
 export class AdminController {
-	constructor(
-		private readonly adminService: AdminService,
-		private readonly authService: AuthService,
-		private readonly prisma: PrismaService,
-		private readonly presenceService: PresenceService,
-	) {}
+	constructor(private readonly adminService: AdminService) {}
 
-	@Roles([ADMIN])
 	@TsRestHandler(r.users.admin.listUsers)
-	async getUsers() {
+	getUsers() {
 		return tsRestHandler(r.users.admin.listUsers, async () => {
-			const users = await this.prisma.user.findMany({
-				orderBy: {
-					createdAt: 'asc',
-				},
-				include: {
-					roles: true,
-				},
-			});
-
-			// const liveUsers = users.map(user => this.presenceService.convertUserToLiveUser(user));
-
-			const liveUsers = users.map((user) => ({
-				...user,
-				online: this.presenceService.isUserConnected(user.email),
-			}));
+			const users = await this.adminService.getUsers();
 
 			return {
 				status: 200,
-				body: liveUsers,
+				body: users,
 			};
 		});
 	}
 
-	@Roles([ADMIN])
 	@TsRestHandler(r.users.admin.listUsersGQL, {
 		jsonQuery: true,
 	})
-	async getUsersGql() {
+	getUsersGql() {
 		return tsRestHandler(r.users.admin.listUsersGQL, async (data) => {
-			const { select, ...findArgs } = data.query;
-
-			const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>({ select } as unknown as PrismaSelector, 'online');
-
-			const users = await this.prisma.user.findMany({
-				...selector,
-				...findArgs,
-			});
-
-			const liveUsers = users.map<Partial<(typeof users)[number] & { online: boolean }>>((user) => ({
-				...user,
-				online: online && this.presenceService.isUserConnected(user.email),
-			}));
+			const users = await this.adminService.getUsersGql(data.query);
 
 			return {
 				status: 200,
-				body: liveUsers,
+				body: users,
+			};
+		});
+	}
+
+	@TsRestHandler(r.users.admin.getUserForEdit)
+	getUserForEdit() {
+		return tsRestHandler(r.users.admin.getUserForEdit, async ({ query: { email } }) => {
+			const { user, roles } = await this.adminService.getUserForEdit(email);
+
+			if (!user) {
+				return {
+					status: 400,
+					body: {
+						message: 'No user with email!',
+					},
+				};
+			}
+
+			return {
+				status: 200,
+				body: { user, roles },
+			};
+		});
+	}
+
+	@TsRestHandler(r.users.admin.editUser)
+	editUser() {
+		return tsRestHandler(r.users.admin.editUser, async ({ body: { userRef, ...data } }) => {
+			const editedUser = await this.adminService.editUser(userRef, data);
+
+			return {
+				status: 200,
+				body: { user: editedUser },
 			};
 		});
 	}

@@ -25,31 +25,13 @@ export class UsersListener {
 	async handleUserConnectedEvent(session: USERS_ON_CONNECT_EVENT_TYPE) {
 		const liveUser = this.presenceService.convertUserToLiveUser(session.user);
 
-		const rolesData = await this.prisma.user.findUniqueOrThrow({
-			where: {
-				email: liveUser.email,
-			},
-			select: {
-				roles: true,
-			},
-		});
-
-		this.sockets.emit(wsR.auth.session, { ...liveUser, ...rolesData });
+		this.sockets.emit(wsR.users.onlineChange, liveUser);
 	}
 
 	@OnEvent(USERS_ON_DISCONNECT_EVENT_KEY, { async: true })
 	async handleUserDisconnectedEvent(session: USERS_ON_DISCONNECT_EVENT_TYPE) {
 		const liveUser = this.presenceService.convertUserToLiveUser(session.user);
 
-		const rolesData = await this.prisma.user.findUniqueOrThrow({
-			where: {
-				email: liveUser.email,
-			},
-			select: {
-				roles: true,
-			},
-		});
-
-		this.sockets.emit(wsR.auth.session, { ...liveUser, ...rolesData });
+		this.sockets.emit(wsR.users.onlineChange, liveUser);
 	}
 }

@@ -6,7 +6,7 @@
 
 	type ZodArrayErrors = {
 		_errors?: string[] | undefined;
-	} & Record<number, string[]>;
+	} & Record<number, unknown>;
 
 	export let errors: string[] | ZodArrayErrors | undefined;
 

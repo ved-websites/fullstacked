@@ -121,10 +121,10 @@ export function routeError(status: number, message: string, options?: RouteError
 
 		if (event.locals.step === 'action') {
 			return;
-			// throw fail(status, {
-			// 	toasts: errorToasts,
-			// 	...pageMessagesData,
-			// });
+		}
+
+		if (event.locals.step === 'resolved') {
+			return;
 		}
 
 		throw redirect(
@@ -143,10 +143,6 @@ export function routeError(status: number, message: string, options?: RouteError
 	const flash = getFlash(page);
 
 	flash.update(($flash) => {
-		if (!$flash) {
-			$flash = {};
-		}
-
 		$flash = {
 			toasts: errorToasts,
 			...pageMessagesData,

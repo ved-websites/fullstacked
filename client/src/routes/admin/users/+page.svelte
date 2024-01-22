@@ -3,6 +3,7 @@
 	// import { AdminUserDataStore } from '$houdini';
 	import { getI18n } from '$i18n';
 	// import { subscribe } from '$lib/houdini/helper';
+	import { wsClient } from '$lib/ts-ws/client';
 	import { Button, Heading, Modal } from 'flowbite-svelte';
 	import type { ComponentEvents } from 'svelte';
 	import CopyInviteButton from './components/UsersTable/CopyInviteButton.svelte';
@@ -14,42 +15,55 @@
 
 	export let data;
 
-	// let usersSubMap = new Map<string, ReturnType<typeof subscribe>>();
+	let registeredUsers: Awaited<typeof data.streamed.users>[0] | undefined;
+	let unregisteredUsers: Awaited<typeof data.streamed.users>[1] | undefined;
 
-	$: ({ registeredUsers, unregisteredUsers } = data.streamed);
+	wsClient.users.edited({}, ({ data: editedUser }) => {
+		if (editedUser.registerToken) {
+			unregisteredUsers = unregisteredUsers?.map((u) => {
+				if (u.email === editedUser.email) {
+					return editedUser;
+				}
 
-	// $: registeredUsers.then((users) =>
-	// 	// eslint-disable-next-line implicit-arrow-linebreak
-	// 	users?.forEach((user) => {
-	// 		// usersSubMap.get(user.email)?.();
+				return u;
+			});
+		} else {
+			registeredUsers = registeredUsers?.map((u) => {
+				if (u.email === editedUser.email) {
+					return editedUser;
+				}
 
-	// 		const unsubscriber = subscribe([AdminUserDataStore, { email: user.email }], ({ data }) => {
-	// 			if (!data) {
-	// 				return;
-	// 			}
+				return u;
+			});
+		}
+	});
 
-	// 			const editedUser = data.userEdited;
+	wsClient.users.onlineChange({}, ({ data: user }) => {
+		registeredUsers = registeredUsers?.map((u) => {
+			if (u.email === user.email) {
+				return { ...u, online: user.online };
+			}
 
-	// 			// onUserUpdated(editedUser);
-	// 			console.log({ editedUser });
-	// 		});
+			return u;
+		});
+	});
 
-	// 		usersSubMap.set(user.email, unsubscriber);
-	// 	}),
-	// );
+	data.streamed.users
+		.then(([streamedRegisteredUsers, streamedUnregisteredUsers]) => {
+			registeredUsers = streamedRegisteredUsers;
+			unregisteredUsers = streamedUnregisteredUsers;
+		})
+		.catch(() => {
+			registeredUsers = [];
+			unregisteredUsers = [];
+		});
 
-	let deleteModalOpen = false;
 	let deletionUser: BaseUser | undefined;
-
-	// function onUserUpdated(user: NonNullable<typeof registeredUsers>[number]) {
-	// 	registeredUsers = [...registeredUsers.filter((u) => u.email !== user.email), user];
-	// }
 
 	function onDeleteUser(event: ComponentEvents<UsersTable>['deleteUser']) {
 		const { detail: user } = event;
 
 		deletionUser = user;
-		deleteModalOpen = true;
 	}
 </script>
 
@@ -78,13 +92,13 @@
 	</div>
 </div>
 
-<Modal title={$t('admin.users.modal.title')} bind:open={deleteModalOpen}>
+<Modal title={$t('admin.users.modal.title')} open={!!deletionUser}>
 	<div class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
 		<p>{$t('admin.users.modal.body.warning')}</p>
 		<p>{@html $t('admin.users.modal.body.confirmation', { email: deletionUser?.email })}</p>
 	</div>
 
-	<form method="post" action="?/delete" class="flex" use:enhance on:submit={() => (deleteModalOpen = false)}>
+	<form method="post" action="?/delete" class="flex" use:enhance on:submit={() => (deletionUser = undefined)}>
 		<Button class="ml-auto" color="red" type="submit">{$t('common.confirm')}</Button>
 		<input type="hidden" name="email" value={deletionUser?.email} />
 	</form>

@@ -15,6 +15,8 @@ generator zod {
   provider = "zod-prisma-types"
   output   = "../src/_generated/zod"
 
+  useMultipleFiles  = true
+  writeBarrelFiles  = false
   useTypeAssertions = true
 }
 

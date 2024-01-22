@@ -24,17 +24,15 @@ export class AdminResolver {
 	) {}
 
 	@Query(() => [LiveUser])
-	async getUsers(@SelectQL() select: PrismaSelector, @Args('where', { nullable: true }) where?: UserWhereInput) {
-		const users = await this.adminService.getUsers(select, where);
-
-		return users;
+	async getUsers(@SelectQL() _select: PrismaSelector, @Args('where', { nullable: true }) _where?: UserWhereInput) {
+		// const users = await this.adminService.getUsers(select, where);
+		// return users;
 	}
 
 	@Query(() => GetUserOutput, { nullable: true })
-	async getUser(@SelectQL() select: PrismaSelector, @Args('where') where: UserWhereUniqueInput) {
-		const user = await this.adminService.getUser(select, where);
-
-		return user;
+	async getUser(@SelectQL() _select: PrismaSelector, @Args('where') _where: UserWhereUniqueInput) {
+		// const user = await this.adminService.getUser(select, where);
+		// return user;
 	}
 
 	@Mutation(() => CreateUserOutput)
@@ -46,20 +44,18 @@ export class AdminResolver {
 
 	@Mutation(() => User)
 	async editUser(
-		@I18n() i18n: I18nContext,
-		@SelectQL() select: PrismaSelector,
-		@Args('where') where: UserWhereUniqueInput,
-		@Args('data') data: UserUpdateInput,
+		@I18n() _i18n: I18nContext,
+		@SelectQL() _select: PrismaSelector,
+		@Args('where') _where: UserWhereUniqueInput,
+		@Args('data') _data: UserUpdateInput,
 	) {
-		try {
-			const editedUser = await this.adminService.editUser(select, where, data);
-
-			return editedUser;
-		} catch (error) {
-			const message = getErrorMessage(error, i18n);
-
-			throw new ForbiddenException(message);
-		}
+		// try {
+		// 	const editedUser = await this.adminService.editUser(select, where, data);
+		// 	return editedUser;
+		// } catch (error) {
+		// 	const message = getErrorMessage(error, i18n);
+		// 	throw new ForbiddenException(message);
+		// }
 	}
 
 	@Mutation(() => GetUserOutput, { nullable: true })
@@ -76,21 +72,17 @@ export class AdminResolver {
 	}
 
 	@Mutation(() => Boolean)
-	async resendNewUserEmail(@Args('where') where: UserWhereUniqueInput, @AuthUser() user: LuciaUser, @Origin() origin: string) {
-		try {
-			const dbUserToResendTo = await this.adminService.getUser({}, where);
-
-			if (!dbUserToResendTo) {
-				return false;
-			}
-
-			const userToResendTo = await this.authService.getLuciaUser(dbUserToResendTo.id);
-
-			await this.adminService.sendNewUserRegistrationEmail(userToResendTo, { url: origin, user });
-
-			return true;
-		} catch (error) {
-			return false;
-		}
+	async resendNewUserEmail(@Args('where') _where: UserWhereUniqueInput, @AuthUser() _user: LuciaUser, @Origin() _origin: string) {
+		// try {
+		// 	const dbUserToResendTo = await this.adminService.getUser({}, where);
+		// 	if (!dbUserToResendTo) {
+		// 		return false;
+		// 	}
+		// 	const userToResendTo = await this.authService.getLuciaUser(dbUserToResendTo.id);
+		// 	await this.adminService.sendNewUserRegistrationEmail(userToResendTo, { url: origin, user });
+		// 	return true;
+		// } catch (error) {
+		// 	return false;
+		// }
 	}
 }

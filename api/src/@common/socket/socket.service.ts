@@ -1,5 +1,6 @@
 import { Auth, LuciaFactory } from '$users/auth/lucia/lucia.factory';
 import { COOKIE_NAME, setupSessionContainer } from '$users/auth/lucia/lucia.middleware';
+import { PresenceService } from '$users/presence/presence.service';
 import { parseCookies } from '$utils/cookies';
 import { Inject, Injectable } from '@nestjs/common';
 import type { IncomingMessage } from 'http';
@@ -18,6 +19,7 @@ export class SocketService {
 	constructor(
 		@Inject(LuciaFactory) private readonly auth: Auth,
 		private readonly wsEmitter: WsEventEmitter,
+		private readonly presenceService: PresenceService,
 	) {}
 
 	onClientConnect(socket: TypedWebSocket, request: IncomingMessage) {
@@ -46,11 +48,19 @@ export class SocketService {
 
 		await setupSessionContainer(socket, this.auth, token);
 
+		socket.setMaxListeners(0);
+
 		SocketService.initializationMap.delete(socket);
+
+		if (socket.session) {
+			this.presenceService.onConnect(socket.session);
+		}
 	}
 
 	onClientDisconnect(socket: TypedWebSocket) {
-		console.log('hai from SocketService.onClientDisconnect!', socket.session?.user.email);
+		if (socket.session) {
+			this.presenceService.onDisconnect(socket.session);
+		}
 	}
 
 	sendMessage(socketOrSessionId: SocketOrSessionId, message: string, uid?: EventUID) {

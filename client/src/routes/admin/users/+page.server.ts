@@ -1,6 +1,5 @@
 import { DeleteSpecificUserStore } from '$houdini';
 import { createToasts } from '$lib/components/ToastManager/helper';
-import { assertTsRestResultOK } from '$lib/utils/assertions';
 import type { PageDataObject } from '$lib/utils/page-data-object';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
@@ -10,9 +9,13 @@ import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals: { tsrest } }) => {
 	const getUsers = async () => {
-		const result = await tsrest.users.admin.listUsers();
+		const result = await tsrest.users.admin.listUsers({
+			skipErrorHandling: true,
+		});
 
-		assertTsRestResultOK(result);
+		if (result.status !== StatusCodes.OK) {
+			throw new Error(result.body.message);
+		}
 
 		return result.body.reduce(
 			([regUsers, unregUsers], user) => {
@@ -30,10 +33,13 @@ export const load = (async ({ locals: { tsrest } }) => {
 
 	const users = getUsers();
 
+	users.catch(() => {
+		// don't handle errors
+	});
+
 	return {
 		streamed: {
-			registeredUsers: users.then(([registeredUsers]) => registeredUsers),
-			unregisteredUsers: users.then(([_, unregisteredUsers]) => unregisteredUsers),
+			users,
 		},
 	};
 }) satisfies PageServerLoad;

@@ -22,14 +22,12 @@
 	$: ({ t } = $i18n);
 
 	// eslint-disable-next-line no-undef
-	export let users: Promise<T[] | undefined>;
+	export let users: T[] | undefined;
 	export let name: string = '';
 	export let showUserAvatars = false;
 
 	export let tableClass: string = '';
 	export let tableBodyClass: string = 'divide-y';
-
-	$: sortedUsers = users.then((u) => u?.sort((a, b) => a.email.localeCompare(b.email)));
 
 	type Events = {
 		// eslint-disable-next-line no-undef
@@ -45,7 +43,7 @@
 		<TableHeadCell class="text-right">{$t('admin.users.tables.columns.actions')}</TableHeadCell>
 	</TableHead>
 	<TableBody {tableBodyClass}>
-		{#await sortedUsers}
+		{#if users === undefined}
 			<TableBodyRow>
 				<TableBodyCell colspan="2">
 					<div class="flex justify-center py-3">
@@ -53,47 +51,45 @@
 					</div>
 				</TableBodyCell>
 			</TableBodyRow>
-		{:then returnedSortedUsers}
-			{#if !returnedSortedUsers?.length}
+		{:else if !users.length}
+			<TableBodyRow>
+				<TableBodyCell colspan="2">
+					<div class="flex justify-center py-3">
+						<span class="italic">{$t('admin.users.tables.unregistered.nobody')}</span>
+					</div>
+				</TableBodyCell>
+			</TableBodyRow>
+		{:else}
+			{#each users as user, i (user.email)}
+				{@const popoverId = `info-${name}${i}`}
 				<TableBodyRow>
-					<TableBodyCell colspan="2">
-						<div class="flex justify-center py-3">
-							<span class="italic">{$t('admin.users.tables.unregistered.nobody')}</span>
+					<TableBodyCell>
+						{#if showUserAvatars}
+							<div id={popoverId} class="inline-flex items-center gap-2">
+								<UserAvatar {...user} class="hidden sm:flex lg:hidden xl:flex" />
+								<span>{user.email}</span>
+							</div>
+						{:else}
+							<span id={popoverId}>{user.email}</span>
+						{/if}
+					</TableBodyCell>
+					<TableBodyCell>
+						<div class="flex justify-end gap-1">
+							<Button size="xs" href="/admin/users/{user.email}">{$t('admin.users.tables.actions.edit')}</Button>
+							<Button size="xs" on:click={() => dispatch('deleteUser', user)} color="red">
+								{$t('admin.users.tables.actions.delete')}
+							</Button>
+							<slot name="more-actions" {user} {popoverId} />
 						</div>
 					</TableBodyCell>
 				</TableBodyRow>
-			{:else}
-				{#each returnedSortedUsers as user, i (user.email)}
-					{@const popoverId = `info-${name}${i}`}
-					<TableBodyRow>
-						<TableBodyCell>
-							{#if showUserAvatars}
-								<div id={popoverId} class="inline-flex items-center gap-2">
-									<UserAvatar {...user} class="hidden sm:flex lg:hidden xl:flex" />
-									<span>{user.email}</span>
-								</div>
-							{:else}
-								<span id={popoverId}>{user.email}</span>
-							{/if}
-						</TableBodyCell>
-						<TableBodyCell>
-							<div class="flex justify-end gap-1">
-								<Button size="xs" href="/admin/users/{user.email}">{$t('admin.users.tables.actions.edit')}</Button>
-								<Button size="xs" on:click={() => dispatch('deleteUser', user)} color="red">
-									{$t('admin.users.tables.actions.delete')}
-								</Button>
-								<slot name="more-actions" {user} {popoverId} />
-							</div>
-						</TableBodyCell>
-					</TableBodyRow>
-				{/each}
-			{/if}
-		{/await}
+			{/each}
+		{/if}
 	</TableBody>
 </Table>
 
-{#await sortedUsers then returnedSortedUsers}
-	{#each returnedSortedUsers ?? [] as user, i (user.email)}
+{#if users?.length}
+	{#each users as user, i (user.email)}
 		<Popover defaultClass="p-3 flex flex-col gap-3" class="w-64 text-sm font-light" triggeredBy="#info-{name}{i}">
 			<div slot="title" class="font-semibold text-gray-900 dark:text-white text-center">{$t('admin.users.tables.userinfo.heading')}</div>
 			<div class="flex justify-between gap-3">
@@ -124,4 +120,4 @@
 			</div>
 		</Popover>
 	{/each}
-{/await}
+{/if}

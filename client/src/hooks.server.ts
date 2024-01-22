@@ -50,7 +50,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	event.locals.step = 'action';
 
-	return resolve(event, opts);
+	const response = await resolve(event, opts);
+
+	event.locals.step = 'resolved';
+
+	return response;
 };
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {

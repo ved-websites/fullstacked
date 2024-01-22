@@ -20,4 +20,4 @@ export type GraphQLError = {
 
 export interface PageMessages extends PageDataObject {}
 
-export type EventStep = 'hook' | 'action' | 'layout' | 'page';
+export type EventStep = 'hook' | 'action' | 'layout' | 'page' | 'resolved';
