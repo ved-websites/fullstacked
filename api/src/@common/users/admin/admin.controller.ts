@@ -1,6 +1,10 @@
+import { getErrorMessage } from '$i18n/i18n.error';
 import { Roles } from '$users/auth/roles/roles.guard';
-import { Controller } from '@nestjs/common';
+import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
+import { Origin } from '$utils/origin.decorator';
+import { Controller, ForbiddenException } from '@nestjs/common';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
+import { I18n, I18nContext } from 'nestjs-i18n';
 import { r } from '~contract';
 import { ADMIN } from '~utils/roles';
 import { AdminService } from './admin.service';
@@ -66,6 +70,36 @@ export class AdminController {
 				status: 200,
 				body: { user: editedUser },
 			};
+		});
+	}
+
+	@TsRestHandler(r.users.admin.createUser)
+	createUser(@AuthUser() user: LuciaUser, @Origin() origin: string) {
+		return tsRestHandler(r.users.admin.createUser, async ({ body }) => {
+			await this.adminService.createUser(body, { url: origin, user });
+
+			return {
+				status: 200,
+				body: undefined,
+			};
+		});
+	}
+
+	@TsRestHandler(r.users.admin.deleteUser)
+	deleteUser(@I18n() i18n: I18nContext) {
+		return tsRestHandler(r.users.admin.deleteUser, async ({ body: { email } }) => {
+			try {
+				await this.adminService.deleteUser(email);
+
+				return {
+					status: 200,
+					body: undefined,
+				};
+			} catch (error) {
+				const message = getErrorMessage(error, i18n);
+
+				throw new ForbiddenException(message);
+			}
 		});
 	}
 }

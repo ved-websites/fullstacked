@@ -1,7 +1,7 @@
 import { EmailService } from '$email/email.service';
 import { I18nException } from '$i18n/i18n.error';
 import { TypedI18nService } from '$i18n/i18n.service';
-import { UserCreateInput, UserWhereUniqueInput } from '$prisma-graphql/user';
+import { UserWhereUniqueInput } from '$prisma-graphql/user';
 import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
 import { SocketService } from '$socket/socket.service';
 import { AuthService } from '$users/auth/auth.service';
@@ -15,7 +15,7 @@ import { z } from 'zod';
 import { wsR } from '~contract';
 import { EnvironmentConfig } from '~env';
 import { ADMIN } from '~utils/roles';
-import { AdminListUsersGql } from './admin.contract';
+import { AdminListUsersGql, UserCreateInputNoId } from './admin.contract';
 import { ADMIN_CREATE_USER_EVENT_KEY, ADMIN_CREATE_USER_EVENT_TYPE } from './listeners/admin.events';
 
 @Injectable()
@@ -90,7 +90,7 @@ export class AdminService {
 		return { user, roles };
 	}
 
-	async createUser(data: UserCreateInput, origin: ADMIN_CREATE_USER_EVENT_TYPE[1]) {
+	async createUser(data: UserCreateInputNoId, origin: ADMIN_CREATE_USER_EVENT_TYPE[1]) {
 		const { email, firstName, lastName, roles, emailLang } = data;
 
 		const user = (await this.authService.createUser(email, null, {
@@ -104,6 +104,10 @@ export class AdminService {
 		}
 
 		this.eventEmitter.emit(ADMIN_CREATE_USER_EVENT_KEY, [user, origin] satisfies ADMIN_CREATE_USER_EVENT_TYPE);
+
+		const userRoles = await this.rolesService.getRolesOfUser(user.email);
+
+		this.sockets.emit(wsR.users.created, { ...user, roles: userRoles });
 
 		return user;
 	}
@@ -153,7 +157,35 @@ export class AdminService {
 		return liveUser;
 	}
 
-	async deleteUser(select: PrismaSelector, where: UserWhereUniqueInput) {
+	async deleteUser(email: string) {
+		const otherAdminsCount = await this.prisma.user.count({
+			where: {
+				email: {
+					not: email,
+				},
+				roles: {
+					some: {
+						text: {
+							equals: ADMIN,
+						},
+					},
+				},
+			},
+		});
+
+		if (!otherAdminsCount) {
+			throw new I18nException('admin.errors.last.user');
+		}
+
+		const deletedUser = await this.prisma.user.delete({
+			where: { email },
+		});
+
+		this.sockets.emit(wsR.users.deleted, deletedUser);
+
+		return deletedUser;
+	}
+	async deleteUserGql(select: PrismaSelector, where: UserWhereUniqueInput) {
 		const otherAdminsCount = await this.prisma.user.count({
 			where: {
 				email: {

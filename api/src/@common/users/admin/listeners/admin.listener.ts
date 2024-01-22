@@ -9,15 +9,13 @@ export class AdminListener {
 
 	constructor(private readonly adminService: AdminService) {}
 
-	@OnEvent(ADMIN_CREATE_USER_EVENT_KEY, { async: true })
-	async handleUserCreatedEvent([user, origin]: ADMIN_CREATE_USER_EVENT_TYPE) {
-		try {
-			return this.adminService.sendNewUserRegistrationEmail(user, origin);
-		} catch (error) {
+	@OnEvent(ADMIN_CREATE_USER_EVENT_KEY)
+	handleUserCreatedEvent([user, origin]: ADMIN_CREATE_USER_EVENT_TYPE) {
+		this.adminService.sendNewUserRegistrationEmail(user, origin).catch((error) => {
 			this.logger.error(
 				`Error happened while sending email to new user "${user.email}".`,
 				error instanceof Error ? error.stack : undefined,
 			);
-		}
+		});
 	}
 }

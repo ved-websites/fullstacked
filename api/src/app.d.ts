@@ -1,3 +1,4 @@
+import type { User } from '$prisma-client';
 import type { Auth as ApiAuth } from '$users/auth/lucia/lucia.factory';
 import type { SessionContainer } from '$users/auth/lucia/lucia.middleware';
 import type { AuthRequest } from 'lucia';
@@ -12,14 +13,7 @@ declare global {
 	declare namespace Lucia {
 		type Auth = ApiAuth;
 
-		type DatabaseUserAttributes = {
-			email: string;
-			firstName?: string | null;
-			lastName?: string | null;
-			registerToken?: string | null;
-			profilePictureRef?: string;
-			emailLang?: string;
-		};
+		type DatabaseUserAttributes = Omit<User, 'id'>;
 		// type DatabaseSessionAttributes = {};
 	}
 

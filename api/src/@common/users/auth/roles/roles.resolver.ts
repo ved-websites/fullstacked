@@ -10,7 +10,7 @@ export class RolesResolver {
 
 	@Query(() => [Role])
 	async getRoles(@SelectQL() select: PrismaSelector, @Args('where', { nullable: true }) where?: RoleWhereInput) {
-		const roles = await this.rolesService.getRoles(select, where);
+		const roles = await this.rolesService.getRolesGql(select, where);
 
 		return roles;
 	}

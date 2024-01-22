@@ -4,6 +4,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './roles.guard';
 import { RolesResolver } from './roles.resolver';
 import { RolesService } from './roles.service';
+import { RolesController } from './roles.controller';
 
 @Module({
 	imports: [TypedI18nModule],
@@ -16,5 +17,6 @@ import { RolesService } from './roles.service';
 		RolesService,
 	],
 	exports: [RolesService],
+	controllers: [RolesController],
 })
 export class RolesModule {}

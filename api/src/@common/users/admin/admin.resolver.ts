@@ -61,7 +61,7 @@ export class AdminResolver {
 	@Mutation(() => GetUserOutput, { nullable: true })
 	async deleteUser(@I18n() i18n: I18nContext, @SelectQL() select: PrismaSelector, @Args('where') where: UserWhereUniqueInput) {
 		try {
-			const deletedUser = await this.adminService.deleteUser(select, where);
+			const deletedUser = await this.adminService.deleteUserGql(select, where);
 
 			return deletedUser;
 		} catch (error) {

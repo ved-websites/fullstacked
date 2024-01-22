@@ -1,4 +1,5 @@
 import { authContract, wsAuthContract } from '../@common/users/auth/auth.contract';
+import { rolesContract } from '../@common/users/auth/roles/roles.contract';
 import { usersContract, wsUsersContract } from '../@common/users/users.contract';
 import { messagesContract, wsMessagesContract } from '../message/messages.contract';
 import { c, wsC } from './utils/contract';
@@ -9,6 +10,7 @@ const activeRestContracts = {
 	messagesContract,
 	usersContract,
 	authContract,
+	rolesContract,
 };
 // === IMPORT CUSTOM REST CONTRACTS ABOVE ===
 

@@ -1,4 +1,3 @@
-import { PrismaService } from '$prisma/prisma.service';
 import { SocketService } from '$socket/socket.service';
 import { PresenceService } from '$users/presence/presence.service';
 import { Injectable, Logger } from '@nestjs/common';
@@ -16,7 +15,6 @@ export class UsersListener {
 	private readonly logger = new Logger(UsersListener.name);
 
 	constructor(
-		private readonly prisma: PrismaService,
 		private readonly sockets: SocketService,
 		private readonly presenceService: PresenceService,
 	) {}

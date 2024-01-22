@@ -75,7 +75,10 @@ export class WsEventInterceptor implements NestInterceptor {
 							const parseOutput = await eventRoute.emitted.safeParseAsync(emittedData);
 
 							if (!parseOutput.success) {
-								this.logger.error(`Wrong value passed to emitted data structure, what's that about?`, parseOutput.error);
+								this.logger.error(
+									`Wrong value passed to emitted data structure of pattern "${pattern}", what's that about?`,
+									parseOutput.error,
+								);
 								return;
 							}
 

@@ -12,6 +12,8 @@ import { EnvironmentConfig } from '~env';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';
 import { LuciaSession } from './session.decorator';
 
+export type CreateUserLuciaAttributes = Partial<Omit<GlobalDatabaseUserAttributes, 'email'>>;
+
 @Injectable()
 export class AuthService {
 	constructor(
@@ -82,7 +84,7 @@ export class AuthService {
 		return user;
 	}
 
-	async createUser(email: string, password: string | null, attributes?: Omit<GlobalDatabaseUserAttributes, 'email'>) {
+	async createUser(email: string, password: string | null, attributes?: CreateUserLuciaAttributes) {
 		const userWithEmail = await this.prisma.user.count({
 			where: {
 				email,
@@ -90,11 +92,11 @@ export class AuthService {
 		});
 
 		if (userWithEmail !== 0) {
-			throw new BadRequestException('A user with this email already exists!');
+			throw new BadRequestException('A user with this email already exists!'); // TODO : i18n
 		}
 
 		const registerTokenLength = 16;
-		const registerToken = password ? undefined : (await loadLuciaUtils()).generateRandomString(registerTokenLength);
+		const registerToken = password ? null : (await loadLuciaUtils()).generateRandomString(registerTokenLength);
 
 		const user = await this.auth.createUser({
 			key: password ? this.defineEmailKey(email, password) : null,
@@ -102,14 +104,19 @@ export class AuthService {
 				email,
 				registerToken,
 				emailLang: attributes?.emailLang ?? fallbackLanguage,
-				...attributes,
+				firstName: attributes?.firstName ?? null,
+				lastName: attributes?.lastName ?? null,
+				profilePictureRef: attributes?.profilePictureRef ?? null,
+				lang: attributes?.lang ?? null,
+				createdAt: new Date(),
+				updatedAt: new Date(),
 			},
 		});
 
 		return user;
 	}
 
-	async register(registerToken: string, password: string, attributes: Omit<GlobalDatabaseUserAttributes, 'email'>) {
+	async register(registerToken: string, password: string, attributes: CreateUserLuciaAttributes) {
 		const user = await this.prisma.user.findFirst({
 			where: {
 				registerToken,

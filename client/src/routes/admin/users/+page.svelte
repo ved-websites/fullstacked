@@ -16,7 +16,7 @@
 	export let data;
 
 	let registeredUsers: Awaited<typeof data.streamed.users>[0] | undefined;
-	let unregisteredUsers: Awaited<typeof data.streamed.users>[1] | undefined;
+	let unregisteredUsers: Omit<Awaited<typeof data.streamed.users>[1][number], 'online'>[] | undefined;
 
 	wsClient.users.edited({}, ({ data: editedUser }) => {
 		if (editedUser.registerToken) {
@@ -46,6 +46,19 @@
 
 			return u;
 		});
+	});
+
+	wsClient.users.created({}, ({ data: user }) => {
+		unregisteredUsers = [...(unregisteredUsers ?? []), user];
+	});
+
+	wsClient.users.deleted({}, ({ data: { email } }) => {
+		if (unregisteredUsers?.some((u) => u.email === email)) {
+			unregisteredUsers = unregisteredUsers?.filter((u) => u.email !== email);
+		}
+		if (registeredUsers?.some((u) => u.email === email)) {
+			registeredUsers = registeredUsers?.filter((u) => u.email !== email);
+		}
 	});
 
 	data.streamed.users
