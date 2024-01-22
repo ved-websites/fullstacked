@@ -1,8 +1,8 @@
 import type { User } from '$prisma-client';
-import UserUpdateInputSchema from '$zod/inputTypeSchemas/UserUpdateInputSchema';
+import type UserUpdateInputSchema from '$zod/inputTypeSchemas/UserUpdateInputSchema';
 import RoleSchema from '$zod/modelSchema/RoleSchema';
 import UserSchema from '$zod/modelSchema/UserSchema';
-import UserFindManyArgsSchema from '$zod/outputTypeSchemas/UserFindManyArgsSchema';
+import type UserFindManyArgsSchema from '$zod/outputTypeSchemas/UserFindManyArgsSchema';
 import { z } from 'zod';
 import { c, createResponses } from '~contract';
 import { LiveUserSchema, emailSchema } from '~shared';
