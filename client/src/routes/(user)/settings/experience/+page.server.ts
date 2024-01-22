@@ -1,14 +1,12 @@
-import { ChangeLangStore } from '$houdini';
 import { locales } from '$i18n-config';
 import { createToasts } from '$lib/components/ToastManager/helper';
+import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { createPageDataObject } from '$lib/utils/page-data-object';
-import { fail, type Actions } from '@sveltejs/kit';
-import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import { k } from '~shared';
-import type { PageServerLoad } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 
 const langSchema = z.object({
 	lang: z.nullable(z.string()),
@@ -26,43 +24,34 @@ export const actions = {
 	default: async (event) => {
 		const {
 			request,
-			locals: {
-				gql: { mutate },
-				userHasJs,
-			},
+			locals: { tsrest, userHasJs },
 		} = event;
 
 		const form = await superValidate(request, langSchema);
 
-		if (!form.valid) {
-			return fail(StatusCodes.BAD_REQUEST, createPageDataObject({ form }));
-		}
+		const lang = locales.includes(form.data.lang as string) ? form.data.lang : null;
 
-		const { lang: formLang } = form.data;
+		return assertTsRestActionResultOK({
+			form,
+			result: () => {
+				return tsrest.user.settings.profile.update({
+					body: { lang },
+				});
+			},
+			onValid: () => {
+				const toasts = createToasts([
+					{
+						text: lang ? k('settings.experience.lang.toast.targetted') : k('settings.experience.lang.toast.automatic'),
+						timeout: 3000,
+					},
+				]);
 
-		const lang = locales.includes(formLang as string) ? formLang : null;
+				if (!userHasJs) {
+					throw redirect({ toasts }, event);
+				}
 
-		const result = await mutate(ChangeLangStore, { lang });
-
-		if (result.type === 'failure') {
-			return result.kitHandler('error');
-		}
-
-		const toasts = (() => {
-			const text = lang ? k('settings.experience.lang.toast.targetted') : k('settings.experience.lang.toast.automatic');
-
-			return createToasts([
-				{
-					text,
-					timeout: 3000,
-				},
-			]);
-		})();
-
-		if (!userHasJs) {
-			throw redirect({ toasts }, event);
-		}
-
-		return createPageDataObject({ form, toasts });
+				return createPageDataObject({ form, toasts });
+			},
+		});
 	},
 } satisfies Actions;

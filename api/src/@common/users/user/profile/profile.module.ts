@@ -5,9 +5,11 @@ import { Module } from '@nestjs/common';
 import { ProfilePictureModule } from './profile-picture/profile-picture.module';
 import { UserProfileResolver } from './profile.resolver';
 import { UserProfileService } from './profile.service';
+import { ProfileController } from './profile.controller';
 
 @Module({
 	imports: [RolesModule, ProfilePictureModule, PresenceModule, TypedI18nModule],
 	providers: [UserProfileResolver, UserProfileService],
+	controllers: [ProfileController],
 })
 export class UserProfileModule {}

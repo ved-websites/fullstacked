@@ -1,7 +1,7 @@
 import RoleSchema from '$zod/modelSchema/RoleSchema';
 import UserSchema from '$zod/modelSchema/UserSchema';
 import { z } from 'zod';
-import { c, createResponses, wsC } from '~contract';
+import { c, createResponses } from '~contract';
 import { emailSchema, passwordSchema } from '~shared';
 
 export const SessionUserSchema = UserSchema.extend({
@@ -114,10 +114,3 @@ export const authContract = c.router(
 	},
 	{ pathPrefix: '/auth' },
 );
-
-export const wsAuthContract = wsC.router({
-	session: {
-		type: 'update',
-		emitted: SessionUserSchema,
-	},
-});

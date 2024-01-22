@@ -33,13 +33,13 @@
 	$: layoutAlert = $flash?.layoutAlert || $page.data.layoutAlert || formData?.layoutAlert;
 	$: toasts = [...($page.data.toasts ?? []), ...($flash?.toasts ?? []), ...(formData?.toasts ?? [])];
 
-	let sessionUnsubscriber: ReturnType<WsClientType['auth']['session']> | undefined;
+	let sessionUnsubscriber: ReturnType<WsClientType['users']['edited']> | undefined;
 
 	afterNavigate(async () => {
 		if (wsClient.$socket.readyState !== WS_READY_STATES.OPEN && data.sessionUser) {
 			wsClient.$socket.connect();
 
-			sessionUnsubscriber = wsClient.auth.session(({ data: editedUserData }) => {
+			sessionUnsubscriber = wsClient.users.edited({ email: data.sessionUser.email }, ({ data: editedUserData }) => {
 				data.sessionUser = editedUserData;
 
 				invalidateAll();

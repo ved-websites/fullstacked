@@ -1,8 +1,7 @@
-import { ChangeSelfPasswordStore } from '$houdini';
 import { createToasts } from '$lib/components/ToastManager/helper';
+import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { createPageDataObject } from '$lib/utils/page-data-object';
-import { fail, type Actions } from '@sveltejs/kit';
-import { StatusCodes } from 'http-status-codes';
+import type { Actions } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import { passwordSchema } from '~shared';
@@ -25,32 +24,21 @@ export const load = (async () => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({
-		request,
-		locals: {
-			gql: { mutate },
-		},
-	}) => {
+	default: async ({ request, locals: { tsrest } }) => {
 		const form = await superValidate(request, newPasswordFormSchema);
 
-		if (!form.valid) {
-			return fail(StatusCodes.BAD_REQUEST, createPageDataObject({ form }));
-		}
+		return assertTsRestActionResultOK({
+			form,
+			result: () => tsrest.user.settings.security.changePassword({ body: form.data }),
+			onValid: () => {
+				const toasts = createToasts([
+					{
+						text: 'Successfully updated password!', // TODO : i18n
+					},
+				]);
 
-		const { password } = form.data;
-
-		const result = await mutate(ChangeSelfPasswordStore, { password });
-
-		if (result.type === 'failure') {
-			return result.kitHandler('error');
-		}
-
-		const toasts = createToasts([
-			{
-				text: 'Successfully updated password!',
+				return createPageDataObject({ form, toasts });
 			},
-		]);
-
-		return createPageDataObject({ form, toasts });
+		});
 	},
 } satisfies Actions;

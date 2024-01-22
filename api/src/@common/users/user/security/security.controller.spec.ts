@@ -1,22 +1,22 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TestManager } from '~utils/tests/TestManager';
-import { AuthGateway } from './auth.gateway';
+import { SecurityController } from './security.controller';
 
-describe('AuthGateway', () => {
+describe('SecurityController', () => {
 	const manager = new TestManager({
 		metadata: {
-			providers: [AuthGateway],
+			providers: [SecurityController],
 		},
 	});
-	let gateway: AuthGateway;
+	let controller: SecurityController;
 
 	beforeEach(async () => {
 		await manager.setupTestModule();
 
-		gateway = manager.module.get<AuthGateway>(AuthGateway);
+		controller = manager.module.get<SecurityController>(SecurityController);
 	});
 
 	it('should be defined', () => {
-		expect(gateway).toBeDefined();
+		expect(controller).toBeDefined();
 	});
 });

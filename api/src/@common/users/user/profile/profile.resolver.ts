@@ -13,7 +13,7 @@ export class UserProfileResolver {
 	@Mutation(() => User)
 	async editUserProfile(@SelectQL() select: PrismaSelector, @Args('data') data: UserUpdateInput, @AuthUser() user: LuciaUser) {
 		try {
-			const editedUser = await this.profileService.editUser(select, user, data);
+			const editedUser = await this.profileService.editUserGql(select, user, data);
 
 			return editedUser;
 		} catch (error) {
