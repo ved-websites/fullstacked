@@ -15,7 +15,7 @@ export class ProfilePictureResolver {
 		file: FileUpload,
 		@AuthUser() user: LuciaUser,
 	) {
-		const uploadedImage = await this.profilePictureService.uploadImage(file, user);
+		const uploadedImage = await this.profilePictureService.uploadImageGql(file, user);
 
 		return {
 			fileName: uploadedImage.fileName,

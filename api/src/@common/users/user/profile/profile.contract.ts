@@ -13,6 +13,16 @@ export const userProfileContract = c.router(
 				200: z.undefined(),
 			}),
 		},
+		uploadPicture: {
+			method: 'POST',
+			body: c.type<{ file: File }>(),
+			path: '/picture',
+			contentType: 'multipart/form-data',
+			summary: 'Deletes your own profile picture.',
+			responses: createResponses({
+				200: z.undefined(),
+			}),
+		},
 		deletePicture: {
 			method: 'DELETE',
 			body: z.object({}),

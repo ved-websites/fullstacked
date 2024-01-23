@@ -7,10 +7,9 @@
 	import { getProfilePictureImageUrl } from '$lib/utils/images';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { Button, Label } from 'flowbite-svelte';
+	import { ACCEPTED_PICTURE_TYPES } from '~shared';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);
-
-	const ACCEPTED_PROFILE_PICTURE_TYPES = ['jpeg', 'jpg', 'png', 'webp'];
 
 	export let currentProfilePictureRef: string | undefined | null;
 	export let hasJs: boolean;
@@ -106,7 +105,7 @@
 		on:change={handlePictureChange}
 		name="profile-picture"
 		class="mt-2"
-		accept={ACCEPTED_PROFILE_PICTURE_TYPES.map((type) => `image/${type}`).join(', ')}
+		accept={ACCEPTED_PICTURE_TYPES.map((type) => `image/${type}`).join(', ')}
 		bind:input={inputRef}
 		let:isDraggingOver
 	>
@@ -118,7 +117,7 @@
 				</p>
 				<p class="text-xs text-gray-500 dark:text-gray-400">
 					{$t('settings.profile.picture.zone.formats', {
-						formats: new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_PROFILE_PICTURE_TYPES),
+						formats: new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_PICTURE_TYPES),
 					})}
 				</p>
 				{#if isDraggingOver}

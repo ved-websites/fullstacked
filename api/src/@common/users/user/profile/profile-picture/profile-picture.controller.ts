@@ -1,6 +1,8 @@
 import { TypedI18nService } from '$i18n/i18n.service';
+import { FileValidationPipe } from '$minio/minio-client.constants';
 import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
-import { BadRequestException, Controller, Get, Header, Param, StreamableFile } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Header, Param, StreamableFile, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { r } from '~contract';
 import { ProfilePictureService } from './profile-picture.service';
@@ -28,6 +30,19 @@ export class ProfilePictureController {
 		} catch (error) {
 			throw new BadRequestException(this.i18n.t('files.errors.profile-picture.nonexistent'));
 		}
+	}
+
+	@TsRestHandler(r.user.settings.profile.uploadPicture)
+	@UseInterceptors(FileInterceptor('profile-picture'))
+	async uploadProfilePicture(@AuthUser() user: LuciaUser, @UploadedFile(FileValidationPipe) file: Express.Multer.File) {
+		return tsRestHandler(r.user.settings.profile.uploadPicture, async () => {
+			await this.profilePictureService.uploadImage(file, user);
+
+			return {
+				status: 200,
+				body: undefined,
+			};
+		});
 	}
 
 	@TsRestHandler(r.user.settings.profile.deletePicture)

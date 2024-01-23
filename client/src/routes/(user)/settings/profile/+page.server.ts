@@ -1,4 +1,3 @@
-import { EditUserProfilePictureStore } from '$houdini';
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { userFormSchema } from '$lib/components/UserForm/userform.schema';
 import { assertTsRestActionResultOK } from '$lib/utils/assertions';
@@ -25,13 +24,7 @@ export const actions = {
 			},
 		});
 	},
-	profilePicture: async ({
-		request,
-		locals: {
-			gql: { mutate },
-			// tsrest,
-		},
-	}) => {
+	profilePicture: async ({ request, locals: { tsrest } }) => {
 		const formData = await request.formData();
 
 		const profilePictureFile = formData.get('profile-picture');
@@ -39,26 +32,19 @@ export const actions = {
 		if (!(profilePictureFile instanceof File)) {
 			const toasts = createToasts([
 				{
-					text: 'Missing profile picture file!',
+					text: 'Missing profile picture file!', // TODO : i18n
 				},
 			]);
 
 			return fail(StatusCodes.BAD_REQUEST, { toasts });
 		}
 
-		// return assertTsRestActionResultOK({
-		// 	result: () =>
-		// });
-
-		const result = await mutate(EditUserProfilePictureStore, {
-			profilePicture: profilePictureFile,
+		return assertTsRestActionResultOK({
+			result: () => tsrest.user.settings.profile.uploadPicture({ body: formData }),
+			onValid: () => {
+				return {};
+			},
 		});
-
-		if (result.type === 'failure') {
-			return result.kitHandler('error');
-		}
-
-		return {};
 	},
 	deleteProfilePicture: async ({ locals: { tsrest } }) => {
 		return assertTsRestActionResultOK({

@@ -1,6 +1,10 @@
 {
 	"upload": {
-		"invalid": "Invalid file! Make sure that you are sending less than {{count}} files and that the files are less than {{size}} {{size:gt; 1:MBs; default:MB}}.",
+		"invalid": {
+			"size": "Invalid file(s)! Make sure that you are sending files that are less than {{size}} {{size:gt; 1:MBs; default:MB}}.",
+			"type": "Invalid file(s)! Make sure that you are sending files that of type {{types}}.",
+			"count": "Invalid file! Make sure that you are sending less than {{count}} files."
+		},
 		"minio": {
 			"generic": "Error uploading file!"
 		}
