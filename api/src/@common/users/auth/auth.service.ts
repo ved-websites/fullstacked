@@ -3,9 +3,8 @@ import { I18nException } from '$i18n/i18n.error';
 import { fallbackLanguage } from '$i18n/i18n.module';
 import { TypedI18nService } from '$i18n/i18n.service';
 import { User } from '$prisma-client';
-import { PrismaSelector, PrismaService, PrismaSubscribeTriggers } from '$prisma/prisma.service';
+import { PrismaService } from '$prisma/prisma.service';
 import { loadLuciaUtils } from '$users/auth/lucia/modules-compat';
-import { PresenceService } from '$users/presence/presence.service';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes } from 'lucia';
 import { EnvironmentConfig } from '~env';
@@ -22,7 +21,6 @@ export class AuthService {
 		private readonly email: EmailService,
 		private readonly i18n: TypedI18nService,
 		private readonly env: EnvironmentConfig,
-		private readonly presenceService: PresenceService,
 	) {}
 
 	readonly providerId = 'email';
@@ -308,9 +306,5 @@ export class AuthService {
 			from: { email: this.env.EMAIL_FROM },
 			subject: this.i18n.t('auth.emails.password_reset.subject', { lang }),
 		});
-	}
-
-	subscribeUserEdited(select: PrismaSelector, triggers: PrismaSubscribeTriggers) {
-		return this.prisma.subscribe(triggers, select);
 	}
 }

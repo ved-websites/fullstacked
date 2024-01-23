@@ -2,6 +2,5 @@
 	"recommendations": [
 		"svelte.svelte-vscode",
 		"stylelint.vscode-stylelint",
-		"graphql.vscode-graphql",
 	]
 }

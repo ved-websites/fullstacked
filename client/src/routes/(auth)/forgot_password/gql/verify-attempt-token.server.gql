@@ -1,5 +1,0 @@
-query VerifyPasswordResetAttempt($token: String!) {
-	verifyPasswordResetAttempt(token: $token) {
-		email
-	}
-}

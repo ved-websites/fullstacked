@@ -25,11 +25,6 @@ export const navElements: NavElement[] = [
 				drawerIconPath: 'i-mdi-account-details',
 				matches: [/\/admin\/users\/.+/],
 			},
-			{
-				title: k('navbar.navigation.admin-data'),
-				url: '/admin/data',
-				drawerIconPath: 'i-mdi-abacus',
-			},
 		],
 	},
 ];

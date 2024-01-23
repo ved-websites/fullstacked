@@ -1,3 +1,0 @@
-mutation ResendInviteLink($email: String!) {
-	resendNewUserEmail(where: { email: $email })
-}

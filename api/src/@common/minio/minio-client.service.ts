@@ -1,10 +1,8 @@
 import { TypedI18nService } from '$i18n/i18n.service';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
-import { FileUpload } from 'graphql-upload/Upload.js';
 import { MinioService } from 'nestjs-minio-client';
 import { EnvironmentConfig } from '~env';
-import { MAX_FILE_COUNT, MAX_FILE_SIZE_MB } from './minio-client.constants';
 
 @Injectable()
 export class MinioClientService {
@@ -55,52 +53,6 @@ export class MinioClientService {
 				await this.verifyBucketExistence(appBucketName);
 
 				await this.client.putObject(appBucketName, fileName, file.buffer, {
-					'Content-Type': file.mimetype,
-				});
-
-				resolve({
-					fileName,
-					url: `${this.env.MINIO_ENDPOINT}:${this.env.MINIO_PORT}/${appBucketName}/${fileName}`,
-				});
-			})().catch((error) => {
-				reject(
-					new HttpException(this.i18n.t('files.errors.upload.minio.generic'), HttpStatus.BAD_REQUEST, {
-						cause: error,
-					}),
-				);
-			});
-		});
-	}
-
-	public async uploadGql(file: FileUpload, bucketName: string): Promise<{ fileName: string; url: string }> {
-		return new Promise((resolve, reject) => {
-			const fileStream = file.createReadStream();
-
-			fileStream.on('error', (error) => {
-				reject(
-					new HttpException(
-						this.i18n.t('files.errors.upload.invalid', { args: { count: MAX_FILE_COUNT, size: MAX_FILE_SIZE_MB } }),
-						HttpStatus.BAD_REQUEST,
-						{
-							cause: error,
-						},
-					),
-				);
-			});
-
-			const timestamp = Date.now().toString();
-			const hashedFileName = crypto.createHash('md5').update(timestamp).digest('hex');
-			const extension = file.filename.substring(file.filename.lastIndexOf('.'), file.filename.length);
-
-			// We need to append the extension at the end otherwise Minio will save it as a generic file
-			const fileName = hashedFileName + extension;
-
-			const appBucketName = this.getBucketName(bucketName);
-
-			(async () => {
-				await this.verifyBucketExistence(appBucketName);
-
-				await this.client.putObject(appBucketName, fileName, fileStream, {
 					'Content-Type': file.mimetype,
 				});
 

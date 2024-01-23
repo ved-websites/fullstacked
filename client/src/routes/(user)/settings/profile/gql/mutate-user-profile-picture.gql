@@ -1,5 +1,0 @@
-mutation EditUserProfilePicture($profilePicture: Upload!) {
-	uploadProfilePicture(profilePicture: $profilePicture) {
-		fileName
-	}
-}

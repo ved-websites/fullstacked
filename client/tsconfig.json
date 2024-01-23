@@ -1,7 +1,7 @@
 {
 	"extends": ["@v-ed/tsconfig", "./.svelte-kit/tsconfig.json"],
 	"compilerOptions": {
-		"rootDirs": [".", "./.svelte-kit/types", "./$houdini/types"],
+		"rootDirs": [".", "./.svelte-kit/types"],
 		
 		"declaration": false,
 		

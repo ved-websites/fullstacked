@@ -1,5 +1,0 @@
-query GetUserFromSession @cache(policy: NetworkOnly) {
-	getSessionUser {
-		...SessionUserFragment
-	}
-}

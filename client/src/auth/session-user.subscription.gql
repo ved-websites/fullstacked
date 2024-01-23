@@ -1,5 +1,0 @@
-subscription SessionUserData($email: String!) {
-	userEdited(where: { email: $email }) {
-		...SessionUserFragment
-	}
-}

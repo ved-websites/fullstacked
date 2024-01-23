@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
-import type { QueryResult as HoudiniQueryResult } from '../$houdini/runtime/lib';
 import type { SessionUser } from './auth/auth-handler';
-import type { createHoudiniHelpers } from './lib/houdini/helper';
 import type { Theme } from './lib/stores';
 import type { TsRestClient } from './lib/ts-rest/client';
-import type { EventStep, GraphQLError, PageMessages } from './lib/types';
+import type { EventStep, PageMessages } from './lib/types';
 
 export interface AppLocals {
-	gql: ReturnType<typeof createHoudiniHelpers>;
 	tsrest: TsRestClient;
 	sessionUser: SessionUser;
 	theme?: Theme;
@@ -21,10 +18,6 @@ export interface AppPageData extends PageMessages {
 	sessionUser: SessionUser;
 	userHasJs: boolean;
 	flash?: PageMessages;
-}
-
-export interface HoudiniSession {
-	token?: string;
 }
 
 // See https://kit.svelte.dev/docs/types#app
@@ -40,15 +33,5 @@ declare global {
 		interface PageData extends AppPageData {}
 		// interface Error {}
 		// interface Platform {}
-
-		// Houdini
-		interface Session extends HoudiniSession {}
 	}
-}
-
-// Allow for Houdini errors to show extensions and other GraphQL error data.
-declare module '$houdini' {
-	export type QueryResult<_Data = GraphQLObject, _Input = GraphQLVariables> = Omit<HoudiniQueryResult<_Data, _Input>, 'errors'> & {
-		errors: GraphQLError[] | null;
-	};
 }

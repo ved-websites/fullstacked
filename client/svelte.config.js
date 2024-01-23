@@ -1,6 +1,5 @@
 import adapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/kit/vite';
-import path from 'path';
 
 /** @type {NonNullable<import('@sveltejs/kit').Config['kit']>['alias']} */
 const apiAliases = {
@@ -22,7 +21,6 @@ const config = {
 			$auth: './src/auth',
 			$navigation: './src/navigation',
 			$routes: './src/routes',
-			$houdini: path.resolve('.', '$houdini'),
 			$i18n: './src/i18n/lang.ts',
 			'$i18n-config': './src/i18n/translations.ts',
 			'$app-types': './src/app.d.ts',

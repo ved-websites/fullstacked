@@ -26,20 +26,6 @@ export class AdminController {
 		});
 	}
 
-	@TsRestHandler(r.users.admin.listUsersGQL, {
-		jsonQuery: true,
-	})
-	getUsersGql() {
-		return tsRestHandler(r.users.admin.listUsersGQL, async (data) => {
-			const users = await this.adminService.getUsersGql(data.query);
-
-			return {
-				status: 200,
-				body: users,
-			};
-		});
-	}
-
 	@TsRestHandler(r.users.admin.getUserForEdit)
 	getUserForEdit() {
 		return tsRestHandler(r.users.admin.getUserForEdit, async ({ query: { email } }) => {

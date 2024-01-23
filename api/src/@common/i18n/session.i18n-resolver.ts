@@ -1,4 +1,4 @@
-import { ContextService } from '$graphql/context/context.service';
+import { ContextService } from '$context/context.service';
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { I18nResolver } from 'nestjs-i18n';
 

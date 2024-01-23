@@ -11,7 +11,6 @@
     "baseUrl": ".",
     "paths": {
       "$prisma-client": ["./src/_generated/prisma/client/index"],
-      "$prisma-graphql/*": ["./src/_generated/prisma-nestjs-graphql/*"],
       "$zod": ["./src/_generated/zod/index"],
       "$zod/*": ["./src/_generated/zod/*"],
       "$*": ["./src/@common/*"],

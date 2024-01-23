@@ -1,4 +1,4 @@
-import { ContextService } from '$graphql/context/context.service';
+import { ContextService } from '$context/context.service';
 import { PrismaService } from '$prisma/prisma.service';
 import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common';
 import { LuciaUser } from './auth/session.decorator';

@@ -1,4 +1,4 @@
-import { ContextService } from '$graphql/context/context.service';
+import { ContextService } from '$context/context.service';
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 import type { AuthRequest } from 'lucia';
 import type { Auth } from './lucia.factory';

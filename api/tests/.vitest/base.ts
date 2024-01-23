@@ -23,7 +23,7 @@ const vitestBaseConfig = defineConfig({
 			reporter: coverageReporter,
 			clean: false,
 			include: ['**/*.ts'],
-			exclude: ['**/*.d.ts', '.graphqlrc.ts', 'gulpfile.ts', '**/_generated/**', '**/prisma/**', '**/dist/**', '**/fixtures/**'],
+			exclude: ['**/*.d.ts', 'gulpfile.ts', '**/_generated/**', '**/prisma/**', '**/dist/**', '**/fixtures/**'],
 		},
 		setupFiles: ['./tests/.vitest/setup/base.setup.ts'],
 	},

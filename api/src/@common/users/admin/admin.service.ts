@@ -1,13 +1,12 @@
 import { EmailService } from '$email/email.service';
 import { I18nException } from '$i18n/i18n.error';
 import { TypedI18nService } from '$i18n/i18n.service';
-import { UserWhereUniqueInput } from '$prisma-graphql/user';
-import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
+import { PrismaService } from '$prisma/prisma.service';
 import { SocketService } from '$socket/socket.service';
 import { AuthService } from '$users/auth/auth.service';
 import { RolesService } from '$users/auth/roles/roles.service';
 import { LuciaUser } from '$users/auth/session.decorator';
-import { PresenceService, UserOnlineSelector } from '$users/presence/presence.service';
+import { PresenceService } from '$users/presence/presence.service';
 import UserUpdateInputSchema from '$zod/inputTypeSchemas/UserUpdateInputSchema';
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -15,7 +14,7 @@ import { z } from 'zod';
 import { wsR } from '~contract';
 import { EnvironmentConfig } from '~env';
 import { ADMIN } from '~utils/roles';
-import { AdminListUsersGql, UserCreateInputNoId } from './admin.contract';
+import { UserCreateInputNoId } from './admin.contract';
 import { ADMIN_CREATE_USER_EVENT_KEY, ADMIN_CREATE_USER_EVENT_TYPE } from './listeners/admin.events';
 
 @Injectable()
@@ -45,22 +44,6 @@ export class AdminService {
 		return users.map((user) => ({
 			...user,
 			online: !user.registerToken ? this.presenceService.isUserConnected(user.email) : null,
-		}));
-	}
-
-	async getUsersGql(data: AdminListUsersGql) {
-		const { select, ...findArgs } = data;
-
-		const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>({ select } as unknown as PrismaSelector, 'online');
-
-		const users = await this.prisma.user.findMany({
-			...selector,
-			...findArgs,
-		});
-
-		return users.map<Partial<(typeof users)[number] & { online: boolean }>>((user) => ({
-			...user,
-			online: online && this.presenceService.isUserConnected(user.email),
 		}));
 	}
 
@@ -192,33 +175,6 @@ export class AdminService {
 		});
 
 		this.sockets.emit(wsR.users.deleted, deletedUser);
-
-		return deletedUser;
-	}
-	async deleteUserGql(select: PrismaSelector, where: UserWhereUniqueInput) {
-		const otherAdminsCount = await this.prisma.user.count({
-			where: {
-				email: {
-					not: where.email,
-				},
-				roles: {
-					some: {
-						text: {
-							equals: ADMIN,
-						},
-					},
-				},
-			},
-		});
-
-		if (!otherAdminsCount) {
-			throw new I18nException('admin.errors.last.user');
-		}
-
-		const deletedUser = await this.prisma.user.delete({
-			where,
-			...select,
-		});
 
 		return deletedUser;
 	}

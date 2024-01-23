@@ -1,5 +1,4 @@
-import { RoleWhereInput } from '$prisma-graphql/role';
-import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
+import { PrismaService } from '$prisma/prisma.service';
 import RoleCreateNestedManyWithoutUsersInputSchema from '$zod/inputTypeSchemas/RoleCreateNestedManyWithoutUsersInputSchema';
 import { Injectable } from '@nestjs/common';
 import { User } from 'lucia';
@@ -12,14 +11,6 @@ export class RolesService {
 
 	async getRoles() {
 		const roles = await this.prisma.role.findMany();
-
-		return roles;
-	}
-	async getRolesGql(select: PrismaSelector, where?: RoleWhereInput) {
-		const roles = await this.prisma.role.findMany({
-			where,
-			...select,
-		});
 
 		return roles;
 	}
@@ -39,18 +30,16 @@ export class RolesService {
 	}
 
 	async setUserRoles(user: User, roles: z.output<typeof RoleCreateNestedManyWithoutUsersInputSchema>) {
-		const updatedUser = await this.prisma.mutate('USER_ROLE', {}, () => {
-			return this.prisma.user.update({
-				where: {
-					email: user.email,
-				},
-				data: {
-					roles,
-				},
-				include: {
-					roles: true,
-				},
-			});
+		const updatedUser = await this.prisma.user.update({
+			where: {
+				email: user.email,
+			},
+			data: {
+				roles,
+			},
+			include: {
+				roles: true,
+			},
 		});
 
 		return updatedUser;

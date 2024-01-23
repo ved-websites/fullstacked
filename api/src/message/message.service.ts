@@ -1,49 +1,49 @@
-import type {
-	MessageCreateWithoutUserInput,
-	MessageUpdateWithWhereUniqueWithoutUserInput,
-	MessageWhereInput,
-} from '$prisma-graphql/message';
-import { PrismaSelector, PrismaService, PrismaSubscribeTriggers } from '$prisma/prisma.service';
+import { PrismaService } from '$prisma/prisma.service';
+import { SocketService } from '$socket/socket.service';
 import { Injectable } from '@nestjs/common';
 import type { User } from 'lucia';
-import { MESSAGE_ADDED, MESSAGE_UPDATED } from './constants/triggers';
+import { wsR } from '~contract';
 
 @Injectable()
 export class MessageService {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(
+		private readonly prisma: PrismaService,
+		private readonly sockets: SocketService,
+	) {}
 
-	async find(select: PrismaSelector, where?: MessageWhereInput) {
-		const messages = await this.prisma.message.findMany({ where, ...select });
+	async list() {
+		const messages = await this.prisma.message.findMany({
+			select: {
+				id: true,
+				text: true,
+				time: true,
+				user: {
+					select: {
+						email: true,
+						firstName: true,
+						lastName: true,
+						profilePictureRef: true,
+					},
+				},
+			},
+		});
 
 		return messages;
 	}
 
-	async create(select: PrismaSelector, data: MessageCreateWithoutUserInput, user: User) {
-		const message = await this.prisma.mutate([MESSAGE_ADDED], select, (allSelect) => {
-			return this.prisma.message.create({
-				data: {
-					...data,
-					user: { connect: { email: user.email } },
-				},
-				...allSelect,
-			});
+	async create(user: User, text: string) {
+		const message = await this.prisma.message.create({
+			data: {
+				text,
+				user: { connect: { email: user.email } },
+			},
+			include: {
+				user: true,
+			},
 		});
+
+		this.sockets.emit(wsR.messages.new, message);
 
 		return message;
-	}
-
-	async update(select: PrismaSelector, query: MessageUpdateWithWhereUniqueWithoutUserInput) {
-		const where = query.where;
-		const data = { time: new Date(), ...query.data };
-
-		const updatedMessage = await this.prisma.mutate([MESSAGE_UPDATED], select, (allSelect) => {
-			return this.prisma.message.update({ where, data, ...allSelect });
-		});
-
-		return updatedMessage;
-	}
-
-	subscribeAdded(select: PrismaSelector, triggers: PrismaSubscribeTriggers) {
-		return this.prisma.subscribe(triggers, select);
 	}
 }
