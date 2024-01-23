@@ -11,5 +11,6 @@ import { ProfilePictureService } from './profile-picture.service';
 	imports: [MinioClientModule, TypedI18nModule, PresenceModule],
 	controllers: [ProfilePictureController],
 	providers: [ProfilePictureService, ProfilePictureResolver, ProfilePictureListener],
+	exports: [ProfilePictureService],
 })
 export class ProfilePictureModule {}

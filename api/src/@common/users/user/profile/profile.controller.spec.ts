@@ -1,10 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TestManager } from '~utils/tests/TestManager';
 import { ProfileController } from './profile.controller';
+import { UserProfileModule } from './profile.module';
 
 describe('ProfileController', () => {
 	const manager = new TestManager({
 		metadata: {
+			imports: [UserProfileModule],
 			providers: [ProfileController],
 		},
 	});
