@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	// import { AdminUserDataStore } from '$houdini';
 	import { getI18n } from '$i18n';
-	// import { subscribe } from '$lib/houdini/helper';
 	import { wsClient } from '$lib/ts-ws/client';
 	import { Button, Heading, Modal } from 'flowbite-svelte';
 	import type { ComponentEvents } from 'svelte';
@@ -98,7 +96,7 @@
 
 		<UsersTable name="unregistered" users={unregisteredUsers} on:deleteUser={onDeleteUser}>
 			<svelte:fragment slot="more-actions" let:user>
-				<ResendInviteButton {user} />
+				<ResendInviteButton {user} tsrest={data.tsrest} />
 				<CopyInviteButton {user} />
 			</svelte:fragment>
 		</UsersTable>

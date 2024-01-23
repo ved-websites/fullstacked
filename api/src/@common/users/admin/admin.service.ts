@@ -64,6 +64,16 @@ export class AdminService {
 		}));
 	}
 
+	async getUser(email: string) {
+		const user = await this.prisma.user.findFirst({
+			where: {
+				email,
+			},
+		});
+
+		return user;
+	}
+
 	async getUserForEdit(email: string) {
 		const userPromise = this.prisma.user.findFirst({
 			where: {
@@ -211,6 +221,23 @@ export class AdminService {
 		});
 
 		return deletedUser;
+	}
+
+	async resendUserInviteLink(email: string, origin: { url: string; user: LuciaUser }) {
+		try {
+			const dbUserToResendTo = await this.getUser(email);
+
+			if (!dbUserToResendTo) {
+				return false;
+			}
+
+			const userToResendTo = await this.authService.getLuciaUser(dbUserToResendTo.id);
+
+			await this.sendNewUserRegistrationEmail(userToResendTo, origin);
+			return true;
+		} catch (error) {
+			return false;
+		}
 	}
 
 	async sendNewUserRegistrationEmail(user: Omit<LuciaUser, 'userId'>, origin: { url: string; user: LuciaUser }) {

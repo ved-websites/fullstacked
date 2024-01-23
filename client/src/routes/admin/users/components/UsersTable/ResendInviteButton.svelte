@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { ResendInviteLinkStore } from '$houdini';
 	import { getI18n } from '$i18n';
 	import { createToasts, setPageToasts, type ToastData } from '$lib/components/ToastManager/helper';
+	import type { TsRestClient } from '$lib/ts-rest/client';
 	import { Button } from 'flowbite-svelte';
+	import { StatusCodes } from 'http-status-codes';
 	import { k } from '~shared';
 	import type { BaseUser } from '../../types';
 	let i18n = getI18n();
@@ -11,7 +12,8 @@
 	export let user: BaseUser & { registerToken: string | null };
 	export let showInviteResentTextDuration: number = 3000;
 
-	const inviteLinkResender = new ResendInviteLinkStore();
+	export let tsrest: TsRestClient;
+
 	let isSendingNewInvite = false;
 
 	async function handleResend() {
@@ -20,9 +22,15 @@
 		let toasts: ToastData[];
 
 		try {
-			const { errors } = await inviteLinkResender.mutate({ email: user.email });
+			const result = await tsrest.users.admin.resendInviteLink({ body: { email: user.email }, skipErrorHandling: true });
 
-			if (!errors?.length) {
+			if (result.status !== StatusCodes.OK) {
+				return;
+			}
+
+			const success = result.body;
+
+			if (success) {
 				toasts = createToasts([
 					{
 						text: $t('admin.users.tables.actions.resend-invite.toasts.success', { email: user.email }),
@@ -34,7 +42,7 @@
 					{
 						text: k('admin.users.tables.actions.resend-invite.toasts.error-server'),
 						timeout: showInviteResentTextDuration,
-						extraData: `<div class="mt-3 italic">${errors}</div>`,
+						// extraData: `<div class="mt-3 italic">${errors}</div>`,
 					},
 				]);
 			}

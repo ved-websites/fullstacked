@@ -102,4 +102,16 @@ export class AdminController {
 			}
 		});
 	}
+
+	@TsRestHandler(r.users.admin.resendInviteLink)
+	resendInviteLink(@AuthUser() user: LuciaUser, @Origin() origin: string) {
+		return tsRestHandler(r.users.admin.resendInviteLink, async ({ body: { email } }) => {
+			const sendSuccess = await this.adminService.resendUserInviteLink(email, { url: origin, user });
+
+			return {
+				status: 200,
+				body: sendSuccess,
+			};
+		});
+	}
 }

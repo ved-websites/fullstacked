@@ -90,6 +90,17 @@ export const adminContract = c.router(
 				200: z.undefined(),
 			}),
 		},
+		resendInviteLink: {
+			method: 'POST',
+			path: '/user/resend-invite-link',
+			summary: 'Resend the email to allow the user to register.',
+			body: z.object({
+				email: emailSchema,
+			}),
+			responses: createResponses({
+				200: z.boolean(),
+			}),
+		},
 	},
 	{ pathPrefix: '/admins' },
 );
