@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import { page } from '$app/stores';
 import { createToasts } from '$lib/components/ToastManager/helper';
 import type { PageMessages } from '$lib/types';
@@ -137,6 +138,8 @@ export function routeError(status: number, message: string, options?: RouteError
 	if (doThrowForPage) {
 		throw error(status, message);
 	}
+
+	if (!browser) return;
 
 	const flash = getFlash(page);
 

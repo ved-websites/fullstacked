@@ -360,8 +360,8 @@ importers:
         specifier: 3.6.0
         version: 3.6.0(@babel/core@7.22.5)(postcss@8.4.31)(svelte@4.2.3)
       sveltekit-flash-message:
-        specifier: 2.2.2
-        version: 2.2.2(@sveltejs/kit@1.27.6)(svelte@4.2.3)
+        specifier: 2.3.1
+        version: 2.3.1(@sveltejs/kit@1.27.6)(svelte@4.2.3)
       tailwindcss:
         specifier: 3.3.5
         version: 3.3.5
@@ -11104,10 +11104,10 @@ packages:
       magic-string: 0.30.5
       periscopic: 3.1.0
 
-  /sveltekit-flash-message@2.2.2(@sveltejs/kit@1.27.6)(svelte@4.2.3):
-    resolution: {integrity: sha512-5xaQbkbEfzIMT2VfyJNtXl/20ugaBLc/9BzeQ+l4rHr+IoWC81qRANKAFlfZqZ2eCGPq1pzIhVeuxaPk74dAgA==}
+  /sveltekit-flash-message@2.3.1(@sveltejs/kit@1.27.6)(svelte@4.2.3):
+    resolution: {integrity: sha512-QQ48a1kh8Qj8b6mkqzFOtU91KqxCidqP2kgD7OdIO/hZ+YZ+3lJJC9qeSpCX8jsyQ2wp0whnXXTlYfWjxOclhg==}
     peerDependencies:
-      '@sveltejs/kit': 1.x
+      '@sveltejs/kit': 1.x || 2.x
       svelte: 3.x || 4.x
     dependencies:
       '@sveltejs/kit': 1.27.6(svelte@4.2.3)(vite@5.0.0)

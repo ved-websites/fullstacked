@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import { page } from '$app/stores';
 import type { Toast } from 'flowbite-svelte';
 import { getFlash } from 'sveltekit-flash-message/client';
@@ -78,6 +79,8 @@ export const toastBorderColorMapping: Record<ToastAlertType, string> = {
 };
 
 export function setPageToasts(toasts: ToastData[]) {
+	if (!browser) return;
+
 	const flash = getFlash(page);
 
 	flash.update(($flash) => {

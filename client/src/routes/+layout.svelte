@@ -21,7 +21,7 @@
 	$: setI18n(data.i18n);
 	$: setSessionUser(data.sessionUser);
 
-	$: flash = getFlash(page);
+	const flash = getFlash(page);
 
 	$: themeStore.set(data.theme ?? null);
 
