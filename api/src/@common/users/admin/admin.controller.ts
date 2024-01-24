@@ -48,14 +48,25 @@ export class AdminController {
 	}
 
 	@TsRestHandler(r.users.admin.editUser)
-	editUser() {
+	editUser(@I18n() i18n: I18nContext) {
 		return tsRestHandler(r.users.admin.editUser, async ({ body: { userRef, ...data } }) => {
-			const editedUser = await this.adminService.editUser(userRef, data);
+			try {
+				const editedUser = await this.adminService.editUser(userRef, data);
 
-			return {
-				status: 200,
-				body: { user: editedUser },
-			};
+				return {
+					status: 200,
+					body: { user: editedUser },
+				};
+			} catch (error) {
+				const message = getErrorMessage(error, i18n);
+
+				return {
+					status: 400,
+					body: {
+						message,
+					},
+				};
+			}
 		});
 	}
 
