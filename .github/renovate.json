@@ -1,5 +1,11 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["github>V-ed/renovate-config"],
-	"enabled": false
+	"enabled": false,
+	"packageRules": [
+		{
+			"matchPackagePatterns": ["del"],
+			"enabled": false
+		}
+	]
 }

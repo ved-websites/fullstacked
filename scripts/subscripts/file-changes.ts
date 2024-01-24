@@ -6,8 +6,8 @@ export async function setupRenovate() {
 	try {
 		await replaceInFile({
 			files: ['.github/renovate.json'],
-			from: '"enabled": false',
-			to: '"enabled": true',
+			from: '"enabled": false,',
+			to: '"enabled": true,',
 			allowEmptyPaths: true,
 		});
 	} catch (error) {
