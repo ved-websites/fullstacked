@@ -1,7 +1,5 @@
-import { browser } from '$app/environment';
-import { page } from '$app/stores';
+import { flashStore } from '$lib/utils/flash';
 import type { Alert } from 'flowbite-svelte';
-import { getFlash } from 'sveltekit-flash-message/client';
 
 export type LayoutAlertType = 'info' | 'warning' | 'error';
 
@@ -44,11 +42,9 @@ export const layoutAlertContextKey = 'layoutAlert';
 export type LayoutAlertContextStore = LayoutAlertData | undefined;
 
 export function setPageLayoutAlert(layoutAlert: LayoutAlertData) {
-	if (!browser) return;
+	const flash = flashStore();
 
-	const flash = getFlash(page);
-
-	flash.update(($flash) => {
+	flash?.update(($flash) => {
 		if (!$flash) {
 			$flash = {};
 		}

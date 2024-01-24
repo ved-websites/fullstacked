@@ -1,11 +1,9 @@
-import { browser } from '$app/environment';
-import { page } from '$app/stores';
 import { createToasts } from '$lib/components/ToastManager/helper';
 import type { PageMessages } from '$lib/types';
+import { flashStore } from '$lib/utils/flash';
 import { commonErrors, isCommonError, type ApiFetcherData, type CommonError } from '@app/contract';
 import { error, type RequestEvent } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
-import { getFlash } from 'sveltekit-flash-message/client';
 import { redirect } from 'sveltekit-flash-message/server';
 import type { ApiResponseHandlerOptions, ErrorPageMessagesData, OnErrorFunctionArgs } from './client';
 
@@ -139,11 +137,9 @@ export function routeError(status: number, message: string, options?: RouteError
 		throw error(status, message);
 	}
 
-	if (!browser) return;
+	const flash = flashStore();
 
-	const flash = getFlash(page);
-
-	flash.update(($flash) => {
+	flash?.update(($flash) => {
 		$flash = {
 			toasts: errorToasts,
 			...pageMessagesData,

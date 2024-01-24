@@ -1,7 +1,5 @@
-import { browser } from '$app/environment';
-import { page } from '$app/stores';
+import { flashStore } from '$lib/utils/flash';
 import type { Toast } from 'flowbite-svelte';
-import { getFlash } from 'sveltekit-flash-message/client';
 
 export const defaultToastTimeout = 10000;
 
@@ -79,11 +77,9 @@ export const toastBorderColorMapping: Record<ToastAlertType, string> = {
 };
 
 export function setPageToasts(toasts: ToastData[]) {
-	if (!browser) return;
+	const flash = flashStore();
 
-	const flash = getFlash(page);
-
-	flash.update(($flash) => {
+	flash?.update(($flash) => {
 		if (!$flash) {
 			$flash = {};
 		}
