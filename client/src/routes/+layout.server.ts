@@ -2,7 +2,6 @@ import type { AppPageData } from '$app-types';
 import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
 import { HASJS_COOKIE_NAME } from '$lib/utils/js-handling';
 import { loadFlash } from 'sveltekit-flash-message/server';
-import type { LayoutServerLoad } from './$types';
 
 export const load = loadFlash(async (event) => {
 	const {
@@ -13,6 +12,8 @@ export const load = loadFlash(async (event) => {
 		depends,
 		locals: { sessionUser, theme, userHasJs, browserLang },
 	} = event;
+
+	event.locals.step = 'layout';
 
 	depends('data:sessionUser');
 
@@ -31,6 +32,8 @@ export const load = loadFlash(async (event) => {
 		});
 	}
 
+	event.locals.step = 'page';
+
 	return {
 		sessionUser,
 		theme,
@@ -38,4 +41,5 @@ export const load = loadFlash(async (event) => {
 		userHasJs,
 		browserLang,
 	};
-}) satisfies LayoutServerLoad;
+});
+// }) satisfies LayoutServerLoad; // TODO: bugged out for some reason, retry after updating deps

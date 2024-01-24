@@ -1,12 +1,11 @@
-import { LoginStore } from '$houdini';
 import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
-import { createToasts } from '$lib/components/ToastManager/helper';
-import { emailSchema, passwordSchema } from '$lib/schemas/auth';
+import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { createPageDataObject } from '$lib/utils/page-data-object';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
+import { emailSchema, passwordSchema } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({
@@ -20,7 +19,7 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 	const redirectTo = getRedirectTo(url);
 
 	if (sessionUser) {
-		throw redirect(StatusCodes.SEE_OTHER, redirectTo || '/');
+		throw redirect(StatusCodes.SEE_OTHER, redirectTo ?? '/');
 	}
 
 	const layoutAlert = (() => {
@@ -29,7 +28,7 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 		}
 
 		return createLayoutAlert({
-			text: `Vous devez être connecté pour accéder à cette ressource!`,
+			text: `Vous devez être connecté pour accéder à cette ressource!`, // TODO : i18n
 			level: 'warning',
 		});
 	})();
@@ -38,54 +37,19 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({
-		request,
-		url,
-		locals: {
-			gql: { mutate },
-		},
-	}) => {
+	default: async ({ request, url, locals: { tsrest } }) => {
 		const form = await superValidate(request, schema);
 
-		if (!form.valid) return { form };
+		return assertTsRestActionResultOK({
+			form,
+			result: () => tsrest.auth.login({ body: form.data }),
+			onValid: () => {
+				const redirectTo = getRedirectTo(url) ?? '/';
 
-		const { email, password } = form.data;
-
-		const result = await mutate(LoginStore, { email, password });
-
-		if (result.type === 'failure') {
-			const invalidUserPassErrorCatcher = 'Invalid';
-
-			const { errors } = result;
-
-			const allErrors = createToasts(
-				errors
-					?.filter(({ message }) => !message.includes(invalidUserPassErrorCatcher))
-					.map(({ message }) => ({
-						text: message,
-						type: 'error',
-					})),
-			);
-
-			const gqlUserPassError = errors && errors.find(({ message }) => message.includes(invalidUserPassErrorCatcher));
-
-			const userPassError =
-				gqlUserPassError &&
-				createLayoutAlert({
-					text: gqlUserPassError.message,
-					level: 'error',
-				});
-
-			return result.kitHandler('failure', {
-				code: StatusCodes.UNAUTHORIZED,
-				data: createPageDataObject({ form, toasts: allErrors, layoutAlert: userPassError }),
-			});
-		}
-
-		const redirectTo = getRedirectTo(url) || '/';
-
-		// Successful login
-		throw redirect(StatusCodes.SEE_OTHER, redirectTo);
+				// Successful login
+				throw redirect(StatusCodes.SEE_OTHER, redirectTo);
+			},
+		});
 	},
 } satisfies Actions;
 
@@ -93,7 +57,7 @@ function getRedirectTo(url: URL) {
 	const redirectToParam = url.searchParams.get('redirectTo');
 
 	if (redirectToParam === null) {
-		return false;
+		return null;
 	}
 
 	const redirectTo: `/${string}` = `/${redirectToParam.slice(1)}`;

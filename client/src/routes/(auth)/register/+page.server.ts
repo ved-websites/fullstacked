@@ -1,9 +1,10 @@
-import { GetUnregisteredUserStore, RegisterNewUserStore } from '$houdini';
-import { firstNameSchema, lastNameSchema, passwordSchema } from '$lib/schemas/auth';
+import { firstNameSchema, lastNameSchema } from '$lib/schemas/auth';
+import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/assertions';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
+import { passwordSchema } from '~shared';
 import type { PageServerLoad } from './$types';
 
 const schema = z.object({
@@ -13,31 +14,18 @@ const schema = z.object({
 	password: passwordSchema,
 });
 
-export const load = (async ({
-	url,
-	locals: {
-		gql: { query },
-	},
-}) => {
+export const load = (async ({ url, locals: { tsrest } }) => {
 	const registerToken = url.searchParams.get('token');
 
 	if (!registerToken) {
 		throw error(StatusCodes.BAD_REQUEST, { message: 'Missing register token!' });
 	}
 
-	const { data } = await query(GetUnregisteredUserStore, {
-		variables: {
-			registerToken,
-		},
-	});
+	const result = await tsrest.auth.initRegistration({ query: { registerToken } });
 
-	if (!data) {
-		throw redirect(StatusCodes.SEE_OTHER, `/`);
-	}
+	assertTsRestResultOK(result, (result) => [result.status, result.body.message]);
 
-	const {
-		getUnregisteredUser: { email, ...attributes },
-	} = data;
+	const { email, ...attributes } = result.body;
 
 	const form = await superValidate({ registerToken, ...attributes }, schema);
 
@@ -48,22 +36,17 @@ export const load = (async ({
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({
-		request,
-		locals: {
-			gql: { mutate },
-		},
-	}) => {
+	default: async ({ request, locals: { tsrest } }) => {
 		const form = await superValidate(request, schema);
 
-		if (!form.valid) return { form };
+		const { registerToken, password, ...user } = form.data;
 
-		const result = await mutate(RegisterNewUserStore, { data: { ...form.data } });
-
-		if (result.type === 'failure') {
-			return result.kitHandler('formMessage', { form });
-		}
-
-		throw redirect(StatusCodes.SEE_OTHER, '/');
+		return assertTsRestActionResultOK({
+			form,
+			result: () => tsrest.auth.register({ body: { registerToken, password, user } }),
+			onValid: () => {
+				throw redirect(StatusCodes.SEE_OTHER, '/');
+			},
+		});
 	},
 } satisfies Actions;

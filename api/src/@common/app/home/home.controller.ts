@@ -6,6 +6,6 @@ export class HomeController {
 	@Public()
 	@Get()
 	home() {
-		return 'This is the fullstacked API! Make sure to use POST queries and target for /graphl endpoint to use graphql.';
+		return 'This is the fullstacked API!';
 	}
 }

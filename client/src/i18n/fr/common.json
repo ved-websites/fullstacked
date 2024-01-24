@@ -9,7 +9,8 @@
 	},
 	"errors": {
 		"validation": {
-			"email-schema": "Email invalide!"
+			"email-schema": "Email invalide!",
+			"required": "Requis"
 		}
 	},
 	"errorpage": {

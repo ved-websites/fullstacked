@@ -17,7 +17,3 @@ export function getBrowserLang(request: Request) {
 export const { getStore: getI18n, setStore: setI18n } = createStoreContext<I18nInstanceType>({
 	key: 'i18n',
 });
-
-export function k<K extends string = string>(key: K) {
-	return key;
-}

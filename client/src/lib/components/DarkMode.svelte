@@ -47,8 +47,8 @@
 	$: classListStore?.update(`${$isDark ? 'dark' : ''}`);
 </script>
 
-<form method="POST" use:enhance on:submit|preventDefault={handleThemeSubmit}>
-	<ButtonGroup {...$$restProps}>
+<form method="POST" use:enhance on:submit|preventDefault={handleThemeSubmit} {...$$restProps}>
+	<ButtonGroup>
 		<Button
 			data-theme="dark"
 			type="submit"

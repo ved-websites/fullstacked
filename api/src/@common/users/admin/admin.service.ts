@@ -1,18 +1,20 @@
 import { EmailService } from '$email/email.service';
 import { I18nException } from '$i18n/i18n.error';
 import { TypedI18nService } from '$i18n/i18n.service';
-import { UserCreateInput, UserUpdateInput, UserWhereInput, UserWhereUniqueInput } from '$prisma-graphql/user';
-import { PrismaSelector, PrismaService } from '$prisma/prisma.service';
+import { PrismaService } from '$prisma/prisma.service';
+import { SocketService } from '$socket/socket.service';
 import { AuthService } from '$users/auth/auth.service';
-import { USER_EDITED } from '$users/auth/constants/triggers';
 import { RolesService } from '$users/auth/roles/roles.service';
 import { LuciaUser } from '$users/auth/session.decorator';
-import { LiveUser } from '$users/dtos/LiveUser.dto';
-import { PresenceService, UserOnlineSelector } from '$users/presence/presence.service';
+import { PresenceService } from '$users/presence/presence.service';
+import UserUpdateInputSchema from '$zod/inputTypeSchemas/UserUpdateInputSchema';
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { z } from 'zod';
+import { wsR } from '~contract';
 import { EnvironmentConfig } from '~env';
 import { ADMIN } from '~utils/roles';
+import { UserCreateInputNoId } from './admin.contract';
 import { ADMIN_CREATE_USER_EVENT_KEY, ADMIN_CREATE_USER_EVENT_TYPE } from './listeners/admin.events';
 
 @Injectable()
@@ -26,37 +28,62 @@ export class AdminService {
 		private readonly env: EnvironmentConfig,
 		private readonly i18n: TypedI18nService,
 		private readonly presenceService: PresenceService,
+		private readonly sockets: SocketService,
 	) {}
 
-	async getUsers(select: PrismaSelector, where?: UserWhereInput) {
-		const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(select, 'online');
-
+	async getUsers() {
 		const users = await this.prisma.user.findMany({
-			where,
-			...selector,
 			orderBy: {
 				createdAt: 'asc',
 			},
+			include: {
+				roles: true,
+			},
 		});
 
-		return users.map<LiveUser>((user) => ({
+		return users.map((user) => ({
 			...user,
-			online: online && this.presenceService.isUserConnected(user.email),
+			online: !user.registerToken ? this.presenceService.isUserConnected(user.email) : null,
 		}));
 	}
 
-	async getUser(select: PrismaSelector, where: UserWhereUniqueInput) {
-		const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(select, 'online');
-
+	async getUser(email: string) {
 		const user = await this.prisma.user.findFirst({
-			where,
-			...selector,
+			where: {
+				email,
+			},
 		});
 
-		return this.presenceService.convertUserToLiveUser(user, online);
+		return user;
 	}
 
-	async createUser(data: UserCreateInput, origin: ADMIN_CREATE_USER_EVENT_TYPE[1]) {
+	async getUserForEdit(email: string) {
+		const userPromise = this.prisma.user.findFirst({
+			where: {
+				email,
+			},
+			include: {
+				roles: {
+					select: {
+						text: true,
+					},
+				},
+			},
+		});
+
+		const rolesPromise = this.prisma.role.findMany({
+			select: {
+				id: true,
+				text: true,
+			},
+		});
+
+		const [user, roles] = await Promise.all([userPromise, rolesPromise]);
+
+		return { user, roles };
+	}
+
+	async createUser(data: UserCreateInputNoId, origin: ADMIN_CREATE_USER_EVENT_TYPE[1]) {
 		const { email, firstName, lastName, roles, emailLang } = data;
 
 		const user = (await this.authService.createUser(email, null, {
@@ -71,48 +98,63 @@ export class AdminService {
 
 		this.eventEmitter.emit(ADMIN_CREATE_USER_EVENT_KEY, [user, origin] satisfies ADMIN_CREATE_USER_EVENT_TYPE);
 
+		const userRoles = await this.rolesService.getRolesOfUser(user.email);
+
+		this.sockets.emit(wsR.users.created, { ...user, roles: userRoles });
+
 		return user;
 	}
 
-	async editUser(select: PrismaSelector, where: UserWhereUniqueInput, data: UserUpdateInput) {
-		if (data.roles?.set?.every((role) => role.text != ADMIN)) {
-			// if no role has admin, check if at least one admin would remain
-			const otherAdminsCount = await this.prisma.user.count({
-				where: {
-					email: {
-						not: where.email,
-					},
-					roles: {
-						some: {
-							text: {
-								equals: ADMIN,
+	async editUser(email: string, data: Pick<z.output<typeof UserUpdateInputSchema>, 'firstName' | 'lastName' | 'roles'>) {
+		if (data.roles?.set) {
+			const shouldCheckRemainsAdmin = Array.isArray(data.roles.set)
+				? data.roles.set.every((role) => role.text !== ADMIN)
+				: data.roles.set.text !== ADMIN;
+
+			if (shouldCheckRemainsAdmin) {
+				const otherAdminsCount = await this.prisma.user.count({
+					where: {
+						email: {
+							not: email,
+						},
+						roles: {
+							some: {
+								text: {
+									equals: ADMIN,
+								},
 							},
 						},
 					},
-				},
-			});
+				});
 
-			if (!otherAdminsCount) {
-				throw new I18nException('admin.errors.last.role');
+				if (!otherAdminsCount) {
+					throw new I18nException('admin.errors.last.role');
+				}
 			}
 		}
 
-		const updatedUser = await this.prisma.mutate([USER_EDITED], select, async (allSelect) => {
-			const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(allSelect, 'online');
-
-			const user = await this.prisma.user.update({ where, data, ...selector });
-
-			return this.presenceService.convertUserToLiveUser(user, online);
+		const updatedUser = await this.prisma.user.update({
+			where: {
+				email,
+			},
+			data,
+			include: {
+				roles: true,
+			},
 		});
 
-		return updatedUser;
+		const liveUser = this.presenceService.convertUserToLiveUser(updatedUser);
+
+		this.sockets.emit(wsR.users.edited, liveUser);
+
+		return liveUser;
 	}
 
-	async deleteUser(select: PrismaSelector, where: UserWhereUniqueInput) {
+	async deleteUser(email: string) {
 		const otherAdminsCount = await this.prisma.user.count({
 			where: {
 				email: {
-					not: where.email,
+					not: email,
 				},
 				roles: {
 					some: {
@@ -129,11 +171,29 @@ export class AdminService {
 		}
 
 		const deletedUser = await this.prisma.user.delete({
-			where,
-			...select,
+			where: { email },
 		});
 
+		this.sockets.emit(wsR.users.deleted, deletedUser);
+
 		return deletedUser;
+	}
+
+	async resendUserInviteLink(email: string, origin: { url: string; user: LuciaUser }) {
+		try {
+			const dbUserToResendTo = await this.getUser(email);
+
+			if (!dbUserToResendTo) {
+				return false;
+			}
+
+			const userToResendTo = await this.authService.getLuciaUser(dbUserToResendTo.id);
+
+			await this.sendNewUserRegistrationEmail(userToResendTo, origin);
+			return true;
+		} catch (error) {
+			return false;
+		}
 	}
 
 	async sendNewUserRegistrationEmail(user: Omit<LuciaUser, 'userId'>, origin: { url: string; user: LuciaUser }) {

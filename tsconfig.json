@@ -16,5 +16,4 @@
 
     "forceConsistentCasingInFileNames": true
   },
-  "include": [".graphqlrc.ts"],
 }

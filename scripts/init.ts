@@ -45,11 +45,7 @@ if (!cli.hasArg('no-api')) {
 
 	await progresser('Setting up api', async () => {
 		await exec(`pnpm run --filter ./api ${apiInitScript}`);
-		await exec('pnpm run gql');
 	});
-} else if (!cli.hasArg('no-gql')) {
-	// If not setting API, at least check for GraphQL generation
-	await progresser('Setting up GraphQL', () => exec('pnpm run --filter ./api gql:generate'));
 }
 
 // =====================

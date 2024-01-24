@@ -1,5 +1,0 @@
-subscription NewMessage {
-	messageAdded {
-		...ChatMessageFragment
-	}
-}

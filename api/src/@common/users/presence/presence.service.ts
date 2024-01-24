@@ -1,6 +1,5 @@
 import { User } from '$prisma-client';
 import { LuciaSession } from '$users/auth/session.decorator';
-import { LiveUser } from '$users/dtos/LiveUser.dto';
 import { Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import {
@@ -37,15 +36,20 @@ export class PresenceService {
 	isUserConnected(email: string) {
 		const sessionsArray = Array.from(this.sessions.values());
 
-		return sessionsArray.some((s) => s.user.email === email);
+		return sessionsArray.some(({ user }) => user.email === email);
 	}
 
-	convertUserToLiveUser(user: User, onlineSelector?: boolean | undefined): LiveUser;
-	convertUserToLiveUser(user: User | null | undefined, onlineSelector?: boolean | undefined): LiveUser | null;
+	convertUserToLiveUser<U extends User = User>(user: U, onlineSelector?: boolean | undefined): U & { online: boolean | null };
+	convertUserToLiveUser<U extends User = User>(
+		user: U | null | undefined,
+		onlineSelector?: boolean | undefined,
+	): (U & { online: boolean | null }) | null;
 
-	convertUserToLiveUser(user: User | null | undefined, onlineSelector: boolean | undefined = true): LiveUser | null {
-		// is passing by reference but eh
-		const liveUser = user as LiveUser | null | undefined;
+	convertUserToLiveUser<U extends User = User>(
+		user: U | null | undefined,
+		onlineSelector: boolean | undefined = true,
+	): (U & { online: boolean | null }) | null {
+		const liveUser = user as (U & { online: boolean | null }) | null | undefined;
 
 		if (liveUser && onlineSelector) {
 			liveUser.online = this.isUserConnected(liveUser.email);

@@ -1,10 +1,11 @@
-import { TypedI18nService } from '$i18n/i18n.service';
 import { MinioClientService } from '$minio/minio-client.service';
 import { PrismaService } from '$prisma/prisma.service';
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { SocketService } from '$socket/socket.service';
+import { PresenceService } from '$users/presence/presence.service';
+import { Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { FileUpload } from 'graphql-upload/Upload.js';
 import { User } from 'lucia';
+import { wsR } from '~contract';
 import { PROFILE_PICTURE_UPLOAD_EVENT_KEY, PROFILE_PICTURE_UPLOAD_EVENT_TYPE } from './listeners/profile-picture.events';
 
 export const PROFILE_PICTURE_BUCKET_NAME = 'profile-pictures';
@@ -17,27 +18,27 @@ export class ProfilePictureService {
 		private minioClientService: MinioClientService,
 		private prisma: PrismaService,
 		private eventEmitter: EventEmitter2,
-		private readonly i18n: TypedI18nService,
+		private readonly sockets: SocketService,
+		private readonly presenceService: PresenceService,
 	) {}
 
-	readonly acceptedFileExtension: string[] = ['jpeg', 'jpg', 'png', 'webp'];
-
-	async uploadImage(file: FileUpload, user: User) {
-		if (!this.acceptedFileExtension.some((extension) => file.filename.endsWith(extension))) {
-			throw new HttpException(this.i18n.t('files.errors.images.filetype.not-supported'), HttpStatus.BAD_REQUEST);
-		}
-
+	async uploadImage(file: Express.Multer.File, user: User) {
 		const uploadedImage = await this.minioClientService.upload(file, PROFILE_PICTURE_BUCKET_NAME);
 
 		try {
-			await this.prisma.user.update({
+			const editedUser = await this.prisma.user.update({
 				data: {
 					profilePictureRef: uploadedImage.fileName,
 				},
 				where: {
 					id: user.id,
 				},
+				include: {
+					roles: true,
+				},
 			});
+
+			this.sockets.emit(wsR.users.edited, this.presenceService.convertUserToLiveUser(editedUser));
 		} catch (error) {
 			await this.minioClientService.delete(uploadedImage.fileName, PROFILE_PICTURE_BUCKET_NAME);
 		}
@@ -72,14 +73,19 @@ export class ProfilePictureService {
 			this.logger.error(`Couldn't delete profile picture of user "${user.email}"!`, e instanceof Error ? e.stack : undefined);
 		});
 
-		await this.prisma.user.update({
+		const editedUser = await this.prisma.user.update({
 			data: {
 				profilePictureRef: null,
 			},
 			where: {
 				id: user.id,
 			},
+			include: {
+				roles: true,
+			},
 		});
+
+		this.sockets.emit(wsR.users.edited, this.presenceService.convertUserToLiveUser(editedUser));
 
 		return true;
 	}

@@ -18,8 +18,6 @@ export enum Environment {
 
 export const DEFAULT_PORT = 3000;
 
-export const DEFAULT_GRAPHQL_DEPTH_LIMIT = 10;
-
 export const DEFAULT_MINIO_PORT = 9000;
 
 export class EnvironmentConfig {
@@ -52,10 +50,6 @@ export class EnvironmentConfig {
 	})
 	@Transform(({ value }) => splitIntoArray(value))
 	readonly CORS_LINKS?: string[];
-
-	@Type(() => Number)
-	@IsInt()
-	readonly GRAPHQL_DEPTH_LIMIT: number = DEFAULT_GRAPHQL_DEPTH_LIMIT;
 
 	@IsString()
 	readonly KEY!: string;

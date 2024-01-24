@@ -1,6 +1,0 @@
-mutation EditProfileBasicInfo($firstName: String, $lastName: String) {
-	editUserProfile(data: { firstName: { set: $firstName }, lastName: { set: $lastName } }) {
-		email
-		firstName
-	}
-}

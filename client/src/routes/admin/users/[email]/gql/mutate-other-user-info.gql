@@ -1,6 +1,0 @@
-mutation EditOtherUserInfo($oldEmail: String!, $firstName: String, $lastName: String, $roles: [RoleWhereUniqueInput!]) {
-	editUser(where: { email: $oldEmail }, data: { firstName: { set: $firstName }, lastName: { set: $lastName }, roles: { set: $roles } }) {
-		email
-		firstName
-	}
-}

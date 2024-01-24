@@ -1,6 +1,7 @@
 import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import type { NextFunction, Request, Response } from 'express';
 import { Auth, LuciaFactory } from './lucia.factory';
+import { SessionContainer } from './types';
 
 export const COOKIE_NAME = 'auth_session';
 
@@ -27,14 +28,20 @@ export class LuciaMiddleware implements NestMiddleware {
 }
 
 export async function setupRequest(request: Request, auth: Auth) {
-	request.sessionId = auth.readBearerToken(request.headers.authorization);
+	return setupSessionContainer(request, auth, request.headers.authorization);
+}
+
+export async function setupSessionContainer(container: SessionContainer, auth: Auth, token: string | undefined) {
+	container.sessionId = auth.readBearerToken(token);
 
 	try {
-		request.session = request.sessionId ? await auth.validateSession(request.sessionId) : null;
+		container.session = container.sessionId ? await auth.validateSession(container.sessionId) : null;
 	} catch (error) {
 		// invalid session
-		request.session = null;
+		container.session = null;
 	}
 
-	return request.session;
+	return container.session;
 }
+
+export * from './types';

@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { AdminUserDataStore } from '$houdini';
 	import { getI18n } from '$i18n';
-	import { subscribe } from '$lib/houdini/helper';
+	import { wsClient } from '$lib/ts-ws/client';
 	import { Button, Heading, Modal } from 'flowbite-svelte';
 	import type { ComponentEvents } from 'svelte';
-	import type { PageData } from './$houdini';
 	import CopyInviteButton from './components/UsersTable/CopyInviteButton.svelte';
 	import ResendInviteButton from './components/UsersTable/ResendInviteButton.svelte';
 	import UsersTable from './components/UsersTable/UsersTable.svelte';
@@ -13,43 +11,70 @@
 	let i18n = getI18n();
 	$: ({ t } = $i18n);
 
-	export let data: PageData;
+	export let data;
 
-	let usersSubMap = new Map<string, ReturnType<typeof subscribe>>();
+	let registeredUsers: Awaited<typeof data.streamed.users>[0] | undefined;
+	let unregisteredUsers: Omit<Awaited<typeof data.streamed.users>[1][number], 'online'>[] | undefined;
 
-	$: ({ ManageGetUsers } = data);
+	wsClient.users.edited({}, ({ data: editedUser }) => {
+		if (editedUser.registerToken) {
+			unregisteredUsers = unregisteredUsers?.map((u) => {
+				if (u.email === editedUser.email) {
+					return editedUser;
+				}
 
-	$: registeredUser = $ManageGetUsers.data?.users;
-	$: unregisteredUsers = $ManageGetUsers.data?.unregisteredUsers.map((u) => ({ ...u, sendingNewInvite: false as boolean }));
+				return u;
+			});
+		} else {
+			registeredUsers = registeredUsers?.map((u) => {
+				if (u.email === editedUser.email) {
+					return editedUser;
+				}
 
-	$: registeredUser?.forEach((user) => {
-		usersSubMap.get(user.email)?.();
-
-		const unsubscriber = subscribe([AdminUserDataStore, { email: user.email }], ({ data }) => {
-			if (!data) {
-				return;
-			}
-
-			const editedUser = data.userEdited;
-
-			onUserUpdated(editedUser);
-		});
-
-		usersSubMap.set(user.email, unsubscriber);
+				return u;
+			});
+		}
 	});
 
-	let deleteModalOpen = false;
-	let deletionUser: BaseUser | undefined;
+	wsClient.users.onlineChange({}, ({ data: user }) => {
+		registeredUsers = registeredUsers?.map((u) => {
+			if (u.email === user.email) {
+				return { ...u, online: user.online };
+			}
 
-	function onUserUpdated(user: NonNullable<typeof registeredUser>[number]) {
-		registeredUser = [...registeredUser!.filter((u) => u.email !== user.email), user];
-	}
+			return u;
+		});
+	});
+
+	wsClient.users.created({}, ({ data: user }) => {
+		unregisteredUsers = [...(unregisteredUsers ?? []), user];
+	});
+
+	wsClient.users.deleted({}, ({ data: { email } }) => {
+		if (unregisteredUsers?.some((u) => u.email === email)) {
+			unregisteredUsers = unregisteredUsers?.filter((u) => u.email !== email);
+		}
+		if (registeredUsers?.some((u) => u.email === email)) {
+			registeredUsers = registeredUsers?.filter((u) => u.email !== email);
+		}
+	});
+
+	data.streamed.users
+		.then(([streamedRegisteredUsers, streamedUnregisteredUsers]) => {
+			registeredUsers = streamedRegisteredUsers;
+			unregisteredUsers = streamedUnregisteredUsers;
+		})
+		.catch(() => {
+			registeredUsers = [];
+			unregisteredUsers = [];
+		});
+
+	let deletionUser: BaseUser | undefined;
 
 	function onDeleteUser(event: ComponentEvents<UsersTable>['deleteUser']) {
 		const { detail: user } = event;
 
 		deletionUser = user;
-		deleteModalOpen = true;
 	}
 </script>
 
@@ -63,7 +88,7 @@
 	<div>
 		<Heading tag="h4" class="mb-2">{$t('admin.users.tables.registered.heading')}</Heading>
 
-		<UsersTable users={registeredUser} showUserAvatars on:deleteUser={onDeleteUser} />
+		<UsersTable users={registeredUsers} showUserAvatars on:deleteUser={onDeleteUser} />
 	</div>
 
 	<div>
@@ -71,20 +96,20 @@
 
 		<UsersTable name="unregistered" users={unregisteredUsers} on:deleteUser={onDeleteUser}>
 			<svelte:fragment slot="more-actions" let:user>
-				<ResendInviteButton {user} />
+				<ResendInviteButton {user} tsrest={data.tsrest} />
 				<CopyInviteButton {user} />
 			</svelte:fragment>
 		</UsersTable>
 	</div>
 </div>
 
-<Modal title={$t('admin.users.modal.title')} bind:open={deleteModalOpen}>
+<Modal title={$t('admin.users.modal.title')} open={!!deletionUser}>
 	<div class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
 		<p>{$t('admin.users.modal.body.warning')}</p>
 		<p>{@html $t('admin.users.modal.body.confirmation', { email: deletionUser?.email })}</p>
 	</div>
 
-	<form method="post" action="?/delete" class="flex" use:enhance on:submit={() => (deleteModalOpen = false)}>
+	<form method="post" action="?/delete" class="flex" use:enhance on:submit={() => (deletionUser = undefined)}>
 		<Button class="ml-auto" color="red" type="submit">{$t('common.confirm')}</Button>
 		<input type="hidden" name="email" value={deletionUser?.email} />
 	</form>

@@ -4,12 +4,13 @@ import { AuthModule } from '$users/auth/auth.module';
 import { RolesModule } from '$users/auth/roles/roles.module';
 import { PresenceModule } from '$users/presence/presence.module';
 import { Module } from '@nestjs/common';
-import { AdminResolver } from './admin.resolver';
+import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
 import { AdminListener } from './listeners/admin.listener';
 
 @Module({
 	imports: [AuthModule, RolesModule, EmailModule, PresenceModule, TypedI18nModule],
-	providers: [AdminResolver, AdminService, AdminListener],
+	providers: [AdminService, AdminListener],
+	controllers: [AdminController],
 })
 export class AdminModule {}

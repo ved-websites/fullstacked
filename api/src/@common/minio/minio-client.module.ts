@@ -1,12 +1,8 @@
 import { TypedI18nModule } from '$i18n/i18n.module';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
+import { Module } from '@nestjs/common';
 import { MinioModule } from 'nestjs-minio-client';
 import { EnvironmentConfig } from '~env';
 import { MinioClientService } from './minio-client.service';
-
-export const GRAPHQL_MAX_FILE_SIZE_MB = 10;
-export const GRAPHQL_MAX_FILE_COUNT = 10;
 
 @Module({
 	imports: [
@@ -25,12 +21,4 @@ export const GRAPHQL_MAX_FILE_COUNT = 10;
 	providers: [MinioClientService],
 	exports: [MinioClientService],
 })
-export class MinioClientModule implements NestModule {
-	configure(consumer: MiddlewareConsumer) {
-		const byteToMbRatio = 1000000;
-
-		consumer
-			.apply(graphqlUploadExpress({ maxFileSize: GRAPHQL_MAX_FILE_SIZE_MB * byteToMbRatio, maxFiles: GRAPHQL_MAX_FILE_COUNT }))
-			.forRoutes('/graphql');
-	}
-}
+export class MinioClientModule {}

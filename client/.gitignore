@@ -11,5 +11,3 @@ vite.config.ts.timestamp-*
 
 .devcontainer/volumes
 .vercel
-
-$houdini

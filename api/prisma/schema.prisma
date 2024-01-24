@@ -11,14 +11,13 @@ generator client {
   output   = "../src/_generated/prisma/client"
 }
 
-generator nestgraphql {
-  provider     = "node prisma/utils/generators/prisma-nestjs-graphql.js"
-  output       = "../src/_generated/prisma-nestjs-graphql"
-  reExport     = "Directories"
-  emitCompiled = true
+generator zod {
+  provider = "zod-prisma-types"
+  output   = "../src/_generated/zod"
 
-  fields_Validator_from  = "class-validator"
-  fields_Validator_input = "true"
+  useMultipleFiles  = true
+  writeBarrelFiles  = false
+  useTypeAssertions = true
 }
 
 // ===========

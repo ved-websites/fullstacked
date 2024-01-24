@@ -1,6 +1,6 @@
-import { DeleteUserProfilePictureStore, EditProfileBasicInfoStore, EditUserProfilePictureStore } from '$houdini';
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { userFormSchema } from '$lib/components/UserForm/userform.schema';
+import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { fail, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
@@ -13,35 +13,18 @@ export const load = (async ({ locals: { sessionUser } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	basicUserInfo: async ({
-		request,
-		locals: {
-			gql: { mutate },
-		},
-	}) => {
+	basicUserInfo: async ({ request, locals: { tsrest } }) => {
 		const form = await superValidate(request, userFormSchema);
 
-		if (!form.valid) return { form };
-
-		const { firstName, lastName } = form.data;
-
-		const result = await mutate(EditProfileBasicInfoStore, {
-			firstName,
-			lastName,
+		return assertTsRestActionResultOK({
+			form,
+			result: () => tsrest.user.settings.profile.update({ body: form.data }),
+			onValid: () => {
+				return { form };
+			},
 		});
-
-		if (result.type === 'failure') {
-			return result.kitHandler('error');
-		}
-
-		return { form };
 	},
-	profilePicture: async ({
-		request,
-		locals: {
-			gql: { mutate },
-		},
-	}) => {
+	profilePicture: async ({ request, locals: { tsrest } }) => {
 		const formData = await request.formData();
 
 		const profilePictureFile = formData.get('profile-picture');
@@ -49,34 +32,26 @@ export const actions = {
 		if (!(profilePictureFile instanceof File)) {
 			const toasts = createToasts([
 				{
-					text: 'Missing profile picture file!',
+					text: 'Missing profile picture file!', // TODO : i18n
 				},
 			]);
 
 			return fail(StatusCodes.BAD_REQUEST, { toasts });
 		}
 
-		const result = await mutate(EditUserProfilePictureStore, {
-			profilePicture: profilePictureFile,
+		return assertTsRestActionResultOK({
+			result: () => tsrest.user.settings.profile.uploadPicture({ body: formData }),
+			onValid: () => {
+				return {};
+			},
 		});
-
-		if (result.type === 'failure') {
-			return result.kitHandler('error');
-		}
-
-		return {};
 	},
-	deleteProfilePicture: async ({
-		locals: {
-			gql: { mutate },
-		},
-	}) => {
-		const result = await mutate(DeleteUserProfilePictureStore, null);
-
-		if (result.type === 'failure') {
-			return result.kitHandler('error');
-		}
-
-		return {};
+	deleteProfilePicture: async ({ locals: { tsrest } }) => {
+		return assertTsRestActionResultOK({
+			result: () => tsrest.user.settings.profile.deletePicture(),
+			onValid: () => {
+				return {};
+			},
+		});
 	},
 } satisfies Actions;

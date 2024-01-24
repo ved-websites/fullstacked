@@ -24,6 +24,7 @@ usageMatchRegex:
 refactorTemplates:
   - "{$t('$1')}"
   - "t.get('$1')"
+  - "k('$1')"
 
 # If set to true, only enables this custom framework (will disable all built-in frameworks)
 # monopoly: true

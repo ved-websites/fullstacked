@@ -1,0 +1,7 @@
+export const WsStatusCodes = {
+	CLOSE_NORMAL: 1000,
+	CLOSED_NO_STATUS: 1005,
+	CLOSE_ABNORMAL: 1006,
+	UNAUTHORIZED: 4001,
+	FORBIDDEN: 4003,
+} as const;

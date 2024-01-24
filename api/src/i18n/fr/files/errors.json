@@ -1,8 +1,12 @@
 {
 	"upload": {
-		"invalid": "Fichier non valide! Assurez-vous que vous envoyez moins de {{count}} fichiers et que les fichiers font moins de {{size}} Mo.",
 		"minio": {
 			"generic": "Erreur lors du téléversement de fichier!"
+		},
+		"invalid": {
+			"type": "Fichier(s) invalide(s)! Assurez-vous que vous envoyez des fichiers de type {{types}}.",
+			"count": "Fichier non valide! Assurez-vous d'envoyer moins de {{count}} fichiers.",
+			"size": "Fichier(s) invalide(s)! Assurez-vous que vous envoyez des fichiers inférieurs à {{size}} {{size:gt; 1:Mo; default:Mo}}."
 		}
 	}
 }

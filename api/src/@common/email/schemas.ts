@@ -1,6 +1,5 @@
 import { z } from 'zod';
-
-export const emailSchema = z.string().email();
+import { emailSchema } from '~shared';
 
 export const simpleSenderSchema = z.union([
 	emailSchema,

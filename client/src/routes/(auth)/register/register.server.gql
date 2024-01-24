@@ -1,7 +1,0 @@
-mutation RegisterNewUser($data: RegisterInput!) {
-	register(data: $data) {
-		user {
-			email
-		}
-	}
-}

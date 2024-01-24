@@ -58,7 +58,7 @@ jobs:
         run: pnpm install
 
       - name: Init
-        run: pnpm run init --no-api
+        run: pnpm run init --no-db-push
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25

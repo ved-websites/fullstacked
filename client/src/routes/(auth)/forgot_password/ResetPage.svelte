@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { getI18n } from '$i18n';
+	import { createLayoutAlert, setPageLayoutAlert } from '$lib/components/LayoutAlert/helper';
 	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import { Button, Heading, Input, Label, P } from 'flowbite-svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
@@ -13,6 +14,17 @@
 	export let user: { email: string };
 
 	const { enhance, form, constraints, errors } = superForm(sForm);
+
+	$: {
+		if ($errors.resetToken) {
+			setPageLayoutAlert(
+				createLayoutAlert({
+					text: $errors.resetToken.join(' - '),
+					level: 'warning',
+				}),
+			);
+		}
+	}
 </script>
 
 <div class="flex flex-col gap-5 sm:w-3/4 lg:w-1/2 m-auto">

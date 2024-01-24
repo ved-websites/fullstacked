@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import parserFactory from '@sveltekit-i18n/parser-default';
 import {
 	AcceptLanguageResolver,
-	GraphQLWebsocketResolver,
 	HeaderResolver,
 	I18nModule as NestI18nModule,
 	I18nService as NestI18nService,
@@ -39,7 +38,6 @@ const templateParser = parserFactory();
 			}),
 			resolvers: [
 				SessionI18nResolver,
-				GraphQLWebsocketResolver,
 				QueryResolver,
 				new AcceptLanguageResolver({ matchType: 'loose' }),
 				new HeaderResolver(['x-lang']),

@@ -1,29 +1,10 @@
 import { isLocal } from '$configs/helpers';
 import { PrismaClient } from '$prisma-client';
-import { Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { PrismaSelect } from '@paljs/plugins';
-import { PubSub } from 'graphql-subscriptions';
-import { withCancel } from '../utils/withCancel';
-
-export type AsyncIteratorParamType = Parameters<PubSub['asyncIterator']>[0];
-export type PublishParamType = Parameters<PubSub['publish']>[0];
-
-export type PrismaSelector = {
-	[x: string]: never;
-};
-export type ExtractedPrismaSelector = {
-	selector: PrismaSelector;
-};
-
-export type PrismaSubscribeTriggers = Parameters<PrismaService['subscribe']>[0];
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
 	private eventSubsSelectors: Record<string, unknown[] | undefined> = {};
-
-	constructor(@Inject('PUB_SUB') private pubSub: PubSub) {
-		super();
-	}
 
 	async onModuleInit(): Promise<void> {
 		await this.$connect().catch((error) => {
@@ -37,80 +18,5 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
 	async onModuleDestroy(): Promise<void> {
 		await this.$disconnect();
-	}
-
-	async subscribe(triggers: AsyncIteratorParamType, select: PrismaSelector, onUnsubscribe?: () => PromiseLike<void> | void) {
-		const fullTriggers = Array.isArray(triggers) ? triggers : [triggers];
-
-		fullTriggers.forEach((trigger) => (this.eventSubsSelectors[trigger] = (this.eventSubsSelectors[trigger] ?? []).concat(select)));
-
-		const sub = this.pubSub.asyncIterator(triggers);
-
-		return withCancel(sub, () => {
-			fullTriggers.forEach((trigger) => {
-				this.eventSubsSelectors[trigger] = this.eventSubsSelectors[trigger]?.filter((selector) => selector != select);
-
-				if (!this.eventSubsSelectors[trigger]?.length) {
-					delete this.eventSubsSelectors[trigger];
-				}
-			});
-
-			return onUnsubscribe?.();
-		});
-	}
-
-	async mutate<T>(
-		triggers: PublishParamType | PublishParamType[],
-		select: PrismaSelector,
-		mutator: (allSelect: PrismaSelector) => PromiseLike<T> | T,
-	) {
-		const fullTriggers = Array.isArray(triggers) ? triggers : [triggers];
-
-		const subscriberSelects = fullTriggers
-			.map((triggerName) => this.eventSubsSelectors[triggerName] ?? [])
-			.reduce((acc, triggerSelector) => acc.concat(triggerSelector), []);
-
-		const allSelect = PrismaSelect.mergeDeep(select, ...subscriberSelects);
-
-		const returnValue = await mutator(allSelect);
-
-		this.publishSubs(fullTriggers, returnValue);
-
-		return returnValue;
-	}
-
-	publishSubs(triggers: PublishParamType | PublishParamType[], value: unknown) {
-		const fullTriggers = Array.isArray(triggers) ? triggers : [triggers];
-
-		fullTriggers.forEach((triggerName) => this.pubSub.publish(triggerName, { [triggerName]: value }));
-	}
-
-	extractSelectors<K extends string[]>(
-		select: PrismaSelector,
-		...keysToExtract: K
-	): Partial<Record<K[number], unknown>> & ExtractedPrismaSelector;
-	extractSelectors<T extends Record<string, unknown>>(
-		select: PrismaSelector,
-		...keysToExtract: (keyof T)[]
-	): Partial<T> & ExtractedPrismaSelector;
-
-	extractSelectors<T extends Record<string, unknown>>(select: PrismaSelector, ...keysToExtract: (keyof T)[]) {
-		const extractedKeys: Record<string, unknown> = {};
-		const selector: Record<string, unknown> = {};
-
-		const originalSelect = select.select as unknown as Record<string, unknown>;
-
-		for (const key of Object.keys(originalSelect)) {
-			if (keysToExtract.includes(key)) {
-				extractedKeys[key] = originalSelect[key];
-			} else {
-				selector[key] = originalSelect[key];
-			}
-		}
-
-		return {
-			...(extractedKeys as Partial<T>),
-			selector: { select: selector } as unknown as PrismaSelector,
-		};
 	}
 }

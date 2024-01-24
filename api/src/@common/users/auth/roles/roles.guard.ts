@@ -1,8 +1,10 @@
-import { ContextService } from '$graphql/context/context.service';
+import { ContextService } from '$context/context.service';
 import { TypedI18nService } from '$i18n/i18n.service';
 import { PrismaService } from '$prisma/prisma.service';
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { WsException } from '@nestjs/websockets';
+import { LuciaUser } from '../session.decorator';
 import { RolesService } from './roles.service';
 
 @Injectable()
@@ -21,16 +23,32 @@ export class RolesGuard implements CanActivate {
 			return true;
 		}
 
-		const { session } = ContextService.getRequest(context);
+		const user = await ContextService.getUser(context);
 
-		if (!session) {
+		if (!user) {
 			// If no session, don't handle
 			return true;
 		}
 
+		const hasRole = await this.userHasDefinedRoles(user, definedRoles);
+
+		if (!hasRole) {
+			const errorMessage = this.i18n.t('auth.errors.roles.does-not-have-role');
+
+			if (context.getType() === 'ws') {
+				throw new WsException(errorMessage);
+			}
+
+			throw new ForbiddenException(errorMessage);
+		}
+
+		return true;
+	}
+
+	protected async userHasDefinedRoles(user: LuciaUser, definedRoles: string[]) {
 		const { roles } = await this.prisma.user.findFirstOrThrow({
 			where: {
-				id: session.user.id,
+				id: user.id,
 			},
 			select: {
 				roles: true,
@@ -43,7 +61,7 @@ export class RolesGuard implements CanActivate {
 		);
 
 		if (!hasRole) {
-			throw new ForbiddenException(this.i18n.t('auth.errors.roles.does-not-have-role'));
+			return false;
 		}
 
 		return true;

@@ -1,5 +1,5 @@
-import { k } from '$i18n';
 import type { NavElement } from '$lib/components/nav/nav-elements';
+import { k } from '~shared';
 
 export const navElements: NavElement[] = [
 	{
@@ -24,11 +24,6 @@ export const navElements: NavElement[] = [
 				url: '/admin/users',
 				drawerIconPath: 'i-mdi-account-details',
 				matches: [/\/admin\/users\/.+/],
-			},
-			{
-				title: k('navbar.navigation.admin-data'),
-				url: '/admin/data',
-				drawerIconPath: 'i-mdi-abacus',
 			},
 		],
 	},

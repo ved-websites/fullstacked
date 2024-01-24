@@ -1,4 +1,4 @@
-import { ContextService } from '$graphql/context/context.service';
+import { ContextService } from '$context/context.service';
 import { ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { ThrottlerGuard as NestThrottlerGuard, Throttle, ThrottlerOptions } from '@nestjs/throttler';
 import { ThrottlerLimitDetail } from '@nestjs/throttler/dist/throttler.guard.interface';

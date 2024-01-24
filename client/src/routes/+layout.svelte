@@ -1,10 +1,8 @@
 <script lang="ts">
 	import '../app.postcss';
 
-	import type { PageMessages } from '$app-types';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { SessionUserDataStore } from '$houdini';
 	import { setI18n } from '$i18n';
 	import LayoutAlert from '$lib/components/LayoutAlert/LayoutAlert.svelte';
 	import ToastManager from '$lib/components/ToastManager/ToastManager.svelte';
@@ -12,8 +10,10 @@
 	import InitialTheme from '$lib/components/head/InitialTheme.svelte';
 	import LanguageChecker from '$lib/components/head/LanguageChecker.svelte';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
-	import { subscribe } from '$lib/houdini/helper';
 	import { setSessionUser, themeStore } from '$lib/stores';
+	import { wsClient, type WsClientType } from '$lib/ts-ws/client';
+	import { WS_READY_STATES } from '$lib/ts-ws/readyStates';
+	import type { PageMessages } from '$lib/types';
 	import { getFlash } from 'sveltekit-flash-message/client';
 
 	export let data;
@@ -30,20 +30,30 @@
 	$: layoutAlert = $flash?.layoutAlert || $page.data.layoutAlert || formData?.layoutAlert;
 	$: toasts = [...($page.data.toasts ?? []), ...($flash?.toasts ?? []), ...(formData?.toasts ?? [])];
 
-	let sessionUnsubscriber: ReturnType<typeof subscribe>;
+	let sessionUnsubscriber: ReturnType<WsClientType['users']['edited']> | undefined;
 
-	afterNavigate(() => {
-		if (data.sessionUser) {
-			sessionUnsubscriber = subscribe([SessionUserDataStore, { email: data.sessionUser.email }], ({ data: editedUserData }) => {
-				if (!editedUserData) {
-					return;
-				}
+	afterNavigate(async () => {
+		if (wsClient.$socket.readyState !== WS_READY_STATES.OPEN && data.sessionUser) {
+			wsClient.$socket.connect();
 
-				data.sessionUser = editedUserData.userEdited;
+			sessionUnsubscriber = wsClient.users.edited({ email: data.sessionUser.email }, ({ data: editedUserData }) => {
+				data.sessionUser = editedUserData;
+
 				invalidateAll();
 			});
-		} else {
-			sessionUnsubscriber?.();
+		} else if (!data.sessionUser) {
+			const hadSession = !!sessionUnsubscriber;
+
+			if (hadSession) {
+				sessionUnsubscriber!();
+				sessionUnsubscriber = undefined;
+			}
+
+			wsClient.$socket.close();
+
+			if (hadSession) {
+				invalidateAll();
+			}
 		}
 	});
 </script>

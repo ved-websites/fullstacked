@@ -3,14 +3,15 @@ import { I18nException } from '$i18n/i18n.error';
 import { fallbackLanguage } from '$i18n/i18n.module';
 import { TypedI18nService } from '$i18n/i18n.service';
 import { User } from '$prisma-client';
-import { PrismaSelector, PrismaService, PrismaSubscribeTriggers } from '$prisma/prisma.service';
+import { PrismaService } from '$prisma/prisma.service';
 import { loadLuciaUtils } from '$users/auth/lucia/modules-compat';
-import { PresenceService, UserOnlineSelector } from '$users/presence/presence.service';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import type { GlobalDatabaseUserAttributes } from 'lucia';
 import { EnvironmentConfig } from '~env';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';
 import { LuciaSession } from './session.decorator';
+
+export type CreateUserLuciaAttributes = Partial<Omit<GlobalDatabaseUserAttributes, 'email'>>;
 
 @Injectable()
 export class AuthService {
@@ -20,7 +21,6 @@ export class AuthService {
 		private readonly email: EmailService,
 		private readonly i18n: TypedI18nService,
 		private readonly env: EnvironmentConfig,
-		private readonly presenceService: PresenceService,
 	) {}
 
 	readonly providerId = 'email';
@@ -48,17 +48,19 @@ export class AuthService {
 		return this.auth.getUser(userId);
 	}
 
-	async getAuthUser(email: string, select: PrismaSelector) {
-		const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(select, 'online');
+	async getAuthUser(email: string) {
+		// const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(select, 'online');
 
 		const user = await this.prisma.user.findUnique({
 			where: {
 				email,
 			},
-			...selector,
+			include: {
+				roles: true,
+			},
 		});
 
-		return this.presenceService.convertUserToLiveUser(user, online);
+		return user;
 	}
 
 	async getUnregisteredUser(registerToken: string) {
@@ -80,7 +82,7 @@ export class AuthService {
 		return user;
 	}
 
-	async createUser(email: string, password: string | null, attributes?: Omit<GlobalDatabaseUserAttributes, 'email'>) {
+	async createUser(email: string, password: string | null, attributes?: CreateUserLuciaAttributes) {
 		const userWithEmail = await this.prisma.user.count({
 			where: {
 				email,
@@ -88,11 +90,11 @@ export class AuthService {
 		});
 
 		if (userWithEmail !== 0) {
-			throw new BadRequestException('A user with this email already exists!');
+			throw new BadRequestException('A user with this email already exists!'); // TODO : i18n
 		}
 
 		const registerTokenLength = 16;
-		const registerToken = password ? undefined : (await loadLuciaUtils()).generateRandomString(registerTokenLength);
+		const registerToken = password ? null : (await loadLuciaUtils()).generateRandomString(registerTokenLength);
 
 		const user = await this.auth.createUser({
 			key: password ? this.defineEmailKey(email, password) : null,
@@ -100,14 +102,19 @@ export class AuthService {
 				email,
 				registerToken,
 				emailLang: attributes?.emailLang ?? fallbackLanguage,
-				...attributes,
+				firstName: attributes?.firstName ?? null,
+				lastName: attributes?.lastName ?? null,
+				profilePictureRef: attributes?.profilePictureRef ?? null,
+				lang: attributes?.lang ?? null,
+				createdAt: new Date(),
+				updatedAt: new Date(),
 			},
 		});
 
 		return user;
 	}
 
-	async register(registerToken: string, password: string, attributes: Omit<GlobalDatabaseUserAttributes, 'email'>) {
+	async register(registerToken: string, password: string, attributes: CreateUserLuciaAttributes) {
 		const user = await this.prisma.user.findFirst({
 			where: {
 				registerToken,
@@ -299,9 +306,5 @@ export class AuthService {
 			from: { email: this.env.EMAIL_FROM },
 			subject: this.i18n.t('auth.emails.password_reset.subject', { lang }),
 		});
-	}
-
-	subscribeUserEdited(select: PrismaSelector, triggers: PrismaSubscribeTriggers) {
-		return this.prisma.subscribe(triggers, select);
 	}
 }

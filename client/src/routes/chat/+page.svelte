@@ -1,11 +1,10 @@
 <script lang="ts">
 	import type { ConfirmedSessionUser } from '$auth/auth-handler';
-	import { NewMessageStore } from '$houdini';
 	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
 	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
-	import { subscribe } from '$lib/houdini/helper';
 	import { getSessionUser } from '$lib/stores';
+	import { wsClient } from '$lib/ts-ws/client';
 	import { Button, Input, Label } from 'flowbite-svelte';
 	import { onMount, tick } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';
@@ -14,7 +13,7 @@
 	$: ({ t } = $i18n);
 
 	export let data;
-	$: ({ chatMessages } = data);
+	let { chatMessages } = data;
 
 	let sessionUser = getSessionUser<ConfirmedSessionUser>();
 
@@ -23,6 +22,7 @@
 
 	const { enhance, form, constraints, errors } = superForm(data.form, {
 		resetForm: true,
+		invalidateAll: false,
 		async onSubmit({ formData }) {
 			const message = formData.get('message')?.toString();
 
@@ -35,7 +35,7 @@
 			const newMessage: ChatMessageType = {
 				active: false,
 				user: { email: $sessionUser.email },
-				text: message!,
+				text: message,
 				time: new Date(),
 			};
 
@@ -55,17 +55,11 @@
 		},
 	});
 
-	subscribe([NewMessageStore], ({ data }) => {
-		if (!data) {
-			return;
-		}
-
-		const newMessage = data.messageAdded;
-
-		if (newMessage.user.email == $sessionUser.email) {
+	wsClient.messages.new(async ({ data }) => {
+		if (data.user.email == $sessionUser.email) {
 			messages = messages.map((m) => {
-				if (!m.id && m.text == newMessage.text) {
-					m = { ...newMessage, active: true };
+				if (!m.id && m.text == data.text) {
+					m = { ...data, active: true };
 				}
 				return m;
 			});
@@ -73,12 +67,16 @@
 			messages = [
 				...messages.filter((m) => m.active),
 				{
-					...newMessage,
+					...data,
 					active: true,
 				},
 				...messages.filter((m) => !m.active),
 			];
 		}
+
+		await tick();
+
+		messageViewElement.scrollTop = messageViewElement.scrollHeight;
 	});
 
 	$: messages = chatMessages.map<ChatMessageType>((rawMessage) => ({

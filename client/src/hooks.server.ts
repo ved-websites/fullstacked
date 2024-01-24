@@ -1,23 +1,22 @@
 import { PUBLIC_API_ADDR } from '$env/static/public';
-import { setSession } from '$houdini';
 import { getBrowserLang } from '$i18n';
+import { createTsRestClient } from '$lib/ts-rest/client';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 import { parseString } from 'set-cookie-parser';
 import { AUTH_COOKIE_NAME, getAuthUser } from './auth/auth-handler';
-import { createHoudiniHelpers } from './lib/houdini/helper';
 import { themeCookieName, themes, type Theme } from './lib/stores';
 import { HASJS_COOKIE_NAME } from './lib/utils/js-handling';
 import { verifyUserAccess } from './navigation/permissions';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	event.locals.gql = createHoudiniHelpers(event);
+	event.locals.step = 'hook';
+
+	event.locals.tsrest = createTsRestClient(event);
 
 	const token = event.cookies.get(AUTH_COOKIE_NAME);
 
-	setSession(event, { token });
-
 	if (token) {
-		event.locals.sessionUser = await getAuthUser(event.locals.gql.query);
+		event.locals.sessionUser = await getAuthUser(event.locals.tsrest);
 	}
 
 	verifyUserAccess(event);
@@ -44,7 +43,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 		};
 	})();
 
-	return resolve(event, opts);
+	event.locals.step = 'action';
+
+	const response = await resolve(event, opts);
+
+	event.locals.step = 'resolved';
+
+	return response;
 };
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {

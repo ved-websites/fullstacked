@@ -1,7 +1,6 @@
 import assert from 'assert';
-import gql from 'graphql-tag';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { GetEmptyMessagesQuery } from './_generated/graphql';
+import { r } from '~contract';
 import { E2ETestManager, users } from './utils/E2ETestManager';
 
 describe('MessageModule (e2e)', () => {
@@ -18,24 +17,14 @@ describe('MessageModule (e2e)', () => {
 	});
 
 	it('return no messages', async () => {
-		const response = await manager
-			.gql<GetEmptyMessagesQuery>()
-			.query(gql`
-				query GetEmptyMessages {
-					messages {
-						text
-						time
-					}
-				}
-			`)
-			.expectNoErrors();
+		const response = await manager.tsrest(r.messages.list).expect(200);
 
-		const { data } = response;
+		const messages = response.body;
 
-		assert(data);
+		assert(messages);
 
-		expect(Array.isArray(data.messages)).toBe(true);
-		expect(data.messages.length).toBe(0);
+		expect(Array.isArray(messages)).toBe(true);
+		expect(messages.length).toBe(0);
 	});
 
 	it('return all messages', async () => {
@@ -54,27 +43,17 @@ describe('MessageModule (e2e)', () => {
 			],
 		});
 
-		const response = await manager
-			.gql<GetEmptyMessagesQuery>()
-			.query(gql`
-				query GetEmptyMessages {
-					messages {
-						text
-						time
-					}
-				}
-			`)
-			.expectNoErrors();
+		const response = await manager.tsrest(r.messages.list).expect(200);
 
-		const { data } = response;
+		const messages = response.body;
 
-		assert(data);
+		assert(messages);
 
-		expect(Array.isArray(data.messages)).toBe(true);
-		expect(data.messages.length).toBe(2);
+		expect(Array.isArray(messages)).toBe(true);
+		expect(messages.length).toBe(2);
 
-		data.messages.forEach((message) => {
-			expect(message).toEqual({
+		messages.forEach((message: unknown) => {
+			expect(message).toMatchObject({
 				text: expect.any(String),
 				time: expect.any(String),
 			});

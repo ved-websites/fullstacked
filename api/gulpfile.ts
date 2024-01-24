@@ -38,15 +38,6 @@ async function setupEnv() {
 	}
 }
 
-function generateGraphQLSchema() {
-	return exec('pnpm exec nest start --entryFile="@common/graphql/schema/generate-schema"', {
-		env: {
-			...process.env,
-			LOCAL: 'true',
-		},
-	});
-}
-
 function generatePrismaHelpers() {
 	return generatePrisma();
 }
@@ -89,9 +80,9 @@ export const setupPrismaFull: TaskFunction = gulp.series(setupPrisma, updateData
 
 export const build: TaskFunction = gulp.series(gulp.parallel(deleteDist, setupPrisma), buildNest, buildPrisma);
 
-export const init: TaskFunction = gulp.series(deleteDist, setupEnv, setupPrismaFull, generateGraphQLSchema);
+export const init: TaskFunction = gulp.series(deleteDist, setupEnv, setupPrismaFull);
 
-export const initNoDbPush: TaskFunction = gulp.series(deleteDist, setupEnv, setupPrisma, generateGraphQLSchema);
+export const initNoDbPush: TaskFunction = gulp.series(deleteDist, setupEnv, setupPrisma);
 
 export const cleanBuild: TaskFunction = gulp.series(init, build);
 
@@ -101,8 +92,6 @@ export const seed: TaskFunction = seedDatabase;
 
 export const cleanSeed: TaskFunction = gulp.series(cleanDb, seedDatabase);
 
-export const setupGQLSchema: TaskFunction = gulp.series(setupPrisma, generateGraphQLSchema);
-
 // Useful commands
 
-export { deleteDist, generateGraphQLSchema, setupEnv };
+export { deleteDist, setupEnv };

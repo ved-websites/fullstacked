@@ -1,19 +1,17 @@
-import { GetUserFromSessionStore, type GetUserFromSession$result } from '$houdini';
-import type { GraphQLQuery } from '$lib/houdini/helper';
+import type { TsRestClient } from '$lib/ts-rest/client';
+import { assertTsRestResultOK } from '$lib/utils/assertions';
 
 export const AUTH_COOKIE_NAME = 'auth_session';
 
-export async function getAuthUser(query: GraphQLQuery): Promise<SessionUser> {
-	const result = await query(GetUserFromSessionStore);
+export async function getAuthUser(tsrest: TsRestClient) {
+	const result = await tsrest.auth.session();
 
-	if (result.type === 'failure') {
-		return null;
-	}
+	assertTsRestResultOK(result);
 
-	const { getSessionUser: sessionUser } = result.data;
+	const sessionUser = result.body;
 
 	return sessionUser;
 }
 
-export type SessionUser = GetUserFromSession$result['getSessionUser'] | null;
+export type SessionUser = Awaited<ReturnType<typeof getAuthUser>>;
 export type ConfirmedSessionUser = NonNullable<SessionUser>;

@@ -1,24 +1,17 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
-import type { QueryResult as HoudiniQueryResult } from '../$houdini/runtime/lib';
 import type { SessionUser } from './auth/auth-handler';
-import type { LayoutAlertData } from './lib/components/LayoutAlert/helper';
-import type { ToastData } from './lib/components/ToastManager/helper';
-import type { createHoudiniHelpers } from './lib/houdini/helper';
 import type { Theme } from './lib/stores';
-import type { GraphQLError } from './lib/types';
+import type { TsRestClient } from './lib/ts-rest/client';
+import type { EventStep, PageMessages } from './lib/types';
 
 export interface AppLocals {
-	gql: ReturnType<typeof createHoudiniHelpers>;
+	tsrest: TsRestClient;
 	sessionUser: SessionUser;
 	theme?: Theme;
 	userHasJs: boolean;
 	browserLang: string;
-}
-
-export interface PageMessages {
-	toasts?: ToastData[];
-	layoutAlert?: LayoutAlertData;
+	step: EventStep;
 }
 
 export interface AppPageData extends PageMessages {
@@ -27,27 +20,18 @@ export interface AppPageData extends PageMessages {
 	flash?: PageMessages;
 }
 
-export interface HoudiniSession {
-	token?: string;
-}
-
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
+	type Awaitable<T> = T | PromiseLike<T>;
+	type Prettify<T> = {
+		[K in keyof T]: T[K];
+	} & unknown;
+
 	namespace App {
 		interface Locals extends AppLocals {}
 		interface PageData extends AppPageData {}
 		// interface Error {}
 		// interface Platform {}
-
-		// Houdini
-		interface Session extends HoudiniSession {}
 	}
-}
-
-// Allow for Houdini errors to show extensions and other GraphQL error data.
-declare module '$houdini' {
-	export type QueryResult<_Data = GraphQLObject, _Input = GraphQLVariables> = Omit<HoudiniQueryResult<_Data, _Input>, 'errors'> & {
-		errors: GraphQLError[] | null;
-	};
 }

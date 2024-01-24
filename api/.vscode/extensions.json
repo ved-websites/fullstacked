@@ -1,6 +1,5 @@
 {
 	"recommendations":[
 		"prisma.prisma",
-		"graphql.vscode-graphql"
 	],
 }
