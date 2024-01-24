@@ -1,7 +1,9 @@
+import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/assertions';
 import { createPageDataObject } from '$lib/utils/page-data-object';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
+import { redirect } from 'sveltekit-flash-message/server';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { adminNewUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
@@ -20,7 +22,12 @@ export const load = (async ({ locals: { tsrest } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals: { tsrest } }) => {
+	default: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+		} = event;
+
 		const form = await superValidate(request, adminNewUserFormSchema);
 
 		return assertTsRestActionResultOK({
@@ -52,7 +59,17 @@ export const actions = {
 				return fail(result.status, createPageDataObject({ ...pageData, form }));
 			},
 			onValid: () => {
-				throw redirect(StatusCodes.SEE_OTHER, '/admin/users');
+				throw redirect(
+					'/admin/users',
+					{
+						toasts: createToasts([
+							{
+								text: `Successfully created new user with email ${form.data.email}!`, // TODO : i18n
+							},
+						]),
+					},
+					event,
+				);
 			},
 		});
 	},

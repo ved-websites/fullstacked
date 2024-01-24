@@ -1,6 +1,6 @@
+import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/assertions';
-import { redirect } from '@sveltejs/kit';
-import { StatusCodes } from 'http-status-codes';
+import { redirect } from 'sveltekit-flash-message/server';
 import { superValidate } from 'sveltekit-superforms/server';
 import { adminUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
@@ -28,7 +28,13 @@ export const load = (async ({ params: { email }, locals: { tsrest } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals: { tsrest }, params: { email: editableUserEmail } }) => {
+	default: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+			params: { email: editableUserEmail },
+		} = event;
+
 		const form = await superValidate(request, adminUserFormSchema);
 
 		return assertTsRestActionResultOK({
@@ -46,7 +52,17 @@ export const actions = {
 				});
 			},
 			onValid: () => {
-				throw redirect(StatusCodes.SEE_OTHER, '/admin/users');
+				throw redirect(
+					'/admin/users',
+					{
+						toasts: createToasts([
+							{
+								text: `Successfully created edited user ${editableUserEmail}!`, // TODO : i18n
+							},
+						]),
+					},
+					event,
+				);
 			},
 		});
 	},

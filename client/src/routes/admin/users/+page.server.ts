@@ -1,11 +1,10 @@
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import type { PageDataObject } from '$lib/utils/page-data-object';
-import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
+import { redirect } from 'sveltekit-flash-message/server';
 import { emailSchema } from '~shared';
-import type { Actions } from '../$types';
-import type { PageServerLoad } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ locals: { tsrest } }) => {
 	const getUsers = async () => {
@@ -45,11 +44,28 @@ export const load = (async ({ locals: { tsrest } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	delete: async ({ request, locals: { tsrest } }) => {
+	delete: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+		} = event;
+
 		const formdata = await request.formData();
 
 		const email = await emailSchema.parseAsync(formdata.get('email')).catch(() => {
-			throw redirect(StatusCodes.SEE_OTHER, '/admin/users?error=Missing email!');
+			throw redirect(
+				'/admin/users',
+				{
+					toasts: createToasts([
+						{
+							text: 'Missing email!', // TODO : i18n
+							type: 'warning',
+							extraData: `You shouldn't play with the HTML you sneaky dork :)`, // TODO : i18n
+						},
+					]),
+				},
+				event,
+			);
 		});
 
 		return assertTsRestActionResultOK({
