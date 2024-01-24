@@ -1,11 +1,14 @@
 <script lang="ts" context="module">
-	export const icon = 'i-mdi-account';
+	export const meta: SettingsRouteMeta = {
+		icon: 'i-mdi-account',
+	};
 </script>
 
 <script lang="ts">
 	import UserForm from '$lib/components/UserForm/UserForm.svelte';
 	import { getSessionUser } from '$lib/stores';
 	import { superForm } from 'sveltekit-superforms/client';
+	import type { SettingsRouteMeta } from '../types';
 	import ProfilePictureForm from './ProfilePictureForm.svelte';
 
 	export let data;

@@ -1,6 +1,8 @@
 <script lang="ts" context="module">
-	export const icon = 'i-mdi-face-man-shimmer';
-	export const order = 10;
+	export const meta: SettingsRouteMeta = {
+		icon: 'i-mdi-face-man-shimmer',
+		order: 10,
+	};
 </script>
 
 <script lang="ts">
@@ -10,6 +12,7 @@
 	import type { VSelectOptionType } from '$lib/components/flowbite-custom/VSelect/types';
 	import { Button, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
+	import type { SettingsRouteMeta } from '../types.js';
 	let i18n = getI18n();
 	$: ({ t, setLocale, locales } = $i18n);
 

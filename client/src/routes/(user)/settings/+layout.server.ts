@@ -1,5 +1,6 @@
 import { convertRawRoutesInfo } from '$lib/utils/routes';
 import type { LayoutServerLoad } from './$types';
+import type { SettingsRouteMeta } from './types';
 
 export type RouteInfo = {
 	url: string;
@@ -11,13 +12,11 @@ export type RouteInfo = {
 
 const rawSettingPages = import.meta.glob('./**/+page.svelte', { eager: true });
 
-const routesInfo = convertRawRoutesInfo<RouteInfo>(rawSettingPages, ({ component, parents, fullRoute }) => {
-	const icon = 'icon' in component && typeof component.icon === 'string' ? component.icon : undefined;
-
+const routesInfo = convertRawRoutesInfo<RouteInfo, SettingsRouteMeta>(rawSettingPages, ({ meta, parents, fullRoute }) => {
 	return {
 		url: `/settings/${fullRoute}`,
 		name: fullRoute.replaceAll('/', '.'),
-		icon,
+		icon: meta?.icon,
 		parents,
 	};
 });

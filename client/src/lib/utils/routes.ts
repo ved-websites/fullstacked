@@ -14,28 +14,34 @@ export function getRawRoutesInfo(rawImports: ReturnType<ImportGlobFunction>) {
 	return rawRoutesInfo;
 }
 
-type DefaultComponent = {
+export type DefaultComponent<M extends RouteMeta> = {
 	default: new () => unknown;
+	meta?: M;
 	[x: string]: unknown;
 };
 
-type ConvertRawRouteInfoCallbackArgs = {
+export type ConvertRawRouteInfoCallbackArgs<M extends RouteMeta> = {
 	fullRoute: string;
-	component: DefaultComponent;
+	component: DefaultComponent<M>;
 	route: string;
 	parents: string[];
 	index: number;
 	order: number;
+	meta: M | undefined;
 };
 
-export function convertRawRoutesInfo<T>(
+export type RouteMeta = {
+	order?: number;
+};
+
+export function convertRawRoutesInfo<T, M extends RouteMeta = RouteMeta>(
 	rawImports: ReturnType<ImportGlobFunction>,
-	converter: (data: ConvertRawRouteInfoCallbackArgs) => T | undefined,
+	converter: (data: ConvertRawRouteInfoCallbackArgs<M>) => T | undefined,
 ): T[] {
 	const rawRoutesInfo = getRawRoutesInfo(rawImports);
 
 	const argsMap = rawRoutesInfo.map((rawRouteInfo, index) => {
-		const component = rawRouteInfo.component as DefaultComponent | undefined;
+		const component = rawRouteInfo.component as DefaultComponent<M> | undefined;
 
 		if (!component || !(typeof component === 'object')) {
 			console.error(`Failed parsing given file. Does the "${rawRouteInfo.route}" svelte file is actually svelte?`);
@@ -48,20 +54,21 @@ export function convertRawRoutesInfo<T>(
 			parents.reverse();
 		}
 
-		if ('order' in component && typeof component.order !== 'number') {
+		if (component.meta?.order && typeof component.meta.order !== 'number') {
 			throw `Component '${rawRouteInfo.route}' has defined an 'order' property that isn't a number!`;
 		}
 
-		const order = (component.order as number | undefined) ?? index;
+		const order = component.meta?.order ?? index;
 
-		const args: ConvertRawRouteInfoCallbackArgs = {
+		const args = {
 			fullRoute: rawRouteInfo.route,
 			component,
 			route: route ?? '',
 			parents,
 			index,
 			order,
-		};
+			meta: component.meta,
+		} satisfies ConvertRawRouteInfoCallbackArgs<M>;
 
 		return args;
 	});

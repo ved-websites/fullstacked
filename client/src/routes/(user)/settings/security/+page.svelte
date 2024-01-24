@@ -1,5 +1,7 @@
 <script lang="ts" context="module">
-	export const icon = 'i-mdi-security';
+	export const meta: SettingsRouteMeta = {
+		icon: 'i-mdi-security',
+	};
 </script>
 
 <script lang="ts">
@@ -7,6 +9,7 @@
 	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import { Button, Input, Label } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
+	import type { SettingsRouteMeta } from '../types.js';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);
 
