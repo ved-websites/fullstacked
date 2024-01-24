@@ -1,13 +1,14 @@
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import type { PageDataObject } from '$lib/utils/page-data-object';
+import { streamed } from '$lib/utils/streaming';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
 import { emailSchema } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ locals: { tsrest } }) => {
-	const getUsers = async () => {
+	const users = streamed(async () => {
 		const result = await tsrest.users.admin.listUsers({
 			skipErrorHandling: true,
 		});
@@ -28,12 +29,6 @@ export const load = (async ({ locals: { tsrest } }) => {
 			},
 			[[] as typeof result.body, [] as typeof result.body],
 		);
-	};
-
-	const users = getUsers();
-
-	users.catch(() => {
-		// don't handle errors
 	});
 
 	return {

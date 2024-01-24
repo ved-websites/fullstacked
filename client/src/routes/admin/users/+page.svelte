@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { getI18n } from '$i18n';
+	import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
 	import { wsClient } from '$lib/ts-ws/client';
+	import { handleStreamed, type StreamedData } from '$lib/utils/streaming';
 	import { Button, Heading, Modal } from 'flowbite-svelte';
 	import type { ComponentEvents } from 'svelte';
 	import CopyInviteButton from './components/UsersTable/CopyInviteButton.svelte';
@@ -13,8 +15,8 @@
 
 	export let data;
 
-	let registeredUsers: Awaited<typeof data.streamed.users>[0] | undefined;
-	let unregisteredUsers: Omit<Awaited<typeof data.streamed.users>[1][number], 'online'>[] | undefined;
+	let registeredUsers: StreamedData<typeof data.streamed.users>[0] | undefined;
+	let unregisteredUsers: StreamedData<typeof data.streamed.users>[1] | undefined;
 
 	wsClient.users.edited({}, ({ data: editedUser }) => {
 		if (editedUser.registerToken) {
@@ -47,7 +49,7 @@
 	});
 
 	wsClient.users.created({}, ({ data: user }) => {
-		unregisteredUsers = [...(unregisteredUsers ?? []), user];
+		unregisteredUsers = [...(unregisteredUsers ?? []), { ...user, online: null }];
 	});
 
 	wsClient.users.deleted({}, ({ data: { email } }) => {
@@ -59,15 +61,23 @@
 		}
 	});
 
-	data.streamed.users
-		.then(([streamedRegisteredUsers, streamedUnregisteredUsers]) => {
+	handleStreamed(data.streamed.users, {
+		onData: ([streamedRegisteredUsers, streamedUnregisteredUsers]) => {
 			registeredUsers = streamedRegisteredUsers;
 			unregisteredUsers = streamedUnregisteredUsers;
-		})
-		.catch(() => {
+		},
+		onError: (error) => {
 			registeredUsers = [];
 			unregisteredUsers = [];
-		});
+
+			return {
+				layoutAlert: createLayoutAlert({
+					text: error,
+					type: 'error',
+				}),
+			};
+		},
+	});
 
 	let deletionUser: BaseUser | undefined;
 
