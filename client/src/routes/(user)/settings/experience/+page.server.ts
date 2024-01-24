@@ -39,12 +39,10 @@ export const actions = {
 				});
 			},
 			onValid: () => {
-				const toasts = createToasts([
-					{
-						text: lang ? k('settings.experience.lang.toast.targetted') : k('settings.experience.lang.toast.automatic'),
-						timeout: 3000,
-					},
-				]);
+				const toasts = createToasts({
+					text: lang ? k('settings.experience.lang.toast.targetted') : k('settings.experience.lang.toast.automatic'),
+					timeout: 3000,
+				});
 
 				if (!userHasJs) {
 					throw redirect({ toasts }, event);

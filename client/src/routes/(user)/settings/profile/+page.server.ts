@@ -30,11 +30,9 @@ export const actions = {
 		const profilePictureFile = formData.get('profile-picture');
 
 		if (!(profilePictureFile instanceof File)) {
-			const toasts = createToasts([
-				{
-					text: 'Missing profile picture file!', // TODO : i18n
-				},
-			]);
+			const toasts = createToasts({
+				text: 'Missing profile picture file!', // TODO : i18n
+			});
 
 			return fail(StatusCodes.BAD_REQUEST, { toasts });
 		}

@@ -55,11 +55,9 @@ export const actions = {
 				throw redirect(
 					'/admin/users',
 					{
-						toasts: createToasts([
-							{
-								text: `Successfully created edited user ${editableUserEmail}!`, // TODO : i18n
-							},
-						]),
+						toasts: createToasts({
+							text: `Successfully created edited user ${editableUserEmail}!`, // TODO : i18n
+						}),
 					},
 					event,
 				);

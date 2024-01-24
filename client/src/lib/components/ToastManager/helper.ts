@@ -4,32 +4,33 @@ import { getFlash } from 'sveltekit-flash-message/client';
 
 export const defaultToastTimeout = 10000;
 
-export type ToastAlertLevel = 'info' | 'warning' | 'error';
+export type ToastAlertType = 'info' | 'warning' | 'error';
 
 export type ToastManagerData = {
 	text: string;
-	type?: ToastAlertLevel;
+	type?: ToastAlertType;
 	icon?: string;
 	classes?: string;
 	timeout?: number;
 	/** Adds extra data under the main text. Warning: Data formatted as html. */
 	extraData?: string;
+	i18nPayload?: Record<string, unknown>;
 };
 
 export type ToastData = ToastManagerData & {
 	id: string;
-	type: ToastAlertLevel;
+	type: ToastAlertType;
 	open: boolean;
 	markedForDeletion: boolean;
 	timeoutId?: ReturnType<typeof setTimeout>;
 };
 
-export function createToasts(data?: ToastManagerData[]): ToastData[] {
-	if (!data?.length) {
+export function createToasts(...toastsData: ToastManagerData[]): ToastData[] {
+	if (!toastsData?.length) {
 		return [];
 	}
 
-	const toasts = data.map((toastManagerData) => {
+	const toasts = toastsData.map((toastManagerData) => {
 		// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 		const toastId = (Math.random() + 1).toString(36).substring(7);
 
@@ -42,7 +43,7 @@ export function createToasts(data?: ToastManagerData[]): ToastData[] {
 		};
 
 		if (!toast.icon) {
-			const mapping: Record<ToastAlertLevel, string> = {
+			const mapping: Record<ToastAlertType, string> = {
 				info: 'i-mdi-information',
 				warning: 'i-mdi-help-rhombus',
 				error: 'i-mdi-alert',
@@ -65,12 +66,12 @@ export function createToasts(data?: ToastManagerData[]): ToastData[] {
 	return toasts;
 }
 
-export const toastColorMapping: Record<ToastAlertLevel, Toast['$$prop_def']['color']> = {
+export const toastColorMapping: Record<ToastAlertType, Toast['$$prop_def']['color']> = {
 	info: 'blue',
 	warning: 'yellow',
 	error: 'red',
 };
-export const toastBorderColorMapping: Record<ToastAlertLevel, string> = {
+export const toastBorderColorMapping: Record<ToastAlertType, string> = {
 	info: 'border-blue-400',
 	warning: 'border-yellow-400',
 	error: 'border-red-400',

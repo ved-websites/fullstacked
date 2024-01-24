@@ -107,12 +107,10 @@ export type RouteErrorOptions = Partial<{
 export function routeError(status: number, message: string, options?: RouteErrorOptions) {
 	const { event, doThrowForPage = true, pageMessagesData } = options ?? {};
 
-	const errorToasts = createToasts([
-		{
-			text: message,
-			type: 'error',
-		},
-	]);
+	const errorToasts = createToasts({
+		text: message,
+		type: 'error',
+	});
 
 	if (event) {
 		if (event.locals.step === 'page' && doThrowForPage) {

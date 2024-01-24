@@ -58,13 +58,13 @@ export function assertTsRestActionResultOK<T extends { status: number; body: unk
 				if ('layoutAlert' in args) {
 					return createPageDataObject({
 						form: args.form,
-						layoutAlert: createLayoutAlert({ text: errorMessage, level: 'error', ...args.layoutAlert }),
+						layoutAlert: createLayoutAlert({ text: errorMessage, type: 'error', ...args.layoutAlert }),
 					});
 				}
 
 				return createPageDataObject({
 					form: args.form,
-					toasts: createToasts([{ text: errorMessage, type: 'error', ...args.toast }]),
+					toasts: createToasts({ text: errorMessage, type: 'error', ...args.toast }),
 				});
 			})();
 

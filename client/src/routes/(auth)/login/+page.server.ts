@@ -29,7 +29,7 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 
 		return createLayoutAlert({
 			text: `Vous devez être connecté pour accéder à cette ressource!`, // TODO : i18n
-			level: 'warning',
+			type: 'warning',
 		});
 	})();
 

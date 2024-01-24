@@ -31,11 +31,9 @@ export const actions = {
 			form,
 			result: () => tsrest.user.settings.security.changePassword({ body: form.data }),
 			onValid: () => {
-				const toasts = createToasts([
-					{
-						text: 'Successfully updated password!', // TODO : i18n
-					},
-				]);
+				const toasts = createToasts({
+					text: 'Successfully updated password!', // TODO : i18n
+				});
 
 				return createPageDataObject({ form, toasts });
 			},

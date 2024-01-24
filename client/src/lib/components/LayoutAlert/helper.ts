@@ -2,37 +2,38 @@ import { page } from '$app/stores';
 import type { Alert } from 'flowbite-svelte';
 import { getFlash } from 'sveltekit-flash-message/client';
 
-export type LayoutAlertLevel = 'info' | 'warning' | 'error';
+export type LayoutAlertType = 'info' | 'warning' | 'error';
 
 export type LayoutAlertData = {
 	text: string;
 	/** The Alert behavior. Defaults to 'info'. */
-	level: LayoutAlertLevel;
+	type: LayoutAlertType;
 	/** The icon class to use from `iconify`. Defaults to level aware icon. */
 	icon: string;
+	i18nPayload: Record<string, unknown>;
 };
 
 export function createLayoutAlert(data: Required<Pick<LayoutAlertData, 'text'>> & Partial<LayoutAlertData>): LayoutAlertData {
 	const layoutAlert = data as LayoutAlertData;
 
-	if (!data.level) {
-		layoutAlert.level = 'info';
+	if (!data.type) {
+		layoutAlert.type = 'info';
 	}
 
 	if (!layoutAlert.icon) {
-		const mapping: Record<LayoutAlertLevel, string> = {
+		const mapping: Record<LayoutAlertType, string> = {
 			info: 'i-mdi-information',
 			warning: 'i-mdi-help-rhombus',
 			error: 'i-mdi-alert',
 		};
 
-		layoutAlert.icon = mapping[layoutAlert.level]!;
+		layoutAlert.icon = mapping[layoutAlert.type];
 	}
 
 	return layoutAlert;
 }
 
-export const alertColorMapping: Record<LayoutAlertLevel, Alert['$$prop_def']['color']> = {
+export const alertColorMapping: Record<LayoutAlertType, Alert['$$prop_def']['color']> = {
 	info: 'blue',
 	warning: 'yellow',
 	error: 'red',

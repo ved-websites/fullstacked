@@ -16,12 +16,10 @@
 		navigator.clipboard.writeText(`${window.location.origin}/register?token=${user.registerToken}`);
 
 		setPageToasts(
-			createToasts([
-				{
-					text: $t('admin.users.tables.actions.copy-invite.toast', { email: user.email }),
-					timeout: showCopiedTextDuration,
-				},
-			]),
+			createToasts({
+				text: $t('admin.users.tables.actions.copy-invite.toast', { email: user.email }),
+				timeout: showCopiedTextDuration,
+			}),
 		);
 	}}
 	color="green"

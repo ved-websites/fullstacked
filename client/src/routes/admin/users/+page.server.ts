@@ -56,13 +56,11 @@ export const actions = {
 			throw redirect(
 				'/admin/users',
 				{
-					toasts: createToasts([
-						{
-							text: 'Missing email!', // TODO : i18n
-							type: 'warning',
-							extraData: `You shouldn't play with the HTML you sneaky dork :)`, // TODO : i18n
-						},
-					]),
+					toasts: createToasts({
+						text: 'Missing email!', // TODO : i18n
+						type: 'warning',
+						extraData: `You shouldn't play with the HTML you sneaky dork :)`, // TODO : i18n
+					}),
 				},
 				event,
 			);
@@ -71,11 +69,9 @@ export const actions = {
 		return assertTsRestActionResultOK({
 			result: () => tsrest.users.admin.deleteUser({ body: { email } }),
 			onValid: () => {
-				const toasts = createToasts([
-					{
-						text: `Successfully deleted user "${email}"!`, // TODO : i18n
-					},
-				]);
+				const toasts = createToasts({
+					text: `Successfully deleted user "${email}"!`, // TODO : i18n
+				});
 
 				return { toasts } satisfies PageDataObject;
 			},

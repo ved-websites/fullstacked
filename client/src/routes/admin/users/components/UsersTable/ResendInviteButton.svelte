@@ -31,30 +31,24 @@
 			const success = result.body;
 
 			if (success) {
-				toasts = createToasts([
-					{
-						text: $t('admin.users.tables.actions.resend-invite.toasts.success', { email: user.email }),
-						timeout: showInviteResentTextDuration,
-					},
-				]);
+				toasts = createToasts({
+					text: $t('admin.users.tables.actions.resend-invite.toasts.success', { email: user.email }),
+					timeout: showInviteResentTextDuration,
+				});
 			} else {
-				toasts = createToasts([
-					{
-						text: k('admin.users.tables.actions.resend-invite.toasts.error-server'),
-						timeout: showInviteResentTextDuration,
-						// extraData: `<div class="mt-3 italic">${errors}</div>`,
-					},
-				]);
+				toasts = createToasts({
+					text: k('admin.users.tables.actions.resend-invite.toasts.error-server'),
+					timeout: showInviteResentTextDuration,
+					// extraData: `<div class="mt-3 italic">${errors}</div>`,
+				});
 			}
 		} catch (error) {
-			toasts = createToasts([
-				{
-					text: k('admin.users.tables.actions.resend-invite.toasts.error-local'),
-					type: 'warning',
-					timeout: showInviteResentTextDuration,
-					extraData: `<div class="mt-3 italic">${error}</div>`,
-				},
-			]);
+			toasts = createToasts({
+				text: k('admin.users.tables.actions.resend-invite.toasts.error-local'),
+				type: 'warning',
+				timeout: showInviteResentTextDuration,
+				extraData: `<div class="mt-3 italic">${error}</div>`,
+			});
 		}
 
 		setPageToasts(toasts);

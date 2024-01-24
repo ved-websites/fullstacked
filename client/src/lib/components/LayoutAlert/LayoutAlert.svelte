@@ -10,8 +10,8 @@
 </script>
 
 {#if data}
-	<Alert color={alertColorMapping[data.level]} class="mb-5 flex items-center">
+	<Alert color={alertColorMapping[data.type]} class="mb-5 flex items-center">
 		<Icon class={data.icon} />
-		<span>{$t(data.text)}</span>
+		<span>{$t(data.text, data.i18nPayload)}</span>
 	</Alert>
 {/if}

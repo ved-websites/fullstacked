@@ -20,7 +20,7 @@
 			setPageLayoutAlert(
 				createLayoutAlert({
 					text: $errors.resetToken.join(' - '),
-					level: 'warning',
+					type: 'warning',
 				}),
 			);
 		}

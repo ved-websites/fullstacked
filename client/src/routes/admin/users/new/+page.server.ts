@@ -62,11 +62,9 @@ export const actions = {
 				throw redirect(
 					'/admin/users',
 					{
-						toasts: createToasts([
-							{
-								text: `Successfully created new user with email ${form.data.email}!`, // TODO : i18n
-							},
-						]),
+						toasts: createToasts({
+							text: `Successfully created new user with email ${form.data.email}!`, // TODO : i18n
+						}),
 					},
 					event,
 				);

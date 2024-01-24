@@ -18,7 +18,7 @@
 			return;
 		}
 
-		toast.text = t.get(toast.text);
+		toast.text = t.get(toast.text, toast.i18nPayload);
 
 		toasts = [...toasts, toast];
 	});

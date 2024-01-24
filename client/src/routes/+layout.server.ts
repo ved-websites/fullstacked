@@ -28,7 +28,7 @@ export const load = loadFlash(async (event) => {
 	if (url.searchParams.has('forbidden')) {
 		layoutAlert = createLayoutAlert({
 			text: 'You cannot perform this action!',
-			level: 'error',
+			type: 'error',
 		});
 	}
 
