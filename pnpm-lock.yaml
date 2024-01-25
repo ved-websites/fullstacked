@@ -270,7 +270,7 @@ importers:
         version: 2.4.2(svelte@4.2.3)
       sveltekit-superforms:
         specifier: 1.10.2
-        version: 1.10.2(@sveltejs/kit@1.27.6)(svelte@4.2.3)(zod@3.22.4)
+        version: 1.10.2(@sveltejs/kit@1.30.3)(svelte@4.2.3)(zod@3.22.4)
       tailwind-merge:
         specifier: 2.0.0
         version: 2.0.0
@@ -297,11 +297,11 @@ importers:
         specifier: 1.39.0
         version: 1.39.0
       '@sveltejs/adapter-vercel':
-        specifier: ^3.1.0
-        version: 3.1.0(@sveltejs/kit@1.27.6)
+        specifier: 3.1.0
+        version: 3.1.0(@sveltejs/kit@1.30.3)
       '@sveltejs/kit':
-        specifier: 1.27.6
-        version: 1.27.6(svelte@4.2.3)(vite@5.0.0)
+        specifier: 1.30.3
+        version: 1.30.3(svelte@4.2.3)(vite@5.0.0)
       '@types/accept-language-parser':
         specifier: 1.5.6
         version: 1.5.6
@@ -361,7 +361,7 @@ importers:
         version: 3.6.0(@babel/core@7.22.5)(postcss@8.4.31)(svelte@4.2.3)
       sveltekit-flash-message:
         specifier: 2.3.1
-        version: 2.3.1(@sveltejs/kit@1.27.6)(svelte@4.2.3)
+        version: 2.3.1(@sveltejs/kit@1.30.3)(svelte@4.2.3)
       tailwindcss:
         specifier: 3.3.5
         version: 3.3.5
@@ -2457,12 +2457,12 @@ packages:
       '@sinonjs/commons': 3.0.0
     dev: false
 
-  /@sveltejs/adapter-vercel@3.1.0(@sveltejs/kit@1.27.6):
+  /@sveltejs/adapter-vercel@3.1.0(@sveltejs/kit@1.30.3):
     resolution: {integrity: sha512-AkG7GuqPj/70zxfuOV7QbxXVuYFPUlyFEPlGUSXynDbIBTYu1Er+c676M2egnAyw0flB+kpj6nlxJIElRLKAaA==}
     peerDependencies:
       '@sveltejs/kit': ^1.5.0
     dependencies:
-      '@sveltejs/kit': 1.27.6(svelte@4.2.3)(vite@5.0.0)
+      '@sveltejs/kit': 1.30.3(svelte@4.2.3)(vite@5.0.0)
       '@vercel/nft': 0.24.4
       esbuild: 0.18.20
     transitivePeerDependencies:
@@ -2470,8 +2470,8 @@ packages:
       - supports-color
     dev: true
 
-  /@sveltejs/kit@1.27.6(svelte@4.2.3)(vite@5.0.0):
-    resolution: {integrity: sha512-GsjTkMbKzXdbeRg0tk8S7HNShQ4879ftRr0ZHaZfjbig1xQwG57Bvcm9U9/mpLJtCapLbLWUnygKrgcLISLC8A==}
+  /@sveltejs/kit@1.30.3(svelte@4.2.3)(vite@5.0.0):
+    resolution: {integrity: sha512-0DzVXfU4h+tChFvoc8C61IqErCyskD4ydSIDjpKS2lYlEzIYrtYrY7juSqACFxqcvZAnOEXvSY+zZ8br0+ZMMg==}
     engines: {node: ^16.14 || >=18}
     hasBin: true
     requiresBuild: true
@@ -2485,7 +2485,7 @@ packages:
       devalue: 4.3.2
       esm-env: 1.0.0
       kleur: 4.1.5
-      magic-string: 0.30.2
+      magic-string: 0.30.5
       mrmime: 1.0.1
       sade: 1.8.1
       set-cookie-parser: 2.6.0
@@ -8365,6 +8365,7 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
+    dev: true
 
   /magic-string@0.30.5:
     resolution: {integrity: sha512-7xlpfBaQaP/T6Vh8MO/EqXSW5En6INHEvEXQiuff7Gku0PWjU3uf6w/j9o7O+SpB5fOAkrI5HeoNgwjEO0pFsA==}
@@ -11104,13 +11105,13 @@ packages:
       magic-string: 0.30.5
       periscopic: 3.1.0
 
-  /sveltekit-flash-message@2.3.1(@sveltejs/kit@1.27.6)(svelte@4.2.3):
+  /sveltekit-flash-message@2.3.1(@sveltejs/kit@1.30.3)(svelte@4.2.3):
     resolution: {integrity: sha512-QQ48a1kh8Qj8b6mkqzFOtU91KqxCidqP2kgD7OdIO/hZ+YZ+3lJJC9qeSpCX8jsyQ2wp0whnXXTlYfWjxOclhg==}
     peerDependencies:
       '@sveltejs/kit': 1.x || 2.x
       svelte: 3.x || 4.x
     dependencies:
-      '@sveltejs/kit': 1.27.6(svelte@4.2.3)(vite@5.0.0)
+      '@sveltejs/kit': 1.30.3(svelte@4.2.3)(vite@5.0.0)
       svelte: 4.2.3
     dev: true
 
@@ -11124,14 +11125,14 @@ packages:
       svelte: 4.2.3
     dev: false
 
-  /sveltekit-superforms@1.10.2(@sveltejs/kit@1.27.6)(svelte@4.2.3)(zod@3.22.4):
+  /sveltekit-superforms@1.10.2(@sveltejs/kit@1.30.3)(svelte@4.2.3)(zod@3.22.4):
     resolution: {integrity: sha512-eZxLi4oEQjxMQlRD6acNZL8E7vwEnsVATB3VkZuVEUi925TXli9EkrP3fGZudzBbDC5D7Nx6D7UQ2Mzfhl0r8w==}
     peerDependencies:
       '@sveltejs/kit': 1.x
       svelte: 3.x || 4.x
       zod: 3.x
     dependencies:
-      '@sveltejs/kit': 1.27.6(svelte@4.2.3)(vite@5.0.0)
+      '@sveltejs/kit': 1.30.3(svelte@4.2.3)(vite@5.0.0)
       svelte: 4.2.3
       zod: 3.22.4
     dev: false
