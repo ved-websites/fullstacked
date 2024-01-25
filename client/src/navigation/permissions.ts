@@ -26,7 +26,7 @@ export function verifyUserAccess(event: RequestEvent) {
 			const pathTo = url.searchParams.get('pathTo');
 
 			if (pathTo) {
-				throw redirect(StatusCodes.SEE_OTHER, pathTo);
+				redirect(StatusCodes.SEE_OTHER, pathTo);
 			}
 		}
 
@@ -37,11 +37,11 @@ export function verifyUserAccess(event: RequestEvent) {
 		if (url.pathname == '/no_access') {
 			return true;
 		} else {
-			throw redirect(StatusCodes.SEE_OTHER, handleAccessRedirect(url));
+			redirect(StatusCodes.SEE_OTHER, handleAccessRedirect(url));
 		}
 	}
 
-	throw redirect(StatusCodes.SEE_OTHER, handleLoginRedirect(url));
+	redirect(StatusCodes.SEE_OTHER, handleLoginRedirect(url));
 }
 
 /**

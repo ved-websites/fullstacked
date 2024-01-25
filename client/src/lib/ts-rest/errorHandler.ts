@@ -113,7 +113,8 @@ export function routeError(status: number, message: string, options?: RouteError
 
 	if (event) {
 		if (event.locals.step === 'page' && doThrowForPage) {
-			throw error(status, message);
+			error(status, message);
+			return;
 		}
 
 		if (event.locals.step === 'action') {
@@ -134,7 +135,7 @@ export function routeError(status: number, message: string, options?: RouteError
 	}
 
 	if (doThrowForPage) {
-		throw error(status, message);
+		error(status, message);
 	}
 
 	const flash = flashStore();

@@ -9,7 +9,7 @@ export const actions = {
 			layoutAlert: undefined,
 			result: () => tsrest.auth.logout(),
 			onValid: () => {
-				throw redirect(StatusCodes.SEE_OTHER, '/login');
+				redirect(StatusCodes.SEE_OTHER, '/login');
 			},
 		});
 	},
@@ -22,7 +22,7 @@ export const actions = {
 		if (theme === 'null') {
 			cookies.delete(themeCookieName);
 
-			throw redirect(StatusCodes.SEE_OTHER, redirectTo);
+			redirect(StatusCodes.SEE_OTHER, redirectTo);
 		}
 
 		if (!theme || !(themes as unknown as string[]).includes(theme)) {
@@ -30,10 +30,11 @@ export const actions = {
 		}
 
 		cookies.set(themeCookieName, theme, {
+			path: '/',
 			expires: new Date('01 Jan 9999'),
 			httpOnly: false,
 		});
 
-		throw redirect(StatusCodes.SEE_OTHER, redirectTo);
+		redirect(StatusCodes.SEE_OTHER, redirectTo);
 	},
 } satisfies Actions;

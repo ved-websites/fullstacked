@@ -31,7 +31,7 @@ export const load = (async ({ url, locals: { tsrest }, setHeaders }) => {
 			return result.body;
 		}
 
-		throw error(result.status, extractErrorMessageFromApiFetcherData(result));
+		error(result.status, extractErrorMessageFromApiFetcherData(result));
 	})();
 
 	if (resetToken && user) {

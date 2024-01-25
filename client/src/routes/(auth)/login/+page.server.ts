@@ -19,7 +19,7 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 	const redirectTo = getRedirectTo(url);
 
 	if (sessionUser) {
-		throw redirect(StatusCodes.SEE_OTHER, redirectTo ?? '/');
+		redirect(StatusCodes.SEE_OTHER, redirectTo ?? '/');
 	}
 
 	const layoutAlert = (() => {
@@ -47,7 +47,7 @@ export const actions = {
 				const redirectTo = getRedirectTo(url) ?? '/';
 
 				// Successful login
-				throw redirect(StatusCodes.SEE_OTHER, redirectTo);
+				redirect(StatusCodes.SEE_OTHER, redirectTo);
 			},
 		});
 	},

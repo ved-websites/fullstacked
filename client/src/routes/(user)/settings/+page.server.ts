@@ -3,5 +3,5 @@ import { StatusCodes } from 'http-status-codes';
 import type { PageServerLoad } from './$types';
 
 export const load = (async () => {
-	throw redirect(StatusCodes.MOVED_PERMANENTLY, '/settings/profile');
+	redirect(StatusCodes.MOVED_PERMANENTLY, '/settings/profile');
 }) satisfies PageServerLoad;

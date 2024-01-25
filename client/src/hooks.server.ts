@@ -79,6 +79,7 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 		const { name, value, ...opts } = parseString(cookie);
 
 		event.cookies.set(name, value, {
+			path: '/',
 			...opts,
 			// @ts-expect-error set-cookie-parser has string instead of strict type
 			sameSite: opts.sameSite,
