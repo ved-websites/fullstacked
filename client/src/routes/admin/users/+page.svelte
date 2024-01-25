@@ -15,8 +15,8 @@
 
 	export let data;
 
-	let registeredUsers: StreamedData<typeof data.streamed.users>[0] | undefined;
-	let unregisteredUsers: StreamedData<typeof data.streamed.users>[1] | undefined;
+	let registeredUsers: StreamedData<typeof data.users>[0] | undefined;
+	let unregisteredUsers: StreamedData<typeof data.users>[1] | undefined;
 
 	wsClient.users.edited({}, ({ data: editedUser }) => {
 		if (editedUser.registerToken) {
@@ -61,7 +61,7 @@
 		}
 	});
 
-	handleStreamed(data.streamed.users, {
+	handleStreamed(data.users, {
 		onData: ([streamedRegisteredUsers, streamedUnregisteredUsers]) => {
 			registeredUsers = streamedRegisteredUsers;
 			unregisteredUsers = streamedUnregisteredUsers;

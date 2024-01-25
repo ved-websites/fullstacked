@@ -18,7 +18,7 @@ export const load = (async ({ url, locals: { tsrest } }) => {
 	const registerToken = url.searchParams.get('token');
 
 	if (!registerToken) {
-		throw error(StatusCodes.BAD_REQUEST, { message: 'Missing register token!' });
+		error(StatusCodes.BAD_REQUEST, { message: 'Missing register token!' });
 	}
 
 	const result = await tsrest.auth.initRegistration({ query: { registerToken } });
@@ -45,7 +45,7 @@ export const actions = {
 			form,
 			result: () => tsrest.auth.register({ body: { registerToken, password, user } }),
 			onValid: () => {
-				throw redirect(StatusCodes.SEE_OTHER, '/');
+				redirect(StatusCodes.SEE_OTHER, '/');
 			},
 		});
 	},

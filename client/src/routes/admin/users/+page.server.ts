@@ -32,9 +32,7 @@ export const load = (async ({ locals: { tsrest } }) => {
 	});
 
 	return {
-		streamed: {
-			users,
-		},
+		users,
 	};
 }) satisfies PageServerLoad;
 
