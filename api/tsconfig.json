@@ -34,6 +34,8 @@
     
     "importsNotUsedAsValues": "remove",
     "verbatimModuleSyntax": false,
+    
+    "experimentalDecorators": true,
   },
   "include": [
     "src/**/*.ts",
