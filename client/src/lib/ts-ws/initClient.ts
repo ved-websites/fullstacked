@@ -33,8 +33,8 @@ type ClientEventRouter<T extends EventRouter> = {
 	[K in keyof T]: T[K] extends EventRoute
 		? ReturnType<typeof initRoute<T[K]>>
 		: T[K] extends EventRouter
-		  ? ClientEventRouter<T[K]>
-		  : unknown;
+			? ClientEventRouter<T[K]>
+			: unknown;
 };
 
 function initRoute<TRoute extends EventRoute>(route: TRoute, socket: KitSocket) {
