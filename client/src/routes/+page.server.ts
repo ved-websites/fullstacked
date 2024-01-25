@@ -20,7 +20,7 @@ export const actions = {
 		const redirectTo = formData.get('redirectTo')?.toString() ?? '/';
 
 		if (theme === 'null') {
-			cookies.delete(themeCookieName);
+			cookies.delete(themeCookieName, { path: '/' });
 
 			redirect(StatusCodes.SEE_OTHER, redirectTo);
 		}

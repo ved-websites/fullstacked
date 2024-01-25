@@ -1,4 +1,4 @@
-import { OnboardingDto } from '$onboarding/onboarding.dto';
+import { OnboardingDto } from '$users/onboarding/onboarding.dto';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { E2ETestManager, users } from './utils/E2ETestManager';
 

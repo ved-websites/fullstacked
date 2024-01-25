@@ -11,7 +11,11 @@ const e2eConfigs = mergeConfig(
 		},
 		test: {
 			include: ['**/*.e2e-spec.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-			threads: false,
+			poolOptions: {
+				threads: {
+					singleThread: true,
+				},
+			},
 		},
 	}),
 );

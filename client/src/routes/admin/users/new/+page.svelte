@@ -4,8 +4,7 @@
 	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import VSelect from '$lib/components/flowbite-custom/VSelect/VSelect.svelte';
 	import type { VSelectOptionType } from '$lib/components/flowbite-custom/VSelect/types';
-	import { Heading, Input, Label, MultiSelect } from 'flowbite-svelte';
-	import type { SelectOptionType } from 'flowbite-svelte/dist/types';
+	import { Heading, Input, Label, MultiSelect, type SelectOptionType } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	let i18n = getI18n();
 	$: ({ t, locale, locales } = $i18n);

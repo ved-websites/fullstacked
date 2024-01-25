@@ -15,7 +15,7 @@ export function assertTsRestResultOK<T extends { status: number }>(
 	errorArgs?: (result: InvalidResult<T>) => Parameters<typeof error>,
 ): asserts result is ValidResult<T> {
 	if (result.status !== StatusCodes.OK) {
-		const definedErrorArgs = errorArgs?.(result as Exclude<T, { status: StatusCodes.OK }>) ?? [result.status];
+		const definedErrorArgs = errorArgs?.(result as Exclude<T, { status: StatusCodes.OK }>) ?? [result.status as never];
 
 		error(...definedErrorArgs);
 	}

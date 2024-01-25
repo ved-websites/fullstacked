@@ -28,7 +28,9 @@ export class ThrottlerGuard extends NestThrottlerGuard {
 		return { req, res };
 	}
 
-	protected override async handleRequest(context: ExecutionContext, limit: number, ttl: number, throttler: ThrottlerOptions) {
+	protected override async handleRequest(...args: Parameters<NestThrottlerGuard['handleRequest']>) {
+		const [context] = args;
+
 		const res = ContextService.getResponse(context);
 
 		if (!res) {
@@ -36,7 +38,7 @@ export class ThrottlerGuard extends NestThrottlerGuard {
 			return true;
 		}
 
-		return super.handleRequest(context, limit, ttl, throttler);
+		return super.handleRequest(...args);
 	}
 
 	protected override async throwThrottlingException(context: ExecutionContext, _throttlerLimitDetail: ThrottlerLimitDetail): Promise<void> {

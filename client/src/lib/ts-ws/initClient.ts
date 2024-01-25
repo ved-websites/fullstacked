@@ -64,7 +64,7 @@ function initRoute<TRoute extends EventRoute>(route: TRoute, socket: KitSocket) 
 			});
 		} catch (error) {
 			if (error instanceof Error && error.message !== 'Function called outside component initialization') {
-				throw error;
+				console.error('An unexpected error happened!', error.message);
 			}
 		}
 
