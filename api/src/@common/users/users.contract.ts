@@ -1,46 +1,45 @@
 import RoleSchema from '$zod/modelSchema/RoleSchema';
 import UserSchema from '$zod/modelSchema/UserSchema';
-import { z } from 'zod';
 import { c, wsC } from '~contract';
-import { LiveUserSchema, emailSchema } from '~shared';
+import { LiveUserSchema } from '~shared';
 import { adminContract } from './admin/admin.contract';
 
 export const usersContract = c.router({
 	admin: adminContract,
 });
 
-export const OptionalEmailSpecifierSchema = z.object({
-	email: emailSchema.optional(),
-});
+export const OptionalUserSpecifierSchema = UserSchema.pick({
+	id: true,
+}).partial();
 
 export const wsUsersContract = wsC.router({
 	edited: {
 		type: 'update',
-		input: OptionalEmailSpecifierSchema,
+		input: OptionalUserSpecifierSchema,
 		emitted: LiveUserSchema.extend({
 			roles: RoleSchema.array(),
 		}),
 	},
 	onlineChange: {
 		type: 'update',
-		input: OptionalEmailSpecifierSchema,
+		input: OptionalUserSpecifierSchema,
 		emitted: LiveUserSchema.pick({
-			email: true,
+			id: true,
 			online: true,
 		}),
 	},
 	created: {
 		type: 'create',
-		input: OptionalEmailSpecifierSchema,
+		input: OptionalUserSpecifierSchema,
 		emitted: UserSchema.extend({
 			roles: RoleSchema.array(),
 		}),
 	},
 	deleted: {
 		type: 'delete',
-		input: OptionalEmailSpecifierSchema,
+		input: OptionalUserSpecifierSchema,
 		emitted: LiveUserSchema.pick({
-			email: true,
+			id: true,
 		}),
 	},
 });

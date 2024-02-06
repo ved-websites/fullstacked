@@ -21,7 +21,7 @@
 	wsClient.users.edited({}, ({ data: editedUser }) => {
 		if (editedUser.registerToken) {
 			unregisteredUsers = unregisteredUsers?.map((u) => {
-				if (u.email === editedUser.email) {
+				if (u.id === editedUser.id) {
 					return editedUser;
 				}
 
@@ -29,7 +29,7 @@
 			});
 		} else {
 			registeredUsers = registeredUsers?.map((u) => {
-				if (u.email === editedUser.email) {
+				if (u.id === editedUser.id) {
 					return editedUser;
 				}
 
@@ -40,7 +40,7 @@
 
 	wsClient.users.onlineChange({}, ({ data: user }) => {
 		registeredUsers = registeredUsers?.map((u) => {
-			if (u.email === user.email) {
+			if (u.id === user.id) {
 				return { ...u, online: user.online };
 			}
 
@@ -52,12 +52,12 @@
 		unregisteredUsers = [...(unregisteredUsers ?? []), { ...user, online: null }];
 	});
 
-	wsClient.users.deleted({}, ({ data: { email } }) => {
-		if (unregisteredUsers?.some((u) => u.email === email)) {
-			unregisteredUsers = unregisteredUsers?.filter((u) => u.email !== email);
+	wsClient.users.deleted({}, ({ data: { id } }) => {
+		if (unregisteredUsers?.some((u) => u.id === id)) {
+			unregisteredUsers = unregisteredUsers?.filter((u) => u.id !== id);
 		}
-		if (registeredUsers?.some((u) => u.email === email)) {
-			registeredUsers = registeredUsers?.filter((u) => u.email !== email);
+		if (registeredUsers?.some((u) => u.id === id)) {
+			registeredUsers = registeredUsers?.filter((u) => u.id !== id);
 		}
 	});
 
