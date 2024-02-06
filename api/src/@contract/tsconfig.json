@@ -1,5 +1,5 @@
 {
-	"extends": "@v-ed/tsconfig",
+	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"moduleResolution": "node",
 		"target": "es2019",

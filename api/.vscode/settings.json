@@ -4,4 +4,7 @@
 		"src/i18n",
 		"../client/src/i18n",
 	],
+	"[typescriptreact]": {
+		"typescript.preferences.importModuleSpecifier": "relative"
+	}
 }

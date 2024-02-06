@@ -58,9 +58,12 @@
 		"[prisma]": {
 			"editor.formatOnSave": true,
 		},
+		"files.associations": {
+			"router.ts": "typescriptreact"
+		},
 		"git.pullTags": false,
 		"svelte.plugin.css.diagnostics.enable": false,
-		"typescript.tsdk": "./node_modules/typescript/lib",
+		"typescript.tsdk": "Root (Fullstacked)/node_modules/typescript/lib",
 		"vitest.commandLine": "pnpm exec vitest --config tests/.vitest/vitest.config.all.ts",
 		"vitest.enable": true,
 		"vitest.exclude": [
