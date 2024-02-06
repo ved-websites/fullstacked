@@ -25,12 +25,9 @@ generator zod {
 // ===========
 
 model User {
-  /// @HideField({ output: false, input: true })
   id String @id @unique
 
-  /// @HideField({ output: true, input: true })
   auth_session Session[]
-  /// @HideField({ output: true, input: true })
   auth_key     Key[]
 
   email     String  @unique
@@ -46,15 +43,12 @@ model User {
   roles                 Role[]
   messages              Message[]
 
-  /// @HideField({ output: false, input: true })
   createdAt DateTime @default(now())
-  /// @HideField({ output: false, input: true })
   updatedAt DateTime @updatedAt
 
   @@map("users")
 }
 
-/// @ObjectType({ isAbstract: true })
 model Session {
   id             String @id @unique
   user_id        String
@@ -67,7 +61,6 @@ model Session {
   @@map("sessions")
 }
 
-/// @ObjectType({ isAbstract: true })
 model Key {
   id              String  @id @unique
   hashed_password String?
@@ -94,7 +87,6 @@ model Role {
 
   users User[]
 
-  /// @HideField({ output: false, input: true })
   createdAt DateTime @default(now())
 
   @@map("roles")
@@ -125,11 +117,9 @@ model Message {
   id   Int      @id @default(autoincrement())
   /// @Validator.IsNotEmpty()
   text String
-  /// @HideField({ output: false, input: true })
   time DateTime @default(now())
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  /// @HideField({ output: true, input: true })
   userId String
 
   @@map("messages")
