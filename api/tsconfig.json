@@ -36,6 +36,7 @@
     "verbatimModuleSyntax": false,
     
     "experimentalDecorators": true,
+    "strictNullChecks": true,
   },
   "include": [
     "src/**/*.ts",
