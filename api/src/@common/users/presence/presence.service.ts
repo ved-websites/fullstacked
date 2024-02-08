@@ -20,23 +20,23 @@ export class PresenceService {
 	constructor(private eventEmitter: EventEmitter2) {}
 
 	onConnect(session: LuciaSession) {
-		this.sessions.set(session.sessionId, session);
+		this.sessions.set(session.id, session);
 
-		this.eventEmitter.emitAsync(USERS_ON_CONNECT_EVENT_KEY, session satisfies USERS_ON_CONNECT_EVENT_TYPE);
+		this.eventEmitter.emitAsync(USERS_ON_CONNECT_EVENT_KEY, session.userId satisfies USERS_ON_CONNECT_EVENT_TYPE);
 	}
 
 	onDisconnect(session: LuciaSession) {
-		const hadSession = this.sessions.delete(session.sessionId);
+		const hadSession = this.sessions.delete(session.id);
 
 		if (hadSession) {
-			this.eventEmitter.emitAsync(USERS_ON_DISCONNECT_EVENT_KEY, session satisfies USERS_ON_DISCONNECT_EVENT_TYPE);
+			this.eventEmitter.emitAsync(USERS_ON_DISCONNECT_EVENT_KEY, session.userId satisfies USERS_ON_DISCONNECT_EVENT_TYPE);
 		}
 	}
 
-	isUserConnected(email: string) {
+	isUserConnected(userId: string) {
 		const sessionsArray = Array.from(this.sessions.values());
 
-		return sessionsArray.some(({ user }) => user.email === email);
+		return sessionsArray.some(({ userId: sessionUserId }) => sessionUserId === userId);
 	}
 
 	convertUserToLiveUser<U extends User = User>(user: U, onlineSelector?: boolean | undefined): U & { online: boolean | null };
@@ -52,7 +52,7 @@ export class PresenceService {
 		const liveUser = user as (U & { online: boolean | null }) | null | undefined;
 
 		if (liveUser && onlineSelector) {
-			liveUser.online = this.isUserConnected(liveUser.email);
+			liveUser.online = this.isUserConnected(liveUser.id);
 		}
 
 		return liveUser ?? null;

@@ -5,11 +5,6 @@ export async function loadLuciaModule() {
 
 	return module;
 }
-export async function loadLuciaUtils() {
-	const module = importDynamic('lucia/utils') as Promise<typeof import('lucia/utils')>;
-
-	return module;
-}
 
 export async function loadPrismaAdapterModule() {
 	const module = importDynamic('@lucia-auth/adapter-prisma') as Promise<typeof import('@lucia-auth/adapter-prisma')>;
@@ -17,14 +12,14 @@ export async function loadPrismaAdapterModule() {
 	return module;
 }
 
-export async function loadLuciaMiddleware() {
-	const module = importDynamic('lucia/middleware') as Promise<typeof import('lucia/middleware')>;
+export async function loadOsloPasswordModule() {
+	const module = importDynamic('oslo/password') as Promise<typeof import('oslo/password')>;
 
 	return module;
 }
 
-export async function loadLuciaCryptoNode18() {
-	const module = importDynamic('lucia/polyfill/node') as Promise<typeof import('lucia/polyfill/node')>;
+export async function loadOsloCryptoModule() {
+	const module = importDynamic('oslo/crypto') as Promise<typeof import('oslo/crypto')>;
 
 	return module;
 }

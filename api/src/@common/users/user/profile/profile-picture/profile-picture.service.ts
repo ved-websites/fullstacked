@@ -15,9 +15,9 @@ export class ProfilePictureService {
 	private readonly logger = new Logger(ProfilePictureService.name);
 
 	constructor(
-		private minioClientService: MinioClientService,
-		private prisma: PrismaService,
-		private eventEmitter: EventEmitter2,
+		private readonly minioClientService: MinioClientService,
+		private readonly prisma: PrismaService,
+		private readonly eventEmitter: EventEmitter2,
 		private readonly sockets: SocketService,
 		private readonly presenceService: PresenceService,
 	) {}

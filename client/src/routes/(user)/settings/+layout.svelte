@@ -22,8 +22,8 @@
 <header class="flex gap-5 mb-5">
 	<UserAvatar {...$sessionUser} />
 	<P size="lg" class="self-center">
-		{#if $sessionUser.firstName}
-			{$sessionUser.firstName}{$sessionUser.lastName ? ` ${$sessionUser.lastName}` : ''} ({$sessionUser.email})
+		{#if $sessionUser.fullName}
+			{$sessionUser.fullName} ({$sessionUser.email})
 		{:else}
 			{$sessionUser.email}
 		{/if}

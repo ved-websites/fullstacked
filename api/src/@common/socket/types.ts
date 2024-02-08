@@ -1,5 +1,5 @@
 import type { WebSocket } from 'ws';
-import type { SessionContainer } from '../users/auth/lucia/types';
+import type { LuciaContainer } from '../users/auth/lucia/types';
 
-export type TypedWebSocket = WebSocket & SessionContainer;
+export type TypedWebSocket = WebSocket & LuciaContainer;
 export type SocketOrSessionId = TypedWebSocket | string;

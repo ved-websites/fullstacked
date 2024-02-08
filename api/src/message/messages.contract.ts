@@ -1,7 +1,7 @@
 import MessageSchema from '$zod/modelSchema/MessageSchema';
-import UserSchema from '$zod/modelSchema/UserSchema';
 import { z } from 'zod';
 import { c, createResponses, wsC } from '~contract';
+import { UserSchema } from '~shared';
 
 export const messagesContract = c.router(
 	{

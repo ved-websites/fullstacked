@@ -5,12 +5,12 @@ import { I18nResolver } from 'nestjs-i18n';
 @Injectable()
 export class SessionI18nResolver implements I18nResolver {
 	resolve(context: ExecutionContext) {
-		const { session } = ContextService.getRequest(context);
+		const { user } = ContextService.getRequest(context);
 
-		if (!session) {
+		if (!user) {
 			return undefined;
 		}
 
-		return session.user.lang ?? undefined;
+		return user.lang ?? undefined;
 	}
 }

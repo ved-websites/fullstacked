@@ -27,18 +27,19 @@ generator zod {
 model User {
   id String @id @unique
 
-  auth_session Session[]
-  auth_key     Key[]
-
   email     String  @unique
   firstName String? @map("first_name")
   lastName  String? @map("last_name")
 
-  lang              String?
-  emailLang         String
-  profilePictureRef String? @map("profile_picture_ref")
-  registerToken     String? @unique @map("register_token")
+  lang          String?
+  emailLang     String
+  registerToken String? @unique @map("register_token")
 
+  profilePictureRef String? @map("profile_picture_ref")
+
+  hashedPassword String?
+
+  sessions              Session[]
   passwordResetAttempts PasswordResetAttempt[]
   roles                 Role[]
   messages              Message[]
@@ -50,27 +51,26 @@ model User {
 }
 
 model Session {
-  id             String @id @unique
-  user_id        String
-  active_expires BigInt
-  idle_expires   BigInt
+  id        String   @id @unique
+  userId    String   @map("user_id")
+  expiresAt DateTime @map("expires_at")
 
-  user User @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 
-  @@index([user_id])
+  @@index([userId])
   @@map("sessions")
 }
 
-model Key {
-  id              String  @id @unique
-  hashed_password String?
+// model Key {
+//   id              String  @id @unique
+//   hashed_password String?
 
-  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
-  user_id String
+//   user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+//   user_id String
 
-  @@index([user_id])
-  @@map("keys")
-}
+//   @@index([user_id])
+//   @@map("keys")
+// }
 
 // ===========
 //  END AUTH

@@ -38,7 +38,7 @@ export class WsEventInterceptor implements NestInterceptor {
 
 		const { type, uid } = wsData;
 
-		const unsubPattern = `unsub:${socket.sessionId}:${pattern}${uid ? `:${uid}` : ''}`;
+		const unsubPattern = `unsub:${socket.session!.id}:${pattern}${uid ? `:${uid}` : ''}`;
 
 		if (type === 'unsubscribe') {
 			this.wsEventEmitter.emit(unsubPattern);
@@ -137,7 +137,7 @@ export class WsEventInterceptor implements NestInterceptor {
 
 						observer.complete();
 
-						this.logger.debug(`User unsubbed from pattern '${pattern}' : ${socket.session?.user.email}`);
+						this.logger.debug(`User unsubbed from pattern '${pattern}' : ${socket.user?.email}`);
 					};
 
 					socket.on('close', finishSub);

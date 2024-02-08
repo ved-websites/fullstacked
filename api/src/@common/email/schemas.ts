@@ -1,11 +1,13 @@
 import { z } from 'zod';
-import { emailSchema } from '~shared';
+import { emailSchema, fullNameSchema } from '~shared';
+
+const optionalName = fullNameSchema.optional().transform((v) => (v === null ? undefined : v) as typeof v);
 
 export const simpleSenderSchema = z.union([
 	emailSchema,
 	z.object({
 		email: emailSchema,
-		name: z.optional(z.string()),
+		name: optionalName,
 	}),
 ]);
 
@@ -16,9 +18,9 @@ export const sendEmailSchema = z.object({
 	from: senderSchema,
 	subject: z.string(),
 	html: z.string(),
-	cc: z.optional(senderSchema),
-	bcc: z.optional(senderSchema),
-	replyTo: z.optional(senderSchema),
+	cc: senderSchema.optional(),
+	bcc: senderSchema.optional(),
+	replyTo: senderSchema.optional(),
 });
 
 export type SendMailData = ReturnType<typeof sendEmailSchema.parse>;

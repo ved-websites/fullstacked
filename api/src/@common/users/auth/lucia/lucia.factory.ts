@@ -1,27 +1,28 @@
-import type { PrismaClient } from '$prisma-client';
-import { Environment, type EnvironmentConfig } from '~env';
-import { loadLuciaCryptoNode18, loadLuciaMiddleware, loadLuciaModule, loadPrismaAdapterModule } from './modules-compat';
+import { getUserFullName } from '$prisma/prisma.extended-client';
+import { type PrismaService } from '$prisma/prisma.service';
+import { Environment, EnvironmentConfig } from '~env';
+import { loadLuciaModule, loadPrismaAdapterModule } from './modules-compat';
+import { EnhancedUser } from './types';
 
-export async function luciaFactory(prisma: PrismaClient, env: EnvironmentConfig) {
-	await loadLuciaCryptoNode18();
+export async function luciaFactory(prisma: PrismaService, env: EnvironmentConfig) {
+	const { Lucia } = await loadLuciaModule();
+	const { PrismaAdapter } = await loadPrismaAdapterModule();
 
-	const { lucia } = await loadLuciaModule();
-	const { prisma: prismaAdapter } = await loadPrismaAdapterModule();
-	const { express } = await loadLuciaMiddleware();
+	const adapter = new PrismaAdapter<PrismaService>(prisma.$rawClient.session, prisma.$rawClient.user);
 
-	const isDev = env.NODE_ENV == Environment.Development;
+	return new Lucia(adapter, {
+		getUserAttributes: (dbUserAttributes) => {
+			dbUserAttributes.hashedPassword = null;
 
-	return lucia({
-		adapter: prismaAdapter(prisma),
-		env: isDev ? 'DEV' : 'PROD',
-		middleware: express(),
-		getUserAttributes: (userSchema) => {
-			return {
-				fullName: userSchema.firstName && userSchema.lastName ? `${userSchema.firstName} ${userSchema.lastName}` : undefined,
-				...userSchema,
-			};
+			(dbUserAttributes as Record<string, unknown>)['fullName'] = getUserFullName(dbUserAttributes);
+
+			return dbUserAttributes as EnhancedUser;
 		},
-		allowedRequestOrigins: env.CORS_LINKS,
+		sessionCookie: {
+			attributes: {
+				secure: env.NODE_ENV == Environment.Production,
+			},
+		},
 	});
 }
 

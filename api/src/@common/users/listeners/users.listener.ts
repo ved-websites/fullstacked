@@ -1,3 +1,4 @@
+import { PrismaService } from '$prisma/prisma.service';
 import { SocketService } from '$socket/socket.service';
 import { PresenceService } from '$users/presence/presence.service';
 import { Injectable, Logger } from '@nestjs/common';
@@ -17,18 +18,39 @@ export class UsersListener {
 	constructor(
 		private readonly sockets: SocketService,
 		private readonly presenceService: PresenceService,
+		private readonly prisma: PrismaService,
 	) {}
 
 	@OnEvent(USERS_ON_CONNECT_EVENT_KEY, { async: true })
-	async handleUserConnectedEvent(session: USERS_ON_CONNECT_EVENT_TYPE) {
-		const liveUser = this.presenceService.convertUserToLiveUser(session.user);
+	async handleUserConnectedEvent(userId: USERS_ON_CONNECT_EVENT_TYPE) {
+		const user = await this.prisma.user.findUnique({
+			where: {
+				id: userId,
+			},
+		});
+
+		if (!user) {
+			return;
+		}
+
+		const liveUser = this.presenceService.convertUserToLiveUser(user);
 
 		this.sockets.emit(wsR.users.onlineChange, liveUser);
 	}
 
 	@OnEvent(USERS_ON_DISCONNECT_EVENT_KEY, { async: true })
-	async handleUserDisconnectedEvent(session: USERS_ON_DISCONNECT_EVENT_TYPE) {
-		const liveUser = this.presenceService.convertUserToLiveUser(session.user);
+	async handleUserDisconnectedEvent(userId: USERS_ON_DISCONNECT_EVENT_TYPE) {
+		const user = await this.prisma.user.findUnique({
+			where: {
+				id: userId,
+			},
+		});
+
+		if (!user) {
+			return;
+		}
+
+		const liveUser = this.presenceService.convertUserToLiveUser(user);
 
 		this.sockets.emit(wsR.users.onlineChange, liveUser);
 	}

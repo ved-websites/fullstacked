@@ -23,7 +23,7 @@ export class AdminService {
 		private readonly prisma: PrismaService,
 		private readonly authService: AuthService,
 		private readonly rolesService: RolesService,
-		private eventEmitter: EventEmitter2,
+		private readonly eventEmitter: EventEmitter2,
 		private readonly email: EmailService,
 		private readonly env: EnvironmentConfig,
 		private readonly i18n: TypedI18nService,
@@ -43,7 +43,7 @@ export class AdminService {
 
 		return users.map((user) => ({
 			...user,
-			online: !user.registerToken ? this.presenceService.isUserConnected(user.email) : null,
+			online: !user.registerToken ? this.presenceService.isUserConnected(user.id) : null,
 		}));
 	}
 
@@ -90,7 +90,7 @@ export class AdminService {
 			firstName,
 			lastName,
 			emailLang,
-		})) satisfies LuciaUser as Omit<LuciaUser, 'registerToken'> & { registerToken: NonNullable<LuciaUser['registerToken']> };
+		})) satisfies LuciaUser as unknown as Omit<LuciaUser, 'registerToken'> & { registerToken: NonNullable<LuciaUser['registerToken']> };
 
 		if (roles) {
 			await this.rolesService.setUserRoles(user, roles);
@@ -196,7 +196,7 @@ export class AdminService {
 		}
 	}
 
-	async sendNewUserRegistrationEmail(user: Omit<LuciaUser, 'userId'>, origin: { url: string; user: LuciaUser }) {
+	async sendNewUserRegistrationEmail(user: LuciaUser, origin: { url: string; user: LuciaUser }) {
 		if (!user.registerToken) {
 			return;
 		}

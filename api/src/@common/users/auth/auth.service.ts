@@ -4,14 +4,15 @@ import { fallbackLanguage } from '$i18n/i18n.module';
 import { TypedI18nService } from '$i18n/i18n.service';
 import { User } from '$prisma-client';
 import { PrismaService } from '$prisma/prisma.service';
-import { loadLuciaUtils } from '$users/auth/lucia/modules-compat';
+import { generateId, generateRandomSafeString } from '$utils/random';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import type { GlobalDatabaseUserAttributes } from 'lucia';
 import { EnvironmentConfig } from '~env';
+import { AuthError } from './auth.error';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';
-import { LuciaSession } from './session.decorator';
+import { loadOsloPasswordModule } from './lucia/modules-compat';
+import { LuciaSession, LuciaUser } from './session.decorator';
 
-export type CreateUserLuciaAttributes = Partial<Omit<GlobalDatabaseUserAttributes, 'email'>>;
+export type CreateUserLuciaAttributes = Partial<Omit<LuciaUser, 'email'>>;
 
 @Injectable()
 export class AuthService {
@@ -23,29 +24,24 @@ export class AuthService {
 		private readonly env: EnvironmentConfig,
 	) {}
 
-	readonly providerId = 'email';
+	async hashPassword(password: string) {
+		const { Argon2id } = await loadOsloPasswordModule();
 
-	defineEmailKey(email: string, password: string | null): Omit<Parameters<typeof this.auth.createKey>[0], 'userId'>;
-	defineEmailKey(email: string, password: string | null, userId: string): Parameters<typeof this.auth.createKey>[0];
-	defineEmailKey(email: string, password: string | null, userId?: string) {
-		if (userId) {
-			return {
-				providerId: this.providerId,
-				providerUserId: email,
-				password,
-				userId,
-			} satisfies Parameters<typeof this.auth.createKey>[0];
-		}
+		return new Argon2id().hash(password);
+	}
 
-		return {
-			providerId: this.providerId,
-			providerUserId: email,
-			password,
-		};
+	async verifyPassword(hashedPassword: string, password: string) {
+		const { Argon2id } = await loadOsloPasswordModule();
+
+		return new Argon2id().verify(hashedPassword, password);
 	}
 
 	async getLuciaUser(userId: string) {
-		return this.auth.getUser(userId);
+		return this.prisma.user.findUniqueOrThrow({
+			where: {
+				id: userId,
+			},
+		});
 	}
 
 	async getAuthUser(email: string) {
@@ -93,13 +89,17 @@ export class AuthService {
 			throw new BadRequestException('A user with this email already exists!'); // TODO : i18n
 		}
 
-		const registerTokenLength = 16;
-		const registerToken = password ? null : (await loadLuciaUtils()).generateRandomString(registerTokenLength);
+		const id = await generateId();
 
-		const user = await this.auth.createUser({
-			key: password ? this.defineEmailKey(email, password) : null,
-			attributes: {
+		const registerToken = password ? null : await generateRandomSafeString();
+
+		const hashedPassword = password ? await this.hashPassword(password) : undefined;
+
+		const user = await this.prisma.user.create({
+			data: {
+				id,
 				email,
+				hashedPassword,
 				registerToken,
 				emailLang: attributes?.emailLang ?? fallbackLanguage,
 				firstName: attributes?.firstName ?? null,
@@ -126,46 +126,64 @@ export class AuthService {
 		});
 
 		if (!user) {
-			throw new Error('Invalid userId!');
+			throw new Error('Invalid userId!'); // TODO : i18n
 		}
 
-		const key = await this.auth.createKey(this.defineEmailKey(user.email, password, user.id));
+		const hashedPassword = await this.hashPassword(password);
 
-		await this.auth.updateUserAttributes(key.userId, {
-			...attributes,
-			registerToken: null,
+		const updatedUser = await this.prisma.user.update({
+			data: {
+				...attributes,
+				registerToken: null,
+				hashedPassword,
+			},
+			where: {
+				id: user.id,
+			},
 		});
 
-		return this.loginUser(key.userId);
+		return this.loginUser(updatedUser.id);
 	}
 
 	async login(email: string, password: string) {
-		const key = await this.auth.useKey(this.providerId, email, password);
+		const user = await this.prisma.$rawClient.user.findUnique({
+			where: {
+				email,
+			},
+			select: {
+				id: true,
+				hashedPassword: true,
+			},
+		});
 
-		const session = await this.loginUser(key.userId);
+		if (!user) {
+			throw new AuthError();
+		}
 
-		// this.presenceService.onConnect(session);
+		const validPassword = await this.verifyPassword(user.hashedPassword ?? '', password);
 
-		return session;
+		if (!validPassword) {
+			throw new AuthError();
+		}
+
+		return this.loginUser(user.id);
 	}
 
 	async loginUser(userId: string) {
-		const session = await this.auth.createSession({ userId, attributes: {} });
+		const session = await this.auth.createSession(userId, {});
+		const sessionCookie = this.auth.createSessionCookie(session.id);
 
-		return session;
+		return { session, sessionCookie };
 	}
 
 	async logout(session: LuciaSession) {
-		await this.auth.invalidateSession(session.sessionId);
+		await this.auth.invalidateSession(session.id);
 
-		// this.presenceService.onDisconnect(session);
-
-		return this.auth.createSessionCookie(null);
+		return this.auth.createBlankSessionCookie();
 	}
 
 	async getForgotPasswordRequestToken() {
-		const forgotPasswordTokenLength = 16;
-		const forgotPasswordToken = (await loadLuciaUtils()).generateRandomString(forgotPasswordTokenLength);
+		const forgotPasswordToken = generateRandomSafeString();
 
 		return forgotPasswordToken;
 	}
@@ -268,7 +286,7 @@ export class AuthService {
 
 		try {
 			await this.prisma.$transaction(async (tx) => {
-				await tx.passwordResetAttempt.update({
+				const { user } = await tx.passwordResetAttempt.update({
 					data: {
 						used: {
 							set: true,
@@ -277,17 +295,46 @@ export class AuthService {
 					where: {
 						id,
 					},
+					select: {
+						user: {
+							select: {
+								id: true,
+							},
+						},
+					},
 				});
 
-				await this.auth.updateKeyPassword(this.providerId, user.email, password);
+				const hashedPassword = await this.hashPassword(password);
+
+				await tx.user.update({
+					data: {
+						hashedPassword,
+					},
+					where: {
+						id: user.id,
+					},
+				});
 			});
 
-			await this.auth.invalidateAllUserSessions(user.id);
+			await this.auth.invalidateUserSessions(user.id);
 		} catch (error) {
 			// eh
 		}
 
 		return { user };
+	}
+
+	async updatePassword(user: LuciaUser, password: string) {
+		const hashedPassword = await this.hashPassword(password);
+
+		await this.prisma.user.update({
+			data: {
+				hashedPassword,
+			},
+			where: {
+				id: user.id,
+			},
+		});
 	}
 
 	async sendPasswordResetSuccessEmail(user: User, _origin: { url: string }) {

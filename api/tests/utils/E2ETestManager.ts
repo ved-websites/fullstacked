@@ -1,5 +1,3 @@
-import 'lucia/polyfill/node';
-
 import { setupApp } from '$app/setupApp';
 import { PrismaService } from '$prisma/prisma.service';
 import { AuthModule } from '$users/auth/auth.module';
@@ -165,8 +163,8 @@ export class E2ETestManager extends TestManager<E2ETestOptions> {
 	}
 
 	async login(user: keyof typeof users) {
-		const session = await this.authService.loginUser(users[user].instance!.id);
+		const { session } = await this.authService.loginUser(users[user].instance!.id);
 
-		this.authToken = session.sessionId;
+		this.authToken = session.id;
 	}
 }

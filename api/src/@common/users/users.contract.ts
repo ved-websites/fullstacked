@@ -1,7 +1,6 @@
 import RoleSchema from '$zod/modelSchema/RoleSchema';
-import UserSchema from '$zod/modelSchema/UserSchema';
 import { c, wsC } from '~contract';
-import { LiveUserSchema } from '~shared';
+import { LiveUserSchema, UserSchema } from '~shared';
 import { adminContract } from './admin/admin.contract';
 
 export const usersContract = c.router({

@@ -96,8 +96,8 @@
 				<UserAvatar {...user} />
 				<div class="self-center text-right min-w-0">
 					<div class="text-base font-semibold leading-none text-gray-900 dark:text-white">
-						{#if user.firstName || user.lastName}
-							<span>{user.firstName ?? ''} {user.lastName ?? ''}</span>
+						{#if user.fullName}
+							<span>{user.fullName}</span>
 						{:else}
 							<span>{$t('admin.users.tables.userinfo.fields.name.none')}</span>
 						{/if}

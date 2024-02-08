@@ -2,11 +2,10 @@ import type { User } from '$prisma-client';
 import type UserCreateInputSchema from '$zod/inputTypeSchemas/UserCreateInputSchema';
 import type UserUpdateInputSchema from '$zod/inputTypeSchemas/UserUpdateInputSchema';
 import RoleSchema from '$zod/modelSchema/RoleSchema';
-import UserSchema from '$zod/modelSchema/UserSchema';
 import type UserFindManyArgsSchema from '$zod/outputTypeSchemas/UserFindManyArgsSchema';
 import { z } from 'zod';
 import { c, createResponses } from '~contract';
-import { LiveUserSchema, emailSchema } from '~shared';
+import { LiveUserSchema, UserSchema, emailSchema } from '~shared';
 
 export type AdminListUsersGql = z.infer<typeof UserFindManyArgsSchema> & { select?: { online?: boolean } };
 

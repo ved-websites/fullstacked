@@ -118,7 +118,7 @@ export class SocketService {
 	getSocketsOf(userId: string) {
 		const allSockets = Array.from(this.server.clients.values()) as TypedWebSocket[];
 
-		return allSockets.filter((socket) => socket.session?.user.userId === userId);
+		return allSockets.filter((socket) => socket.user?.id === userId);
 	}
 
 	flushUserSockets(userId: string) {
@@ -156,7 +156,7 @@ export class SocketService {
 	}
 
 	protected getSessionId(socketOrSessionId: SocketOrSessionId) {
-		const sessionId = typeof socketOrSessionId === 'string' ? socketOrSessionId : socketOrSessionId.sessionId;
+		const sessionId = typeof socketOrSessionId === 'string' ? socketOrSessionId : socketOrSessionId.session?.id;
 
 		return sessionId;
 	}
@@ -168,7 +168,7 @@ export class SocketService {
 
 		const sockets = Array.from(this.server.clients.values()) as TypedWebSocket[];
 
-		return sockets.find((socket) => socket.sessionId === socketOrSessionId);
+		return sockets.find((socket) => socket.session?.id === socketOrSessionId);
 	}
 
 	broadcast(data: EventRouteOutput<unknown>) {

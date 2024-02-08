@@ -10,10 +10,10 @@ export class LangInterceptor implements NestInterceptor {
 	constructor(private readonly prisma: PrismaService) {}
 
 	intercept(context: ExecutionContext, next: CallHandler) {
-		const { i18nLang, session } = ContextService.getRequest(context);
+		const { i18nLang, user } = ContextService.getRequest(context);
 
-		if (i18nLang && session) {
-			this.handleEmailLang(i18nLang, session.user);
+		if (i18nLang && user) {
+			this.handleEmailLang(i18nLang, user);
 		}
 
 		return next.handle();

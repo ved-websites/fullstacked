@@ -6,13 +6,11 @@ import { Controller, ForbiddenException, InternalServerErrorException, Res, Unau
 import { Throttle } from '@nestjs/throttler';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import type { Response } from 'express';
-import { ErrorMessage } from 'lucia/dist/auth/error';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { r } from '~contract';
+import { AuthError } from './auth.error';
 import { Public } from './auth.guard';
 import { AuthService } from './auth.service';
-import { LuciaAuth, LuciaAuthRequest } from './lucia/lucia.decorator';
-import { loadLuciaModule } from './lucia/modules-compat';
 import { AuthSession, AuthUser, LuciaSession, LuciaUser } from './session.decorator';
 
 @Controller()
@@ -36,28 +34,22 @@ export class AuthController {
 
 	@Public()
 	@TsRestHandler(r.auth.login)
-	login(@LuciaAuth() authRequest: LuciaAuthRequest) {
+	login(@Res({ passthrough: true }) res: Response) {
 		return tsRestHandler(r.auth.login, async ({ body: { email, password } }) => {
 			try {
-				const session = await this.authService.login(email, password);
+				const { sessionCookie } = await this.authService.login(email, password);
 
-				authRequest.setSession(session);
+				res.cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 
 				return {
 					status: 200,
 					body: {
-						accessToken: session.sessionId,
+						accessToken: sessionCookie.value,
 					},
 				};
 			} catch (error) {
-				const { LuciaError } = await loadLuciaModule();
-
-				if (error instanceof LuciaError) {
-					const userPassError: ErrorMessage[] = ['AUTH_INVALID_PASSWORD', 'AUTH_INVALID_KEY_ID'];
-
-					if (userPassError.includes(error.message)) {
-						throw new UnauthorizedException(this.i18n.t('auth.errors.login'));
-					}
+				if (error instanceof AuthError) {
+					throw new UnauthorizedException(this.i18n.t('auth.errors.login'));
 				}
 
 				throw new InternalServerErrorException(this.i18n.t('common.errors.internal-server-error'));
@@ -94,11 +86,11 @@ export class AuthController {
 
 	@Public()
 	@TsRestHandler(r.auth.register)
-	register(@LuciaAuth() authRequest: LuciaAuthRequest) {
+	register(@Res({ passthrough: true }) res: Response) {
 		return tsRestHandler(r.auth.register, async ({ body: { registerToken, password, user: userAttributes } }) => {
-			const session = await this.authService.register(registerToken, password, userAttributes);
+			const { sessionCookie } = await this.authService.register(registerToken, password, userAttributes);
 
-			authRequest.setSession(session);
+			res.cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 
 			return {
 				status: 200,

@@ -29,10 +29,6 @@ export class AuthGuard implements CanActivate {
 			throw new UnauthorizedException(this.i18n.t('auth.errors.session.missing'));
 		}
 
-		if (session.state !== 'active') {
-			throw new UnauthorizedException(this.i18n.t('auth.errors.session.inactive'));
-		}
-
 		return true;
 	}
 }

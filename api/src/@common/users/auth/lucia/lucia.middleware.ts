@@ -1,7 +1,7 @@
 import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import type { NextFunction, Request, Response } from 'express';
 import { Auth, LuciaFactory } from './lucia.factory';
-import { SessionContainer } from './types';
+import { LuciaContainer } from './types';
 
 export const COOKIE_NAME = 'auth_session';
 
@@ -17,11 +17,14 @@ export class LuciaMiddleware implements NestMiddleware {
 			request.headers.authorization = `Bearer ${authSessionCookieToken}`;
 		}
 
-		const authRequest = this.auth.handleRequest(request, response);
-
-		response.locals.authRequest = authRequest;
-
 		await setupRequest(request, this.auth);
+
+		if (request.session && request.session.fresh) {
+			// Refresh cookie when required.
+			const newCookie = this.auth.createSessionCookie(request.session.id);
+
+			response.cookie(newCookie.name, newCookie.value, newCookie.attributes);
+		}
 
 		next();
 	}
@@ -31,17 +34,13 @@ export async function setupRequest(request: Request, auth: Auth) {
 	return setupSessionContainer(request, auth, request.headers.authorization);
 }
 
-export async function setupSessionContainer(container: SessionContainer, auth: Auth, token: string | undefined) {
-	container.sessionId = auth.readBearerToken(token);
+export async function setupSessionContainer(container: LuciaContainer, auth: Auth, token: string | undefined) {
+	const sessionId = auth.readBearerToken(token ?? '');
 
-	try {
-		container.session = container.sessionId ? await auth.validateSession(container.sessionId) : null;
-	} catch (error) {
-		// invalid session
-		container.session = null;
-	}
+	const { user, session } = await auth.validateSession(sessionId ?? '');
 
-	return container.session;
+	container.user = user;
+	container.session = session;
 }
 
 export * from './types';

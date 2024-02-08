@@ -1,11 +1,9 @@
 import { isLocal } from '$configs/helpers';
-import { PrismaClient } from '$prisma-client';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { ExtendedPrismaClient } from './prisma.extended-client';
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-	private eventSubsSelectors: Record<string, unknown[] | undefined> = {};
-
+export class PrismaService extends ExtendedPrismaClient implements OnModuleInit, OnModuleDestroy {
 	async onModuleInit(): Promise<void> {
 		await this.$connect().catch((error) => {
 			if (isLocal) {
