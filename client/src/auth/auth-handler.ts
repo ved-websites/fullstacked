@@ -1,8 +1,6 @@
 import type { TsRestClient } from '$lib/ts-rest/client';
 import { assertTsRestResultOK } from '$lib/utils/assertions';
 
-export const AUTH_COOKIE_NAME = 'auth_session';
-
 export async function getAuthUser(tsrest: TsRestClient) {
 	const result = await tsrest.auth.session();
 

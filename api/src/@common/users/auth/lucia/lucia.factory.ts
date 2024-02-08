@@ -1,6 +1,7 @@
 import { getUserFullName } from '$prisma/prisma.extended-client';
 import { type PrismaService } from '$prisma/prisma.service';
 import { Environment, EnvironmentConfig } from '~env';
+import { SESSION_COOKIE_NAME } from '~shared';
 import { loadLuciaModule, loadPrismaAdapterModule } from './modules-compat';
 import { EnhancedUser } from './types';
 
@@ -19,6 +20,7 @@ export async function luciaFactory(prisma: PrismaService, env: EnvironmentConfig
 			return dbUserAttributes as EnhancedUser;
 		},
 		sessionCookie: {
+			name: SESSION_COOKIE_NAME,
 			attributes: {
 				secure: env.NODE_ENV == Environment.Production,
 			},

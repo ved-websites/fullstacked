@@ -1,5 +1,5 @@
 import { Auth, LuciaFactory } from '$users/auth/lucia/lucia.factory';
-import { COOKIE_NAME, setupSessionContainer } from '$users/auth/lucia/lucia.middleware';
+import { setupSessionContainer } from '$users/auth/lucia/lucia.middleware';
 import { PresenceService } from '$users/presence/presence.service';
 import { parseCookies } from '$utils/cookies';
 import { Inject, Injectable } from '@nestjs/common';
@@ -7,6 +7,7 @@ import type { IncomingMessage } from 'http';
 import { Server, WebSocket } from 'ws';
 import type { z } from 'zod';
 import { EventRouteOutput, EventUID, extractEventRouteKey, type EventRoute } from '~contract';
+import { SESSION_COOKIE_NAME } from '~shared';
 import { WsEventEmitter } from './ts-ws/ws-event.emitter';
 import type { SocketOrSessionId, TypedWebSocket } from './types';
 
@@ -37,7 +38,7 @@ export class SocketService {
 	private async initialize(socket: TypedWebSocket, request: IncomingMessage) {
 		const cookies = parseCookies(request.headers.cookie);
 
-		const authSessionCookieToken = cookies[COOKIE_NAME] as string | undefined;
+		const authSessionCookieToken = cookies[SESSION_COOKIE_NAME] as string | undefined;
 		const authSessionHeader = request.headers.authorization;
 
 		let token = request.headers.authorization;
