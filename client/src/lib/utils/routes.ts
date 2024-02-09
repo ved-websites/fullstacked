@@ -90,16 +90,17 @@ export type ConvertRawRouteInfoOptions = {
 
 export function convertRawRoutesInfo<M extends RouteMeta = RouteMeta, T extends object = RouteInfo<M>>(
 	rawImports: ReturnType<ImportGlobFunction>,
-	converter?: (data: ConvertRawRouteInfoCallbackArgs<M, T>) => T | undefined,
+	converter?: (data: ConvertRawRouteInfoCallbackArgs<M, Omit<EnhancedRouteInfo<T>, 'parents'>>) => T | undefined,
 	options?: Partial<ConvertRawRouteInfoOptions>,
 ): EnhancedRouteInfo<T>[] {
 	const topLevelRawRoutesInfo = getRawRoutesInfo<M>(rawImports);
 
 	const convertedMark = '$$converted';
 
-	const executeConvertion = (rawRoutesInfo: RawRouteInfo<M>[]): T[] => {
-		if (!rawRoutesInfo?.length) {
-			return (rawRoutesInfo as T[]) ?? [];
+	const executeConvertion = (rawRoutesInfo: RawRouteInfo<M>[]): EnhancedRouteInfo<T>[] => {
+		if (!rawRoutesInfo.length) {
+			// @ts-expect-error Wrong type, but empty array so it doesn't matter
+			return rawRoutesInfo;
 		}
 
 		const argsMap = rawRoutesInfo.map((rawRouteInfo, index) => {
@@ -150,9 +151,11 @@ export function convertRawRoutesInfo<M extends RouteMeta = RouteMeta, T extends 
 			try {
 				const convertedRawArgData = converter?.(rawArgsData);
 
-				routeInfoData = (convertedRawArgData
-					? { route: rawArgsData.route, order: rawArgsData.order, children: rawArgsData.children, ...convertedRawArgData }
-					: rawArgsData) as unknown as EnhancedRouteInfo<T>;
+				routeInfoData = (
+					convertedRawArgData
+						? { route: rawArgsData.route, order: rawArgsData.order, children: rawArgsData.children, ...convertedRawArgData }
+						: rawArgsData
+				) as EnhancedRouteInfo<T>;
 
 				// @ts-expect-error untyped temporary mark
 				rawRoutesInfo[i]![convertedMark] = true;
@@ -200,12 +203,10 @@ export function convertRawRoutesInfo<M extends RouteMeta = RouteMeta, T extends 
 			return val1.order - val2.order;
 		};
 
-		(rawRoutesInfo as unknown as { order: number }[]).sort(sorter);
-
-		return rawRoutesInfo as T[];
+		return (rawRoutesInfo as unknown as EnhancedRouteInfo<T>[]).sort(sorter);
 	};
 
-	const convertedRoutes = executeConvertion(topLevelRawRoutesInfo) as EnhancedRouteInfo<T>[];
+	const convertedRoutes = executeConvertion(topLevelRawRoutesInfo);
 
 	convertedRoutes.forEach((convertedRoute) => {
 		// @ts-expect-error untyped temporary mark
