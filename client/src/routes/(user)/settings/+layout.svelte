@@ -5,17 +5,17 @@
 	import Icon from '$lib/components/Icon.svelte';
 	import UserAvatar from '$lib/components/UserAvatar.svelte';
 	import { getSessionUser } from '$lib/stores/index.js';
+	import { findDeepRoute } from '$lib/utils/routes.js';
 	import { Heading, P, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);
 
 	export let data;
 
-	$: activeUrl = $page.url.pathname;
-	$: currentRoute = routesInfo.find(({ url }) => url === activeUrl);
+	$: activeUrl = $page.url.pathname.replace('/settings/', '');
+	$: currentRoute = findDeepRoute(data.routesInfo, activeUrl);
 
 	let sessionUser = getSessionUser<ConfirmedSessionUser>();
-	$: routesInfo = data.routesInfo;
 	$: label = currentRoute && ($t(`settings.${currentRoute.name}.name`) as string);
 </script>
 
@@ -35,7 +35,7 @@
 		<Sidebar {activeUrl} class="w-full md:w-64">
 			<SidebarWrapper>
 				<SidebarGroup>
-					{#each routesInfo as route}
+					{#each data.routesInfo as route}
 						<SidebarItem href={route.url} label={$t(`settings.${route.name}.name`)} active={activeUrl === route.url}>
 							<svelte:fragment slot="icon">
 								{#if route.icon}

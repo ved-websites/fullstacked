@@ -2,22 +2,19 @@ import { convertRawRoutesInfo } from '$lib/utils/routes';
 import type { LayoutServerLoad } from './$types';
 import type { SettingsRouteMeta } from './types';
 
-export type RouteInfo = {
+export type SettingsRouteInfo = {
 	url: string;
 	name: string;
 	icon?: string;
-	parents: string[];
-	subroutes?: RouteInfo[];
 };
 
 const rawSettingPages = import.meta.glob('./**/+page.svelte', { eager: true });
 
-const routesInfo = convertRawRoutesInfo<RouteInfo, SettingsRouteMeta>(rawSettingPages, ({ meta, parents, fullRoute }) => {
+const routesInfo = convertRawRoutesInfo<SettingsRouteMeta, SettingsRouteInfo>(rawSettingPages, ({ meta, route }) => {
 	return {
-		url: `/settings/${fullRoute}`,
-		name: fullRoute.replaceAll('/', '.'),
+		url: `/settings/${route}`,
+		name: route.replaceAll('/', '.'),
 		icon: meta?.icon,
-		parents,
 	};
 });
 
