@@ -32,20 +32,20 @@ model User {
   lastName  String? @map("last_name")
 
   lang          String?
-  emailLang     String
+  emailLang     String  @map("email_lang")
   registerToken String? @unique @map("register_token")
 
   profilePictureRef String? @map("profile_picture_ref")
 
-  hashedPassword String?
+  hashedPassword String? @map("hashed_password")
 
   sessions              Session[]
   passwordResetAttempts PasswordResetAttempt[]
   roles                 Role[]
   messages              Message[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
 }
@@ -60,17 +60,6 @@ model Session {
   @@index([userId])
   @@map("sessions")
 }
-
-// model Key {
-//   id              String  @id @unique
-//   hashed_password String?
-
-//   user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
-//   user_id String
-
-//   @@index([user_id])
-//   @@map("keys")
-// }
 
 // ===========
 //  END AUTH
@@ -87,7 +76,7 @@ model Role {
 
   users User[]
 
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("roles")
 }
@@ -95,12 +84,13 @@ model Role {
 model PasswordResetAttempt {
   id Int @id @default(autoincrement())
 
-  user   User    @relation(fields: [userId], references: [id])
-  userId String
-  token  String
-  used   Boolean @default(false)
+  token String
+  used  Boolean @default(false)
 
-  expiryDate DateTime
+  expiryDate DateTime @map("expiry_date")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
 
   @@map("password_reset_attempts")
 }
@@ -120,7 +110,7 @@ model Message {
   time DateTime @default(now())
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  userId String @map("user_id")
 
   @@map("messages")
 }
