@@ -14,6 +14,17 @@ export function getBrowserLang(request: Request) {
 	return lang ?? fallbackLocale;
 }
 
-export const { getStore: getI18n, setStore: setI18n } = createStoreContext<I18nInstanceType>({
+const i18nStoreContext = createStoreContext<I18nInstanceType>({
 	key: 'i18n',
 });
+
+/**
+ * ```ts
+ * let i18n = getI18n();
+ * $: ({ t } = $i18n);
+ * ```
+ *
+ * Gets the i18n store from the current context.
+ */
+export const getI18n = i18nStoreContext.getStore;
+export const setI18n = i18nStoreContext.setStore;
