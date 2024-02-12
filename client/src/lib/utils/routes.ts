@@ -235,8 +235,12 @@ export function findDeepRoute<T extends EnhancedRouteInfo>(routesInfo: T[], rout
 		}
 
 		if (routeInfo.children.length) {
-			// @ts-expect-error TS is confused about T and expected T
-			return findDeepRoute(routeInfo.children, routeToFind);
+			const deepRoute = findDeepRoute(routeInfo.children, routeToFind);
+
+			if (deepRoute) {
+				// @ts-expect-error TS is confused about T and expected T
+				return deepRoute;
+			}
 		}
 	}
 
