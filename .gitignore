@@ -110,6 +110,7 @@
 !.vscode/workspace.code-workspace
 !**/.vscode/scripts
 !**/.vscode/i18n-ally-custom-framework.yml
+!**/.vscode/*.code-snippets
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
