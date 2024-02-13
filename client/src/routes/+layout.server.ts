@@ -2,6 +2,7 @@ import type { AppPageData } from '$app-types';
 import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
 import { HASJS_COOKIE_NAME } from '$lib/utils/js-handling';
 import { loadFlash } from 'sveltekit-flash-message/server';
+import { k } from '~shared';
 
 export const load = loadFlash(async (event) => {
 	const {
@@ -25,9 +26,15 @@ export const load = loadFlash(async (event) => {
 
 	let layoutAlert: AppPageData['layoutAlert'];
 
-	if (url.searchParams.has('forbidden')) {
+	if (sessionUser === undefined) {
 		layoutAlert = createLayoutAlert({
-			text: 'You cannot perform this action!',
+			text: k('common.errors.server.down'),
+			i18nPayload: { userHasJs },
+			type: 'error',
+		});
+	} else if (url.searchParams.has('forbidden')) {
+		layoutAlert = createLayoutAlert({
+			text: 'You cannot perform this action!', // TODO : i18n
 			type: 'error',
 		});
 	}

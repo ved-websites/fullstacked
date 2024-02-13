@@ -18,12 +18,14 @@
 
 	<slot />
 
-	{#if $page.url.pathname !== '/'}
-		<Button href="/">{$t('common.errorpage.home-button')}</Button>
-	{:else}
-		<Alert color="yellow" class="flex flex-col gap-3 items-center">
-			<span>{$t('common.errorpage.already-home.summary')}</span>
-			<span>{$t('common.errorpage.already-home.detail')}</span>
-		</Alert>
-	{/if}
+	<slot name="redirect">
+		{#if $page.url.pathname !== '/'}
+			<Button href="/">{$t('common.errorpage.home-button')}</Button>
+		{:else}
+			<Alert color="yellow" class="flex flex-col gap-3 items-center">
+				<span>{$t('common.errorpage.already-home.summary')}</span>
+				<span>{$t('common.errorpage.already-home.detail')}</span>
+			</Alert>
+		{/if}
+	</slot>
 </div>

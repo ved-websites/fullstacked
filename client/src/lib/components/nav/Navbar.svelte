@@ -66,7 +66,7 @@
 				</Button>
 			</form>
 		{:else}
-			<Button href="/login" class={$sessionUser ? 'hidden' : ''}>{$t('navbar.login')}</Button>
+			<Button href="/login">{$t('navbar.login')}</Button>
 		{/if}
 	</div>
 </Navbar>

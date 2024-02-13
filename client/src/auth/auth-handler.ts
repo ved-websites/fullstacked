@@ -1,5 +1,4 @@
 import type { TsRestClient } from '$lib/ts-rest/client';
-import { assertTsRestResultOK } from '$lib/utils/assertions';
 import { StatusCodes } from 'http-status-codes';
 import { SESSION_COOKIE_NAME } from '~shared';
 
@@ -10,9 +9,19 @@ export async function getAuthUser(tsrest: TsRestClient) {
 				event.cookies.delete(SESSION_COOKIE_NAME, { path: '/' });
 			}
 		},
+		autoRouteOtherErrors: false,
 	});
 
-	assertTsRestResultOK(result);
+	// @ts-expect-error Internal status that specifies if the backend server is down.
+	if (result.status === StatusCodes.IM_A_TEAPOT) {
+		// Routes / components can use the check `sessionUser === undefined` to
+		// check if the server was down.
+		return undefined;
+	}
+
+	if (result.status !== StatusCodes.OK) {
+		return null;
+	}
 
 	const sessionUser = result.body;
 

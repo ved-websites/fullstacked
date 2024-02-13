@@ -11,6 +11,9 @@
 		"validation": {
 			"email-schema": "Email invalide!",
 			"required": "Requis"
+		},
+		"server": {
+			"down": "Le serveur est en panne! Réessayez dans quelques minutes. Si cela ne fonctionne toujours pas, veuillez contacter l'administrateur. {{userHasJs:eq; true:La page sera actualisée de temps en temps pour se corriger d'elle-même.;}}"
 		}
 	},
 	"errorpage": {

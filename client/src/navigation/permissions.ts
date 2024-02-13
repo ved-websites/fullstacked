@@ -26,7 +26,7 @@ export function verifyUserAccess(event: RequestEvent) {
 			const pathTo = url.searchParams.get('pathTo');
 
 			if (pathTo) {
-				redirect(StatusCodes.SEE_OTHER, pathTo);
+				redirect(StatusCodes.SEE_OTHER, `/${pathTo.substring(1)}`);
 			}
 		}
 

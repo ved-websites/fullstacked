@@ -2,8 +2,9 @@ import { PUBLIC_API_ADDR } from '$env/static/public';
 import { getBrowserLang } from '$i18n';
 import { createTsRestClient } from '$lib/ts-rest/client';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
+import { StatusCodes } from 'http-status-codes';
 import { parseString } from 'set-cookie-parser';
-import { SESSION_COOKIE_NAME } from '~shared';
+import { SESSION_COOKIE_NAME, k } from '~shared';
 import { getAuthUser } from './auth/auth-handler';
 import { themeCookieName, themes, type Theme } from './lib/stores';
 import { HASJS_COOKIE_NAME } from './lib/utils/js-handling';
@@ -14,11 +15,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	event.locals.tsrest = createTsRestClient(event);
 
-	const token = event.cookies.get(SESSION_COOKIE_NAME);
-
-	if (token) {
-		event.locals.sessionUser = await getAuthUser(event.locals.tsrest);
-	}
+	event.locals.sessionUser = event.cookies.get(SESSION_COOKIE_NAME) ? await getAuthUser(event.locals.tsrest) : null;
 
 	verifyUserAccess(event);
 
@@ -66,7 +63,15 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 		});
 	}
 
-	const response = await fetch(request);
+	const response = await fetch(request).catch(() => {
+		const fakeResponse = { message: k('common.errors.server.down') };
+
+		const blob = new Blob([JSON.stringify(fakeResponse)], {
+			type: 'application/json',
+		});
+
+		return new Response(blob, { status: StatusCodes.IM_A_TEAPOT });
+	});
 
 	const headerCookies = response.headers.get('set-cookie');
 

@@ -15,7 +15,7 @@
 
 	let iconColor: string | undefined = undefined;
 
-	$: hideWsIssue = issueMessage === undefined || !$sessionUser;
+	$: showWsIssue = issueMessage !== undefined || !$sessionUser;
 
 	wsClient.$socket.onConnChange = (event) => {
 		if (event.type === 'open') {
@@ -31,9 +31,9 @@
 	};
 </script>
 
-<Icon id="ws-issue-indicator" class={twMerge('i-mdi-wifi-strength-alert-outline', iconColor, hideWsIssue && 'hidden')} />
+<Icon id="ws-issue-indicator" class={twMerge('i-mdi-wifi-strength-alert-outline', iconColor, !showWsIssue && 'hidden')} />
 
-{#if !hideWsIssue}
+{#if showWsIssue}
 	<!-- TODO : i18n -->
 	<Popover class="max-w-[14rem]" triggeredBy="#ws-issue-indicator">
 		<div class="flex flex-col gap-3 p-1">

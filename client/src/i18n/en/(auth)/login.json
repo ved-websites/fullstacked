@@ -8,5 +8,10 @@
 		"password": {
 			"text": "Forgot password?"
 		}
+	},
+	"errors": {
+		"server": {
+			"down": "We see that you are logged in, but the server is down so we cannot authenticate you."
+		}
 	}
 }

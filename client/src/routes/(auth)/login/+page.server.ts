@@ -49,6 +49,7 @@ export const actions = {
 				// Successful login
 				redirect(StatusCodes.SEE_OTHER, redirectTo);
 			},
+			layoutAlert: {},
 		});
 	},
 } satisfies Actions;

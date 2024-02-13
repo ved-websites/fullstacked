@@ -1,7 +1,8 @@
 import { themeCookieName, themes } from '$lib/stores';
 import { assertTsRestActionResultOK } from '$lib/utils/assertions';
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
+import type { Actions } from './$types';
 
 export const actions = {
 	async logout({ locals: { tsrest } }) {

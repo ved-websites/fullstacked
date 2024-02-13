@@ -9,6 +9,9 @@
 		}
 	},
 	"errors": {
+		"server": {
+			"down": "The server is down! Try again in a few minutes. If it is still not working, please contact the administrator. {{userHasJs:eq; true:The page will refresh every so often to correct itself.;}}"
+		},
 		"validation": {
 			"required": "Required",
 			"email-schema": "Invalid email!"
@@ -29,11 +32,11 @@
 				"summary": "{{errorCode}} Server Error ({{errorMessage}})...",
 				"explanation": "There is no page at {{pathname}} !",
 				"details": {
-					"default": "An unknown error as happened...",
-					"500": "An unknown error as happened...",
+					"500": "An unknown error has happened...",
 					"501": "The request method is not supported.",
 					"503": "The system is unavailable, try again in a few seconds.",
-					"504": "The response couldn't be fetched in time, please try again."
+					"504": "The response couldn't be fetched in time, please try again.",
+					"default": "An unknown error as happened..."
 				}
 			}
 		}

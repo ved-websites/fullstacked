@@ -1,7 +1,6 @@
 <script lang="ts">
 	import '../app.postcss';
 
-	import { browser } from '$app/environment';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { setI18n } from '$i18n';
@@ -15,21 +14,21 @@
 	import { wsClient, type WsClientType } from '$lib/ts-ws/client';
 	import { WS_READY_STATES } from '$lib/ts-ws/readyStates';
 	import type { PageMessages } from '$lib/types';
-	import { writable, type Writable } from 'svelte/store';
-	import { getFlash } from 'sveltekit-flash-message/client';
+	import { flashStore } from '$lib/utils/flash';
+	import { onDestroy } from 'svelte';
 
 	export let data;
 
 	$: setI18n(data.i18n);
 	$: setSessionUser(data.sessionUser);
 
-	const flash = browser ? getFlash(page) : writable<ReturnType<typeof getFlash> extends Writable<infer T> ? T : never>();
+	const flash = flashStore();
 
 	$: themeStore.set(data.theme ?? null);
 
 	$: formData = $page.form as PageMessages | undefined;
 
-	$: layoutAlert = $flash?.layoutAlert || $page.data.layoutAlert || formData?.layoutAlert;
+	$: layoutAlert = $flash?.layoutAlert || data.layoutAlert || $page.data.layoutAlert || formData?.layoutAlert;
 	$: toasts = [...($page.data.toasts ?? []), ...($flash?.toasts ?? []), ...(formData?.toasts ?? [])];
 
 	let sessionUnsubscriber: ReturnType<WsClientType['users']['edited']> | undefined;
@@ -57,6 +56,25 @@
 				invalidateAll();
 			}
 		}
+	});
+
+	let serverDownRefreshInterval: ReturnType<typeof setInterval> | undefined;
+
+	$: if (data.sessionUser === undefined) {
+		if (serverDownRefreshInterval === undefined) {
+			const refreshDelayInSeconds = 10;
+
+			serverDownRefreshInterval = setInterval(() => {
+				invalidateAll();
+			}, refreshDelayInSeconds * 1000);
+		}
+	} else {
+		clearInterval(serverDownRefreshInterval);
+		serverDownRefreshInterval = undefined;
+	}
+
+	onDestroy(() => {
+		clearInterval(serverDownRefreshInterval);
 	});
 </script>
 

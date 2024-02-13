@@ -6,10 +6,12 @@ import { loadLuciaModule, loadPrismaAdapterModule } from './modules-compat';
 import { EnhancedUser } from './types';
 
 export async function luciaFactory(prisma: PrismaService, env: EnvironmentConfig) {
-	const { Lucia } = await loadLuciaModule();
+	const { Lucia, TimeSpan } = await loadLuciaModule();
 	const { PrismaAdapter } = await loadPrismaAdapterModule();
 
 	const adapter = new PrismaAdapter<PrismaService>(prisma.$rawClient.session, prisma.$rawClient.user);
+
+	const sessionExpirationInWeeks = 8; // 2 months
 
 	return new Lucia(adapter, {
 		getUserAttributes: (dbUserAttributes) => {
@@ -19,6 +21,7 @@ export async function luciaFactory(prisma: PrismaService, env: EnvironmentConfig
 
 			return dbUserAttributes as EnhancedUser;
 		},
+		sessionExpiresIn: new TimeSpan(sessionExpirationInWeeks, 'w'),
 		sessionCookie: {
 			name: SESSION_COOKIE_NAME,
 			attributes: {

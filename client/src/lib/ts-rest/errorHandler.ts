@@ -19,10 +19,10 @@ function getErrorPageMessagesData(handler: ErrorPageMessagesData | undefined, ar
 	return handler;
 }
 
-export function extractErrorMessageFromApiFetcherData(data: ApiFetcherData) {
-	const body = data.body as Record<string, unknown>;
+export async function extractErrorMessageFromApiFetcherData(data: ApiFetcherData) {
+	const body = data.body as Record<string, unknown> | Blob;
 
-	const message = 'message' in body ? String(body.message) : JSON.stringify(data.body);
+	const message = body instanceof Blob ? await body.text() : 'message' in body ? String(body.message) : JSON.stringify(data.body);
 
 	return message;
 }
@@ -44,7 +44,7 @@ export async function checkForApiErrors(data: ApiFetcherData, options?: ApiRespo
 
 	if (isCommonError(data)) {
 		if (data.status === StatusCodes.BAD_REQUEST) {
-			const message = extractErrorMessageFromApiFetcherData(data);
+			const message = await extractErrorMessageFromApiFetcherData(data);
 
 			isErrorHandled = !!(await onBadRequest?.({ event, data, message }));
 
@@ -69,7 +69,7 @@ export async function checkForApiErrors(data: ApiFetcherData, options?: ApiRespo
 	const handleOtherErrors = data.status !== StatusCodes.OK && autoRouteOtherErrors;
 
 	if (handleOtherErrors || data.status >= StatusCodes.INTERNAL_SERVER_ERROR) {
-		const message = extractErrorMessageFromApiFetcherData(data);
+		const message = await extractErrorMessageFromApiFetcherData(data);
 
 		routeError(data.status, message, {
 			event,
@@ -83,7 +83,7 @@ export async function checkForApiErrors(data: ApiFetcherData, options?: ApiRespo
 export async function handleTsRestCommonError(data: ApiFetcherData<CommonError>, options?: ApiResponseHandlerOptions) {
 	const { onCommonError, event, errPageData: errorPageMessagesData } = options ?? {};
 
-	const message = extractErrorMessageFromApiFetcherData(data);
+	const message = await extractErrorMessageFromApiFetcherData(data);
 
 	const didHandle = !!(await onCommonError?.({ event, data, message }));
 
@@ -114,7 +114,6 @@ export function routeError(status: number, message: string, options?: RouteError
 	if (event) {
 		if (event.locals.step === 'page' && doThrowForPage) {
 			error(status as never, message);
-			return;
 		}
 
 		if (event.locals.step === 'action') {
@@ -125,7 +124,7 @@ export function routeError(status: number, message: string, options?: RouteError
 			return;
 		}
 
-		throw redirect(
+		redirect(
 			{
 				toasts: errorToasts,
 				...pageMessagesData,

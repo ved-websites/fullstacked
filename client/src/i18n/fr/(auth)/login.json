@@ -8,5 +8,10 @@
 		"password": {
 			"text": "Mot de passe oublié?"
 		}
+	},
+	"errors": {
+		"server": {
+			"down": "Nous voyons que vous êtes connecté, mais le serveur est en panne et nous ne pouvons donc pas vous authentifier."
+		}
 	}
 }

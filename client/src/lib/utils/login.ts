@@ -1,16 +1,10 @@
-import type { RequestEvent } from '@sveltejs/kit';
+import { handleRedirectTo } from './redirecting';
 
-export function handleLoginRedirect(url: RequestEvent['url']) {
-	const redirectTo = url.pathname + url.search;
-
-	// if (redirectTo.includes('@')) {
-	// 	return '/login';
-	// }
-
-	return `/login?redirectTo=${redirectTo}`;
+export function handleLoginRedirect(url: URL) {
+	return handleRedirectTo('/login', url);
 }
 
-export function handleAccessRedirect(url: RequestEvent['url']) {
+export function handleAccessRedirect(url: URL) {
 	const pathTo = url.pathname + url.search;
 
 	// if (pathTo.includes('@')) {
