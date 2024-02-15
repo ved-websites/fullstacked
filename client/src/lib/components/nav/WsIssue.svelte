@@ -15,7 +15,7 @@
 
 	let iconColor: string | undefined = undefined;
 
-	$: showWsIssue = issueMessage !== undefined || !$sessionUser;
+	$: showWsIssue = issueMessage !== undefined || $sessionUser === undefined;
 
 	wsClient.$socket.onConnChange = (event) => {
 		if (event.type === 'open') {
