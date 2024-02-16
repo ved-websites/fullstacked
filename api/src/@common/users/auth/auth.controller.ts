@@ -11,6 +11,7 @@ import { r } from '~contract';
 import { AuthError } from './auth.error';
 import { Public } from './auth.guard';
 import { AuthService } from './auth.service';
+import { setResponseCookie } from './lucia/lucia.factory';
 import { AuthSession, AuthUser, LuciaSession, LuciaUser } from './session.decorator';
 
 @Controller()
@@ -39,7 +40,7 @@ export class AuthController {
 			try {
 				const { sessionCookie } = await this.authService.login(email, password);
 
-				res.cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+				setResponseCookie(res, sessionCookie);
 
 				return {
 					status: 200,
@@ -62,7 +63,7 @@ export class AuthController {
 		return tsRestHandler(r.auth.logout, async () => {
 			const sessionCookie = await this.authService.logout(session);
 
-			res.cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+			setResponseCookie(res, sessionCookie);
 
 			return {
 				status: 200,
@@ -90,7 +91,7 @@ export class AuthController {
 		return tsRestHandler(r.auth.register, async ({ body: { registerToken, password, user: userAttributes } }) => {
 			const { sessionCookie } = await this.authService.register(registerToken, password, userAttributes);
 
-			res.cookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+			setResponseCookie(res, sessionCookie);
 
 			return {
 				status: 200,

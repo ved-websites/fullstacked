@@ -1,17 +1,19 @@
 import { getUserFullName } from '$prisma/prisma.extended-client';
 import { type PrismaService } from '$prisma/prisma.service';
+import type { Response } from 'express';
+import type { Cookie } from 'lucia';
 import { Environment, EnvironmentConfig } from '~env';
 import { SESSION_COOKIE_NAME } from '~shared';
 import { loadLuciaModule, loadPrismaAdapterModule } from './modules-compat';
 import { EnhancedUser } from './types';
+
+const sessionExpirationInWeeks = 8; // 2 months
 
 export async function luciaFactory(prisma: PrismaService, env: EnvironmentConfig) {
 	const { Lucia, TimeSpan } = await loadLuciaModule();
 	const { PrismaAdapter } = await loadPrismaAdapterModule();
 
 	const adapter = new PrismaAdapter<PrismaService>(prisma.$rawClient.session, prisma.$rawClient.user);
-
-	const sessionExpirationInWeeks = 8; // 2 months
 
 	return new Lucia(adapter, {
 		getUserAttributes: (dbUserAttributes) => {
@@ -28,6 +30,19 @@ export async function luciaFactory(prisma: PrismaService, env: EnvironmentConfig
 				secure: env.NODE_ENV == Environment.Production,
 			},
 		},
+	});
+}
+
+/**
+ * Sets the Oslo cookie to the express response's compatible cookie.
+ */
+export function setResponseCookie(response: Response, cookie: Cookie) {
+	// Max-Age in Oslo Cookie is `seconds`, while it is `milliseconds` in `response.cookie`
+	const maxAge = (cookie.attributes.maxAge ?? 1000) * 1000;
+
+	response.cookie(cookie.name, cookie.value, {
+		...cookie.attributes,
+		maxAge,
 	});
 }
 
