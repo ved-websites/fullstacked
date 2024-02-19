@@ -11,5 +11,8 @@
 			"delete": "Delete",
 			"upload": "Submit Profile Picture"
 		}
+	},
+	"email": {
+		"header": "Looking to change your email?"
 	}
 }

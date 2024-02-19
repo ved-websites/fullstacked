@@ -1,4 +1,3 @@
-import { browser } from '$app/environment';
 import { page } from '$app/stores';
 import type { PageMessages } from '$lib/types';
 import type { RequestEvent } from '@sveltejs/kit';
@@ -6,11 +5,11 @@ import type { Writable } from 'svelte/store';
 import { getFlash } from 'sveltekit-flash-message/client';
 
 export function flashStore<T extends Record<string, unknown> = Record<string, unknown>>() {
-	if (!browser) {
+	try {
+		return getFlash(page) as Writable<PageMessages & T>;
+	} catch (error) {
 		return undefined;
 	}
-
-	return getFlash(page) as Writable<PageMessages & T>;
 }
 
 export function parseCookies(cookieHeader: string | undefined) {

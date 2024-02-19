@@ -9,4 +9,5 @@ export function helperMissing(...args: unknown[]) {
 export { color } from './colors';
 export { array, format, object } from './data';
 export { styles } from './html-easing';
+export { newLinesToParagraphs } from './paragraphs';
 export { previewRenderWhitespace } from './previewRenderWhitespace';

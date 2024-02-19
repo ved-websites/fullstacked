@@ -48,9 +48,9 @@
 			</SidebarWrapper>
 		</Sidebar>
 	</section>
-	<section class="grow">
+	<section class="grow flex flex-col gap-5">
 		{#if label}
-			<Heading tag="h2" class="mb-5">{label}</Heading>
+			<Heading tag="h2">{label}</Heading>
 		{/if}
 		<slot />
 	</section>

@@ -39,10 +39,11 @@ model User {
 
   hashedPassword String? @map("hashed_password")
 
-  sessions              Session[]
-  passwordResetAttempts PasswordResetAttempt[]
-  roles                 Role[]
-  messages              Message[]
+  sessions                Session[]
+  passwordResetAttempts   PasswordResetAttempt[]
+  roles                   Role[]
+  messages                Message[]
+  userEmailChangeRequests UserEmailChangeRequest[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -59,6 +60,35 @@ model Session {
 
   @@index([userId])
   @@map("sessions")
+}
+
+model UserEmailChangeRequest {
+  id Int @id @default(autoincrement())
+
+  newEmail        String  @map("new_email")
+  emailResetToken String? @unique @map("email_reset_token")
+  used            Boolean @default(false)
+
+  userId String @map("user_id")
+  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("user_email_change_requests")
+}
+
+model PasswordResetAttempt {
+  id Int @id @default(autoincrement())
+
+  token String
+  used  Boolean @default(false)
+
+  expiryDate DateTime @map("expiry_date")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  @@map("password_reset_attempts")
 }
 
 // ===========
@@ -81,22 +111,8 @@ model Role {
   @@map("roles")
 }
 
-model PasswordResetAttempt {
-  id Int @id @default(autoincrement())
-
-  token String
-  used  Boolean @default(false)
-
-  expiryDate DateTime @map("expiry_date")
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @map("user_id")
-
-  @@map("password_reset_attempts")
-}
-
 // ===========
-//  END AUTH
+//  END ROLES
 // ===========
 
 // ===========

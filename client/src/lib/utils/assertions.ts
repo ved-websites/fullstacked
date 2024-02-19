@@ -1,11 +1,12 @@
 import { createLayoutAlert, type LayoutAlertData } from '$lib/components/LayoutAlert/helper';
 import { createToasts, type ToastData, type ToastManagerData } from '$lib/components/ToastManager/helper';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, type RequestEvent } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
+import { redirect } from 'sveltekit-flash-message/server';
 import type { SuperValidated } from 'sveltekit-superforms';
 import type { AnyZodObject } from 'zod';
 import { k } from '~shared';
-import { createPageDataObject } from './page-data-object';
+import { createPageDataObject, type PageDataObject } from './page-data-object';
 
 export type ValidResult<T extends { status: number }> = T extends { status: StatusCodes.OK } ? T : never;
 export type InvalidResult<T extends { status: number }> = Exclude<T, { status: StatusCodes.OK }>;
@@ -36,8 +37,9 @@ export type ActionNotValidData = {
 
 export type AssertTsRestActionResultOKArgs<T extends { status: number }> = {
 	form?: SuperValidated<AnyZodObject>;
+	event?: RequestEvent;
 	result: () => Awaitable<T>;
-	onValid: (result: ValidResult<T>) => Awaitable<unknown>;
+	onValid: (result: ValidResult<T>) => Awaitable<PageDataObject>;
 	onNotOk?: (result: InvalidResult<T>, data: ActionNotValidData) => Awaitable<unknown>;
 } & ({ toast?: Partial<ToastManagerData> } | { layoutAlert: Partial<LayoutAlertData> });
 
@@ -68,7 +70,7 @@ export function assertTsRestActionResultOK<T extends { status: number; body: unk
 				});
 			})();
 
-			const userDefinedError = args.onNotOk?.(result as InvalidResult<T>, { errorMessage, pageData });
+			const userDefinedError = await args.onNotOk?.(result as InvalidResult<T>, { errorMessage, pageData });
 
 			if (userDefinedError) {
 				return userDefinedError;
@@ -77,7 +79,13 @@ export function assertTsRestActionResultOK<T extends { status: number; body: unk
 			return fail(result.status, pageData);
 		}
 
-		return args.onValid(result);
+		const expectedResult = await args.onValid(result);
+
+		if (args.event) {
+			return redirect({ form: args.form, ...expectedResult }, args.event);
+		}
+
+		return expectedResult;
 	};
 
 	if (args.form) {

@@ -1,0 +1,29 @@
+{
+	"settings": {
+		"email": {
+			"notify": {
+				"subject": "Email Address Change Request",
+				"preview": "Heads up! An email change request was made on your account!",
+				"body": {
+					"text": "Hi {{name}}!\nWe received a request to change the email address on your account.\nIf you made this request, the you will receive a separate email at the new address to confirm this change, and you can ignore this notice.\nIf you did not make this change email address request, then please log into your account and change your password to protect against malicious access."
+				}
+			},
+			"confirm": {
+				"subject": "Confirm New Email Address",
+				"preview": "New email, new you!",
+				"body": {
+					"text": "You have requested to change your email address. To confirm you have access to this email, please click the button below :",
+					"cta-button": "Change Your Email",
+					"warning": "If you are not the person which requested this change, you can safely ignore this email."
+				}
+			},
+			"updated": {
+				"subject": "New Email Confirmed!",
+				"preview": "Success! This is now your new email address!",
+				"body": {
+					"text": "Hello again {{name}}!\nThis is just a notification that confirms to you that your request to change email was confirmed, so you can now login with this new email address."
+				}
+			}
+		}
+	}
+}

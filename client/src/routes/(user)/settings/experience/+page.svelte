@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
 	export const meta: SettingsRouteMeta = {
 		icon: 'i-mdi-face-man-shimmer',
-		order: 10,
+		order: 2,
 	};
 </script>
 

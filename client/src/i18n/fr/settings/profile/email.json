@@ -1,0 +1,11 @@
+{
+	"name": "Changement de courriel",
+	"information": {
+		"confirm-email": "Pour des raisons de sécurité, un courriel sera envoyé à la nouvelle adresse courriel vous demandant de confirmer le changement.",
+		"new-email-usage": "Changer votre adresse courriel signifie que vous devrez utiliser cette nouvelle adresse courriel lors de votre connexion."
+	},
+	"update": {
+		"error": "Erreur! Soit vous n'avez pas confirmé la demande de modification à temps, soit le jeton fourni n'était pas valide. Veuillez réessayer.",
+		"success": "Succès! Vous pouvez désormais utiliser votre nouvelle adresse courriel lors de la connexion!"
+	}
+}

@@ -11,5 +11,8 @@
 			"formats": "Formats acceptés: {{formats}}.",
 			"instructions": "<span class=\"font-semibold\">Cliquez pour téléverser</span> {{hasJs; true:ou glisser-déposer}}"
 		}
+	},
+	"email": {
+		"header": "Vous cherchez à changer votre email?"
 	}
 }

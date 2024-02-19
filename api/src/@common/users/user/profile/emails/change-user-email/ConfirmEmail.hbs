@@ -1,0 +1,31 @@
+{{#> container }}
+
+	{{> preview text=(t 'users.emails.settings.email.confirm.preview') }}
+
+	{{> textblock text=(t 'users.emails.settings.email.confirm.body.text' (object name=name)) }}
+
+	{{> hr }}
+
+	{{#> button url=url
+	linkStyles=(object
+		padding="10px 0"
+		backgroundColor=(color "blue")
+		borderRadius="3px"
+		color=(color "white")
+		fontSize="18px"
+		textDecoration="none"
+		textAlign="center"
+		display="block"
+		width="100%"
+	)
+	}}
+		{{ t 'users.emails.settings.email.confirm.body.cta-button' }}
+	{{/button}}
+
+	{{> hr }}
+	
+	{{#> text }}
+		{{ t 'users.emails.settings.email.confirm.body.warning' }}
+	{{/text}}
+
+{{/container}}
