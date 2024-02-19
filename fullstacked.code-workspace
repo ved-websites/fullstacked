@@ -66,7 +66,7 @@
 		"typescript.tsdk": "Root (Fullstacked)/node_modules/typescript/lib",
 		"vitest.commandLine": "pnpm exec vitest --config tests/.vitest/vitest.config.all.ts",
 		"vitest.enable": true,
-		"vitest.exclude": [
+		"vitest.debugExclude": [
 			"**/node_modules/**",
 			"**/dist/**",
 			"**/cypress/**",

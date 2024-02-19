@@ -21,7 +21,7 @@
 				"stylelint.vscode-stylelint",
 				"prisma.prisma",
 				"bradlc.vscode-tailwindcss",
-				"ZixuanChen.vitest-explorer",
+				"vitest.explorer",
 				"mtxr.sqltools",
 				"mtxr.sqltools-driver-pg",
 				"lokalise.i18n-ally",
