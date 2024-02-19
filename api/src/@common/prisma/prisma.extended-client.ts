@@ -26,12 +26,12 @@ function extendPrismaClient(prisma: PrismaClient) {
 			name: 'exists',
 			model: {
 				$allModels: {
-					async exists<T>(this: T, where: NonNullable<Prisma.Args<T, 'findFirst'>['where']>): Promise<boolean> {
+					async exists<T>(this: T, where: NonNullable<Prisma.Args<T, 'count'>['where']>): Promise<boolean> {
 						const context = Prisma.getExtensionContext(this);
 
-						const result = await (context as any).findFirst({ where });
+						const count = await (context as any).count({ where });
 
-						return result !== null;
+						return count > 0;
 					},
 				},
 			},
