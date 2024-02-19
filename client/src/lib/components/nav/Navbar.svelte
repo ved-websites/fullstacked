@@ -4,7 +4,7 @@
 	import { page } from '$app/stores';
 	import { getI18n } from '$i18n';
 	import { getSessionUser, isDrawerHidden } from '$lib/stores';
-	import { twMerge } from '$lib/twMerge';
+	import { cn } from '$lib/twMerge';
 	import { navElements } from '$navigation/routes';
 	import { Button, Dropdown, DropdownHeader, DropdownItem, NavBrand, NavHamburger, NavLi, NavUl, Navbar } from 'flowbite-svelte';
 	import DarkMode from '../DarkMode.svelte';
@@ -39,7 +39,7 @@
 					{@const activeClasses =
 						isActive &&
 						`text-white bg-primary-700 md:bg-transparent md:text-primary-700 md:dark:text-white dark:bg-primary-600 md:dark:bg-transparent`}
-					<NavLi id={navElement.id} class={twMerge('cursor-pointer flex items-center', activeClasses)}>
+					<NavLi id={navElement.id} class={cn('cursor-pointer flex items-center', activeClasses)}>
 						{$t(navElement.title)}
 						<Icon class="i-mdi-chevron-down"></Icon>
 					</NavLi>

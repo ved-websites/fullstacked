@@ -2,7 +2,7 @@
 	import { getI18n } from '$i18n';
 	import { getSessionUser } from '$lib/stores';
 	import { wsClient } from '$lib/ts-ws/client';
-	import { twMerge } from '$lib/twMerge';
+	import { cn } from '$lib/twMerge';
 	import { Popover } from 'flowbite-svelte';
 	import { WsStatusCodes } from '~contract';
 	import Icon from '../Icon.svelte';
@@ -31,13 +31,13 @@
 	};
 </script>
 
-<Icon id="ws-issue-indicator" class={twMerge('i-mdi-wifi-strength-alert-outline', iconColor, !showWsIssue && 'hidden')} />
+<Icon id="ws-issue-indicator" class={cn('i-mdi-wifi-strength-alert-outline', iconColor, !showWsIssue && 'hidden')} />
 
 {#if showWsIssue}
 	<!-- TODO : i18n -->
 	<Popover class="max-w-[14rem]" triggeredBy="#ws-issue-indicator">
 		<div class="flex flex-col gap-3 p-1">
-			<div class={twMerge('text-center', issueMessage && 'font-bold')}>You are not connected to realtime updates!</div>
+			<div class={cn('text-center', issueMessage && 'font-bold')}>You are not connected to realtime updates!</div>
 			{#if issueMessage}
 				<div class="italic">
 					Issue : {$t(issueMessage)}

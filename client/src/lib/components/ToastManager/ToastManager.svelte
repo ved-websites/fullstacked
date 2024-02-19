@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { getI18n } from '$i18n';
-	import { twMerge } from '$lib/twMerge';
+	import { cn } from '$lib/twMerge';
 	import { Toast } from 'flowbite-svelte';
 	import { onDestroy } from 'svelte';
 	import Icon from '../Icon.svelte';
@@ -53,7 +53,7 @@
 			<Toast
 				bind:open={toast.open}
 				color={toastColorMapping[toast.type]}
-				class={twMerge('border-b-2', toastBorderColorMapping[toast.type], toast.classes)}
+				class={cn('border-b-2', toastBorderColorMapping[toast.type], toast.classes)}
 				contentClass="w-full text-sm font-normal flex flex-col"
 			>
 				<svelte:fragment slot="icon">
