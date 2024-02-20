@@ -1,7 +1,7 @@
 import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import type { NextFunction, Request, Response } from 'express';
 import { SESSION_COOKIE_NAME } from '~shared';
-import { Auth, LuciaFactory } from './lucia.factory';
+import { Auth, LuciaFactory, setResponseCookie } from './lucia.factory';
 import { LuciaContainer } from './types';
 
 @Injectable()
@@ -22,7 +22,7 @@ export class LuciaMiddleware implements NestMiddleware {
 			// Refresh cookie when required.
 			const newCookie = this.auth.createSessionCookie(request.session.id);
 
-			response.cookie(newCookie.name, newCookie.value, newCookie.attributes);
+			setResponseCookie(response, newCookie);
 		}
 
 		next();
