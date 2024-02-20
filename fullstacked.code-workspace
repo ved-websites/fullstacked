@@ -55,9 +55,6 @@
 			"editor.defaultFormatter": "esbenp.prettier-vscode",
 			"editor.formatOnSave": true,
 		},
-		"[prisma]": {
-			"editor.formatOnSave": true,
-		},
 		"files.associations": {
 			"router.ts": "typescriptreact"
 		},
@@ -107,6 +104,11 @@
 		"i18n-ally.indent": 4,
 		"i18n-ally.tabStyle": "tab",
 		"i18n-ally.keystyle": "nested",
-		"i18n-ally.regex.key": "[\\w\\d\\. \\(\\)\\-\\[\\]\\/:]*?"
+		"i18n-ally.regex.key": "[\\w\\d\\. \\(\\)\\-\\[\\]\\/:]*?",
+		"triggerTaskOnSave.tasks": {
+			"format prisma file": [
+				"**/schema.prisma",
+			],
+		}
 	}
 }

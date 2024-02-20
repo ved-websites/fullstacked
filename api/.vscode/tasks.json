@@ -40,6 +40,22 @@
 			"type": "shell",
 			"problemMatcher": [],
 		},
+		{
+			"label": "format prisma file",
+			"command": "pnpm format:prisma",
+			"type": "shell",
+			"problemMatcher": [],
+			"hide": true,
+			"presentation": {
+				"echo": false,
+				"reveal": "never",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": true,
+				"close": true,
+			}
+		},
 	],
 	"inputs": [
 		{

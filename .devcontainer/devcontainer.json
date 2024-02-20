@@ -25,7 +25,8 @@
 				"mtxr.sqltools",
 				"mtxr.sqltools-driver-pg",
 				"lokalise.i18n-ally",
-				"antfu.iconify"
+				"antfu.iconify",
+				"Gruntfuggly.triggertaskonsave"
 			]
 		}
 	},
