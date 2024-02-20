@@ -119,7 +119,7 @@
 		<p>{@html $t('admin.users.modal.body.confirmation', { email: deletionUser?.email })}</p>
 	</div>
 
-	<form method="post" action="?/delete" class="flex" use:enhance on:submit={() => (deletionUser = undefined)}>
+	<form method="POST" action="?/delete" class="flex" use:enhance on:submit={() => (deletionUser = undefined)}>
 		<Button class="ml-auto" color="red" type="submit">{$t('common.confirm')}</Button>
 		<input type="hidden" name="email" value={deletionUser?.email} />
 	</form>

@@ -93,7 +93,7 @@
 	};
 </script>
 
-<form method="post" enctype="multipart/form-data" use:enhance={handleEnhance} {...$$restProps}>
+<form method="POST" enctype="multipart/form-data" use:enhance={handleEnhance} {...$$restProps}>
 	<Label>{$t('settings.profile.picture.label')}</Label>
 	<VDropzone
 		id="dropzone"

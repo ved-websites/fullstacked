@@ -13,7 +13,7 @@
 
 <Heading tag="h2">{$t('(auth).register.heading', { email: data.userEmail })}</Heading>
 
-<form method="post" class="mt-5 flex flex-col gap-6 mb-6 md:grid-cols-2" use:enhance>
+<form method="POST" class="mt-5 flex flex-col gap-6 mb-6 md:grid-cols-2" use:enhance>
 	<Label for="password">
 		<span>{$t('(auth).register.form.password')}</span>
 		<Input name="firstName" class="mt-2" type="password" bind:value={$form.password} {...$constraints.password} />

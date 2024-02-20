@@ -14,7 +14,7 @@
 	$: ({ enhance, form, constraints, errors } = superFormData);
 </script>
 
-<form method="post" use:enhance {...$$restProps}>
+<form method="POST" use:enhance {...$$restProps}>
 	<div class="grid gap-3">
 		<slot name="above" />
 

@@ -25,7 +25,7 @@
 		<Alert color="yellow">{$t('(auth).forgot_password.request.wrong_token')}</Alert>
 	{/if}
 
-	<form method="post" action="?/requestPasswordReset" use:enhance class="flex flex-col gap-5">
+	<form method="POST" action="?/requestPasswordReset" use:enhance class="flex flex-col gap-5">
 		<div>
 			<Label for="email">
 				{$t('(auth).forgot_password.request.labels.email')}

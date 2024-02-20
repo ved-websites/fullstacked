@@ -14,7 +14,7 @@
 	$: isServerDown = data.sessionUser === undefined;
 </script>
 
-<form method="post" use:enhance class="flex flex-col gap-5 w-3/4 lg:w-1/2 m-auto">
+<form method="POST" use:enhance class="flex flex-col gap-5 w-3/4 lg:w-1/2 m-auto">
 	<div>
 		<Label for="email">
 			{$t('(auth).login.labels.email')}

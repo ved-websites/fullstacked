@@ -37,7 +37,7 @@
 		{$t('(auth).forgot_password.reset.warning')}
 	</P>
 
-	<form method="post" action="?/resetPassword" use:enhance class="flex flex-col gap-5">
+	<form method="POST" action="?/resetPassword" use:enhance class="flex flex-col gap-5">
 		<div>
 			<Label for="password">
 				{$t('(auth).forgot_password.reset.labels.password')}
