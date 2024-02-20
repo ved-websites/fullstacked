@@ -28,12 +28,12 @@ export class TestManager<Options extends TestOptions = TestOptions> {
 		const sharedImports: NonNullable<typeof metadata>['imports'] = [
 			ConfigModule,
 			PrismaModule,
-			TypedI18nModule,
 			EventEmitterModule.forRoot({
 				global: true,
 				verboseMemoryLeak: true,
 			}),
 			SocketModule,
+			TypedI18nModule,
 		];
 
 		const sharedProviders: NonNullable<typeof metadata>['providers'] = [

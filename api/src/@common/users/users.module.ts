@@ -1,4 +1,3 @@
-import { TypedI18nModule } from '$i18n/i18n.module';
 import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AdminModule } from './admin/admin.module';
@@ -14,7 +13,7 @@ import { UsersGateway } from './users.gateway';
  * The module responsible to handle all common users handling.
  */
 @Module({
-	imports: [OnboardingModule, AuthModule, AdminModule, UserModule, PresenceModule, TypedI18nModule],
+	imports: [OnboardingModule, AuthModule, AdminModule, UserModule, PresenceModule],
 	providers: [
 		{
 			provide: APP_INTERCEPTOR,

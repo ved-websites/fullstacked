@@ -16,9 +16,7 @@ export function TypedI18nServiceFactory(i18nService: NestI18nService) {
 	const defaultTranslate = i18nService.translate.bind(i18nService);
 
 	i18nService.translate = (key, options) => {
-		const tmp = I18nContext.current();
-
-		const lang = options?.lang || tmp?.lang;
+		const lang = options?.lang || I18nContext.current()?.lang;
 
 		const defaultOptions: typeof options = {
 			...options,
