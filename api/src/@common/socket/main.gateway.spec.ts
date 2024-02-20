@@ -1,5 +1,5 @@
+import { TestManager } from '$tests/TestManager';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { TestManager } from '~utils/tests/TestManager';
 import { MainGateway } from './main.gateway';
 
 describe('MainGateway', () => {

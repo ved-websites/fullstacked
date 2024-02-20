@@ -1,5 +1,6 @@
 import { setupApp } from '$app/setupApp';
 import { PrismaService } from '$prisma/prisma.service';
+import { TestManager, TestOptions } from '$tests/TestManager';
 import { AuthModule } from '$users/auth/auth.module';
 import { AuthService } from '$users/auth/auth.service';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -9,7 +10,6 @@ import { User } from 'lucia';
 import supertest from 'supertest';
 import { AppModule } from '~app-module';
 import { ADMIN } from '~utils/roles';
-import { TestManager, type TestOptions } from '~utils/tests/TestManager';
 import { prepareTestDb } from '../../prisma/utils/functions';
 
 type TestUser = {

@@ -1,7 +1,7 @@
 import { SocketService } from '$socket/socket.service';
+import { TestManager } from '$tests/TestManager';
 import { Reflector } from '@nestjs/core';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { TestManager } from '~utils/tests/TestManager';
 import { WsEventEmitter } from './ws-event.emitter';
 import { WsEventInterceptor } from './ws-event.interceptor';
 

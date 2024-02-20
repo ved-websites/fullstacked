@@ -1,12 +1,13 @@
+import { EmailModule } from '$email/email.module';
+import { TestManager } from '$tests/TestManager';
 import { PresenceModule } from '$users/presence/presence.module';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { TestManager } from '~utils/tests/TestManager';
 import { UserProfileService } from './profile.service';
 
 describe('UserProfileService', () => {
 	const manager = new TestManager({
 		metadata: {
-			imports: [PresenceModule],
+			imports: [EmailModule, PresenceModule],
 			providers: [UserProfileService],
 		},
 	});
