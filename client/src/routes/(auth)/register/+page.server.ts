@@ -1,18 +1,9 @@
-import { firstNameSchema, lastNameSchema } from '$lib/schemas/auth';
 import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/assertions';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
-import { z } from 'zod';
-import { passwordSchema } from '~shared';
 import type { PageServerLoad } from './$types';
-
-const schema = z.object({
-	registerToken: z.string(),
-	firstName: firstNameSchema,
-	lastName: lastNameSchema,
-	password: passwordSchema,
-});
+import { registerSchema } from './schema';
 
 export const load = (async ({ url, locals: { tsrest } }) => {
 	const registerToken = url.searchParams.get('token');
@@ -27,7 +18,7 @@ export const load = (async ({ url, locals: { tsrest } }) => {
 
 	const { email, ...attributes } = result.body;
 
-	const form = await superValidate({ registerToken, ...attributes }, schema);
+	const form = await superValidate({ registerToken, ...attributes }, registerSchema);
 
 	return {
 		form,
@@ -37,7 +28,7 @@ export const load = (async ({ url, locals: { tsrest } }) => {
 
 export const actions = {
 	default: async ({ request, locals: { tsrest } }) => {
-		const form = await superValidate(request, schema);
+		const form = await superValidate(request, registerSchema);
 
 		const { registerToken, password, ...user } = form.data;
 

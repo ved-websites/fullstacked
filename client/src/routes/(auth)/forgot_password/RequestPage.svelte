@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getI18n } from '$i18n';
-	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
-	import { Alert, Button, Heading, Input, Label, P } from 'flowbite-svelte';
+	import FormInput from '$lib/components/forms/FormInput.svelte';
+	import { Alert, Button, Heading, P } from 'flowbite-svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { requestPasswordSchema } from './schemas';
@@ -26,23 +26,16 @@
 	{/if}
 
 	<form method="POST" action="?/requestPasswordReset" use:enhance class="flex flex-col gap-5">
-		<div>
-			<Label for="email">
-				{$t('(auth).forgot_password.request.labels.email')}
-				<Input let:props class="mt-2">
-					<input
-						{...props}
-						type="email"
-						name="email"
-						placeholder={$t('(auth).forgot_password.request.email-placeover')}
-						bind:value={$form.email}
-						{...$constraints.email}
-					/>
-				</Input>
-			</Label>
-
-			<ValidationErrors errors={$errors.email} />
-		</div>
+		<FormInput
+			type="email"
+			name="email"
+			placeholder={$t('(auth).forgot_password.request.email-placeover')}
+			bind:value={$form.email}
+			{...$constraints.email}
+			errors={$errors.email}
+		>
+			{$t('(auth).forgot_password.request.labels.email')}
+		</FormInput>
 
 		<Button type="submit" class="mt-2">{$t('common.submit')}</Button>
 	</form>

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
-	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
-	import { Alert, Button, Helper, Input, Label } from 'flowbite-svelte';
+	import FormInput from '$lib/components/forms/FormInput.svelte';
+	import { Alert, Button, Helper } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);
@@ -15,37 +15,25 @@
 </script>
 
 <form method="POST" use:enhance class="flex flex-col gap-5 w-3/4 lg:w-1/2 m-auto">
-	<div>
-		<Label for="email">
-			{$t('(auth).login.labels.email')}
-			<Input let:props class="mt-2">
-				<input
-					{...props}
-					type="email"
-					name="email"
-					placeholder={$t('(auth).login.email-placeover')}
-					bind:value={$form.email}
-					{...$constraints.email}
-				/>
-			</Input>
-		</Label>
+	<FormInput
+		type="email"
+		name="email"
+		noAsterix
+		placeholder={$t('(auth).login.email-placeover')}
+		bind:value={$form.email}
+		{...$constraints.email}
+		errors={$errors.email}
+	>
+		{$t('(auth).login.labels.email')}
+	</FormInput>
 
-		<ValidationErrors errors={$errors.email} />
-	</div>
-	<div>
-		<Label for="password">
-			{$t('(auth).login.labels.password')}
-			<Input let:props class="mt-2">
-				<input {...props} type="password" name="password" bind:value={$form.password} {...$constraints.password} />
-			</Input>
-		</Label>
+	<FormInput type="password" name="password" noAsterix bind:value={$form.password} {...$constraints.password} errors={$errors.password}>
+		{$t('(auth).login.labels.password')}
+	</FormInput>
 
-		<ValidationErrors errors={$errors.password} />
-
-		<Helper class="mt-3">
-			<a href="/forgot_password" class="hover:underline">{$t('(auth).login.forgot.password.text')}</a>
-		</Helper>
-	</div>
+	<Helper>
+		<a href="/forgot_password" class="hover:underline">{$t('(auth).login.forgot.password.text')}</a>
+	</Helper>
 
 	<Button type="submit" class="mt-2" disabled={isServerDown}>{$t('common.submit')}</Button>
 

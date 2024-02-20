@@ -2,10 +2,10 @@
 	import type { ConfirmedSessionUser } from '$auth/auth-handler';
 	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
-	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
+	import FormInput from '$lib/components/forms/FormInput.svelte';
 	import { getSessionUser } from '$lib/stores';
 	import { wsClient } from '$lib/ts-ws/client';
-	import { Button, Input, Label } from 'flowbite-svelte';
+	import { Button } from 'flowbite-svelte';
 	import { onMount, tick } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { ChatMessageType } from './types';
@@ -115,11 +115,18 @@
 </div>
 
 <form method="POST" use:enhance class="flex flex-col gap-3">
-	<Label>
-		<span>{$t('chat.form.label')}</span>
-		<Input type="text" class="mt-2" name="message" disabled={isSending} bind:value={$form.message} autocomplete="off" {...$constraints} />
-	</Label>
-	<ValidationErrors errors={$errors.message} />
+	<FormInput
+		type="text"
+		name="message"
+		disabled={isSending}
+		autocomplete="off"
+		noAsterix
+		bind:value={$form.message}
+		{...$constraints.message}
+		errors={$errors.message}
+	>
+		{$t('chat.form.label')}
+	</FormInput>
 
 	<Button type="submit" disabled={!canSend}>
 		{$t('chat.form.send')}

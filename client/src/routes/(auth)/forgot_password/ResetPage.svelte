@@ -2,8 +2,8 @@
 	import { page } from '$app/stores';
 	import { getI18n } from '$i18n';
 	import { createLayoutAlert, setPageLayoutAlert } from '$lib/components/LayoutAlert/helper';
-	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
-	import { Button, Heading, Input, Label, P } from 'flowbite-svelte';
+	import FormInput from '$lib/components/forms/FormInput.svelte';
+	import { Button, Heading, P } from 'flowbite-svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { resetPasswordSchema } from './schemas';
@@ -38,16 +38,9 @@
 	</P>
 
 	<form method="POST" action="?/resetPassword" use:enhance class="flex flex-col gap-5">
-		<div>
-			<Label for="password">
-				{$t('(auth).forgot_password.reset.labels.password')}
-				<Input let:props class="mt-2">
-					<input {...props} type="password" name="password" bind:value={$form.password} {...$constraints.password} />
-				</Input>
-			</Label>
-
-			<ValidationErrors errors={$errors.password} />
-		</div>
+		<FormInput type="password" name="password" bind:value={$form.password} {...$constraints.password} errors={$errors.password}>
+			{$t('(auth).forgot_password.reset.labels.password')}
+		</FormInput>
 
 		<input name="token" type="hidden" value={$page.url.searchParams.get('resetToken')} />
 

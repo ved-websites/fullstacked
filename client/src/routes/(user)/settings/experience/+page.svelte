@@ -7,10 +7,10 @@
 
 <script lang="ts">
 	import { getI18n } from '$i18n';
-	import ValidationErrors from '$lib/components/ValidationErrors.svelte';
 	import VSelect from '$lib/components/flowbite-custom/VSelect/VSelect.svelte';
 	import type { VSelectOptionType } from '$lib/components/flowbite-custom/VSelect/types';
-	import { Button, Label } from 'flowbite-svelte';
+	import FormInput from '$lib/components/forms/FormInput.svelte';
+	import { Button } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { SettingsRouteMeta } from '../types.js';
 	let i18n = getI18n();
@@ -35,26 +35,26 @@
 	function handleAutoSubmit(e: Event) {
 		const selectElement = e.target as HTMLSelectElement;
 
-		const formElement = selectElement.form;
+		const formElement = selectElement.form!;
 
-		formElement?.requestSubmit();
+		formElement.requestSubmit();
 	}
 </script>
 
-<form method="POST" use:enhance class="w-auto lg:w-[50%] flex flex-col">
-	<Label>
-		<span>{$t('settings.experience.lang.label')}</span>
+<form method="POST" use:enhance class="w-auto lg:w-[50%] flex flex-col gap-3">
+	<FormInput bind:value={$form.lang} errors={$errors.lang}>
+		{$t('settings.experience.lang.label')}
 		<VSelect
+			slot="input"
+			class="mt-2"
 			on:change={handleAutoSubmit}
 			name="lang"
 			placeholder=""
-			class="mt-2"
 			items={selectableLocales}
 			bind:value={$form.lang}
 			{...$constraints.lang}
 		/>
-		<ValidationErrors errors={$errors.lang} />
-	</Label>
+	</FormInput>
 
-	<Button type="submit" class="mt-3 {data.userHasJs ? 'hidden' : ''}">{$t('common.submit')}</Button>
+	<Button type="submit" class={data.userHasJs ? 'hidden' : undefined}>{$t('common.submit')}</Button>
 </form>
