@@ -12,7 +12,6 @@ import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { z } from 'zod';
 import { wsR } from '~contract';
-import { EnvironmentConfig } from '~env';
 import { ADMIN } from '~utils/roles';
 import { UserCreateInputNoId } from './admin.contract';
 import { ADMIN_CREATE_USER_EVENT_KEY, ADMIN_CREATE_USER_EVENT_TYPE } from './listeners/admin.events';
@@ -25,7 +24,6 @@ export class AdminService {
 		private readonly rolesService: RolesService,
 		private readonly eventEmitter: EventEmitter2,
 		private readonly email: EmailService,
-		private readonly env: EnvironmentConfig,
 		private readonly i18n: TypedI18nService,
 		private readonly presenceService: PresenceService,
 		private readonly sockets: SocketService,
@@ -211,7 +209,7 @@ export class AdminService {
 
 		return this.email.renderAndSend(['./emails/RegisterEmail.hbs', templateData], {
 			to: { email: user.email, name: user.fullName },
-			from: { email: this.env.EMAIL_FROM, name: origin.user.fullName },
+			from: { name: origin.user.fullName },
 			replyTo: { email: origin.user.email, name: origin.user.fullName },
 			subject: this.i18n.t('admin.emails.register.subject', { lang }),
 		});

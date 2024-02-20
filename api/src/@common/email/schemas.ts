@@ -1,3 +1,4 @@
+import env from '$configs';
 import { z } from 'zod';
 import { emailSchema, fullNameSchema } from '~shared';
 
@@ -15,7 +16,15 @@ export const senderSchema = z.union([simpleSenderSchema, z.array(simpleSenderSch
 
 export const sendEmailSchema = z.object({
 	to: senderSchema,
-	from: senderSchema,
+	from: emailSchema
+		.optional()
+		.default(env.EMAIL_FROM)
+		.or(
+			z.object({
+				email: emailSchema.optional().default(env.EMAIL_FROM),
+				name: optionalName,
+			}),
+		),
 	subject: z.string(),
 	html: z.string(),
 	cc: senderSchema.optional(),
@@ -23,4 +32,4 @@ export const sendEmailSchema = z.object({
 	replyTo: senderSchema.optional(),
 });
 
-export type SendMailData = ReturnType<typeof sendEmailSchema.parse>;
+export type SendMailData = z.input<typeof sendEmailSchema>;

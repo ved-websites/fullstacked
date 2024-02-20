@@ -9,7 +9,6 @@ import UserUpdateInputSchema from '$zod/inputTypeSchemas/UserUpdateInputSchema';
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 import { wsR } from '~contract';
-import { EnvironmentConfig } from '~env';
 
 export const maxEmailResetTokenDurationInMinutes = 15;
 
@@ -21,7 +20,6 @@ export class UserProfileService {
 		private readonly sockets: SocketService,
 		private readonly email: EmailService,
 		private readonly i18n: TypedI18nService,
-		private readonly env: EnvironmentConfig,
 	) {}
 
 	async editUser(user: LuciaUser, data: Omit<z.output<typeof UserUpdateInputSchema>, 'email' | 'hashedPassword'>) {
@@ -82,7 +80,6 @@ export class UserProfileService {
 
 		this.email.renderAndSend(['./emails/change-user-email/NotifyEmail.hbs', templateData], {
 			to: { email: user.email, name: user.fullName },
-			from: { email: this.env.EMAIL_FROM },
 			subject: this.i18n.t('users.emails.settings.email.notify.subject', { lang }),
 		});
 		this.email.renderAndSend(
@@ -92,7 +89,6 @@ export class UserProfileService {
 			],
 			{
 				to: { email: email, name: user.fullName },
-				from: { email: this.env.EMAIL_FROM },
 				subject: this.i18n.t('users.emails.settings.email.confirm.subject', { lang }),
 			},
 		);
@@ -155,7 +151,6 @@ export class UserProfileService {
 
 		this.email.renderAndSend(['./emails/change-user-email/UpdatedEmail.hbs', templateData], {
 			to: { email: updatedUser.email, name: updatedUser.fullName },
-			from: { email: this.env.EMAIL_FROM },
 			subject: this.i18n.t('users.emails.settings.email.updated.subject', { lang }),
 		});
 

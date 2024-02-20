@@ -6,7 +6,6 @@ import { User } from '$prisma-client';
 import { PrismaService } from '$prisma/prisma.service';
 import { generateId, generateRandomSafeString } from '$utils/random';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { EnvironmentConfig } from '~env';
 import { AuthError } from './auth.error';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';
 import { loadOsloPasswordModule } from './lucia/modules-compat';
@@ -21,7 +20,6 @@ export class AuthService {
 		private readonly prisma: PrismaService,
 		private readonly email: EmailService,
 		private readonly i18n: TypedI18nService,
-		private readonly env: EnvironmentConfig,
 	) {}
 
 	async hashPassword(password: string) {
@@ -266,7 +264,6 @@ export class AuthService {
 
 		return this.email.renderAndSend(['./emails/ForgotPasswordRequest.hbs', templateData], {
 			to: { email: user.email, name: userFullName },
-			from: { email: this.env.EMAIL_FROM },
 			subject: this.i18n.t('auth.emails.forgot_password_request.subject', { lang }),
 		});
 	}
@@ -346,7 +343,6 @@ export class AuthService {
 
 		return this.email.renderAndSend(['./emails/PasswordResetSuccessful.hbs', templateData], {
 			to: { email: user.email, name: userFullName },
-			from: { email: this.env.EMAIL_FROM },
 			subject: this.i18n.t('auth.emails.password_reset.subject', { lang }),
 		});
 	}
