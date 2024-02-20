@@ -34,7 +34,7 @@ export const load = loadFlash(async (event) => {
 		});
 	} else if (url.searchParams.has('forbidden')) {
 		layoutAlert = createLayoutAlert({
-			text: 'You cannot perform this action!', // TODO : i18n
+			text: k('common.errors.access.forbidden'),
 			type: 'error',
 		});
 	}

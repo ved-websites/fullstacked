@@ -5,5 +5,15 @@
 			"confirmation": "Confirmation du nouveau mot de passe",
 			"password": "Nouveau mot de passe"
 		}
+	},
+	"actions": {
+		"password": {
+			"updated": {
+				"success": "Mot de passe mis à jour avec succès!"
+			},
+			"errors": {
+				"not-matching": "Les mots de passe ne correspondent pas!"
+			}
+		}
 	}
 }

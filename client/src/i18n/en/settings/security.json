@@ -5,5 +5,15 @@
 			"password": "New Password",
 			"confirmation": "Confirm New Password"
 		}
+	},
+	"actions": {
+		"password": {
+			"errors": {
+				"not-matching": "Passwords do not match!"
+			},
+			"updated": {
+				"success": "Successfully updated password!"
+			}
+		}
 	}
 }

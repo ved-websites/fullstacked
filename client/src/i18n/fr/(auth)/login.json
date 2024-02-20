@@ -12,6 +12,7 @@
 	"errors": {
 		"server": {
 			"down": "Nous voyons que vous êtes connecté, mais le serveur est en panne et nous ne pouvons donc pas vous authentifier."
-		}
+		},
+		"access": "Vous devez être connecté pour accéder à cette ressource!"
 	}
 }

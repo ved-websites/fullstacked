@@ -3,10 +3,16 @@
 		"missing": "You must be connected to access this resource!",
 		"inactive": "Session is not active anymore!"
 	},
+	"email": {
+		"exists": "A user with this email already exists!"
+	},
 	"password": {
 		"reset": {
 			"no-attempt-found": "No password reset attempt was found with given token ; token might be invalid or expired."
 		}
+	},
+	"registration": {
+		"invalid": "Invalid registration token!"
 	},
 	"roles": {
 		"does-not-have-role": "User does not have an appropriate role to access this resource."

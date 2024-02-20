@@ -1,0 +1,6 @@
+{
+	"email": {
+		"reserved": "Impossible d'utiliser cet email, il est déjà réservé!",
+		"used": "Impossible d'utiliser cet email, il est déjà utilisé!"
+	}
+}

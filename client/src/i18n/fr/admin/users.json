@@ -48,5 +48,22 @@
 			"warning": "La suppression d'un utilisateur est définitive!"
 		},
 		"title": "Confirmation"
+	},
+	"actions": {
+		"edit": {
+			"success": "L'utilisateur {{email}} a été modifié avec succès!"
+		},
+		"create": {
+			"success": "Le nouvel utilisateur ayant comme courriel {{email}} fut créé avec succès!"
+		},
+		"delete": {
+			"success": "L'utilisateur \"{{email}}\" a été supprimé avec succès!",
+			"errors": {
+				"missing-email": {
+					"details": "Vous ne devriez pas jouer avec le HTML, sacré nerd sournois :)",
+					"error": "Courriel manquant!"
+				}
+			}
+		}
 	}
 }

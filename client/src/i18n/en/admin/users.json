@@ -48,5 +48,22 @@
 			"warning": "Deleting a user is permanent!",
 			"confirmation": "Are you sure you want to delete the user <span class=\"font-bold\">{{email}}</span>?"
 		}
+	},
+	"actions": {
+		"create": {
+			"success": "Successfully created new user with email {{email}}!"
+		},
+		"edit": {
+			"success": "Successfully edited user {{email}}!"
+		},
+		"delete": {
+			"success": "Successfully deleted user \"{{email}}\"!",
+			"errors": {
+				"missing-email": {
+					"error": "Missing email!",
+					"details": "You shouldn't play with the HTML you sneaky nerd :)"
+				}
+			}
+		}
 	}
 }

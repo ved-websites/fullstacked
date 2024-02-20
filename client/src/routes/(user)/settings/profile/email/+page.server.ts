@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
-import { emailSchema } from '~shared';
+import { emailSchema, k } from '~shared';
 import type { PageServerLoad } from './$types';
 
 const emailChangeSchema = z.object({
@@ -63,10 +63,10 @@ export const actions = {
 				}
 			},
 			onValid: () => {
-				// TODO : i18n
 				return {
 					toasts: createToasts({
-						text: `Successfully sent the request to change your email to ${form.data.email}! Please check the inbox of your new email address to confirm the changes.`,
+						text: k('settings.profile.email.request.success'),
+						i18nPayload: { email: form.data.email },
 					}),
 				};
 			},

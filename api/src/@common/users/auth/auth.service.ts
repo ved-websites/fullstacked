@@ -72,21 +72,17 @@ export class AuthService {
 		});
 
 		if (!user) {
-			throw new Error('Invalid registration token!');
+			throw new Error(this.i18n.t('auth.errors.registration.invalid'));
 		}
 
 		return user;
 	}
 
 	async createUser(email: string, password: string | null, attributes?: CreateUserLuciaAttributes) {
-		const userWithEmail = await this.prisma.user.count({
-			where: {
-				email,
-			},
-		});
+		const userExists = await this.prisma.user.exists({ email });
 
-		if (userWithEmail !== 0) {
-			throw new BadRequestException('A user with this email already exists!'); // TODO : i18n
+		if (userExists) {
+			throw new BadRequestException(this.i18n.t('auth.errors.email.exists'));
 		}
 
 		const id = await generateId();
@@ -126,7 +122,7 @@ export class AuthService {
 		});
 
 		if (!user) {
-			throw new Error('Invalid userId!'); // TODO : i18n
+			throw new Error(this.i18n.t('auth.errors.registration.invalid'));
 		}
 
 		const hashedPassword = await this.hashPassword(password);

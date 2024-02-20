@@ -10,6 +10,7 @@
 		}
 	},
 	"errors": {
+		"access": "You need to be logged in to access this resource!",
 		"server": {
 			"down": "We see that you are logged in, but the server is down so we cannot authenticate you."
 		}

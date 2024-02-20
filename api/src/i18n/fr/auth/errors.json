@@ -11,5 +11,11 @@
 	"roles": {
 		"does-not-have-role": "L'utilisateur ne dispose pas d'un rôle approprié pour accéder à cette ressource."
 	},
-	"login": "Nom d'utilisateur ou mot de passe invalide!"
+	"login": "Nom d'utilisateur ou mot de passe invalide!",
+	"email": {
+		"exists": "Un utilisateur avec cet email existe déjà!"
+	},
+	"registration": {
+		"invalid": "Jeton d'enregistrement invalide!"
+	}
 }

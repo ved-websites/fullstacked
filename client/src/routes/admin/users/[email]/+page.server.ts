@@ -2,6 +2,7 @@ import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/assertions';
 import { redirect } from 'sveltekit-flash-message/server';
 import { superValidate } from 'sveltekit-superforms/server';
+import { k } from '~shared';
 import { adminUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -56,7 +57,8 @@ export const actions = {
 					'/admin/users',
 					{
 						toasts: createToasts({
-							text: `Successfully created edited user ${editableUserEmail}!`, // TODO : i18n
+							text: k('admin.users.actions.edit.success'),
+							i18nPayload: { email: editableUserEmail },
 						}),
 					},
 					event,

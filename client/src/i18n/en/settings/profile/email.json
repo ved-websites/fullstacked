@@ -4,6 +4,9 @@
 		"new-email-usage": "Changing your email address means you will need to use this new email when logging in.",
 		"confirm-email": "For security, an email will be sent to the new email address asking you to confirm the change."
 	},
+	"request": {
+		"success": "Successfully sent the request to change your email to {{email}}! Please check the inbox of your new email address to confirm the changes."
+	},
 	"update": {
 		"success": "Success! You can now use your new email address for logging in!",
 		"error": "Error! You either didn't confirm the change request in time, or the provided token was invalid. Please try again."

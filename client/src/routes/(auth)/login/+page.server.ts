@@ -5,7 +5,7 @@ import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
-import { emailSchema, passwordSchema } from '~shared';
+import { emailSchema, k, passwordSchema } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({
@@ -28,7 +28,7 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 		}
 
 		return createLayoutAlert({
-			text: `Vous devez être connecté pour accéder à cette ressource!`, // TODO : i18n
+			text: k('(auth).login.errors.access'),
 			type: 'warning',
 		});
 	})();

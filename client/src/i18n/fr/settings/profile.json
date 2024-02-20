@@ -10,6 +10,9 @@
 			"dragging": "Oui, juste ici!",
 			"formats": "Formats acceptés: {{formats}}.",
 			"instructions": "<span class=\"font-semibold\">Cliquez pour téléverser</span> {{hasJs; true:ou glisser-déposer}}"
+		},
+		"errors": {
+			"missing": "Fichier de photo de profil manquant!"
 		}
 	},
 	"email": {

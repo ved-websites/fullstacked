@@ -7,5 +7,8 @@
 	"update": {
 		"error": "Erreur! Soit vous n'avez pas confirmé la demande de modification à temps, soit le jeton fourni n'était pas valide. Veuillez réessayer.",
 		"success": "Succès! Vous pouvez désormais utiliser votre nouvelle adresse courriel lors de la connexion!"
+	},
+	"request": {
+		"success": "La demande de modification de votre adresse courriel vers {{email}} a été envoyée avec succès! Veuillez vérifier la boîte de réception de votre nouvelle adresse courriel pour confirmer les modifications."
 	}
 }

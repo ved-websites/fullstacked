@@ -44,7 +44,7 @@ export class UserProfileService {
 		const emailAlreadyUsed = await this.prisma.user.exists({ email });
 
 		if (emailAlreadyUsed) {
-			throw new Error('Cannot use this email, it is already used!'); // TODO : i18n
+			throw new Error(this.i18n.t('users.settings.errors.email.used'));
 		}
 
 		const validRequestsMaxDate = new Date(Date.now() - 1000 * 60 * maxEmailResetTokenDurationInMinutes);
@@ -56,7 +56,7 @@ export class UserProfileService {
 		});
 
 		if (newEmailAlreadyUsed) {
-			throw new Error('Cannot use this email, it is already reserved!'); // TODO : i18n
+			throw new Error(this.i18n.t('users.settings.errors.email.reserved'));
 		}
 
 		const lang = user.emailLang;

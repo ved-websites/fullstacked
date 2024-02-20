@@ -10,6 +10,9 @@
 		"buttons": {
 			"delete": "Delete",
 			"upload": "Submit Profile Picture"
+		},
+		"errors": {
+			"missing": "Missing profile picture file!"
 		}
 	},
 	"email": {

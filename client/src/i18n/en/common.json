@@ -14,7 +14,17 @@
 		},
 		"validation": {
 			"required": "Required",
-			"email-schema": "Invalid email!"
+			"email-schema": "Invalid email!",
+			"password": {
+				"minlength": "Password must be at least 4 chars!"
+			}
+		},
+		"realtime": {
+			"not-connected": "You are not connected to realtime updates!",
+			"issue": "Issue : {{issue}}"
+		},
+		"access": {
+			"forbidden": "You cannot perform this action!"
 		}
 	},
 	"errorpage": {

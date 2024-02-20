@@ -4,7 +4,7 @@ import type { PageDataObject } from '$lib/utils/page-data-object';
 import { streamed } from '$lib/utils/streaming';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
-import { emailSchema } from '~shared';
+import { emailSchema, k } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ locals: { tsrest } }) => {
@@ -50,9 +50,9 @@ export const actions = {
 				'/admin/users',
 				{
 					toasts: createToasts({
-						text: 'Missing email!', // TODO : i18n
+						text: k('admin.users.actions.delete.errors.missing-email.error'),
 						type: 'warning',
-						extraData: `You shouldn't play with the HTML you sneaky dork :)`, // TODO : i18n
+						extraData: k('admin.users.actions.delete.errors.missing-email.details'),
 					}),
 				},
 				event,
@@ -63,7 +63,8 @@ export const actions = {
 			result: () => tsrest.users.admin.deleteUser({ body: { email } }),
 			onValid: () => {
 				const toasts = createToasts({
-					text: `Successfully deleted user "${email}"!`, // TODO : i18n
+					text: k('admin.users.actions.delete.success'),
+					i18nPayload: { email },
 				});
 
 				return { toasts } satisfies PageDataObject;

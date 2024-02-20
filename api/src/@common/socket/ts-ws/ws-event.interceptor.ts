@@ -1,3 +1,4 @@
+import { TypedI18nService } from '$i18n/i18n.service';
 import { SocketService } from '$socket/socket.service';
 import type { TypedWebSocket } from '$socket/types';
 import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common';
@@ -16,6 +17,7 @@ export class WsEventInterceptor implements NestInterceptor {
 		private readonly reflector: Reflector,
 		private readonly socketService: SocketService,
 		private readonly wsEventEmitter: WsEventEmitter,
+		private readonly i18n: TypedI18nService,
 	) {}
 
 	intercept(context: ExecutionContext, next: CallHandler) {
@@ -55,7 +57,7 @@ export class WsEventInterceptor implements NestInterceptor {
 		} catch (error) {
 			if (error instanceof ZodError) {
 				this.socketService.sendError(socket, {
-					message: 'Wrong input data!', // TODO : Translate this
+					message: this.i18n.t('ws.errors.input'),
 					errors: error.errors,
 				});
 			} else {

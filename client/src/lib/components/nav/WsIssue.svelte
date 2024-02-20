@@ -34,13 +34,14 @@
 <Icon id="ws-issue-indicator" class={cn('i-mdi-wifi-strength-alert-outline', iconColor, !showWsIssue && 'hidden')} />
 
 {#if showWsIssue}
-	<!-- TODO : i18n -->
 	<Popover class="max-w-[14rem]" triggeredBy="#ws-issue-indicator">
 		<div class="flex flex-col gap-3 p-1">
-			<div class={cn('text-center', issueMessage && 'font-bold')}>You are not connected to realtime updates!</div>
+			<div class={cn('text-center', issueMessage && 'font-bold')}>
+				{$t('common.errors.realtime.not-connected')}
+			</div>
 			{#if issueMessage}
 				<div class="italic">
-					Issue : {$t(issueMessage)}
+					{$t('common.errors.realtime.issue', { issue: $t(issueMessage) })}
 				</div>
 			{/if}
 		</div>

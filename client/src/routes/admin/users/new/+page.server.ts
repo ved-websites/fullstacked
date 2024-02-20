@@ -5,6 +5,7 @@ import { fail } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
 import { setError, superValidate } from 'sveltekit-superforms/server';
+import { k } from '~shared';
 import { adminNewUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -63,7 +64,8 @@ export const actions = {
 					'/admin/users',
 					{
 						toasts: createToasts({
-							text: `Successfully created new user with email ${form.data.email}!`, // TODO : i18n
+							text: k('admin.users.actions.create.success'),
+							i18nPayload: { email: form.data.email },
 						}),
 					},
 					event,

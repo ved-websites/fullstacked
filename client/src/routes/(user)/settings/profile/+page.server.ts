@@ -4,6 +4,7 @@ import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { fail, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms/server';
+import { k } from '~shared';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals: { sessionUser } }) => {
@@ -31,7 +32,7 @@ export const actions = {
 
 		if (!(profilePictureFile instanceof File)) {
 			const toasts = createToasts({
-				text: 'Missing profile picture file!', // TODO : i18n
+				text: k('settings.profile.picture.errors.missing'),
 			});
 
 			return fail(StatusCodes.BAD_REQUEST, { toasts });
