@@ -1,0 +1,29 @@
+{
+	"settings": {
+		"email": {
+			"confirm": {
+				"body": {
+					"cta-button": "Changez votre courriel",
+					"text": "Vous avez demandé à modifier votre adresse courriel.\nPour confirmer que vous avez accès à cet email, veuillez cliquer sur le bouton ci-dessous :",
+					"warning": "Si vous n'êtes pas la personne qui a demandé ce changement, vous pouvez ignorer ce courriel en toute sécurité."
+				},
+				"subject": "Confirmation de la nouvelle adresse courriel",
+				"preview": "Nouveau courriel, nouveau vous!"
+			},
+			"notify": {
+				"body": {
+					"text": "Salut {{name}}!\nNous avons reçu une demande de modification de l'adresse courriel de votre compte.\nSi vous avez fait cette demande, vous recevrez un courriel séparé à la nouvelle adresse pour confirmer ce changement, et vous pourrez ignorer cet avis.\nSi vous n'avez pas fait cette demande de changement d'adresse courriel, veuillez vous connecter à votre compte et modifier votre mot de passe pour vous protéger contre tout accès malveillant."
+				},
+				"preview": "Info rapide!\nUne demande de changement de courriel a été effectuée sur votre compte!",
+				"subject": "Demande de changement d'adresse courriel"
+			},
+			"updated": {
+				"body": {
+					"text": "Re-bonjour {{name}}!\nIl s'agit simplement d'une notification qui vous confirme que votre demande de changement d'addresse courriel a été confirmée, vous pouvez donc désormais vous connecter avec cette nouvelle adresse courriel."
+				},
+				"preview": "Succès! C'est maintenant votre nouvelle adresse courriel!",
+				"subject": "Nouveau courriel confirmé!"
+			}
+		}
+	}
+}

@@ -8,5 +8,13 @@
 			"count": "Fichier non valide! Assurez-vous d'envoyer moins de {{count}} fichiers.",
 			"size": "Fichier(s) invalide(s)! Assurez-vous que vous envoyez des fichiers inférieurs à {{size}} {{size:gt; 1:Mo; default:Mo}}."
 		}
+	},
+	"images": {
+		"filetype": {
+			"not-supported": "Type d'image non pris en charge."
+		}
+	},
+	"profile-picture": {
+		"nonexistent": "La photo de profil n'existe pas!"
 	}
 }
