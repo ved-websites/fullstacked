@@ -4,7 +4,8 @@ import { createPageDataObject } from '$lib/utils/page-data-object';
 import { fail } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
-import { setError, superValidate } from 'sveltekit-superforms/server';
+import { setError, superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { k } from '~shared';
 import { adminNewUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
@@ -14,7 +15,7 @@ export const load = (async ({ locals: { tsrest } }) => {
 
 	assertTsRestResultOK(result);
 
-	const form = await superValidate(adminNewUserFormSchema);
+	const form = await superValidate(zod(adminNewUserFormSchema));
 
 	return {
 		form,
@@ -29,7 +30,7 @@ export const actions = {
 			locals: { tsrest },
 		} = event;
 
-		const form = await superValidate(request, adminNewUserFormSchema);
+		const form = await superValidate(request, zod(adminNewUserFormSchema));
 
 		return assertTsRestActionResultOK({
 			form,

@@ -7,7 +7,7 @@
 	import { wsClient } from '$lib/ts-ws/client';
 	import { Button } from 'flowbite-svelte';
 	import { onMount, tick } from 'svelte';
-	import { superForm } from 'sveltekit-superforms/client';
+	import { superForm } from 'sveltekit-superforms';
 	import type { ChatMessageType } from './types';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);

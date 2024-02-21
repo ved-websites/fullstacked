@@ -6,7 +6,7 @@
 	import { getSessionUser } from '$lib/stores/index.js';
 	import { flashStore } from '$lib/utils/flash.js';
 	import { Alert, Button } from 'flowbite-svelte';
-	import { superForm } from 'sveltekit-superforms/client';
+	import { superForm } from 'sveltekit-superforms';
 	import type { EmailFlashProps } from './+page.server.js';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);

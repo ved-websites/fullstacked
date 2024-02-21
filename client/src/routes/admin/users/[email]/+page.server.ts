@@ -1,7 +1,8 @@
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/assertions';
 import { redirect } from 'sveltekit-flash-message/server';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { k } from '~shared';
 import { adminUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
@@ -19,7 +20,7 @@ export const load = (async ({ params: { email }, locals: { tsrest } }) => {
 		formattedEditableUser.roles = user.roles.map((role) => role.text);
 	}
 
-	const form = await superValidate(formattedEditableUser, adminUserFormSchema);
+	const form = await superValidate(formattedEditableUser, zod(adminUserFormSchema));
 
 	return {
 		editableUser: formattedEditableUser,
@@ -36,7 +37,7 @@ export const actions = {
 			params: { email: editableUserEmail },
 		} = event;
 
-		const form = await superValidate(request, adminUserFormSchema);
+		const form = await superValidate(request, zod(adminUserFormSchema));
 
 		return assertTsRestActionResultOK({
 			form,

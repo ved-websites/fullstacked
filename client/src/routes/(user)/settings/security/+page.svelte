@@ -8,7 +8,7 @@
 	import { getI18n } from '$i18n';
 	import FormInput from '$lib/components/forms/FormInput.svelte';
 	import { Button } from 'flowbite-svelte';
-	import { superForm } from 'sveltekit-superforms/client';
+	import { superForm } from 'sveltekit-superforms';
 	import type { SettingsRouteMeta } from '../types.js';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);

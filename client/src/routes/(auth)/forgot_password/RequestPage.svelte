@@ -3,12 +3,13 @@
 	import FormInput from '$lib/components/forms/FormInput.svelte';
 	import { Alert, Button, Heading, P } from 'flowbite-svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
-	import { superForm } from 'sveltekit-superforms/client';
+	import { superForm } from 'sveltekit-superforms';
+	import type { z } from 'zod';
 	import type { requestPasswordSchema } from './schemas';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);
 
-	export let sForm: SuperValidated<typeof requestPasswordSchema>;
+	export let sForm: SuperValidated<z.output<typeof requestPasswordSchema>>;
 	export let validToken: boolean = true;
 
 	const { enhance, form, constraints, errors } = superForm(sForm);

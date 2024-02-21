@@ -2,7 +2,8 @@
 	import { getI18n } from '$i18n';
 	import FormInput from '$lib/components/forms/FormInput.svelte';
 	import { Button, Heading } from 'flowbite-svelte';
-	import { superForm } from 'sveltekit-superforms/client';
+	import { superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { registerSchema } from './schema.js';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);
@@ -10,7 +11,7 @@
 	export let data;
 
 	const { enhance, form, constraints, errors } = superForm(data.form, {
-		validators: registerSchema,
+		validators: zodClient(registerSchema),
 	});
 </script>
 

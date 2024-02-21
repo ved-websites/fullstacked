@@ -3,7 +3,7 @@
 	import UserForm from '$lib/components/UserForm/UserForm.svelte';
 	import ValidationErrors from '$lib/components/forms/ValidationErrors.svelte';
 	import { Heading, Label, MultiSelect, type SelectOptionType } from 'flowbite-svelte';
-	import { superForm } from 'sveltekit-superforms/client';
+	import { superForm } from 'sveltekit-superforms';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);
 

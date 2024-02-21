@@ -5,7 +5,8 @@ import { createPageDataObject } from '$lib/utils/page-data-object';
 import { error } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
-import { superValidate } from 'sveltekit-superforms/client';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { k } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 import { requestPasswordSchema, resetPasswordSchema } from './schemas';
@@ -35,7 +36,7 @@ export const load = (async ({ url, locals: { tsrest }, setHeaders }) => {
 	})();
 
 	if (resetToken && user) {
-		const form = await superValidate(resetPasswordSchema);
+		const form = await superValidate(zod(resetPasswordSchema));
 
 		setHeaders({
 			'Referrer-Policy': 'no-referrer',
@@ -44,7 +45,7 @@ export const load = (async ({ url, locals: { tsrest }, setHeaders }) => {
 		return createPageDataObject({ form, resetToken, user });
 	}
 
-	const form = await superValidate(requestPasswordSchema);
+	const form = await superValidate(zod(requestPasswordSchema));
 
 	return createPageDataObject({ form, resetToken: null });
 }) satisfies PageServerLoad;
@@ -56,7 +57,7 @@ export const actions = {
 			locals: { tsrest },
 		} = event;
 
-		const form = await superValidate(request, requestPasswordSchema);
+		const form = await superValidate(request, zod(requestPasswordSchema));
 
 		return assertTsRestActionResultOK({
 			form,
@@ -76,7 +77,7 @@ export const actions = {
 			locals: { tsrest },
 		} = event;
 
-		const form = await superValidate(request, resetPasswordSchema);
+		const form = await superValidate(request, zod(resetPasswordSchema));
 
 		return assertTsRestActionResultOK({
 			form,

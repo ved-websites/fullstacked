@@ -3,7 +3,7 @@
 	import Icon from '$lib/components/Icon.svelte';
 	import FormInput from '$lib/components/forms/FormInput.svelte';
 	import { Alert, Button, Helper } from 'flowbite-svelte';
-	import { superForm } from 'sveltekit-superforms/client';
+	import { superForm } from 'sveltekit-superforms';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);
 

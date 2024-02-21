@@ -6,4 +6,4 @@ export const userFormSchema = z.object({
 	lastName: lastNameSchema,
 });
 
-export type UserFormSchemaType = typeof userFormSchema;
+export type UserFormSchemaType = z.output<typeof userFormSchema>;

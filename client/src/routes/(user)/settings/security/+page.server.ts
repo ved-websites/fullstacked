@@ -2,7 +2,8 @@ import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { createPageDataObject } from '$lib/utils/page-data-object';
 import type { Actions } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import { k, passwordSchema } from '~shared';
 import type { PageServerLoad } from './$types';
@@ -18,7 +19,7 @@ const newPasswordFormSchema = z
 	});
 
 export const load = (async () => {
-	const form = await superValidate(newPasswordFormSchema);
+	const form = await superValidate(zod(newPasswordFormSchema));
 
 	return { form };
 }) satisfies PageServerLoad;
@@ -30,7 +31,7 @@ export const actions = {
 			locals: { tsrest },
 		} = event;
 
-		const form = await superValidate(request, newPasswordFormSchema);
+		const form = await superValidate(request, zod(newPasswordFormSchema));
 
 		return assertTsRestActionResultOK({
 			form,

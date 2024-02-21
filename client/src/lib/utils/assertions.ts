@@ -3,7 +3,7 @@ import { createToasts, type ToastData, type ToastManagerData } from '$lib/compon
 import { error, fail, type RequestEvent } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
-import type { SuperValidated } from 'sveltekit-superforms';
+import type { Infer, SuperValidated } from 'sveltekit-superforms';
 import type { AnyZodObject } from 'zod';
 import { k } from '~shared';
 import { createPageDataObject, type PageDataObject } from './page-data-object';
@@ -26,17 +26,17 @@ export type ActionNotValidData = {
 	errorMessage: string;
 	pageData:
 		| {
-				form: SuperValidated<AnyZodObject> | undefined;
+				form: SuperValidated<Infer<AnyZodObject>> | undefined;
 				layoutAlert: LayoutAlertData;
 		  }
 		| {
-				form: SuperValidated<AnyZodObject> | undefined;
+				form: SuperValidated<Infer<AnyZodObject>> | undefined;
 				toasts: ToastData[];
 		  };
 };
 
 export type AssertTsRestActionResultOKArgs<T extends { status: number }> = {
-	form?: SuperValidated<AnyZodObject>;
+	form?: SuperValidated<Infer<AnyZodObject>>;
 	event?: RequestEvent;
 	result: () => Awaitable<T>;
 	onValid: (result: ValidResult<T>) => Awaitable<PageDataObject>;
@@ -103,7 +103,7 @@ export function assertTsRestActionResultOK<T extends { status: number; body: unk
  * You **need** to return the value of this function or it will do nothing.
  * On valid form, the callback's return value will be used as this function's return value.
  */
-export function assertFormValid<T>(form: SuperValidated<AnyZodObject>, onValid: () => Awaitable<T>) {
+export function assertFormValid<T>(form: SuperValidated<Infer<AnyZodObject>>, onValid: () => Awaitable<T>) {
 	if (!form.valid) {
 		return fail(StatusCodes.BAD_REQUEST, { form });
 	}

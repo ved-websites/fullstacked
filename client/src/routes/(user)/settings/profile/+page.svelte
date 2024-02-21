@@ -10,7 +10,7 @@
 	import UserForm from '$lib/components/UserForm/UserForm.svelte';
 	import { getSessionUser } from '$lib/stores';
 	import { Button, Heading } from 'flowbite-svelte';
-	import { superForm } from 'sveltekit-superforms/client';
+	import { superForm } from 'sveltekit-superforms';
 	import type { SettingsRouteMeta } from '../types';
 	import ProfilePictureForm from './ProfilePictureForm.svelte';
 	let i18n = getI18n();

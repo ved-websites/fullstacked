@@ -3,19 +3,20 @@ import { userFormSchema } from '$lib/components/UserForm/userform.schema';
 import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { fail, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
-import { superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import { k } from '~shared';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals: { sessionUser } }) => {
-	const form = await superValidate(sessionUser, userFormSchema);
+	const form = await superValidate(sessionUser, zod(userFormSchema));
 
 	return { form };
 }) satisfies PageServerLoad;
 
 export const actions = {
 	basicUserInfo: async ({ request, locals: { tsrest } }) => {
-		const form = await superValidate(request, userFormSchema);
+		const form = await superValidate(request, zod(userFormSchema));
 
 		return assertTsRestActionResultOK({
 			form,
