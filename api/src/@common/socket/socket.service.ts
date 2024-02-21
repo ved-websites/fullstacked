@@ -49,7 +49,7 @@ export class SocketService {
 
 		await setupSessionContainer(socket, this.auth, token);
 
-		socket.setMaxListeners(0);
+		socket.setMaxListeners(Infinity);
 
 		SocketService.initializationMap.delete(socket);
 

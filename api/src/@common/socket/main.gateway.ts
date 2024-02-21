@@ -1,13 +1,12 @@
 import { SocketService } from '$socket/socket.service';
-import { OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, WebSocketGateway } from '@nestjs/websockets';
+import { OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit } from '@nestjs/websockets';
 import type { IncomingMessage } from 'http';
 import { Server } from 'ws';
 import { WsStatusCodes } from '~contract';
+import { WsGateway } from './ts-ws/ws-event.decorator';
 import type { TypedWebSocket } from './types';
 
-@WebSocketGateway({
-	transports: ['websocket'],
-})
+@WsGateway()
 export class MainGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 	constructor(private socketService: SocketService) {}
 

@@ -1,3 +1,4 @@
+import env from '$configs';
 import { AuthGuard } from '$users/auth/auth.guard';
 import { RolesGuard } from '$users/auth/roles/roles.guard';
 import { SetMetadata, UseFilters, UseGuards, UseInterceptors, applyDecorators } from '@nestjs/common';
@@ -59,6 +60,10 @@ export const WsGateway = () => {
 	return applyDecorators(
 		WebSocketGateway({
 			transports: ['websocket'],
+			cors: {
+				credentials: true,
+				origin: env.CORS_LINKS,
+			},
 		}),
 	);
 };
