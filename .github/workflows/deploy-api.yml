@@ -24,7 +24,7 @@ jobs:
       - name: Generate API Lockfile
         run: |
           pnpm config set shared-workspace-lockfile false
-          pnpm --filter ./api install --lockfile-only --frozen-lockfile
+          pnpm --filter ./api install --lockfile-only --no-frozen-lockfile
 
       - name: Push API to Deploy Branch
         uses: s0/git-publish-subdir-action@v2.6.0
