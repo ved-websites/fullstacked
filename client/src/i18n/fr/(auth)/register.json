@@ -4,5 +4,8 @@
 		"lastName": "Quel est ton nom de famille?",
 		"password": "Créez votre nouveau mot de passe"
 	},
-	"heading": "Bienvenue, {{email}}!"
+	"heading": "Bienvenue, {{email}}!",
+	"errors": {
+		"missing-token": "Jeton de registre manquant!"
+	}
 }

@@ -13,7 +13,7 @@
 <div class="flex flex-col self-center items-center gap-10">
 	<div class="flex items-center">
 		<Icon class="{icon} s-48"></Icon>
-		<span class="text-lg text-center">{errorMessage}</span>
+		<span class="text-lg text-center">{$t(errorMessage)}</span>
 	</div>
 
 	<slot />
