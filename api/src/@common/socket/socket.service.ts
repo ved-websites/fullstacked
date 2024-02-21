@@ -2,7 +2,7 @@ import { Auth, LuciaFactory } from '$users/auth/lucia/lucia.factory';
 import { setupSessionContainer } from '$users/auth/lucia/lucia.middleware';
 import { PresenceService } from '$users/presence/presence.service';
 import { parseCookies } from '$utils/cookies';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { IncomingMessage } from 'http';
 import { Server, WebSocket } from 'ws';
 import type { z } from 'zod';
@@ -13,6 +13,8 @@ import type { SocketOrSessionId, TypedWebSocket } from './types';
 
 @Injectable()
 export class SocketService {
+	private readonly logger = new Logger(SocketService.name);
+
 	server!: Server;
 
 	private static initializationMap = new Map<WebSocket, Promise<unknown>>();
@@ -46,6 +48,8 @@ export class SocketService {
 		if (authSessionCookieToken && !authSessionHeader) {
 			token = `Bearer ${authSessionCookieToken}`;
 		}
+
+		this.logger.log(`WS Token : ${token}`);
 
 		await setupSessionContainer(socket, this.auth, token);
 
