@@ -1,4 +1,4 @@
-import { specRolesMap } from '.';
+import { Roles } from './definitions';
 import type { RoleSpec } from './roles.helper';
 
 export function rolesIntersect(roles1: string[], roles2: string[]) {
@@ -28,14 +28,14 @@ export function rolesSpecIntersects(roleSpecs: RoleSpec[], userRoles: string[]):
 	});
 }
 
-export function userRolesHasSudo(userRoles: string[]) {
-	return userRoles.some((role) => specRolesMap.some((specRole) => specRole.sudo && role === specRole.name));
+export function userRolesHasAdmin(userRoles: string[]) {
+	return userRoles.includes(Roles.ADMIN.name);
 }
 
 export function userHasRoleSpec(roleSpecs: RoleSpec[], userRoles: string[]) {
-	const hasSudo = userRolesHasSudo(userRoles);
+	const hasAdmin = userRolesHasAdmin(userRoles);
 
-	if (hasSudo) {
+	if (hasAdmin) {
 		return true;
 	}
 
