@@ -1,8 +1,8 @@
 import { getApiUrl } from '$lib/utils';
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({ fetch, request }) => {
-	const apiUrl = getApiUrl('/ws-handshake');
+export const POST: RequestHandler = async ({ fetch, request, params }) => {
+	const apiUrl = getApiUrl(`/api/${params.paths}`);
 
 	const body = await request.json();
 

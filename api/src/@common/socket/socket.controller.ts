@@ -2,7 +2,7 @@ import { AuthSession, AuthUser, LuciaSession, LuciaUser } from '$users/auth/sess
 import { BadRequestException, Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { SocketService } from './socket.service';
 
-@Controller()
+@Controller('/api')
 export class SocketController {
 	constructor(private readonly socketService: SocketService) {}
 
