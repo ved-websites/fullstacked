@@ -1,8 +1,10 @@
+import type { RoleSpec } from '~shared';
+
 export type BaseNavElement = {
 	title: string;
 	isPublic?: boolean;
 	drawerIconPath?: string;
-	roles?: string[];
+	roles?: RoleSpec[];
 };
 
 export type LinkNavElement = BaseNavElement & {
@@ -30,8 +32,4 @@ export function getNavElement(navElements: NavElement[], route: string) {
 	}) as LinkNavElement | undefined;
 
 	return navElemFound;
-}
-
-export function rolesIntersect(roles1: string[], roles2: string[]) {
-	return roles1.some((role1) => roles2.some((role2) => role2 === role1));
 }

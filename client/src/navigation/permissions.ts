@@ -1,10 +1,11 @@
 import type { SessionUser } from '$auth/auth-handler';
-import { getNavElement, rolesIntersect, type NavElement } from '$lib/components/nav/nav-elements';
+import { getNavElement, type NavElement } from '$lib/components/nav/nav-elements';
 import { handleAccessRedirect, handleLoginRedirect } from '$lib/utils/login';
 import { navElements } from '$navigation/routes';
 import type { RequestEvent } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
+import { userHasRoleSpec } from '~shared';
 
 /** List of urls available to logged out users. */
 export const urlsWhitelist: string[] = ['/', '/login', '/register', '/forgot_password'] satisfies `/${string}`[];
@@ -86,7 +87,7 @@ export function userCanAccessNav(user: SessionUser, navElements: NavElement[], u
 		return false;
 	}
 
-	return rolesIntersect(
+	return userHasRoleSpec(
 		currentNav.roles,
 		user.roles.map((role) => role.text),
 	);

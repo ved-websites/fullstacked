@@ -1,13 +1,47 @@
 import { PrismaService } from '$prisma/prisma.service';
 import RoleCreateNestedManyWithoutUsersInputSchema from '$zod/inputTypeSchemas/RoleCreateNestedManyWithoutUsersInputSchema';
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { User } from 'lucia';
 import { z } from 'zod';
-import { Roles } from '~utils/roles';
+import { Roles, rolesIntersect, specRolesMap } from '~shared';
 
 @Injectable()
-export class RolesService {
+export class RolesService implements OnApplicationBootstrap {
 	constructor(private readonly prisma: PrismaService) {}
+
+	async onApplicationBootstrap() {
+		const previousRoles = await this.prisma.role.findMany({ select: { text: true } });
+
+		const upsertPromises = specRolesMap.map(async (spec) => {
+			return this.prisma.role.upsert({
+				create: {
+					text: spec.name,
+				},
+				update: {},
+				where: {
+					text: spec.name,
+				},
+			});
+		});
+
+		await Promise.all(upsertPromises);
+
+		const rolesToCheckForDeletion = previousRoles.map((r) => r.text);
+
+		await Promise.all(
+			rolesToCheckForDeletion.map(async (role) => {
+				if (!specRolesMap.some((spec) => spec.name === role)) {
+					await this.prisma.role.update({
+						data: { users: { set: [] } },
+						where: { text: role },
+					});
+					await this.prisma.role.delete({
+						where: { text: role },
+					});
+				}
+			}),
+		);
+	}
 
 	async getRoles() {
 		const roles = await this.prisma.role.findMany();
@@ -45,12 +79,8 @@ export class RolesService {
 		return updatedUser;
 	}
 
-	rolesIntersect(roles1: string[], roles2: string[]) {
-		return roles1.some((role1) => roles2.some((role2) => role2 === role1));
-	}
-
 	async userCanSendEmail(user: User) {
-		const rolesCanSendEmail = [Roles.ADMIN];
+		const rolesCanSendEmail = [Roles.ADMIN.name];
 
 		const userRoles = (
 			await this.prisma.role.findMany({
@@ -67,6 +97,6 @@ export class RolesService {
 			})
 		).map((userRole) => userRole.text);
 
-		return this.rolesIntersect(rolesCanSendEmail, userRoles);
+		return rolesIntersect(rolesCanSendEmail, userRoles);
 	}
 }

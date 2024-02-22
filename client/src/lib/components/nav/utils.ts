@@ -1,13 +1,6 @@
 import type { SessionUser } from '$auth/auth-handler';
+import { userHasRoleSpec } from '~shared';
 import type { NavElement } from './nav-elements';
-
-export function userHasRole(user: SessionUser, ...roles: string[]) {
-	if (!user) {
-		return false;
-	}
-
-	return roles.some((role) => user.roles?.some((userRole) => userRole.text === role));
-}
 
 export function isNavElemVisible(navElem: NavElement, user: SessionUser): boolean {
 	if (navElem.isPublic) {
@@ -21,5 +14,7 @@ export function isNavElemVisible(navElem: NavElement, user: SessionUser): boolea
 		return true;
 	}
 
-	return userHasRole(user, ...navElem.roles);
+	const userRoles = user.roles.map((role) => role.text);
+
+	return userHasRoleSpec(navElem.roles, userRoles);
 }

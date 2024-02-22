@@ -1,9 +1,12 @@
+import { RoleCheck } from '$users/auth/roles/roles.guard';
 import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
 import { Controller } from '@nestjs/common';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { r } from '~contract';
+import { Roles } from '~shared';
 import { MessageService } from './message.service';
 
+@RoleCheck([Roles.CHAT])
 @Controller()
 export class MessageController {
 	constructor(private readonly messageService: MessageService) {}

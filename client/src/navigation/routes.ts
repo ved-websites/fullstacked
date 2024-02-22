@@ -1,5 +1,5 @@
 import type { NavElement } from '$lib/components/nav/nav-elements';
-import { k } from '~shared';
+import { Roles, k } from '~shared';
 
 export const navElements: NavElement[] = [
 	{
@@ -12,12 +12,13 @@ export const navElements: NavElement[] = [
 		title: k('navbar.navigation.chat'),
 		url: '/chat',
 		drawerIconPath: 'i-mdi-chat',
+		roles: [Roles.CHAT],
 	},
 	{
 		title: k('navbar.navigation.admin'),
 		id: 'admin',
 		drawerIconPath: 'i-mdi-shield-crown',
-		roles: ['admin'],
+		roles: [Roles.ADMIN],
 		elements: [
 			{
 				title: k('navbar.navigation.admin-users'),

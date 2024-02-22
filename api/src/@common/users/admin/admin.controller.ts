@@ -6,7 +6,7 @@ import { Controller, ForbiddenException } from '@nestjs/common';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { r } from '~contract';
-import { Roles } from '~utils/roles';
+import { Roles } from '~shared';
 import { AdminService } from './admin.service';
 
 @RoleCheck([Roles.ADMIN])

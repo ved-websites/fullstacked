@@ -16,6 +16,7 @@
 	import type { PageMessages } from '$lib/types';
 	import { flashStore } from '$lib/utils/flash';
 	import { onDestroy } from 'svelte';
+	import { rolesObjectIntersect } from '~shared';
 
 	export let data;
 
@@ -38,7 +39,16 @@
 			wsClient.$socket.connect();
 
 			sessionUnsubscriber = wsClient.users.edited({ id: data.sessionUser.id }, ({ data: editedUserData }) => {
+				const hadSameRoles =
+					data.sessionUser!.roles.length === editedUserData.roles.length &&
+					!rolesObjectIntersect(data.sessionUser!.roles, editedUserData.roles);
+
 				data.sessionUser = editedUserData;
+
+				if (!hadSameRoles) {
+					wsClient.$socket.close();
+					wsClient.$socket.connect();
+				}
 
 				invalidateAll();
 			});

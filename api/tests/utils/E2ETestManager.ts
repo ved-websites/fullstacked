@@ -9,20 +9,20 @@ import { AppRoute } from '@ts-rest/core';
 import { User } from 'lucia';
 import supertest from 'supertest';
 import { AppModule } from '~app-module';
-import { Roles } from '~utils/roles';
+import { RoleSpec, Roles } from '~shared';
 import { prepareTestDb } from '../../prisma/utils/functions';
 
 type TestUser = {
 	email: string;
 	password?: string;
 	instance?: User;
-	roles?: string[];
+	roles?: RoleSpec[];
 };
 const userDefinitions = {
 	admin: {
 		email: 'admin@test.com',
 		password: '12345',
-		roles: ['admin'],
+		roles: [Roles.ADMIN],
 	},
 	testing: {
 		email: 'testing@test.com',
@@ -84,12 +84,6 @@ export class E2ETestManager extends TestManager<E2ETestOptions> {
 		this.httpServer = this.app.getHttpServer();
 		(this.prisma as PrismaService) = this.app.get<PrismaService>(PrismaService);
 
-		await this.prisma.role.create({
-			data: {
-				text: Roles.ADMIN,
-			},
-		});
-
 		this.authService = this.app.get<AuthService>(AuthService);
 
 		const creationSteps = Object.entries({
@@ -109,16 +103,16 @@ export class E2ETestManager extends TestManager<E2ETestOptions> {
 			if (userDef.roles) {
 				await Promise.all(
 					userDef.roles.map(async (role) => {
-						await this.prisma.role.update({
+						await this.prisma.user.update({
 							data: {
-								users: {
+								roles: {
 									connect: {
-										email: userDef.email,
+										text: role.name,
 									},
 								},
 							},
 							where: {
-								text: role,
+								email: userDef.email,
 							},
 						});
 					}),

@@ -3,6 +3,7 @@ import { Public } from '$users/auth/auth.guard';
 import { AuthService } from '$users/auth/auth.service';
 import { Body, Controller, Get, Next, Post, Redirect, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import type { NextFunction, Response } from 'express';
+import { Roles } from '~shared';
 import { OnboardingDto } from './onboarding.dto';
 
 @Controller()
@@ -43,7 +44,7 @@ export class OnboardingController {
 
 		await this.prisma.role.upsert({
 			create: {
-				text: 'admin',
+				text: Roles.ADMIN.name,
 				users: {
 					connect: {
 						email,
@@ -58,7 +59,7 @@ export class OnboardingController {
 				},
 			},
 			where: {
-				text: 'admin',
+				text: Roles.ADMIN.name,
 			},
 		});
 	}

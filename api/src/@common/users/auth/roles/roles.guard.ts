@@ -4,15 +4,14 @@ import { PrismaService } from '$prisma/prisma.service';
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { WsException } from '@nestjs/websockets';
-import { LuciaUser } from '../session.decorator';
-import { RolesService } from './roles.service';
+import { RoleSpec, userHasRoleSpec } from '~shared';
+import { LuciaUser } from '../types';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
 	constructor(
 		private reflector: Reflector,
 		private readonly prisma: PrismaService,
-		private readonly rolesService: RolesService,
 		private readonly i18n: TypedI18nService,
 	) {}
 
@@ -45,8 +44,8 @@ export class RolesGuard implements CanActivate {
 		return true;
 	}
 
-	protected async userHasDefinedRoles(user: LuciaUser, definedRoles: string[]) {
-		const { roles } = await this.prisma.user.findFirstOrThrow({
+	protected async userHasDefinedRoles(user: LuciaUser, definedRoles: RoleSpec[]) {
+		const { roles: rawUserRoles } = await this.prisma.user.findFirstOrThrow({
 			where: {
 				id: user.id,
 			},
@@ -55,17 +54,10 @@ export class RolesGuard implements CanActivate {
 			},
 		});
 
-		const hasRole = this.rolesService.rolesIntersect(
-			definedRoles,
-			roles.map((role) => role.text),
-		);
+		const roles = rawUserRoles.map((role) => role.text);
 
-		if (!hasRole) {
-			return false;
-		}
-
-		return true;
+		return userHasRoleSpec(definedRoles, roles);
 	}
 }
 
-export const RoleCheck = Reflector.createDecorator<[string, ...string[]]>();
+export const RoleCheck = Reflector.createDecorator<[RoleSpec, ...RoleSpec[]]>();
