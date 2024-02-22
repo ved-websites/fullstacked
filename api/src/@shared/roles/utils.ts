@@ -1,5 +1,5 @@
 import { specRolesMap } from '.';
-import { RoleSpec } from './roles.helper';
+import type { RoleSpec } from './roles.helper';
 
 export function rolesIntersect(roles1: string[], roles2: string[]) {
 	return roles1.some((role1) => roles2.some((role2) => role2 === role1));
