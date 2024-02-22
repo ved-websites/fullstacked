@@ -1,13 +1,10 @@
-import { Auth, LuciaFactory } from '$users/auth/lucia/lucia.factory';
-import { setupSessionContainer } from '$users/auth/lucia/lucia.middleware';
+import { LuciaContainer } from '$users/auth/lucia/types';
 import { PresenceService } from '$users/presence/presence.service';
-import { parseCookies } from '$utils/cookies';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import type { IncomingMessage } from 'http';
 import { Server, WebSocket } from 'ws';
 import type { z } from 'zod';
 import { EventRouteOutput, EventUID, extractEventRouteKey, type EventRoute } from '~contract';
-import { SESSION_COOKIE_NAME } from '~shared';
 import { WsEventEmitter } from './ts-ws/ws-event.emitter';
 import type { SocketOrSessionId, TypedWebSocket } from './types';
 
@@ -17,55 +14,61 @@ export class SocketService {
 
 	server!: Server;
 
-	private static initializationMap = new Map<WebSocket, Promise<unknown>>();
+	private handshakeMap = new Map<string, LuciaContainer>();
 
 	constructor(
-		@Inject(LuciaFactory) private readonly auth: Auth,
 		private readonly wsEmitter: WsEventEmitter,
 		private readonly presenceService: PresenceService,
 	) {}
 
-	onClientConnect(socket: TypedWebSocket, request: IncomingMessage) {
-		const socketInit = this.initialize(socket, request);
-
-		SocketService.initializationMap.set(socket, socketInit);
-
-		return socketInit;
-	}
-
-	static async finishInitialization(socket: TypedWebSocket) {
-		await SocketService.initializationMap.get(socket);
-	}
-
-	private async initialize(socket: TypedWebSocket, request: IncomingMessage) {
-		const cookies = parseCookies(request.headers.cookie);
-
-		const authSessionCookieToken = cookies[SESSION_COOKIE_NAME] as string | undefined;
-		const authSessionHeader = request.headers.authorization;
-
-		let token = request.headers.authorization;
-
-		if (authSessionCookieToken && !authSessionHeader) {
-			token = `Bearer ${authSessionCookieToken}`;
+	async onClientConnect(socket: TypedWebSocket, request: IncomingMessage) {
+		if (!request.url) {
+			this.logger.error(`Incoming request has no url, aborting client connection.`);
+			return;
 		}
 
-		this.logger.log(`WS Token : ${token}`);
+		const url = new URL(request.url, `http://${request.headers.host}`);
 
-		await setupSessionContainer(socket, this.auth, token);
+		const token = url.searchParams.get('token');
+
+		if (!token) {
+			this.logger.debug(`Client did not add token to request url, aborting client connection.`);
+			return;
+		}
+
+		const handshake = this.handshakeMap.get(token);
+
+		if (!handshake) {
+			this.logger.debug(`No handshake associated with provided token, aborting client connection.`);
+			return;
+		}
+
+		socket.session = handshake.session;
+		socket.user = handshake.user;
 
 		socket.setMaxListeners(Infinity);
-
-		SocketService.initializationMap.delete(socket);
 
 		if (socket.session) {
 			this.presenceService.onConnect(socket.session);
 		}
+
+		this.handshakeMap.delete(token);
 	}
 
 	onClientDisconnect(socket: TypedWebSocket) {
 		if (socket.session) {
 			this.presenceService.onDisconnect(socket.session);
 		}
+	}
+
+	addHandshake(token: string, container: LuciaContainer) {
+		this.handshakeMap.set(token, container);
+
+		const handshakeMaximumDelay = 10; // in seconds
+
+		setTimeout(() => {
+			this.handshakeMap.delete(token);
+		}, handshakeMaximumDelay * 1000);
 	}
 
 	sendMessage(socketOrSessionId: SocketOrSessionId, message: string, uid?: EventUID) {

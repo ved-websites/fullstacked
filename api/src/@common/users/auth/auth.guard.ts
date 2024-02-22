@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
 			return true;
 		}
 
-		const session = await ContextService.getSession(context);
+		const session = ContextService.getSession(context);
 
 		if (!session) {
 			if (context.getType() === 'ws') {

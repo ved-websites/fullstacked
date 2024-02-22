@@ -23,7 +23,7 @@ export class RolesGuard implements CanActivate {
 			return true;
 		}
 
-		const user = await ContextService.getUser(context);
+		const user = ContextService.getUser(context);
 
 		if (!user) {
 			// If no session, don't handle

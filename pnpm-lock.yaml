@@ -258,7 +258,7 @@ importers:
         version: link:../api/src/@shared
       '@shippr/supersocket':
         specifier: github:V-ed/supersocket
-        version: github.com/V-ed/supersocket/0d640dff735e6e46b24ce1420626f5217b50b8eb(@babel/core@7.22.5)(@types/node@20.10.4)(esbuild@0.19.12)(typescript@5.3.3)
+        version: github.com/V-ed/supersocket/db4bca8a3446726272dd8abd9a46fb51032af0b1(@babel/core@7.22.5)(@types/node@20.10.4)(esbuild@0.19.12)(typescript@5.3.3)
       '@ts-rest/core':
         specifier: 3.33.0
         version: 3.33.0(zod@3.22.4)
@@ -13157,9 +13157,9 @@ packages:
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
 
-  github.com/V-ed/supersocket/0d640dff735e6e46b24ce1420626f5217b50b8eb(@babel/core@7.22.5)(@types/node@20.10.4)(esbuild@0.19.12)(typescript@5.3.3):
-    resolution: {tarball: https://codeload.github.com/V-ed/supersocket/tar.gz/0d640dff735e6e46b24ce1420626f5217b50b8eb}
-    id: github.com/V-ed/supersocket/0d640dff735e6e46b24ce1420626f5217b50b8eb
+  github.com/V-ed/supersocket/db4bca8a3446726272dd8abd9a46fb51032af0b1(@babel/core@7.22.5)(@types/node@20.10.4)(esbuild@0.19.12)(typescript@5.3.3):
+    resolution: {tarball: https://codeload.github.com/V-ed/supersocket/tar.gz/db4bca8a3446726272dd8abd9a46fb51032af0b1}
+    id: github.com/V-ed/supersocket/db4bca8a3446726272dd8abd9a46fb51032af0b1
     name: '@shippr/supersocket'
     version: 1.0.6
     engines: {node: '>=16.7'}

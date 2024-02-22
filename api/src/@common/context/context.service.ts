@@ -1,5 +1,4 @@
 import { TypedI18nService } from '$i18n/i18n.service';
-import { SocketService } from '$socket/socket.service';
 import type { TypedWebSocket } from '$socket/types';
 import { Auth, LuciaFactory } from '$users/auth/lucia/lucia.factory';
 import type { LuciaContainer } from '$users/auth/lucia/types';
@@ -40,11 +39,9 @@ export class ContextService {
 		throw new Error('Response type not supported!');
 	}
 
-	protected static async getLuciaContainer(context: ExecutionContext): Promise<LuciaContainer> {
+	protected static getLuciaContainer(context: ExecutionContext): LuciaContainer {
 		if (context.getType() === 'ws') {
 			const socket = context.switchToWs().getClient<TypedWebSocket>();
-
-			await SocketService.finishInitialization(socket);
 
 			return socket;
 		}
@@ -54,14 +51,14 @@ export class ContextService {
 		return request;
 	}
 
-	static async getSession(context: ExecutionContext) {
-		const { session } = await this.getLuciaContainer(context);
+	static getSession(context: ExecutionContext) {
+		const { session } = this.getLuciaContainer(context);
 
 		return session;
 	}
 
-	static async getUser(context: ExecutionContext) {
-		const { user } = await this.getLuciaContainer(context);
+	static getUser(context: ExecutionContext) {
+		const { user } = this.getLuciaContainer(context);
 
 		return user;
 	}

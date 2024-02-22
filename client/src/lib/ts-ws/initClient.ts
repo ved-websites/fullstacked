@@ -37,6 +37,12 @@ type ClientEventRouter<T extends EventRouter> = {
 			: unknown;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-magic-numbers
+function generateUid(length = 8) {
+	// eslint-disable-next-line @typescript-eslint/no-magic-numbers
+	return [...Array(length)].map(() => Math.random().toString(36)[2]).join('');
+}
+
 function initRoute<TRoute extends EventRoute>(route: TRoute, socket: KitSocket) {
 	/**
 	 * Subscribes to the given event.
@@ -138,7 +144,7 @@ class KitSocket extends SuperSocket {
 			subscriber: SubscriptionEventValue<TRoute>['subscriber'];
 		},
 	) {
-		const uid = this.generateUid();
+		const uid = generateUid();
 
 		const subscriptionRequest: NestWsIncomingMessage<TRoute> = {
 			event: route.key,
@@ -184,12 +190,6 @@ class KitSocket extends SuperSocket {
 	hasSubscription(uid: EventUID | undefined) {
 		return this.subscriptionMap.has(uid);
 	}
-
-	// eslint-disable-next-line @typescript-eslint/no-magic-numbers
-	protected generateUid(length = 8) {
-		// eslint-disable-next-line @typescript-eslint/no-magic-numbers
-		return [...Array(length)].map(() => Math.random().toString(36)[2]).join('');
-	}
 }
 
 function initRouter<TRouter extends EventRouter>(router: TRouter, socket: KitSocket) {
@@ -212,9 +212,23 @@ export function initClient<TRouter extends EventRouter>(
 	router: TRouter,
 	args: {
 		url: string;
+		handshakeUrl: string;
 	},
 ) {
-	const $socket = new KitSocket(args.url, [], {
+	const endpoint = args.url.startsWith('http') ? args.url.replace('http', 'ws') : args.url;
+
+	const token = generateUid();
+
+	const $socket = new KitSocket(endpoint, [], {
+		queryParams: { token },
+		authenticate: {
+			endpoint: args.handshakeUrl,
+			data: { token },
+			headers: { 'Content-Type': 'application/json' },
+			fetchOptions: {
+				credentials: 'include',
+			},
+		},
 		secureOnly: !dev,
 		pingInterval: 30000,
 		lazy: true,
