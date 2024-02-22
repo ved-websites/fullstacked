@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'client/**'
+      - 'api/src/@shared/**'
       - 'package.json'
       - '.github/workflows/main-client.yml'
 

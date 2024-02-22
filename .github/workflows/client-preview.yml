@@ -6,6 +6,7 @@ on:
       - '!release-please**'
     paths:
       - 'client/**'
+      - 'api/src/@shared/**'
 
 env:
   NODE_VERSION: '20'
