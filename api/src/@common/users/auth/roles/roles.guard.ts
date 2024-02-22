@@ -17,7 +17,7 @@ export class RolesGuard implements CanActivate {
 	) {}
 
 	async canActivate(context: ExecutionContext) {
-		const definedRoles = this.reflector.getAllAndOverride(Roles, [context.getHandler(), context.getClass()]);
+		const definedRoles = this.reflector.getAllAndOverride(RoleCheck, [context.getHandler(), context.getClass()]);
 
 		if (!definedRoles) {
 			return true;
@@ -68,4 +68,4 @@ export class RolesGuard implements CanActivate {
 	}
 }
 
-export const Roles = Reflector.createDecorator<[string, ...string[]]>();
+export const RoleCheck = Reflector.createDecorator<[string, ...string[]]>();

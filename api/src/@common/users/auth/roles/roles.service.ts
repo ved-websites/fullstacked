@@ -3,7 +3,7 @@ import RoleCreateNestedManyWithoutUsersInputSchema from '$zod/inputTypeSchemas/R
 import { Injectable } from '@nestjs/common';
 import { User } from 'lucia';
 import { z } from 'zod';
-import { ADMIN } from '~utils/roles';
+import { Roles } from '~utils/roles';
 
 @Injectable()
 export class RolesService {
@@ -50,7 +50,7 @@ export class RolesService {
 	}
 
 	async userCanSendEmail(user: User) {
-		const rolesCanSendEmail = [ADMIN];
+		const rolesCanSendEmail = [Roles.ADMIN];
 
 		const userRoles = (
 			await this.prisma.role.findMany({

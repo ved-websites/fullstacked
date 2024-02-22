@@ -9,7 +9,7 @@ import { AppRoute } from '@ts-rest/core';
 import { User } from 'lucia';
 import supertest from 'supertest';
 import { AppModule } from '~app-module';
-import { ADMIN } from '~utils/roles';
+import { Roles } from '~utils/roles';
 import { prepareTestDb } from '../../prisma/utils/functions';
 
 type TestUser = {
@@ -86,7 +86,7 @@ export class E2ETestManager extends TestManager<E2ETestOptions> {
 
 		await this.prisma.role.create({
 			data: {
-				text: ADMIN,
+				text: Roles.ADMIN,
 			},
 		});
 

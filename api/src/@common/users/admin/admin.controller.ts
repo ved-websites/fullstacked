@@ -1,15 +1,15 @@
 import { getErrorMessage } from '$i18n/i18n.error';
-import { Roles } from '$users/auth/roles/roles.guard';
+import { RoleCheck } from '$users/auth/roles/roles.guard';
 import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
 import { Origin } from '$utils/origin.decorator';
 import { Controller, ForbiddenException } from '@nestjs/common';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { r } from '~contract';
-import { ADMIN } from '~utils/roles';
+import { Roles } from '~utils/roles';
 import { AdminService } from './admin.service';
 
-@Roles([ADMIN])
+@RoleCheck([Roles.ADMIN])
 @Controller()
 export class AdminController {
 	constructor(private readonly adminService: AdminService) {}

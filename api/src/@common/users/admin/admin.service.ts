@@ -12,7 +12,7 @@ import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { z } from 'zod';
 import { wsR } from '~contract';
-import { ADMIN } from '~utils/roles';
+import { Roles } from '~utils/roles';
 import { UserCreateInputNoId } from './admin.contract';
 import { ADMIN_CREATE_USER_EVENT_KEY, ADMIN_CREATE_USER_EVENT_TYPE } from './listeners/admin.events';
 
@@ -106,8 +106,8 @@ export class AdminService {
 	async editUser(email: string, data: Pick<z.output<typeof UserUpdateInputSchema>, 'firstName' | 'lastName' | 'roles'>) {
 		if (data.roles?.set) {
 			const shouldCheckRemainsAdmin = Array.isArray(data.roles.set)
-				? data.roles.set.every((role) => role.text !== ADMIN)
-				: data.roles.set.text !== ADMIN;
+				? data.roles.set.every((role) => role.text !== Roles.ADMIN)
+				: data.roles.set.text !== Roles.ADMIN;
 
 			if (shouldCheckRemainsAdmin) {
 				const otherAdminsCount = await this.prisma.user.count({
@@ -118,7 +118,7 @@ export class AdminService {
 						roles: {
 							some: {
 								text: {
-									equals: ADMIN,
+									equals: Roles.ADMIN,
 								},
 							},
 						},
@@ -157,7 +157,7 @@ export class AdminService {
 				roles: {
 					some: {
 						text: {
-							equals: ADMIN,
+							equals: Roles.ADMIN,
 						},
 					},
 				},
