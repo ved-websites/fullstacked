@@ -46,31 +46,24 @@ export const load = (async (event) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async (event) => {
-		const {
-			request,
-			locals: { tsrest },
-		} = event;
-
+	default: async ({ request, locals: { tsrest }, cookies }) => {
 		const form = await superValidate(request, zod(emailChangeSchema));
 
 		return assertTsRestActionResultOK({
 			form,
-			event,
+			cookies,
 			result: () => tsrest.user.settings.profile.requestUpdateEmail({ body: form.data }),
 			onNotOk: (result, { errorMessage }) => {
 				if (result.status == StatusCodes.FORBIDDEN) {
 					return setError(form, 'email', errorMessage);
 				}
 			},
-			onValid: () => {
-				return {
-					toasts: createToasts({
-						text: k('settings.profile.email.request.success'),
-						i18nPayload: { email: form.data.email },
-					}),
-				};
-			},
+			onValid: () => ({
+				toasts: createToasts({
+					text: k('settings.profile.email.request.success'),
+					i18nPayload: { email: form.data.email },
+				}),
+			}),
 		});
 	},
 } satisfies Actions;

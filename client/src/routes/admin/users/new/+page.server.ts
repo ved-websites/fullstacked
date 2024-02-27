@@ -1,9 +1,8 @@
 import { createToasts } from '$lib/components/ToastManager/helper';
+import type { PageMessages } from '$lib/types';
 import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/assertions';
-import { createPageDataObject } from '$lib/utils/page-data-object';
 import { fail } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
-import { redirect } from 'sveltekit-flash-message/server';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { k } from '~shared';
@@ -24,16 +23,12 @@ export const load = (async ({ locals: { tsrest } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async (event) => {
-		const {
-			request,
-			locals: { tsrest },
-		} = event;
-
+	default: async ({ request, locals: { tsrest }, cookies }) => {
 		const form = await superValidate(request, zod(adminNewUserFormSchema));
 
 		return assertTsRestActionResultOK({
 			form,
+			cookies,
 			result: () => {
 				const { email, firstName, lastName, roles, emailLang } = form.data;
 
@@ -58,20 +53,15 @@ export const actions = {
 					setError(form, errorMessage);
 				}
 
-				return fail(result.status, createPageDataObject({ ...pageData, form }));
+				return fail(result.status, { ...pageData, form } satisfies PageMessages);
 			},
-			onValid: () => {
-				throw redirect(
-					'/admin/users',
-					{
-						toasts: createToasts({
-							text: k('admin.users.actions.create.success'),
-							i18nPayload: { email: form.data.email },
-						}),
-					},
-					event,
-				);
-			},
+			onValid: () => ({
+				redirectTo: '/admin/users',
+				toasts: createToasts({
+					text: k('admin.users.actions.create.success'),
+					i18nPayload: { email: form.data.email },
+				}),
+			}),
 		});
 	},
 } satisfies Actions;

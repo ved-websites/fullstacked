@@ -1,12 +1,12 @@
 import { createLayoutAlert, type LayoutAlertData } from '$lib/components/LayoutAlert/helper';
 import { createToasts, type ToastData, type ToastManagerData } from '$lib/components/ToastManager/helper';
-import { error, fail, type RequestEvent } from '@sveltejs/kit';
+import type { PageMessages } from '$lib/types';
+import { error, fail, type Cookies, type RequestEvent } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
 import type { Infer, SuperValidated } from 'sveltekit-superforms';
 import type { AnyZodObject } from 'zod';
 import { k } from '~shared';
-import { createPageDataObject, type PageDataObject } from './page-data-object';
 
 export type ValidResult<T extends { status: number }> = T extends { status: StatusCodes.OK } ? T : never;
 export type InvalidResult<T extends { status: number }> = Exclude<T, { status: StatusCodes.OK }>;
@@ -37,11 +37,16 @@ export type ActionNotValidData = {
 
 export type AssertTsRestActionResultOKArgs<T extends { status: number }> = {
 	form?: SuperValidated<Infer<AnyZodObject>>;
-	event?: RequestEvent;
 	result: () => Awaitable<T>;
-	onValid: (result: ValidResult<T>) => Awaitable<PageDataObject>;
+	onValid?: (result: ValidResult<T>) => Awaitable<
+		PageMessages & {
+			/** Special key that redirects to this given url when form action is valid. */
+			redirectTo?: `/${string}`;
+		}
+	>;
 	onNotOk?: (result: InvalidResult<T>, data: ActionNotValidData) => Awaitable<unknown>;
-} & ({ toast?: Partial<ToastManagerData> } | { layoutAlert: Partial<LayoutAlertData> });
+} & ({ toast?: Partial<ToastManagerData> } | { layoutAlert: Partial<LayoutAlertData> }) &
+	({ cookies: Cookies } | { event: RequestEvent });
 
 export function assertTsRestActionResultOK<T extends { status: number; body: unknown }>(args: AssertTsRestActionResultOKArgs<T>) {
 	// Define checking result function
@@ -58,16 +63,16 @@ export function assertTsRestActionResultOK<T extends { status: number; body: unk
 
 			const pageData = (() => {
 				if ('layoutAlert' in args) {
-					return createPageDataObject({
+					return {
 						form: args.form,
 						layoutAlert: createLayoutAlert({ text: errorMessage, type: 'error', ...args.layoutAlert }),
-					});
+					} satisfies PageMessages;
 				}
 
-				return createPageDataObject({
+				return {
 					form: args.form,
 					toasts: createToasts({ text: errorMessage, type: 'error', ...args.toast }),
-				});
+				} satisfies PageMessages;
 			})();
 
 			const userDefinedError = await args.onNotOk?.(result as InvalidResult<T>, { errorMessage, pageData });
@@ -79,13 +84,17 @@ export function assertTsRestActionResultOK<T extends { status: number; body: unk
 			return fail(result.status, pageData);
 		}
 
-		const expectedResult = await args.onValid(result);
+		const { redirectTo, ...expectedResult } = (await args.onValid?.(result)) ?? {};
 
-		if (args.event) {
-			return redirect({ form: args.form, ...expectedResult }, args.event);
+		const redirectEvent = 'cookies' in args ? args.cookies : args.event;
+
+		const pageData: PageMessages = { form: args.form, ...expectedResult };
+
+		if (redirectTo) {
+			return redirect(redirectTo, pageData, redirectEvent);
 		}
 
-		return expectedResult;
+		return redirect(pageData, redirectEvent);
 	};
 
 	if (args.form) {

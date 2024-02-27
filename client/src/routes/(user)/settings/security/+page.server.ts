@@ -1,6 +1,5 @@
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK } from '$lib/utils/assertions';
-import { createPageDataObject } from '$lib/utils/page-data-object';
 import type { Actions } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -25,25 +24,19 @@ export const load = (async () => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async (event) => {
-		const {
-			request,
-			locals: { tsrest },
-		} = event;
-
+	default: async ({ request, locals: { tsrest }, cookies }) => {
 		const form = await superValidate(request, zod(newPasswordFormSchema));
 
 		return assertTsRestActionResultOK({
 			form,
-			event,
+			cookies,
 			result: () => tsrest.user.settings.security.changePassword({ body: form.data }),
-			onValid: () => {
-				const toasts = createToasts({
+			onValid: () => ({
+				form,
+				toasts: createToasts({
 					text: k('settings.security.actions.password.updated.success'),
-				});
-
-				return createPageDataObject({ form, toasts });
-			},
+				}),
+			}),
 		});
 	},
 } satisfies Actions;

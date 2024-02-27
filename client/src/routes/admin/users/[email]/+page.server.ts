@@ -1,6 +1,5 @@
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/assertions';
-import { redirect } from 'sveltekit-flash-message/server';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { k } from '~shared';
@@ -30,17 +29,12 @@ export const load = (async ({ params: { email }, locals: { tsrest } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async (event) => {
-		const {
-			request,
-			locals: { tsrest },
-			params: { email: editableUserEmail },
-		} = event;
-
+	default: async ({ request, locals: { tsrest }, params: { email: editableUserEmail }, cookies }) => {
 		const form = await superValidate(request, zod(adminUserFormSchema));
 
 		return assertTsRestActionResultOK({
 			form,
+			cookies,
 			result: () => {
 				return tsrest.users.admin.editUser({
 					body: {
@@ -53,18 +47,13 @@ export const actions = {
 					},
 				});
 			},
-			onValid: () => {
-				throw redirect(
-					'/admin/users',
-					{
-						toasts: createToasts({
-							text: k('admin.users.actions.edit.success'),
-							i18nPayload: { email: editableUserEmail },
-						}),
-					},
-					event,
-				);
-			},
+			onValid: () => ({
+				redirectTo: '/admin/users',
+				toasts: createToasts({
+					text: k('admin.users.actions.edit.success'),
+					i18nPayload: { email: editableUserEmail },
+				}),
+			}),
 		});
 	},
 } satisfies Actions;

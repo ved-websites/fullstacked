@@ -1,7 +1,6 @@
 import { locales } from '$i18n-config';
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK } from '$lib/utils/assertions';
-import { redirect } from 'sveltekit-flash-message/server';
 import { superValidate } from 'sveltekit-superforms';
 import { zod, type Infer } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
@@ -21,36 +20,25 @@ export const load = (async ({ locals: { sessionUser, browserLang } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async (event) => {
-		const {
-			request,
-			locals: { tsrest, userHasJs },
-		} = event;
-
+	default: async ({ request, locals: { tsrest }, cookies }) => {
 		const form = await superValidate(request, zod(langSchema));
 
 		const lang = locales.includes(form.data.lang as string) ? form.data.lang : null;
 
 		return assertTsRestActionResultOK({
 			form,
-			event,
+			cookies,
 			result: () => {
 				return tsrest.user.settings.profile.update({
 					body: { lang },
 				});
 			},
-			onValid: () => {
-				const toasts = createToasts({
+			onValid: () => ({
+				toasts: createToasts({
 					text: lang ? k('settings.experience.lang.toast.targetted') : k('settings.experience.lang.toast.automatic'),
 					timeout: 3000,
-				});
-
-				if (!userHasJs) {
-					throw redirect({ toasts }, event);
-				}
-
-				return { form, toasts };
-			},
+				}),
+			}),
 		});
 	},
 } satisfies Actions;

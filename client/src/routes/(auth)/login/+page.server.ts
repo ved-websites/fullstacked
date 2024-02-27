@@ -1,6 +1,6 @@
 import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
+import type { PageMessages } from '$lib/types';
 import { assertTsRestActionResultOK } from '$lib/utils/assertions';
-import { createPageDataObject } from '$lib/utils/page-data-object';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms';
@@ -34,22 +34,18 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 		});
 	})();
 
-	return createPageDataObject({ form, layoutAlert });
+	return { form, layoutAlert } satisfies PageMessages;
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, url, locals: { tsrest } }) => {
+	default: async ({ request, url, locals: { tsrest }, cookies }) => {
 		const form = await superValidate(request, zod(schema));
 
 		return assertTsRestActionResultOK({
 			form,
+			cookies,
 			result: () => tsrest.auth.login({ body: form.data }),
-			onValid: () => {
-				const redirectTo = getRedirectTo(url) ?? '/';
-
-				// Successful login
-				redirect(StatusCodes.SEE_OTHER, redirectTo);
-			},
+			onValid: () => ({ redirectTo: getRedirectTo(url) ?? '/' }),
 			layoutAlert: {},
 		});
 	},

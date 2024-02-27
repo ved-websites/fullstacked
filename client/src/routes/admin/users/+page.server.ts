@@ -1,6 +1,5 @@
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK } from '$lib/utils/assertions';
-import type { PageDataObject } from '$lib/utils/page-data-object';
 import { streamed } from '$lib/utils/streaming';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
@@ -31,18 +30,11 @@ export const load = (async ({ locals: { tsrest } }) => {
 		);
 	});
 
-	return {
-		users,
-	};
+	return { users };
 }) satisfies PageServerLoad;
 
 export const actions = {
-	delete: async (event) => {
-		const {
-			request,
-			locals: { tsrest },
-		} = event;
-
+	delete: async ({ request, locals: { tsrest }, cookies }) => {
 		const formdata = await request.formData();
 
 		const email = await emailSchema.parseAsync(formdata.get('email')).catch(() => {
@@ -55,20 +47,19 @@ export const actions = {
 						extraData: k('admin.users.actions.delete.errors.missing-email.details'),
 					}),
 				},
-				event,
+				cookies,
 			);
 		});
 
 		return assertTsRestActionResultOK({
+			cookies,
 			result: () => tsrest.users.admin.deleteUser({ body: { email } }),
-			onValid: () => {
-				const toasts = createToasts({
+			onValid: () => ({
+				toasts: createToasts({
 					text: k('admin.users.actions.delete.success'),
 					i18nPayload: { email },
-				});
-
-				return { toasts } satisfies PageDataObject;
-			},
+				}),
+			}),
 		});
 	},
 } satisfies Actions;

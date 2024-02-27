@@ -1,5 +1,5 @@
 import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/assertions';
-import { error, redirect, type Actions } from '@sveltejs/kit';
+import { error, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -29,17 +29,16 @@ export const load = (async ({ url, locals: { tsrest } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals: { tsrest } }) => {
+	default: async ({ request, locals: { tsrest }, cookies }) => {
 		const form = await superValidate(request, zod(registerSchema));
 
 		const { registerToken, password, ...user } = form.data;
 
 		return assertTsRestActionResultOK({
 			form,
+			cookies,
 			result: () => tsrest.auth.register({ body: { registerToken, password, user } }),
-			onValid: () => {
-				redirect(StatusCodes.SEE_OTHER, '/');
-			},
+			onValid: () => ({ redirectTo: '/' }),
 		});
 	},
 } satisfies Actions;

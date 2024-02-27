@@ -5,13 +5,12 @@ import { StatusCodes } from 'http-status-codes';
 import type { Actions } from './$types';
 
 export const actions = {
-	async logout({ locals: { tsrest } }) {
+	async logout({ locals: { tsrest }, cookies }) {
 		return assertTsRestActionResultOK({
-			layoutAlert: undefined,
+			cookies,
+			layoutAlert: {},
 			result: () => tsrest.auth.logout(),
-			onValid: () => {
-				redirect(StatusCodes.SEE_OTHER, '/login');
-			},
+			onValid: () => ({ redirectTo: '/login' }),
 		});
 	},
 	async theme({ cookies, url: { searchParams }, request }) {
