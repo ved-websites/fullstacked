@@ -23,12 +23,17 @@ export const load = (async ({ locals: { tsrest } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals: { tsrest }, cookies }) => {
+	default: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+		} = event;
+
 		const form = await superValidate(request, zod(adminNewUserFormSchema));
 
 		return assertTsRestActionResultOK({
 			form,
-			cookies,
+			event,
 			result: () => {
 				const { email, firstName, lastName, roles, emailLang } = form.data;
 

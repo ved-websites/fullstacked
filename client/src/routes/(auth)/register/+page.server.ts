@@ -29,14 +29,19 @@ export const load = (async ({ url, locals: { tsrest } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals: { tsrest }, cookies }) => {
+	default: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+		} = event;
+
 		const form = await superValidate(request, zod(registerSchema));
 
 		const { registerToken, password, ...user } = form.data;
 
 		return assertTsRestActionResultOK({
 			form,
-			cookies,
+			event,
 			result: () => tsrest.auth.register({ body: { registerToken, password, user } }),
 			onValid: () => ({ redirectTo: '/' }),
 		});

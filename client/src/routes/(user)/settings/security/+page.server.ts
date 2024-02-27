@@ -24,12 +24,17 @@ export const load = (async () => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals: { tsrest }, cookies }) => {
+	default: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+		} = event;
+
 		const form = await superValidate(request, zod(newPasswordFormSchema));
 
 		return assertTsRestActionResultOK({
 			form,
-			cookies,
+			event,
 			result: () => tsrest.user.settings.security.changePassword({ body: form.data }),
 			onValid: () => ({
 				form,

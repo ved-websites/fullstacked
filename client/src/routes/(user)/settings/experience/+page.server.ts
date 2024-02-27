@@ -20,14 +20,19 @@ export const load = (async ({ locals: { sessionUser, browserLang } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals: { tsrest }, cookies }) => {
+	default: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+		} = event;
+
 		const form = await superValidate(request, zod(langSchema));
 
 		const lang = locales.includes(form.data.lang as string) ? form.data.lang : null;
 
 		return assertTsRestActionResultOK({
 			form,
-			cookies,
+			event,
 			result: () => {
 				return tsrest.user.settings.profile.update({
 					body: { lang },

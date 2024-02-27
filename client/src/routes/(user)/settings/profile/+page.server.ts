@@ -15,16 +15,26 @@ export const load = (async ({ locals: { sessionUser } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	basicUserInfo: async ({ request, locals: { tsrest }, cookies }) => {
+	basicUserInfo: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+		} = event;
+
 		const form = await superValidate(request, zod(userFormSchema));
 
 		return assertTsRestActionResultOK({
 			form,
-			cookies,
+			event,
 			result: () => tsrest.user.settings.profile.update({ body: form.data }),
 		});
 	},
-	profilePicture: async ({ request, locals: { tsrest }, cookies }) => {
+	profilePicture: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+		} = event;
+
 		const formData = await request.formData();
 
 		const profilePictureFile = formData.get('profile-picture');
@@ -38,13 +48,17 @@ export const actions = {
 		}
 
 		return assertTsRestActionResultOK({
-			cookies,
+			event,
 			result: () => tsrest.user.settings.profile.uploadPicture({ body: formData }),
 		});
 	},
-	deleteProfilePicture: async ({ locals: { tsrest }, cookies }) => {
+	deleteProfilePicture: async (event) => {
+		const {
+			locals: { tsrest },
+		} = event;
+
 		return assertTsRestActionResultOK({
-			cookies,
+			event,
 			result: () => tsrest.user.settings.profile.deletePicture(),
 		});
 	},

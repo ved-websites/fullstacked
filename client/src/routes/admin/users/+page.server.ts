@@ -34,7 +34,12 @@ export const load = (async ({ locals: { tsrest } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	delete: async ({ request, locals: { tsrest }, cookies }) => {
+	delete: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+		} = event;
+
 		const formdata = await request.formData();
 
 		const email = await emailSchema.parseAsync(formdata.get('email')).catch(() => {
@@ -47,12 +52,12 @@ export const actions = {
 						extraData: 'admin.users.actions.delete.errors.missing-email.details' satisfies I18nKey,
 					}),
 				},
-				cookies,
+				event,
 			);
 		});
 
 		return assertTsRestActionResultOK({
-			cookies,
+			event,
 			result: () => tsrest.users.admin.deleteUser({ body: { email } }),
 			onValid: () => ({
 				toasts: createToasts({

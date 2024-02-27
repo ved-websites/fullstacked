@@ -46,12 +46,17 @@ export const load = (async (event) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals: { tsrest }, cookies }) => {
+	default: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+		} = event;
+
 		const form = await superValidate(request, zod(emailChangeSchema));
 
 		return assertTsRestActionResultOK({
 			form,
-			cookies,
+			event,
 			result: () => tsrest.user.settings.profile.requestUpdateEmail({ body: form.data }),
 			onNotOk: (result, { errorMessage }) => {
 				if (result.status == StatusCodes.FORBIDDEN) {

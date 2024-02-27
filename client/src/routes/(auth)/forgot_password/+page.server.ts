@@ -50,12 +50,17 @@ export const load = (async ({ url, locals: { tsrest }, setHeaders }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	requestPasswordReset: async ({ request, locals: { tsrest }, cookies }) => {
+	requestPasswordReset: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+		} = event;
+
 		const form = await superValidate(request, zod(requestPasswordSchema));
 
 		return assertTsRestActionResultOK({
 			form,
-			cookies,
+			event,
 			result: () => tsrest.auth.forgotPasswordRequest({ query: form.data }),
 			onValid: () => ({
 				layoutAlert: createLayoutAlert({
@@ -64,12 +69,17 @@ export const actions = {
 			}),
 		});
 	},
-	resetPassword: async ({ request, locals: { tsrest }, cookies }) => {
+	resetPassword: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+		} = event;
+
 		const form = await superValidate(request, zod(resetPasswordSchema));
 
 		return assertTsRestActionResultOK({
 			form,
-			cookies,
+			event,
 			result: () => tsrest.auth.resetPassword({ body: form.data }),
 			onValid: () => ({
 				redirectTo: '/login',

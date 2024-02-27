@@ -29,12 +29,18 @@ export const load = (async ({ params: { email }, locals: { tsrest } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, locals: { tsrest }, params: { email: editableUserEmail }, cookies }) => {
+	default: async (event) => {
+		const {
+			request,
+			locals: { tsrest },
+			params: { email: editableUserEmail },
+		} = event;
+
 		const form = await superValidate(request, zod(adminUserFormSchema));
 
 		return assertTsRestActionResultOK({
 			form,
-			cookies,
+			event,
 			result: () => {
 				return tsrest.users.admin.editUser({
 					body: {

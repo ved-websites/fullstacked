@@ -1,7 +1,7 @@
 import { createLayoutAlert, type LayoutAlertData } from '$lib/components/LayoutAlert/helper';
 import { createToasts, type ToastData, type ToastManagerData } from '$lib/components/ToastManager/helper';
 import type { PageMessages } from '$lib/types';
-import { error, fail, type Cookies, type RequestEvent } from '@sveltejs/kit';
+import { error, fail, type RequestEvent } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
 import type { Infer, SuperValidated } from 'sveltekit-superforms';
@@ -37,6 +37,7 @@ export type ActionNotValidData = {
 
 export type AssertTsRestActionResultOKArgs<T extends { status: number }> = {
 	form?: SuperValidated<Infer<AnyZodObject>>;
+	event: RequestEvent;
 	result: () => Awaitable<T>;
 	onValid?: (result: ValidResult<T>) => Awaitable<
 		PageMessages & {
@@ -45,8 +46,7 @@ export type AssertTsRestActionResultOKArgs<T extends { status: number }> = {
 		}
 	>;
 	onNotOk?: (result: InvalidResult<T>, data: ActionNotValidData) => Awaitable<unknown>;
-} & ({ toast?: Partial<ToastManagerData> } | { layoutAlert: Partial<LayoutAlertData> }) &
-	({ cookies: Cookies } | { event: RequestEvent });
+} & ({ toast?: Partial<ToastManagerData> } | { layoutAlert: Partial<LayoutAlertData> });
 
 export function assertTsRestActionResultOK<T extends { status: number; body: unknown }>(args: AssertTsRestActionResultOKArgs<T>) {
 	// Define checking result function
@@ -86,15 +86,14 @@ export function assertTsRestActionResultOK<T extends { status: number; body: unk
 
 		const { redirectTo, ...expectedResult } = (await args.onValid?.(result)) ?? {};
 
-		const redirectEvent = 'cookies' in args ? args.cookies : args.event;
-
 		const pageData: PageMessages = { form: args.form, ...expectedResult };
 
 		if (redirectTo) {
-			return redirect(redirectTo, pageData, redirectEvent);
+			console.log({ redirectTo });
+			return redirect(redirectTo, pageData, args.event);
 		}
 
-		return redirect(pageData, redirectEvent);
+		return redirect(pageData, args.event);
 	};
 
 	if (args.form) {

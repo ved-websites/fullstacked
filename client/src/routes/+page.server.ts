@@ -5,9 +5,13 @@ import { StatusCodes } from 'http-status-codes';
 import type { Actions } from './$types';
 
 export const actions = {
-	async logout({ locals: { tsrest }, cookies }) {
+	async logout(event) {
+		const {
+			locals: { tsrest },
+		} = event;
+
 		return assertTsRestActionResultOK({
-			cookies,
+			event,
 			layoutAlert: {},
 			result: () => tsrest.auth.logout(),
 			onValid: () => ({ redirectTo: '/login' }),

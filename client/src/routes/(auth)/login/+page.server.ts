@@ -38,12 +38,18 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ request, url, locals: { tsrest }, cookies }) => {
+	default: async (event) => {
+		const {
+			request,
+			url,
+			locals: { tsrest },
+		} = event;
+
 		const form = await superValidate(request, zod(schema));
 
 		return assertTsRestActionResultOK({
 			form,
-			cookies,
+			event,
 			result: () => tsrest.auth.login({ body: form.data }),
 			onValid: () => ({ redirectTo: getRedirectTo(url) ?? '/' }),
 			layoutAlert: {},
