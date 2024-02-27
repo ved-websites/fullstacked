@@ -1,7 +1,6 @@
 import { locales } from '$i18n-config';
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK } from '$lib/utils/assertions';
-import { createPageDataObject } from '$lib/utils/page-data-object';
 import { redirect } from 'sveltekit-flash-message/server';
 import { superValidate } from 'sveltekit-superforms';
 import { zod, type Infer } from 'sveltekit-superforms/adapters';
@@ -34,6 +33,7 @@ export const actions = {
 
 		return assertTsRestActionResultOK({
 			form,
+			event,
 			result: () => {
 				return tsrest.user.settings.profile.update({
 					body: { lang },
@@ -49,7 +49,7 @@ export const actions = {
 					throw redirect({ toasts }, event);
 				}
 
-				return createPageDataObject({ form, toasts });
+				return { form, toasts };
 			},
 		});
 	},
