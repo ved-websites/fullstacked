@@ -2,7 +2,7 @@ import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/assertions';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { k } from '~shared';
+import type { I18nKey } from '~shared';
 import { adminUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -50,7 +50,7 @@ export const actions = {
 			onValid: () => ({
 				redirectTo: '/admin/users',
 				toasts: createToasts({
-					text: k('admin.users.actions.edit.success'),
+					text: 'admin.users.actions.edit.success' satisfies I18nKey,
 					i18nPayload: { email: editableUserEmail },
 				}),
 			}),

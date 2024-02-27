@@ -7,7 +7,8 @@
 		"new-email": "Nouveau Courriel"
 	},
 	"roles": {
-		"admin": "Administrateur"
+		"admin": "Administrateur",
+		"chat": "Chat"
 	},
 	"placeholders": {
 		"email": "exemple@exemple.com"

@@ -4,7 +4,7 @@ import { createTsRestClient } from '$lib/ts-rest/client';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { parseString } from 'set-cookie-parser';
-import { SESSION_COOKIE_NAME, k } from '~shared';
+import { SESSION_COOKIE_NAME, type I18nKey } from '~shared';
 import { getAuthUser } from './auth/auth-handler';
 import { themeCookieName, themes, type Theme } from './lib/stores';
 import { HASJS_COOKIE_NAME } from './lib/utils/js-handling';
@@ -64,7 +64,7 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 	}
 
 	const response = await fetch(request).catch(() => {
-		const fakeResponse = { message: k('common.errors.server.down') };
+		const fakeResponse = { message: 'common.errors.server.down' satisfies I18nKey };
 
 		const blob = new Blob([JSON.stringify(fakeResponse)], {
 			type: 'application/json',

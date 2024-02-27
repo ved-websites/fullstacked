@@ -3,7 +3,7 @@ import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { streamed } from '$lib/utils/streaming';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
-import { emailSchema, k } from '~shared';
+import { emailSchema, type I18nKey } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ locals: { tsrest } }) => {
@@ -42,9 +42,9 @@ export const actions = {
 				'/admin/users',
 				{
 					toasts: createToasts({
-						text: k('admin.users.actions.delete.errors.missing-email.error'),
+						text: 'admin.users.actions.delete.errors.missing-email.error' satisfies I18nKey,
 						type: 'warning',
-						extraData: k('admin.users.actions.delete.errors.missing-email.details'),
+						extraData: 'admin.users.actions.delete.errors.missing-email.details' satisfies I18nKey,
 					}),
 				},
 				cookies,
@@ -56,7 +56,7 @@ export const actions = {
 			result: () => tsrest.users.admin.deleteUser({ body: { email } }),
 			onValid: () => ({
 				toasts: createToasts({
-					text: k('admin.users.actions.delete.success'),
+					text: 'admin.users.actions.delete.success' satisfies I18nKey,
 					i18nPayload: { email },
 				}),
 			}),

@@ -3,7 +3,7 @@ import { error, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { k } from '~shared';
+import type { I18nKey } from '~shared';
 import type { PageServerLoad } from './$types';
 import { registerSchema } from './schema';
 
@@ -11,7 +11,7 @@ export const load = (async ({ url, locals: { tsrest } }) => {
 	const registerToken = url.searchParams.get('token');
 
 	if (!registerToken) {
-		error(StatusCodes.BAD_REQUEST, { message: k('(auth).register.errors.missing-token') });
+		error(StatusCodes.BAD_REQUEST, { message: '(auth).register.errors.missing-token' satisfies I18nKey });
 	}
 
 	const result = await tsrest.auth.initRegistration({ query: { registerToken } });

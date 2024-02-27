@@ -4,7 +4,7 @@
 	import type { TsRestClient } from '$lib/ts-rest/client';
 	import { Button } from 'flowbite-svelte';
 	import { StatusCodes } from 'http-status-codes';
-	import { k } from '~shared';
+	import type { I18nKey } from '~shared';
 	import type { BaseUser } from '../../types';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);
@@ -37,14 +37,14 @@
 				});
 			} else {
 				toasts = createToasts({
-					text: k('admin.users.tables.actions.resend-invite.toasts.error-server'),
+					text: 'admin.users.tables.actions.resend-invite.toasts.error-server' satisfies I18nKey,
 					timeout: showInviteResentTextDuration,
 					// extraData: `<div class="mt-3 italic">${errors}</div>`,
 				});
 			}
 		} catch (error) {
 			toasts = createToasts({
-				text: k('admin.users.tables.actions.resend-invite.toasts.error-local'),
+				text: 'admin.users.tables.actions.resend-invite.toasts.error-local' satisfies I18nKey,
 				type: 'warning',
 				timeout: showInviteResentTextDuration,
 				extraData: `<div class="mt-3 italic">${error}</div>`,

@@ -5,7 +5,7 @@ import { fail, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { k } from '~shared';
+import type { I18nKey } from '~shared';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals: { sessionUser } }) => {
@@ -31,7 +31,7 @@ export const actions = {
 
 		if (!(profilePictureFile instanceof File)) {
 			const toasts = createToasts({
-				text: k('settings.profile.picture.errors.missing'),
+				text: 'settings.profile.picture.errors.missing' satisfies I18nKey,
 			});
 
 			return fail(StatusCodes.BAD_REQUEST, { toasts });

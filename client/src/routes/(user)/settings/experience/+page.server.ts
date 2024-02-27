@@ -4,7 +4,7 @@ import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { superValidate } from 'sveltekit-superforms';
 import { zod, type Infer } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import { k } from '~shared';
+import type { I18nKey } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 
 const langSchema = z.object({
@@ -35,7 +35,9 @@ export const actions = {
 			},
 			onValid: () => ({
 				toasts: createToasts({
-					text: lang ? k('settings.experience.lang.toast.targetted') : k('settings.experience.lang.toast.automatic'),
+					text: lang
+						? ('settings.experience.lang.toast.targetted' satisfies I18nKey)
+						: ('settings.experience.lang.toast.automatic' satisfies I18nKey),
 					timeout: 3000,
 				}),
 			}),

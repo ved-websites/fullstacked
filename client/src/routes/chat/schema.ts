@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { k } from '~shared';
+import type { I18nKey } from '~shared';
 
 export const chatSchema = z.object({
-	message: z.string().min(1, k('chat.errors.message.empty')),
+	message: z.string().min(1, 'chat.errors.message.empty' satisfies I18nKey),
 });

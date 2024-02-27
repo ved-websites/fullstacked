@@ -105,6 +105,10 @@
 		"i18n-ally.tabStyle": "tab",
 		"i18n-ally.keystyle": "nested",
 		"i18n-ally.regex.key": "[\\w\\d\\. \\(\\)\\-\\[\\]\\/:]*?",
+		"i18n-ally.localesPaths": [
+			"api/src/i18n",
+			"client/src/i18n",
+		],
 		"triggerTaskOnSave.tasks": {
 			"format prisma file": [
 				"**/schema.prisma",

@@ -4,7 +4,7 @@ import type { Actions } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import { k, passwordSchema } from '~shared';
+import { passwordSchema, type I18nKey } from '~shared';
 import type { PageServerLoad } from './$types';
 
 const newPasswordFormSchema = z
@@ -13,7 +13,7 @@ const newPasswordFormSchema = z
 		confirm: z.string(),
 	})
 	.refine(({ password, confirm }) => password === confirm, {
-		message: k('settings.security.actions.password.errors.not-matching'),
+		message: 'settings.security.actions.password.errors.not-matching' satisfies I18nKey,
 		path: ['confirm'],
 	});
 
@@ -34,7 +34,7 @@ export const actions = {
 			onValid: () => ({
 				form,
 				toasts: createToasts({
-					text: k('settings.security.actions.password.updated.success'),
+					text: 'settings.security.actions.password.updated.success' satisfies I18nKey,
 				}),
 			}),
 		});

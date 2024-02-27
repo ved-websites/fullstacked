@@ -5,7 +5,7 @@ import { fail } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { k } from '~shared';
+import type { I18nKey } from '~shared';
 import { adminNewUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -58,7 +58,7 @@ export const actions = {
 			onValid: () => ({
 				redirectTo: '/admin/users',
 				toasts: createToasts({
-					text: k('admin.users.actions.create.success'),
+					text: 'admin.users.actions.create.success' satisfies I18nKey,
 					i18nPayload: { email: form.data.email },
 				}),
 			}),

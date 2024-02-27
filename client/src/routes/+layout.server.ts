@@ -2,7 +2,7 @@ import type { AppPageData } from '$app-types';
 import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
 import { HASJS_COOKIE_NAME } from '$lib/utils/js-handling';
 import { loadFlash } from 'sveltekit-flash-message/server';
-import { k } from '~shared';
+import type { I18nKey } from '~shared';
 
 export const load = loadFlash(async (event) => {
 	const {
@@ -28,13 +28,13 @@ export const load = loadFlash(async (event) => {
 
 	if (sessionUser === undefined) {
 		layoutAlert = createLayoutAlert({
-			text: k('common.errors.server.down'),
+			text: 'common.errors.server.down' satisfies I18nKey,
 			i18nPayload: { userHasJs },
 			type: 'error',
 		});
 	} else if (url.searchParams.has('forbidden')) {
 		layoutAlert = createLayoutAlert({
-			text: k('common.errors.access.forbidden'),
+			text: 'common.errors.access.forbidden' satisfies I18nKey,
 			type: 'error',
 		});
 	}

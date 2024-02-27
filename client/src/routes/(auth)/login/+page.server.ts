@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import { emailSchema, k, passwordSchema } from '~shared';
+import { emailSchema, passwordSchema, type I18nKey } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({
@@ -29,7 +29,7 @@ export const load = (async ({ url, locals: { sessionUser } }) => {
 		}
 
 		return createLayoutAlert({
-			text: k('(auth).login.errors.access'),
+			text: '(auth).login.errors.access' satisfies I18nKey,
 			type: 'warning',
 		});
 	})();

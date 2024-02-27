@@ -1,3 +1,1 @@
-export function k(key: string) {
-	return key;
-}
+export type I18nKey = string;

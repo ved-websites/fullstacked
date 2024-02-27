@@ -1,27 +1,27 @@
 import type { NavElement } from '$lib/components/nav/nav-elements';
-import { Roles, k } from '~shared';
+import { Roles, type I18nKey } from '~shared';
 
 export const navElements: NavElement[] = [
 	{
-		title: k('navbar.navigation.about'),
+		title: 'navbar.navigation.about' satisfies I18nKey,
 		url: '/about',
 		isPublic: true,
 		drawerIconPath: 'i-mdi-information',
 	},
 	{
-		title: k('navbar.navigation.chat'),
+		title: 'navbar.navigation.chat' satisfies I18nKey,
 		url: '/chat',
 		drawerIconPath: 'i-mdi-chat',
 		roles: [Roles.CHAT],
 	},
 	{
-		title: k('navbar.navigation.admin'),
+		title: 'navbar.navigation.admin' satisfies I18nKey,
 		id: 'admin',
 		drawerIconPath: 'i-mdi-shield-crown',
 		roles: [Roles.ADMIN],
 		elements: [
 			{
-				title: k('navbar.navigation.admin-users'),
+				title: 'navbar.navigation.admin-users' satisfies I18nKey,
 				url: '/admin/users',
 				drawerIconPath: 'i-mdi-account-details',
 				matches: [/\/admin\/users\/.+/],

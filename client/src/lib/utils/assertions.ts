@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
 import type { Infer, SuperValidated } from 'sveltekit-superforms';
 import type { AnyZodObject } from 'zod';
-import { k } from '~shared';
+import type { I18nKey } from '~shared';
 
 export type ValidResult<T extends { status: number }> = T extends { status: StatusCodes.OK } ? T : never;
 export type InvalidResult<T extends { status: number }> = Exclude<T, { status: StatusCodes.OK }>;
@@ -59,7 +59,7 @@ export function assertTsRestActionResultOK<T extends { status: number; body: unk
 			const errorMessage =
 				result.body && typeof result.body === 'object' && 'message' in result.body
 					? String(result.body.message)
-					: k('common.errorpage.types.server.details.500');
+					: ('common.errorpage.types.server.details.500' satisfies I18nKey);
 
 			const pageData = (() => {
 				if ('layoutAlert' in args) {

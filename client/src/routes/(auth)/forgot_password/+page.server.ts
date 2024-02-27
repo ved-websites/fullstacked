@@ -6,7 +6,7 @@ import { error } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { k } from '~shared';
+import type { I18nKey } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 import { requestPasswordSchema, resetPasswordSchema } from './schemas';
 
@@ -59,7 +59,7 @@ export const actions = {
 			result: () => tsrest.auth.forgotPasswordRequest({ query: form.data }),
 			onValid: () => ({
 				layoutAlert: createLayoutAlert({
-					text: k('(auth).forgot_password.request.alert'),
+					text: '(auth).forgot_password.request.alert' satisfies I18nKey,
 				}),
 			}),
 		});
@@ -74,7 +74,7 @@ export const actions = {
 			onValid: () => ({
 				redirectTo: '/login',
 				layoutAlert: createLayoutAlert({
-					text: k('(auth).forgot_password.reset.action.success'),
+					text: '(auth).forgot_password.reset.action.success' satisfies I18nKey,
 				}),
 			}),
 		});

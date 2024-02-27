@@ -7,7 +7,7 @@ import { redirect } from 'sveltekit-flash-message/server';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import { emailSchema, k } from '~shared';
+import { emailSchema, type I18nKey } from '~shared';
 import type { PageServerLoad } from './$types';
 
 const emailChangeSchema = z.object({
@@ -60,7 +60,7 @@ export const actions = {
 			},
 			onValid: () => ({
 				toasts: createToasts({
-					text: k('settings.profile.email.request.success'),
+					text: 'settings.profile.email.request.success' satisfies I18nKey,
 					i18nPayload: { email: form.data.email },
 				}),
 			}),
