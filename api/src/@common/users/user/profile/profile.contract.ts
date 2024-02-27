@@ -26,7 +26,7 @@ export const userProfileContract = c.router(
 		},
 		deletePicture: {
 			method: 'DELETE',
-			body: z.undefined(),
+			body: c.type<undefined>(),
 			path: '/picture',
 			summary: 'Deletes your own profile picture.',
 			responses: createResponses({
