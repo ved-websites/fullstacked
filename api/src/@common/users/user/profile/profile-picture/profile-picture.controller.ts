@@ -1,5 +1,6 @@
 import { TypedI18nService } from '$i18n/i18n.service';
 import { FileValidationPipe } from '$minio/minio-client.constants';
+import { Public } from '$users/auth/auth.guard';
 import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
 import { BadRequestException, Controller, Get, Header, Param, StreamableFile, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -16,6 +17,7 @@ export class ProfilePictureController {
 		private readonly i18n: TypedI18nService,
 	) {}
 
+	@Public()
 	@Get('profile-pictures/:ref')
 	@Header('Cache-Control', `max-age=${ProfilePictureController.PROFILE_PICTURE_MAX_AGE_MINUTES * 60 * 1000}`)
 	async getUserProfilePicture(@Param('ref') ref: string) {
