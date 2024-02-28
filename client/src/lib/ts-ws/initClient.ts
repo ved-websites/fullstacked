@@ -231,6 +231,7 @@ export function initClient<TRouter extends EventRouter>(
 		},
 		secureOnly: !dev,
 		pingInterval: 30000,
+		reconnectDelay: 3000,
 		lazy: true,
 		pingData: {
 			event: 'ping',

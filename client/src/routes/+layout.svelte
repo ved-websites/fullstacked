@@ -35,8 +35,10 @@
 	let sessionUnsubscriber: ReturnType<WsClientType['users']['edited']> | undefined;
 
 	afterNavigate(async () => {
-		if (wsClient.$socket.readyState !== WS_READY_STATES.OPEN && data.sessionUser) {
-			wsClient.$socket.connect();
+		if (!sessionUnsubscriber && data.sessionUser) {
+			if (wsClient.$socket.readyState !== WS_READY_STATES.OPEN) {
+				wsClient.$socket.connect();
+			}
 
 			sessionUnsubscriber = wsClient.users.edited({ id: data.sessionUser.id }, ({ data: rawEditedUserData }) => {
 				const editedUserData = removeKeys(rawEditedUserData, 'online');
