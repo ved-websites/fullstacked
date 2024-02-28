@@ -39,6 +39,11 @@ export class EnvironmentConfig {
 	@IsEnum(Environment)
 	readonly NODE_ENV?: Environment;
 
+	@Type(() => Boolean)
+	@IsOptional()
+	@IsBoolean()
+	readonly DEBUG?: boolean = false;
+
 	@Type(() => Number)
 	@IsInt()
 	readonly PORT: number = DEFAULT_PORT;
