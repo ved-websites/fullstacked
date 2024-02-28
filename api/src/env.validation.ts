@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 import { Transform, Type } from 'class-transformer';
 import { IsBoolean, IsEmail, IsEnum, IsInt, IsOptional, IsString, Matches } from 'class-validator';
 
