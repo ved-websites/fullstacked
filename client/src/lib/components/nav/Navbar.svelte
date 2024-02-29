@@ -74,7 +74,7 @@
 {#if browser && $sessionUser}
 	<Dropdown placement="bottom" triggeredBy="#avatar-menu" class="py-2">
 		<DropdownHeader>
-			<span class="block text-sm">{$sessionUser.firstName} {$sessionUser.lastName}</span>
+			<span class="block text-sm">{$sessionUser.fullName}</span>
 			<span class="block truncate text-sm font-light"> {$sessionUser.email} </span>
 		</DropdownHeader>
 		<DropdownItem href="/settings">{$t('navbar.user.links.settings')}</DropdownItem>
