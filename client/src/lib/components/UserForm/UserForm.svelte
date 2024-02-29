@@ -24,7 +24,7 @@
 			</FormInput>
 
 			<FormInput type="text" name="lastName" bind:value={$form.lastName} {...$constraints.lastName} errors={$errors.firstName}>
-				{$t('shared.userform.labels.firstname')}
+				{$t('shared.userform.labels.lastname')}
 			</FormInput>
 		</div>
 
