@@ -17,5 +17,9 @@
 	},
 	"email": {
 		"header": "Looking to change your email?"
+	},
+	"roles": {
+		"header": "Roles",
+		"no-roles": "You do not have any roles!"
 	}
 }
