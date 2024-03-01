@@ -7,5 +7,6 @@
 	"heading": "Bienvenue, {{email}}!",
 	"errors": {
 		"missing-token": "Jeton de registre manquant!"
-	}
+	},
+	"title": "Inscription"
 }

@@ -1,4 +1,5 @@
 {
+	"title": "Unauthorized",
 	"error": "No access!",
 	"summary": "You do not have access to the resource \"{{resource}}\"!"
 }

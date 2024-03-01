@@ -2,5 +2,6 @@
 	"labels": {
 		"email-lang": "Langue de Courriels"
 	},
-	"heading": "Création d'un nouvel utilisateur"
+	"heading": "Création d'un nouvel utilisateur",
+	"title": "Admin - Nouvel utilisateur"
 }

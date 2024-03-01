@@ -1,4 +1,5 @@
 {
+	"title": "Register",
 	"heading": "Welcome, {{email}}!",
 	"form": {
 		"password": "Create your new Password",

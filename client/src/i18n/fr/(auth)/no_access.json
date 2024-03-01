@@ -1,4 +1,5 @@
 {
 	"error": "Pas d'accès!",
-	"summary": "Vous n'avez pas accès à la ressource \"{{resource}}\"!"
+	"summary": "Vous n'avez pas accès à la ressource \"{{resource}}\"!",
+	"title": "Non autorisé"
 }

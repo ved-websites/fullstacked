@@ -1,4 +1,5 @@
 {
+	"title": "Welcome!",
 	"welcome": "Welcome to SvelteKit",
 	"visit": "Visit {{link}} to read the documentation!",
 	"info": "<span class=\"font-medium\">Info alert!</span> Change a few things up and try submitting again.",

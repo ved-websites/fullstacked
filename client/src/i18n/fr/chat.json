@@ -11,5 +11,6 @@
 		"message": {
 			"empty": "Vous ne pouvez pas envoyer de messages vides!"
 		}
-	}
+	},
+	"title": "Communications"
 }

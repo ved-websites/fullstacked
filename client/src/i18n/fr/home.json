@@ -8,5 +8,6 @@
 		"yellow": "Jaune"
 	},
 	"info": "<span class=\"font-medium\">Alerte info!</span> Modifiez quelques éléments et réessayez de soumettre.",
-	"welcome": "Bienvenue sur SvelteKit"
+	"welcome": "Bienvenue sur SvelteKit",
+	"title": "Bienvenue!"
 }

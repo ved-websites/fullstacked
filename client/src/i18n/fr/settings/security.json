@@ -19,5 +19,6 @@
 				"not-matching": "Les mots de passe ne correspondent pas!"
 			}
 		}
-	}
+	},
+	"title": "Sécurité"
 }

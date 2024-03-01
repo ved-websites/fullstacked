@@ -25,6 +25,35 @@
 
 	const flash = flashStore();
 
+	const titleHeader = 'Fullstacked';
+
+	$: title = (() => {
+		let path = $page.route.id?.replaceAll('/', '.').substring(1);
+
+		if (path === undefined) {
+			path = '';
+		} else if (path.length === 0) {
+			path = 'home';
+		}
+
+		const t = data.i18n.t;
+
+		const textKey = `${path}.title`;
+		let text = t.get(textKey);
+
+		if (text === textKey && textKey.includes('(')) {
+			const noGroupTextKey = textKey.replaceAll(/\(.*\)\./g, '');
+
+			text = t.get(noGroupTextKey);
+		}
+
+		if (text === textKey) {
+			return titleHeader;
+		}
+
+		return `${titleHeader} - ${text}`;
+	})();
+
 	$: themeStore.set(data.theme ?? null);
 
 	$: formData = $page.form as PageMessages | undefined;
@@ -91,6 +120,10 @@
 		clearInterval(serverDownRefreshInterval);
 	});
 </script>
+
+<svelte:head>
+	<title>{title}</title>
+</svelte:head>
 
 <HasJs />
 <InitialTheme />

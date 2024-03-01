@@ -1,3 +1,10 @@
 {
-	"heading": "Modification de l'utilisateur {{email}}"
+	"heading": "Modification de l'utilisateur {{email}}",
+	"admin": {
+		"users": {
+			"email": {
+				"title": "Administrateur - Modification de l'utilisateur {{email}}"
+			}
+		}
+	}
 }
