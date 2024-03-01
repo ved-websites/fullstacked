@@ -4,8 +4,11 @@ import { fallbackLanguage } from '$i18n/i18n.module';
 import { TypedI18nService } from '$i18n/i18n.service';
 import { User } from '$prisma-client';
 import { PrismaService } from '$prisma/prisma.service';
+import { SocketService } from '$socket/socket.service';
+import { PresenceService } from '$users/presence/presence.service';
 import { generateId, generateRandomSafeString } from '$utils/random';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { wsR } from '~contract';
 import { AuthError } from './auth.error';
 import { Auth, LuciaFactory } from './lucia/lucia.factory';
 import { loadOsloPasswordModule } from './lucia/modules-compat';
@@ -20,6 +23,8 @@ export class AuthService {
 		private readonly prisma: PrismaService,
 		private readonly email: EmailService,
 		private readonly i18n: TypedI18nService,
+		private readonly sockets: SocketService,
+		private readonly presenceService: PresenceService,
 	) {}
 
 	async hashPassword(password: string) {
@@ -134,7 +139,12 @@ export class AuthService {
 			where: {
 				id: user.id,
 			},
+			include: {
+				roles: true,
+			},
 		});
+
+		this.sockets.emit(wsR.users.edited, this.presenceService.convertUserToLiveUser(updatedUser));
 
 		return this.loginUser(updatedUser.id);
 	}

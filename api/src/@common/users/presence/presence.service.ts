@@ -39,13 +39,16 @@ export class PresenceService {
 		return sessionsArray.some(({ userId: sessionUserId }) => sessionUserId === userId);
 	}
 
-	convertUserToLiveUser<U extends User = User>(user: U, onlineSelector?: boolean | undefined): U & { online: boolean | null };
-	convertUserToLiveUser<U extends User = User>(
+	convertUserToLiveUser<U extends Pick<User, 'id'> = Pick<User, 'id'>>(
+		user: U,
+		onlineSelector?: boolean | undefined,
+	): U & { online: boolean | null };
+	convertUserToLiveUser<U extends Pick<User, 'id'> = Pick<User, 'id'>>(
 		user: U | null | undefined,
 		onlineSelector?: boolean | undefined,
 	): (U & { online: boolean | null }) | null;
 
-	convertUserToLiveUser<U extends User = User>(
+	convertUserToLiveUser<U extends Pick<User, 'id'> = Pick<User, 'id'>>(
 		user: U | null | undefined,
 		onlineSelector: boolean | undefined = true,
 	): (U & { online: boolean | null }) | null {

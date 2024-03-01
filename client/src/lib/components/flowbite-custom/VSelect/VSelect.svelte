@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { getI18n } from '$i18n';
 	import { twMerge } from 'tailwind-merge';
 	import type { VSelectOptionType } from './types';
+	let i18n = getI18n();
+	$: ({ t } = $i18n);
 
 	export let items: VSelectOptionType[] = [];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,7 +35,7 @@
 	{/if}
 
 	{#each items as { value, name, selected }}
-		<option {value} {selected}>{name}</option>
+		<option {value} {selected}>{$t(String(name))}</option>
 	{:else}
 		<slot />
 	{/each}

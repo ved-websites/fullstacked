@@ -15,31 +15,20 @@
 
 	export let data;
 
-	let registeredUsers: StreamedData<typeof data.users>[0] | undefined;
-	let unregisteredUsers: StreamedData<typeof data.users>[1] | undefined;
+	let users: StreamedData<typeof data.users> | undefined;
 
 	wsClient.users.edited({}, ({ data: editedUser }) => {
-		if (editedUser.registerToken) {
-			unregisteredUsers = unregisteredUsers?.map((u) => {
-				if (u.id === editedUser.id) {
-					return editedUser;
-				}
+		users = users?.map((u) => {
+			if (u.id === editedUser.id) {
+				return editedUser;
+			}
 
-				return u;
-			});
-		} else {
-			registeredUsers = registeredUsers?.map((u) => {
-				if (u.id === editedUser.id) {
-					return editedUser;
-				}
-
-				return u;
-			});
-		}
+			return u;
+		});
 	});
 
 	wsClient.users.onlineChange({}, ({ data: user }) => {
-		registeredUsers = registeredUsers?.map((u) => {
+		users = users?.map((u) => {
 			if (u.id === user.id) {
 				return { ...u, online: user.online };
 			}
@@ -49,26 +38,21 @@
 	});
 
 	wsClient.users.created({}, ({ data: user }) => {
-		unregisteredUsers = [...(unregisteredUsers ?? []), { ...user, online: null }];
+		users = [...(users ?? []), { ...user, online: null }];
 	});
 
 	wsClient.users.deleted({}, ({ data: { id } }) => {
-		if (unregisteredUsers?.some((u) => u.id === id)) {
-			unregisteredUsers = unregisteredUsers?.filter((u) => u.id !== id);
-		}
-		if (registeredUsers?.some((u) => u.id === id)) {
-			registeredUsers = registeredUsers?.filter((u) => u.id !== id);
+		if (users?.some((u) => u.id === id)) {
+			users = users?.filter((u) => u.id !== id);
 		}
 	});
 
 	handleStreamed(data.users, {
-		onData: ([streamedRegisteredUsers, streamedUnregisteredUsers]) => {
-			registeredUsers = streamedRegisteredUsers;
-			unregisteredUsers = streamedUnregisteredUsers;
+		onData: (streamedUsers) => {
+			users = streamedUsers;
 		},
 		onError: (error) => {
-			registeredUsers = [];
-			unregisteredUsers = [];
+			users = [];
 
 			return {
 				layoutAlert: createLayoutAlert({
@@ -94,24 +78,14 @@
 	<Button href="/admin/users/new">{$t('admin.users.create-button')}</Button>
 </div>
 
-<div class="grid gap-10 grid-cols-1 lg:grid-cols-2">
-	<div>
-		<Heading tag="h4" class="mb-2">{$t('admin.users.tables.registered.heading')}</Heading>
-
-		<UsersTable users={registeredUsers} showUserAvatars on:deleteUser={onDeleteUser} />
-	</div>
-
-	<div>
-		<Heading tag="h4" class="mb-2">{$t('admin.users.tables.unregistered.heading')}</Heading>
-
-		<UsersTable name="unregistered" users={unregisteredUsers} on:deleteUser={onDeleteUser}>
-			<svelte:fragment slot="more-actions" let:user>
-				<ResendInviteButton {user} tsrest={data.tsrest} />
-				<CopyInviteButton {user} />
-			</svelte:fragment>
-		</UsersTable>
-	</div>
-</div>
+<UsersTable heading={$t('admin.users.tables.heading')} {users} on:deleteUser={onDeleteUser}>
+	<svelte:fragment slot="more-actions" let:user>
+		{#if user.registerToken}
+			<ResendInviteButton {user} tsrest={data.tsrest} />
+			<CopyInviteButton {user} />
+		{/if}
+	</svelte:fragment>
+</UsersTable>
 
 <Modal title={$t('admin.users.modal.title')} open={!!deletionUser}>
 	<div class="text-base leading-relaxed text-gray-500 dark:text-gray-400">

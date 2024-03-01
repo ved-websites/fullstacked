@@ -6,13 +6,7 @@
 			"user": "User",
 			"actions": "Actions"
 		},
-		"registered": {
-			"heading": "Registered Users"
-		},
-		"unregistered": {
-			"heading": "Unregistered Users List",
-			"nobody": "No unregistered Users!"
-		},
+		"heading": "Users",
 		"actions": {
 			"edit": "Edit",
 			"delete": "Delete",
@@ -39,6 +33,19 @@
 					"title": "Roles",
 					"empty": "~ No Roles ~"
 				}
+			}
+		},
+		"empty": "No users found under current filters!",
+		"filters": {
+			"toggle": "Filters",
+			"fields": {
+				"search": "Search...",
+				"type": "Type"
+			},
+			"types": {
+				"all": "All",
+				"registered": "Registered",
+				"unregistered": "Unregistered"
 			}
 		}
 	},

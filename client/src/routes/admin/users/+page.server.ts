@@ -16,18 +16,7 @@ export const load = (async ({ locals: { tsrest } }) => {
 			throw new Error(result.body.message);
 		}
 
-		return result.body.reduce(
-			([regUsers, unregUsers], user) => {
-				if (user.registerToken) {
-					unregUsers!.push(user);
-				} else {
-					regUsers!.push(user);
-				}
-
-				return [regUsers!, unregUsers!];
-			},
-			[[] as typeof result.body, [] as typeof result.body],
-		);
+		return result.body;
 	});
 
 	return { users };

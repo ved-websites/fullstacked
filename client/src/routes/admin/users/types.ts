@@ -6,4 +6,5 @@ export type BaseUser = {
 	roles: { text: string }[] | null;
 	profilePictureRef: string | null;
 	online?: boolean | null;
+	registerToken?: string | null;
 };

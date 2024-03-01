@@ -22,13 +22,7 @@
 			"actions": "Actions",
 			"user": "Utilisateur"
 		},
-		"registered": {
-			"heading": "Utilisateurs enregistrés"
-		},
-		"unregistered": {
-			"heading": "Liste des utilisateurs non enregistrés",
-			"nobody": "Aucun utilisateur non enregistré!"
-		},
+		"heading": "Utilisateurs",
 		"userinfo": {
 			"fields": {
 				"roles": {
@@ -40,6 +34,19 @@
 				}
 			},
 			"heading": "Carte d'information"
+		},
+		"empty": "Aucun utilisateur trouvé sous les filtres actuels!",
+		"filters": {
+			"toggle": "Filtres",
+			"fields": {
+				"search": "Recherche...",
+				"type": "Type"
+			},
+			"types": {
+				"all": "Tous",
+				"registered": "Inscrit",
+				"unregistered": "Non inscrits"
+			}
 		}
 	},
 	"modal": {
