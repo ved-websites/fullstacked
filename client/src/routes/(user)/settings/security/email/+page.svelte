@@ -23,8 +23,8 @@
 <Alert color="blue" class="flex items-center">
 	<Icon class="i-mdi-information" />
 	<div class="flex flex-col gap-2">
-		<span>{$t('settings.profile.email.information.new-email-usage')}</span>
-		<span>{$t('settings.profile.email.information.confirm-email')}</span>
+		<span>{$t('settings.security.email.information.new-email-usage')}</span>
+		<span>{$t('settings.security.email.information.confirm-email')}</span>
 	</div>
 </Alert>
 
@@ -37,7 +37,7 @@
 		{...$constraints.email}
 		errors={$errors.email}
 	>
-		{$t('shared.userform.labels.new-email')}
+		{$t('settings.security.email.action')}
 	</FormInput>
 
 	<Button type="submit" class="mt-3">{$t('common.submit')}</Button>
@@ -47,9 +47,9 @@
 	<Alert color={$flash.hasUpdatedEmail ? 'blue' : 'yellow'} class="flex items-center">
 		<Icon class={$flash.hasUpdatedEmail ? 'i-mdi-information' : 'i-mdi-alert'} />
 		{#if $flash.hasUpdatedEmail}
-			<span>{$t('settings.profile.email.update.success')}</span>
+			<span>{$t('settings.security.email.update.success')}</span>
 		{:else}
-			<span>{$t('settings.profile.email.update.error')}</span>
+			<span>{$t('settings.security.email.update.error')}</span>
 		{/if}
 	</Alert>
 {/if}

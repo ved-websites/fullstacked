@@ -3,8 +3,7 @@
 		"firstname": "Prénom",
 		"lastname": "Nom de famille",
 		"roles": "Rôles",
-		"email": "Courriel",
-		"new-email": "Nouveau Courriel"
+		"email": "Courriel"
 	},
 	"roles": {
 		"admin": "Administrateur",

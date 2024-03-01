@@ -31,7 +31,7 @@ export const load = (async (event) => {
 	const form = await superValidate(zod(emailChangeSchema));
 
 	if (token) {
-		const result = await tsrest.user.settings.profile.updateEmail({ body: { token } });
+		const result = await tsrest.user.settings.security.updateEmail({ body: { token } });
 
 		let hasUpdatedEmail = false;
 
@@ -57,7 +57,7 @@ export const actions = {
 		return assertTsRestActionResultOK({
 			form,
 			event,
-			result: () => tsrest.user.settings.profile.requestUpdateEmail({ body: form.data }),
+			result: () => tsrest.user.settings.security.requestUpdateEmail({ body: form.data }),
 			onNotOk: (result, { errorMessage }) => {
 				if (result.status == StatusCodes.FORBIDDEN) {
 					return setError(form, 'email', errorMessage);

@@ -3,8 +3,7 @@
 		"email": "Email",
 		"firstname": "First Name",
 		"lastname": "Last Name",
-		"roles": "Roles",
-		"new-email": "New Email"
+		"roles": "Roles"
 	},
 	"roles": {
 		"admin": "Admin",

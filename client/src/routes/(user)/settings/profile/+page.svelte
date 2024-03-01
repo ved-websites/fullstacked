@@ -10,7 +10,7 @@
 	import { getI18n } from '$i18n';
 	import UserForm from '$lib/components/UserForm/UserForm.svelte';
 	import { getSessionUser } from '$lib/stores';
-	import { Badge, Button, Heading } from 'flowbite-svelte';
+	import { Badge, Heading } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import type { SettingsRouteMeta } from '../types';
 	import ProfilePictureForm from './ProfilePictureForm.svelte';
@@ -27,10 +27,6 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-y-10 lg:gap-10">
 	<div class="col-span-2 order-2 lg:order-none flex flex-col gap-y-5">
 		<UserForm action="?/basicUserInfo" {superFormData} />
-		<div class="flex flex-col gap-y-5">
-			<Heading tag="h4">{$t('settings.profile.email.header')}</Heading>
-			<Button href="/settings/profile/email">{$t('shared.userform.labels.new-email')}</Button>
-		</div>
 		<div class="flex flex-col gap-y-5">
 			<Heading tag="h4">{$t('settings.profile.roles.header')}</Heading>
 			<div class="flex gap-3 flex-wrap justify-stretch">

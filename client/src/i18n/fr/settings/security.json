@@ -6,6 +6,10 @@
 			"password": "Nouveau mot de passe"
 		}
 	},
+	"email": {
+		"header": "Vous cherchez à changer votre email?",
+		"action": "Nouveau Courriel"
+	},
 	"actions": {
 		"password": {
 			"updated": {

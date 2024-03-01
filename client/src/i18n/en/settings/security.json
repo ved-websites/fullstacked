@@ -6,6 +6,10 @@
 			"confirmation": "Confirm New Password"
 		}
 	},
+	"email": {
+		"header": "Looking to change your email?",
+		"action": "New Email"
+	},
 	"actions": {
 		"password": {
 			"errors": {
