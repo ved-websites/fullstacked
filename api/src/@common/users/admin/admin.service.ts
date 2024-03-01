@@ -61,11 +61,7 @@ export class AdminService {
 				email,
 			},
 			include: {
-				roles: {
-					select: {
-						text: true,
-					},
-				},
+				roles: true,
 			},
 		});
 

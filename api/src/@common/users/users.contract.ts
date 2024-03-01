@@ -1,6 +1,5 @@
-import RoleSchema from '$zod/modelSchema/RoleSchema';
 import { c, wsC } from '~contract';
-import { LiveUserSchema, UserSchema } from '~shared';
+import { LiveUserSchema, UserRolesSchemaExtension, UserSchema } from '~shared';
 import { adminContract } from './admin/admin.contract';
 
 export const usersContract = c.router({
@@ -15,9 +14,7 @@ export const wsUsersContract = wsC.router({
 	edited: {
 		type: 'update',
 		input: OptionalUserSpecifierSchema,
-		emitted: LiveUserSchema.extend({
-			roles: RoleSchema.array(),
-		}),
+		emitted: LiveUserSchema.extend(UserRolesSchemaExtension),
 	},
 	onlineChange: {
 		type: 'update',
@@ -30,14 +27,12 @@ export const wsUsersContract = wsC.router({
 	created: {
 		type: 'create',
 		input: OptionalUserSpecifierSchema,
-		emitted: UserSchema.extend({
-			roles: RoleSchema.array(),
-		}),
+		emitted: UserSchema.extend(UserRolesSchemaExtension),
 	},
 	deleted: {
 		type: 'delete',
 		input: OptionalUserSpecifierSchema,
-		emitted: LiveUserSchema.pick({
+		emitted: UserSchema.pick({
 			id: true,
 		}),
 	},

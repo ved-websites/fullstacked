@@ -1,3 +1,4 @@
+import RoleSchema from '$zod/modelSchema/RoleSchema';
 import GeneratedUserSchema from '$zod/modelSchema/UserSchema';
 import { z } from 'zod';
 
@@ -10,6 +11,10 @@ export const UserSchema = GeneratedUserSchema.omit({
 }).extend({
 	fullName: fullNameSchema,
 });
+
+export const UserRolesSchemaExtension = {
+	roles: RoleSchema.omit({ createdAt: true }).array(),
+};
 
 export const LiveUserSchema = UserSchema.extend({
 	online: onlineSchema,
