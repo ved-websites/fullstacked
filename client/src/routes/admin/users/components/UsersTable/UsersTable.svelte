@@ -104,7 +104,7 @@
 		</div>
 
 		<Label class="flex content-center gap-5">
-			<span class="my-auto text-nowrap">Type :</span>
+			<span class="my-auto text-nowrap">{$t('admin.users.tables.filters.fields.type')} :</span>
 			<VSelect items={userTypes} placeholder="" bind:value={userTypeChoice}></VSelect>
 		</Label>
 	</div>
