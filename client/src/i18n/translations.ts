@@ -34,11 +34,11 @@ const translationFiles = Object.entries(rawTranslationImports).map(([path, getFi
 			.filter((k) => !(k.startsWith('(') && k.endsWith(')')))
 			.map((k) => {
 				// handle cases with `[param]`
-				if (!(k.startsWith('[') && k.endsWith(']'))) {
-					return k;
+				if (k.startsWith('[') && k.endsWith(']')) {
+					return '.*';
 				}
 
-				return '.*';
+				return k;
 			});
 
 		const routePath = new RegExp(`/${kitKeys.join('/')}`);

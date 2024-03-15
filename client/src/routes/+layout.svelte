@@ -4,6 +4,7 @@
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { setI18n } from '$i18n';
+	import { getTextFromRouteId } from '$i18n/utils';
 	import LayoutAlert from '$lib/components/LayoutAlert/LayoutAlert.svelte';
 	import ToastManager from '$lib/components/ToastManager/ToastManager.svelte';
 	import HasJs from '$lib/components/head/HasJS.svelte';
@@ -26,33 +27,9 @@
 	const flash = flashStore();
 
 	const titleHeader = 'Fullstacked';
+	const titleI18nText = getTextFromRouteId(data.i18n.t, (path) => `${path}.title`);
 
-	$: title = (() => {
-		let path = $page.route.id?.replaceAll('/', '.').substring(1);
-
-		if (path === undefined) {
-			path = '';
-		} else if (path.length === 0) {
-			path = 'home';
-		}
-
-		const t = data.i18n.t;
-
-		const textKey = `${path}.title`;
-		let text = t.get(textKey);
-
-		if (text === textKey && textKey.includes('(')) {
-			const noGroupTextKey = textKey.replaceAll(/\(.*\)\./g, '');
-
-			text = t.get(noGroupTextKey);
-		}
-
-		if (text === textKey) {
-			return titleHeader;
-		}
-
-		return `${titleHeader} - ${text}`;
-	})();
+	$: title = $titleI18nText ? `${titleHeader} - ${$titleI18nText}` : titleHeader;
 
 	$: themeStore.set(data.theme ?? null);
 
