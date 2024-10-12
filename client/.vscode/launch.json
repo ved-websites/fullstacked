@@ -26,6 +26,7 @@
 				"group": "Client",
 				"order": 1,
 			},
+			"preLaunchTask": "client dev",
 		},
 		{
 			"name": "Debug Server Side",

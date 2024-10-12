@@ -19,7 +19,8 @@
 				"hidden": false,
 				"group": "App",
 				"order": 1,
-			}
+			},
+			"preLaunchTask": "api dev"
 		},
 		{
 			"type": "node",
