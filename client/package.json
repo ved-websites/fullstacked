@@ -10,8 +10,8 @@
 		"pnpm": ">=8.0.0"
 	},
 	"scripts": {
-		"dev": "vite dev --port 5000",
-		"debug": "vavite-loader vite dev --port 5000",
+		"dev": "vite dev --host --port 5000",
+		"debug": "vavite-loader vite dev --host --port 5000",
 		"build": "vite build",
 		"preview": "vite preview",
 		"sync": "svelte-kit sync",
