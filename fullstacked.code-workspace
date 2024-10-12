@@ -113,6 +113,7 @@
 			"format prisma file": [
 				"**/schema.prisma",
 			],
-		}
+		},
+		"git-blame.gitWebUrl": "https://github.com/ved-websites/fullstacked/commit/$ID"
 	}
 }
