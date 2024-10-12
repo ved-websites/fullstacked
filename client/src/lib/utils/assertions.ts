@@ -89,7 +89,6 @@ export function assertTsRestActionResultOK<T extends { status: number; body: unk
 		const pageData: PageMessages = { form: args.form, ...expectedResult };
 
 		if (redirectTo) {
-			console.log({ redirectTo });
 			return redirect(redirectTo, pageData, args.event);
 		}
 
