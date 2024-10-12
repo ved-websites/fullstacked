@@ -4,7 +4,6 @@
 	import { afterNavigate, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { setI18n } from '$i18n';
-	import { getTextFromRouteId } from '$i18n/utils';
 	import LayoutAlert from '$lib/components/LayoutAlert/LayoutAlert.svelte';
 	import ToastManager from '$lib/components/ToastManager/ToastManager.svelte';
 	import HasJs from '$lib/components/head/HasJS.svelte';
@@ -18,6 +17,7 @@
 	import { flashStore } from '$lib/utils/flash';
 	import { onDestroy } from 'svelte';
 	import { removeKeys, rolesObjectIntersect } from '~shared';
+	import { getTextFromRouteId } from '../i18n/utils';
 
 	export let data;
 
