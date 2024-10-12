@@ -1,7 +1,9 @@
-import { PUBLIC_API_ADDR } from '$env/static/public';
+import { PUBLIC_API_ADDR, PUBLIC_SENTRY_DSN } from '$env/static/public';
 import { getBrowserLang } from '$i18n';
 import { createTsRestClient } from '$lib/ts-rest/client';
+import * as Sentry from '@sentry/sveltekit';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
 import { StatusCodes } from 'http-status-codes';
 import { parseString } from 'set-cookie-parser';
 import { SESSION_COOKIE_NAME, type I18nKey } from '~shared';
@@ -10,7 +12,12 @@ import { themeCookieName, themes, type Theme } from './lib/stores';
 import { HASJS_COOKIE_NAME } from './lib/utils/js-handling';
 import { verifyUserAccess } from './navigation/permissions';
 
-export const handle: Handle = async ({ event, resolve }) => {
+Sentry.init({
+	dsn: PUBLIC_SENTRY_DSN,
+	tracesSampleRate: 1.0,
+});
+
+export const handle: Handle = sequence(Sentry.sentryHandle(), async ({ event, resolve }) => {
 	event.locals.step = 'hook';
 
 	event.locals.tsrest = createTsRestClient(event);
@@ -48,7 +55,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.step = 'resolved';
 
 	return response;
-};
+});
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 	if (request.url.startsWith(PUBLIC_API_ADDR)) {
@@ -94,3 +101,4 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 
 	return response;
 };
+export const handleError = Sentry.handleErrorWithSentry();

@@ -11,3 +11,6 @@ vite.config.ts.timestamp-*
 
 .devcontainer/volumes
 .vercel
+
+# Sentry
+.sentryclirc

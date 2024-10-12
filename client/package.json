@@ -40,6 +40,7 @@
 	"dependencies": {
 		"@app/contract": "workspace:*",
 		"@app/shared": "workspace:*",
+		"@sentry/sveltekit": "8.5.0",
 		"@shippr/supersocket": "github:V-ed/supersocket",
 		"@ts-rest/core": "3.33.0",
 		"accept-language-parser": "1.5.0",
