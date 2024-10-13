@@ -1,5 +1,5 @@
 import { dev } from '$app/environment';
-import { PUBLIC_SENTRY_DSN } from '$env/static/public';
+import { PUBLIC_API_ADDR, PUBLIC_SENTRY_DSN } from '$env/static/public';
 import { getBrowserLang } from '$i18n';
 import { createTsRestClient } from '$lib/ts-rest/client';
 import { getApiUrl } from '$lib/utils';
@@ -61,6 +61,18 @@ export const handle: Handle = sequence(Sentry.sentryHandle(), async ({ event, re
 });
 
 export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
+	if (request.url.startsWith(PUBLIC_API_ADDR)) {
+		const passedHeaders: string[] = ['cookie', 'accept-language'];
+
+		passedHeaders.forEach((header) => {
+			const headerValue = event.request.headers.get(header);
+
+			if (headerValue) {
+				request.headers.set(header, headerValue);
+			}
+		});
+	}
+
 	const response = await fetch(request).catch(() => {
 		const fakeResponse = { message: 'common.errors.server.down' satisfies I18nKey };
 
