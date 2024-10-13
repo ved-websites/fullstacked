@@ -33,7 +33,7 @@ jobs:
           release-type: 'node'
 
       - uses: actions/checkout@v3
-        if: (github.event_name == 'workflow_dispatch' && contains(fromJson('["All", "API"]'), github.event.inputs.app)) || steps.release-please.outputs.releases_created
+        if: github.event_name == 'workflow_dispatch' || steps.release-please.outputs.releases_created
         with:
           fetch-depth: 0
 
