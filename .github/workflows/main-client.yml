@@ -103,7 +103,7 @@ jobs:
 
       - name: Cache Build Folders
         if: contains(fromJson('["ved-bot"]'), github.actor) == false
-        uses: actions/cache@v3
+        uses: actions/cache/save@v3
         with:
           path: |
             client/.vercel
@@ -135,7 +135,7 @@ jobs:
         run: pnpm install
 
       - name: Fetch Cached Build Folders
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         with:
           path: |
             client/.vercel
