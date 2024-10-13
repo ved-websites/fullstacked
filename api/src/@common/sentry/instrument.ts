@@ -9,7 +9,7 @@ Sentry.init({
 	dsn: env.SENTRY_DSN,
 	integrations: [nodeProfilingIntegration()],
 
-	environment: env.NODE_ENV === Environment.Production ? 'api-prod' : 'api-develop',
+	environment: env.NODE_ENV === Environment.Production ? 'api-prod' : 'api-dev',
 
 	// Add Tracing by setting tracesSampleRate
 	// We recommend adjusting this value in production
