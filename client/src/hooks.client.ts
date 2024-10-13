@@ -9,6 +9,8 @@ Sentry.init({
 	dsn: PUBLIC_SENTRY_DSN,
 	tracesSampleRate: 1.0,
 
+	environment: dev ? 'client-dev' : 'client-prod',
+
 	// This sets the sample rate to be 10%. You may want this to be 100% while
 	// in development and sample at a lower rate in production
 	replaysSessionSampleRate: dev ? 1.0 : SENTRY_PROD_SESSION_SAMPLE_RATE,

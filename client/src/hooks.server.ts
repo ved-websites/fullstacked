@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import { PUBLIC_API_ADDR, PUBLIC_SENTRY_DSN } from '$env/static/public';
 import { getBrowserLang } from '$i18n';
 import { createTsRestClient } from '$lib/ts-rest/client';
@@ -15,6 +16,7 @@ import { verifyUserAccess } from './navigation/permissions';
 Sentry.init({
 	dsn: PUBLIC_SENTRY_DSN,
 	tracesSampleRate: 1.0,
+	environment: dev ? 'client-dev' : 'client-prod',
 });
 
 export const handle: Handle = sequence(Sentry.sentryHandle(), async ({ event, resolve }) => {
