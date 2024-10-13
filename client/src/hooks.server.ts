@@ -95,8 +95,7 @@ export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
 			path: '/',
 			...opts,
 			domain: apiUrl.hostname,
-			// @ts-expect-error set-cookie-parser has string instead of strict type
-			sameSite: opts.sameSite,
+			sameSite: 'none',
 		});
 	});
 
