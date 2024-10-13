@@ -12,7 +12,7 @@ export function getTextFromRouteId(t: I18nInstanceType['t'], keyMapper: (path: s
 			path = 'home';
 		}
 
-		const textKey = `${path}.title`;
+		const textKey = keyMapper(path);
 		const text: string = t.get(textKey);
 
 		if (text !== textKey) {
