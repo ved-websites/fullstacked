@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import type { I18nKey } from '../utils/i18n';
 
 export const PASSWORD_MIN_LENGTH = 4;
 

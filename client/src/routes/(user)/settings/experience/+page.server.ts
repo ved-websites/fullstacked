@@ -4,7 +4,6 @@ import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { superValidate } from 'sveltekit-superforms';
 import { zod, type Infer } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import type { I18nKey } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 
 const langSchema = z.object({

@@ -6,7 +6,7 @@ import type { Handle, HandleFetch } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { StatusCodes } from 'http-status-codes';
 import { parseString } from 'set-cookie-parser';
-import { SESSION_COOKIE_NAME, type I18nKey } from '~shared';
+import { SESSION_COOKIE_NAME } from '~shared';
 import { getAuthUser } from './auth/auth-handler';
 import { themeCookieName, themes, type Theme } from './lib/stores';
 import { HASJS_COOKIE_NAME } from './lib/utils/js-handling';

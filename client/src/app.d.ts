@@ -28,6 +28,8 @@ declare global {
 		[K in keyof T]: T[K];
 	} & unknown;
 
+	type I18nKey = string;
+
 	namespace App {
 		interface Locals extends AppLocals {}
 		interface PageData extends AppPageData {}

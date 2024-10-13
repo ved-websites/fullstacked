@@ -5,7 +5,6 @@ import { fail, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import type { I18nKey } from '~shared';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals: { sessionUser } }) => {

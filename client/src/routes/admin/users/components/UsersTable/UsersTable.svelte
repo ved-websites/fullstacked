@@ -1,6 +1,4 @@
 <script lang="ts" generics="T extends BaseUser = BaseUser">
-	import type { I18nKey } from '~shared';
-
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	import type { BaseUser } from '../../types';
 

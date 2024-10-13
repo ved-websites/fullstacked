@@ -12,7 +12,6 @@
 	import FormInput from '$lib/components/forms/FormInput.svelte';
 	import { Button } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms';
-	import type { I18nKey } from '~shared';
 	import type { SettingsRouteMeta } from '../types.js';
 	let i18n = getI18n();
 	$: ({ t, setLocale, locales } = $i18n);

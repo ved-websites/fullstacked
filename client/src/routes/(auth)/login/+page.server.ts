@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import { emailSchema, passwordSchema, type I18nKey } from '~shared';
+import { emailSchema, passwordSchema } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 
 const schema = z.object({

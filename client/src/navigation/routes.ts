@@ -1,5 +1,5 @@
 import type { NavElement } from '$lib/components/nav/nav-elements';
-import { Roles, type I18nKey } from '~shared';
+import { Roles } from '~shared';
 
 export const navElements: NavElement[] = [
 	{

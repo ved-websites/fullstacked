@@ -2,7 +2,6 @@ import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/assertions';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import type { I18nKey } from '~shared';
 import { adminUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
 

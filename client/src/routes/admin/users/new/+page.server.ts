@@ -5,7 +5,6 @@ import { fail } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import type { I18nKey } from '~shared';
 import { adminNewUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
 

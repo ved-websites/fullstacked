@@ -4,7 +4,6 @@
 	import type { TsRestClient } from '$lib/ts-rest/client';
 	import { Button } from 'flowbite-svelte';
 	import { StatusCodes } from 'http-status-codes';
-	import type { I18nKey } from '~shared';
 	import type { BaseUser } from '../../types';
 	let i18n = getI18n();
 	$: ({ t } = $i18n);

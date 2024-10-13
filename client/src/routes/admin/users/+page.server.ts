@@ -3,7 +3,7 @@ import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { streamed } from '$lib/utils/streaming';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
-import { emailSchema, type I18nKey } from '~shared';
+import { emailSchema } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ locals: { tsrest } }) => {

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { emailSchema, passwordSchema, type I18nKey } from '~shared';
+import { emailSchema, passwordSchema } from '~shared';
 
 export const requestPasswordSchema = z.object({
 	email: emailSchema,

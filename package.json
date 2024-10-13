@@ -23,7 +23,8 @@
     "rules": {
       "camelcase": ["error", {
         "allow": ["required_error"]
-      }]
+      }],
+      "no-undef": "off"
     },
     "overrides": [
       {

@@ -2,7 +2,6 @@ import type { AppPageData } from '$app-types';
 import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
 import { HASJS_COOKIE_NAME } from '$lib/utils/js-handling';
 import { loadFlash } from 'sveltekit-flash-message/server';
-import type { I18nKey } from '~shared';
 
 export const load = loadFlash(async (event) => {
 	const {

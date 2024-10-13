@@ -7,7 +7,7 @@ import { redirect } from 'sveltekit-flash-message/server';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import { emailSchema, type I18nKey } from '~shared';
+import { emailSchema } from '~shared';
 import type { PageServerLoad } from './$types';
 
 const emailChangeSchema = z.object({

@@ -4,7 +4,7 @@ import type { Actions } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import { passwordSchema, type I18nKey } from '~shared';
+import { passwordSchema } from '~shared';
 import type { PageServerLoad } from './$types';
 
 const newPasswordFormSchema = z

@@ -17,6 +17,8 @@ declare global {
 		[K in keyof T]: T[K];
 	} & unknown;
 
+	type I18nKey = string;
+
 	declare namespace Express {
 		interface Request extends LuciaContainer {
 			i18nLang: string;
