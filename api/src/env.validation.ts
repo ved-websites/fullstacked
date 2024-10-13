@@ -119,4 +119,11 @@ export class EnvironmentConfig {
 
 	@IsString()
 	readonly MINIO_BUCKET_PREFIX!: string;
+
+	// ---------------
+	//     Sentry
+	// ---------------
+
+	@IsString()
+	readonly SENTRY_DSN!: string;
 }

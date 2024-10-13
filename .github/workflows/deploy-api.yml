@@ -54,6 +54,17 @@ jobs:
           git_remote_url: 'ssh://dokku@${{ vars.DOKKU_SSH_HOST }}/${{ vars.DOKKU_APPNAME }}'
           ssh_private_key: ${{ secrets.DOKKU_SSH_KEY }}
           
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+        with:
+          environment: 'api-prod'
+          working_directory: './api'
+          sourcemaps: './dist'
+          
       - name: Delete deploy branch
         uses: dawidd6/action-delete-branch@v3
         with:

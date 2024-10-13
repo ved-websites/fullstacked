@@ -31,6 +31,9 @@
     "outDir": "./dist",
     
     "declaration": false,
+    "sourceMap": true,
+    
+    "sourceRoot": "/",
     
     "importsNotUsedAsValues": "remove",
     "verbatimModuleSyntax": false,
