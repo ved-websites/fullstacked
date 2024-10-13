@@ -65,7 +65,7 @@ export const actions = {
 			},
 			onValid: () => ({
 				toasts: createToasts({
-					text: 'settings.profile.email.request.success' satisfies I18nKey,
+					text: 'settings.security.email.request.success' satisfies I18nKey,
 					i18nPayload: { email: form.data.email },
 				}),
 			}),
