@@ -6,7 +6,7 @@ const apiUrl = getApiUrl();
 
 export const wsClient = initClient(wsR, {
 	url: apiUrl.href,
-	handshakeUrl: `${apiUrl}/ws-handshake`,
+	handshakeUrl: `${apiUrl.origin}/ws-handshake`,
 });
 
 export type WsClientType = typeof wsClient;
