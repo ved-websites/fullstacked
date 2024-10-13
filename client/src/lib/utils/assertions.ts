@@ -1,21 +1,35 @@
 import { createLayoutAlert, type LayoutAlertData } from '$lib/components/LayoutAlert/helper';
 import { createToasts, type ToastData, type ToastManagerData } from '$lib/components/ToastManager/helper';
+import { extractErrorMessageFromApiFetcherData } from '$lib/ts-rest/errorHandler';
 import type { PageMessages } from '$lib/types';
 import { error, fail, type RequestEvent } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
 import type { Infer, SuperValidated } from 'sveltekit-superforms';
 import type { AnyZodObject } from 'zod';
+import type { ApiFetcherData } from '~contract';
 
 export type ValidResult<T extends { status: number }> = T extends { status: StatusCodes.OK } ? T : never;
 export type InvalidResult<T extends { status: number }> = Exclude<T, { status: StatusCodes.OK }>;
 
-export function assertTsRestResultOK<T extends { status: number }>(
+export function assertTsRestResultOK<T extends ApiFetcherData>(
 	result: T,
 	errorArgs?: (result: InvalidResult<T>) => Parameters<typeof error>,
 ): asserts result is ValidResult<T> {
 	if (result.status !== StatusCodes.OK) {
-		const definedErrorArgs = errorArgs?.(result as Exclude<T, { status: StatusCodes.OK }>) ?? [result.status as never];
+		const definedErrorArgs: Parameters<typeof error> = errorArgs?.(result as Exclude<T, { status: StatusCodes.OK }>) ?? [
+			result.status as never,
+			(() => {
+				const message = extractErrorMessageFromApiFetcherData(result);
+
+				if (message instanceof Promise) {
+					// This should never happen, only when the body is a blob which shouldn't be an issue here
+					throw new Error('Cannot handle promise error messages');
+				}
+
+				return message;
+			})(),
+		];
 
 		error(...definedErrorArgs);
 	}
@@ -47,7 +61,7 @@ export type AssertTsRestActionResultOKArgs<T extends { status: number }> = {
 	onNotOk?: (result: InvalidResult<T>, data: ActionNotValidData) => Awaitable<unknown>;
 } & ({ toast?: Partial<ToastManagerData> } | { layoutAlert: Partial<LayoutAlertData> });
 
-export function assertTsRestActionResultOK<T extends { status: number; body: unknown }>(args: AssertTsRestActionResultOKArgs<T>) {
+export function assertTsRestActionResultOK<T extends ApiFetcherData>(args: AssertTsRestActionResultOKArgs<T>) {
 	// Define checking result function
 	const checkValidResult = async () => {
 		const result = await args.result();

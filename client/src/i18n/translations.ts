@@ -82,6 +82,17 @@ export async function loadI18n(locale: string, route: string) {
 		locale: i18nInstance.locale,
 		locales: i18nInstance.locales,
 		setLocale: i18nInstance.setLocale,
+		tPayload: <T extends Record<string, unknown> | undefined>(
+			i18nPayload: T,
+		): T extends undefined ? undefined : Record<keyof T, string> => {
+			if (!i18nPayload) {
+				return undefined as never;
+			}
+
+			const translatedEntries = Object.entries(i18nPayload).map(([key, value]) => [key, i18nInstance.t.get(String(value))]);
+
+			return Object.fromEntries(translatedEntries);
+		},
 	};
 }
 

@@ -23,5 +23,9 @@
 		<span>{statusDetail !== statusDetailsKey ? statusDetail : $t(`common.errorpage.types.server.details.default`)}</span>
 	</PageError>
 {:else}
-	<PageError icon="i-mdi-emoticon-sad-outline" errorMessage={$page.error?.message ?? 'Unknown error'}></PageError>
+	<PageError
+		icon="i-mdi-emoticon-sad-outline"
+		errorMessage={$page.error?.message ?? 'Unknown error'}
+		i18nPayload={$page.error?.i18nPayload}
+	/>
 {/if}

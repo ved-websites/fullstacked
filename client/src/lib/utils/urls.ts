@@ -3,7 +3,13 @@ export function reconstructUrl(url: URL, searchParams?: URLSearchParams) {
 
 	const paramsString = params.size > 0 ? `?${params.toString()}` : '';
 
-	return `${url.origin}${url.pathname}${paramsString}`;
+	return `${url.pathname}${paramsString}`;
+}
+
+export function reconstructUrlWithOrigin(url: URL, searchParams?: URLSearchParams) {
+	const path = reconstructUrl(url, searchParams);
+
+	return `${url.origin}${path}`;
 }
 
 export function stringParamsFromUrl(url: URL, ...keys: string[]) {

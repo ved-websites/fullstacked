@@ -1,3 +1,4 @@
+import type { AppErrorBody } from '$app-types';
 import type { PageMessages } from '$lib/types';
 import { getApiUrl } from '$lib/utils';
 import { r, tsRestFetcherApi, type ApiFetcherData, type CommonError } from '@app/contract';
@@ -9,7 +10,7 @@ export type ErrorPageMessagesData = PageMessages | ((args: OnErrorFunctionArgs) 
 
 export type OnErrorFunctionArgs<T = unknown> = {
 	/** The error message. Usually a stringified `data.body.message`, but could be other things depending on the error. */
-	message: string;
+	message: AppErrorBody;
 	data: ApiFetcherData<T>;
 	event?: RequestEvent;
 };
@@ -52,9 +53,9 @@ export type ApiResponseHandlerOptions = {
 	skipErrorHandling?: boolean;
 };
 
-const apiUrl = getApiUrl();
-
 export function createTsRestClient(event?: RequestEvent) {
+	const apiUrl = getApiUrl();
+
 	const client = initClient(r, {
 		baseUrl: apiUrl.href.slice(0, -1),
 		baseHeaders: {},

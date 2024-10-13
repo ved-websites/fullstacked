@@ -1,10 +1,12 @@
+import type { AppErrorBody } from '$app-types';
 import { createToasts } from '$lib/components/ToastManager/helper';
 import type { PageMessages } from '$lib/types';
-import { flashStore } from '$lib/utils/flash';
+import { extractFlashMessageFromEvent, flashStore } from '$lib/utils/flash';
 import { commonErrors, isCommonError, type ApiFetcherData, type CommonError } from '@app/contract';
 import { error, type RequestEvent } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
+import type { ZodError } from 'zod';
 import type { ApiResponseHandlerOptions, ErrorPageMessagesData, OnErrorFunctionArgs } from './client';
 
 function getErrorPageMessagesData(handler: ErrorPageMessagesData | undefined, args: OnErrorFunctionArgs) {
@@ -19,12 +21,34 @@ function getErrorPageMessagesData(handler: ErrorPageMessagesData | undefined, ar
 	return handler;
 }
 
-export async function extractErrorMessageFromApiFetcherData(data: ApiFetcherData) {
+export function extractErrorMessageFromApiFetcherData(data: ApiFetcherData): AppErrorBody | Promise<AppErrorBody> {
 	const body = data.body as Record<string, unknown> | Blob;
 
-	const message = body instanceof Blob ? await body.text() : 'message' in body ? String(body.message) : JSON.stringify(data.body);
+	if (body instanceof Blob) {
+		return body.text();
+	}
 
-	return message;
+	if ('message' in body) {
+		return String(body.message);
+	}
+
+	if ('queryResult' in body) {
+		const { issues } = body.queryResult as { issues: ZodError['issues'] };
+
+		if (issues.length === 1) {
+			return {
+				message: 'common.errorpage.query.single' satisfies I18nKey,
+				i18nPayload: { error: issues[0]!.message },
+			};
+		}
+
+		return {
+			message: 'common.errorpage.query.multiple' satisfies I18nKey,
+			i18nPayload: { errors: issues.map((issue) => issue.message).join(', ') },
+		};
+	}
+
+	return JSON.stringify(data.body);
 }
 
 export async function checkForApiErrors(data: ApiFetcherData, options?: ApiResponseHandlerOptions) {
@@ -49,7 +73,7 @@ export async function checkForApiErrors(data: ApiFetcherData, options?: ApiRespo
 			isErrorHandled = !!(await onBadRequest?.({ event, data, message }));
 
 			if (!isErrorHandled) {
-				routeError(data.status, data.body.message, {
+				routeError(data.status, message, {
 					event,
 					doThrowForPage: showErrorPageOnBadRequest,
 					pageMessagesData: await getErrorPageMessagesData(errorPageMessagesData, { event, data, message }),
@@ -103,12 +127,13 @@ export type RouteErrorOptions = Partial<{
 	pageMessagesData?: PageMessages;
 }>;
 
-export function routeError(status: number, message: string, options?: RouteErrorOptions) {
+export function routeError(status: number, message: string | App.Error, options?: RouteErrorOptions) {
 	const { event, doThrowForPage = true, pageMessagesData } = options ?? {};
 
 	const errorToasts = createToasts({
-		text: message,
+		text: typeof message === 'string' ? message : message.message,
 		type: 'error',
+		i18nPayload: typeof message === 'object' ? message.i18nPayload : undefined,
 	});
 
 	if (event) {
@@ -124,13 +149,22 @@ export function routeError(status: number, message: string, options?: RouteError
 			return;
 		}
 
-		redirect(
-			{
-				toasts: errorToasts,
-				...pageMessagesData,
-			},
-			event,
-		);
+		const flash = extractFlashMessageFromEvent(event);
+
+		const isFromRedirect = 'isFromRedirect';
+
+		if (flash?.[isFromRedirect]) {
+			error(status as never, message);
+		} else {
+			redirect(
+				{
+					toasts: errorToasts,
+					...pageMessagesData,
+					[isFromRedirect]: true,
+				},
+				event,
+			);
+		}
 	}
 
 	if (doThrowForPage) {

@@ -49,6 +49,11 @@
 					"default": "An unknown error as happened..."
 				}
 			}
+		},
+		"previous-page": "Go to Previous Page",
+		"query": {
+			"single": "There was an error with your query : {{error}}",
+			"multiple": "There were many issues with your query : {{errors}}"
 		}
 	}
 }

@@ -20,6 +20,11 @@ export interface AppPageData extends PageMessages {
 	flash?: PageMessages;
 }
 
+export interface AppError {
+	i18nPayload?: Record<string, unknown>;
+}
+export type AppErrorBody = string | App.Error;
+
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
@@ -33,7 +38,7 @@ declare global {
 	namespace App {
 		interface Locals extends AppLocals {}
 		interface PageData extends AppPageData {}
-		// interface Error {}
+		interface Error extends AppError {}
 		// interface Platform {}
 	}
 }

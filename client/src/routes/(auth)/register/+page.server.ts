@@ -15,7 +15,7 @@ export const load = (async ({ url, locals: { tsrest } }) => {
 
 	const result = await tsrest.auth.initRegistration({ query: { registerToken } });
 
-	assertTsRestResultOK(result, (result) => [result.status, result.body.message]);
+	assertTsRestResultOK(result);
 
 	const { email, ...attributes } = result.body;
 

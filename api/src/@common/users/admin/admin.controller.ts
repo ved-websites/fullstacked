@@ -35,7 +35,7 @@ export class AdminController {
 				return {
 					status: 400,
 					body: {
-						message: 'No user with email!',
+						message: `No user with email "${email}"!`,
 					},
 				};
 			}

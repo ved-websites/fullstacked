@@ -48,6 +48,11 @@
 		"already-home": {
 			"summary": "Habituellement, il y a un bouton ici vous indiquant d'aller à la page d'accueil, mais il semble que vous soyez déjà dans la page d'accueil...",
 			"detail": "Cependant, ne vous inquiétez pas, ce problème est actuellement en train de se faire réparer!"
+		},
+		"previous-page": "Aller à la page précédente",
+		"query": {
+			"single": "Une erreur s'est produite avec votre requête : {{error}}",
+			"multiple": "Plusieurs problèmes sont survenus avec votre requête : {{errors}}"
 		}
 	},
 	"confirm": "Confirmer"
