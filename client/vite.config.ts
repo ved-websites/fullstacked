@@ -34,9 +34,20 @@ export const buildPlugins = ({ mode }: ConfigEnv): UserConfig['plugins'] => {
 export default defineConfig((config) => {
 	const plugins = buildPlugins(config);
 
+	const env = { ...process.env, ...loadEnv(config.mode, process.cwd(), '') };
+
 	return {
 		server: {
 			strictPort: true,
+			proxy: {
+				'/api': {
+					target: env.PUBLIC_API_ADDR,
+					changeOrigin: false,
+					rewrite: (path) => path.replace(/^\/api/, ''),
+					ws: true,
+					secure: false,
+				},
+			},
 		},
 		plugins,
 		build: {

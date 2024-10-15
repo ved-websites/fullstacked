@@ -2,7 +2,13 @@
 	"$schema": "https://openapi.vercel.sh/vercel.json",
 	"public": false,
 	"github": {
-		"enabled": false,
-		"silent": true
-	}
+		"enabled": false
+	},
+	"redirects": [
+		{
+			"source": "/api",
+			"destination": "https://fullstacked-api.v-ed.ca",
+			"permanent": true
+		}
+	]
 }
