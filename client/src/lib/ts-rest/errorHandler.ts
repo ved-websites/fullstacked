@@ -28,6 +28,10 @@ export function extractErrorMessageFromApiFetcherData(data: ApiFetcherData): App
 		return body.text();
 	}
 
+	if (typeof body !== 'object' || body === null) {
+		return 'common.errorpage.types.server.details.500' satisfies I18nKey;
+	}
+
 	if ('message' in body) {
 		return String(body.message);
 	}
@@ -48,7 +52,7 @@ export function extractErrorMessageFromApiFetcherData(data: ApiFetcherData): App
 		};
 	}
 
-	return JSON.stringify(data.body);
+	return JSON.stringify(body);
 }
 
 export async function checkForApiErrors(data: ApiFetcherData, options?: ApiResponseHandlerOptions) {
