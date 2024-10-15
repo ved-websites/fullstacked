@@ -7,7 +7,7 @@
 	"rewrites": [
 		{
 			"source": "/api/:path*",
-			"destination": "https://fullstacked-api.v-ed.ca/:path*"
+			"destination": "$PUBLIC_API_ADDR/:path*"
 		}
 	]
 }

@@ -59,6 +59,13 @@ jobs:
 
       - name: Init
         run: pnpm run init --no-db-push
+        
+      - name: Prepare vercel.json
+        uses: richardrigutins/replace-in-files@v2
+        with:
+          files: './client/vercel.json'
+          search-text: '$PUBLIC_API_ADDR'
+          replacement-text: '${{ vars.PUBLIC_API_ADDR }}'
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
