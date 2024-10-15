@@ -5,7 +5,8 @@
   "private": true,
   "engines": {
     "node": "^20.0.0",
-    "npm": "^10.0.0"
+    "npm": "^10.0.0",
+    "pnpm": "^8.0.0"
   },
   "scripts": {
     "init": "gulp init",
