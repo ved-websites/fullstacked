@@ -4,11 +4,10 @@
 	"github": {
 		"enabled": false
 	},
-	"redirects": [
+	"rewrites": [
 		{
-			"source": "/api",
-			"destination": "https://fullstacked-api.v-ed.ca",
-			"permanent": true
+			"source": "/api/:path*",
+			"destination": "https://fullstacked-api.v-ed.ca/:path*"
 		}
 	]
 }
