@@ -12,10 +12,10 @@
 
 	export let data;
 
-	$: activeUrl = $page.url.pathname.replace('/settings/', '');
-	$: currentRoute = findDeepRoute(data.routesInfo, activeUrl);
-
 	let sessionUser = getSessionUser<ConfirmedSessionUser>();
+
+	$: currentRoute = findDeepRoute(data.routesInfo, $page.url.pathname.replace('/settings/', ''));
+
 	$: label = currentRoute && ($t(`settings.${currentRoute.name}.name`) as string);
 </script>
 
@@ -32,11 +32,11 @@
 
 <div class="flex gap-10 flex-col md:flex-row">
 	<section>
-		<Sidebar {activeUrl} class="w-full md:w-64">
+		<Sidebar activeUrl={$page.url.pathname} class="w-full md:w-64">
 			<SidebarWrapper>
 				<SidebarGroup>
 					{#each data.routesInfo as route}
-						<SidebarItem href={route.url} label={$t(`settings.${route.name}.name`)} active={activeUrl === route.url}>
+						<SidebarItem href={route.url} label={$t(`settings.${route.name}.name`)}>
 							<svelte:fragment slot="icon">
 								{#if route.icon}
 									<Icon class={route.icon} />
