@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 import { IsString } from 'class-validator';
 import { EnvironmentConfig } from '../../env.validation';
 

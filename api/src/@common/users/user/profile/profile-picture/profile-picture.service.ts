@@ -39,7 +39,7 @@ export class ProfilePictureService {
 			});
 
 			this.sockets.emit(wsR.users.edited, this.presenceService.convertUserToLiveUser(editedUser));
-		} catch (error) {
+		} catch (_error) {
 			await this.minioClientService.delete(uploadedImage.fileName, PROFILE_PICTURE_BUCKET_NAME);
 		}
 

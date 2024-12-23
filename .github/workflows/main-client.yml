@@ -9,8 +9,8 @@ on:
       - '.github/workflows/main-client.yml'
 
 env:
-  NODE_VERSION: '20'
-  PNPM_VERSION: 8
+  NODE_VERSION: '22'
+  PNPM_VERSION: 9
 
 jobs:
   cache-modules:

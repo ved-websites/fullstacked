@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        VARIANT: 20-bullseye
-        PNPM_VERSION: 8
+        VARIANT: 22-bullseye
+        PNPM_VERSION: 9
 
     volumes:
       - ..:/home/node/workspace:cached

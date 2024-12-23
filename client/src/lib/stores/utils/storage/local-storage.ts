@@ -49,7 +49,7 @@ export const LocalStorageParsers: Record<DefaultLocalStorageParsers, LocalStorag
 			}
 			try {
 				return JSON.parse(value);
-			} catch (error) {
+			} catch (_error) {
 				return value;
 			}
 		},

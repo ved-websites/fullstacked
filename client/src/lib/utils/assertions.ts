@@ -68,7 +68,7 @@ export function assertTsRestActionResultOK<T extends ApiFetcherData>(args: Asser
 
 		try {
 			assertTsRestResultOK(result);
-		} catch (error) {
+		} catch (_error) {
 			const errorMessage =
 				result.body && typeof result.body === 'object' && 'message' in result.body
 					? String(result.body.message)

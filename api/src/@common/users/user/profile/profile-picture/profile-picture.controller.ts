@@ -29,7 +29,7 @@ export class ProfilePictureController {
 			return new StreamableFile(profilePictureFile, {
 				type: `image/${extension}`,
 			});
-		} catch (error) {
+		} catch (_error) {
 			throw new BadRequestException(this.i18n.t('files.errors.profile-picture.nonexistent'));
 		}
 	}

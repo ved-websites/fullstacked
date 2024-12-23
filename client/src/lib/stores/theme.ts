@@ -16,7 +16,6 @@ export const isTheme = (theme: string | null) => {
 
 const theme = useCookie<Theme>(themeCookieName, {
 	cookieUpdateOpts: {
-		// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 		expiration: new Date('01 Jan 9999'), // Longest expiration time.
 	},
 });

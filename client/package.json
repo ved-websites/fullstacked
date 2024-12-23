@@ -5,8 +5,8 @@
 	"private": true,
 	"type": "module",
 	"engines": {
-		"node": ">=20.0.0",
-		"pnpm": ">=8.0.0"
+		"node": ">=22.0.0",
+		"pnpm": ">=9.0.0"
 	},
 	"scripts": {
 		"dev": "vite dev --host --port 5000",
@@ -65,7 +65,6 @@
 		"@types/ws": "8.5.13",
 		"@typescript-eslint/eslint-plugin": "8.18.1",
 		"@typescript-eslint/parser": "8.18.1",
-		"@v-ed/eslint-config": "0.1.6",
 		"@v-ed/prettier-config": "0.3.0",
 		"@v-ed/tsconfig": "0.3.0",
 		"@vavite/node-loader": "5.1.0",

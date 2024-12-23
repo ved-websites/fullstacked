@@ -185,7 +185,7 @@ export class AdminService {
 
 			await this.sendNewUserRegistrationEmail(userToResendTo, origin);
 			return true;
-		} catch (error) {
+		} catch (_error) {
 			return false;
 		}
 	}

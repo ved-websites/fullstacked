@@ -92,7 +92,7 @@ class KitSocket extends SuperSocket {
 			this.subscriptionMap.forEach((subscription) => {
 				try {
 					this.send(subscription.subscriptionRequest);
-				} catch (error) {
+				} catch (_error) {
 					// sending error, do nothing and wait for retry
 				}
 			});

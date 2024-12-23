@@ -7,7 +7,7 @@ import { getFlash } from 'sveltekit-flash-message/client';
 export function flashStore<T extends Record<string, unknown> = Record<string, unknown>>() {
 	try {
 		return getFlash(page) as Writable<PageMessages & T>;
-	} catch (error) {
+	} catch (_error) {
 		return undefined;
 	}
 }

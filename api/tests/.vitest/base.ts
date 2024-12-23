@@ -4,6 +4,7 @@ import { UserConfig, defineConfig } from 'vitest/config';
 import { env } from '../../src/@common/configs';
 
 const dbURL = process.env.TEST_DATABASE_URL ?? env.TEST_DATABASE_URL;
+
 process.env.DATABASE_URL = dbURL;
 
 type CoverageReporter = CoverageV8Options['reporter'];

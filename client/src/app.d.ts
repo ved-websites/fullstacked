@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 
 import type { SessionUser } from './auth/auth-handler';
 import type { Theme } from './lib/stores';

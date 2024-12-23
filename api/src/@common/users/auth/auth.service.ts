@@ -320,7 +320,7 @@ export class AuthService {
 			});
 
 			await this.auth.invalidateUserSessions(user.id);
-		} catch (error) {
+		} catch (_error) {
 			// eh
 		}
 
