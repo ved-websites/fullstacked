@@ -51,7 +51,7 @@
 	<div class="toast-manager">
 		{#each toasts as toast (toast.id)}
 			<Toast
-				bind:open={toast.open}
+				bind:toastStatus={toast.open}
 				color={toastColorMapping[toast.type]}
 				class={cn('border-b-2', toastBorderColorMapping[toast.type], toast.classes)}
 				contentClass="w-full text-sm font-normal flex flex-col"

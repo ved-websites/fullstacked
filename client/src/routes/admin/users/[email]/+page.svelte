@@ -21,9 +21,11 @@
 <Heading tag="h2" class="overflow-x-clip text-ellipsis">{$t('admin.users.[email].heading', { email: data.editableUser?.email })}</Heading>
 
 <UserForm {superFormData} class="col-span-2 order-1 sm:order-none">
-	<div slot="below">
-		<Label>{$t('shared.userform.labels.roles')}</Label>
-		<MultiSelect name="roles" class="mt-2" items={availableRoles} bind:value={$form.roles} />
-		<ValidationErrors errors={$errors.roles} />
-	</div>
+	{#snippet below()}
+		<div>
+			<Label>{$t('shared.userform.labels.roles')}</Label>
+			<MultiSelect name="roles" class="mt-2" items={availableRoles} bind:value={$form.roles} />
+			<ValidationErrors errors={$errors.roles} />
+		</div>
+	{/snippet}
 </UserForm>

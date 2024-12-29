@@ -43,6 +43,7 @@ export default defineConfig(({ mode }) => {
 				adapter: 'vercel',
 			}),
 			sveltekit(),
+			// @ts-expect-error Purge CSS is not properly updated
 			purgeCss({
 				safelist: {
 					greedy: [/^mt-/],

@@ -116,7 +116,7 @@
 	<TableBody {tableBodyClass}>
 		{#if shownUsers === undefined}
 			<TableBodyRow>
-				<TableBodyCell colspan="2">
+				<TableBodyCell colspan={2}>
 					<div class="flex justify-center py-3">
 						<Spinner />
 					</div>
@@ -124,7 +124,7 @@
 			</TableBodyRow>
 		{:else if !shownUsers.length}
 			<TableBodyRow>
-				<TableBodyCell class="px-4" colspan="2">
+				<TableBodyCell class="px-4" colspan={2}>
 					<div class="flex justify-center py-3">
 						<span class="italic">{$t('admin.users.tables.empty')}</span>
 					</div>

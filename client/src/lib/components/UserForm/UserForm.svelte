@@ -1,22 +1,24 @@
-<script lang="ts" generics="T extends UserFormSchemaType">
+<script lang="ts" generics="T extends UserFormSchemaType = UserFormSchemaType">
 	import { getI18n } from '$i18n';
 	import { Button } from 'flowbite-svelte';
 	import type { SuperForm } from 'sveltekit-superforms';
 	import FormInput from '../forms/FormInput.svelte';
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	import type { UserFormSchemaType } from './userform.schema';
 	let i18n = getI18n();
-	$: ({ t } = $i18n);
+	let { t } = $i18n;
 
-	// eslint-disable-next-line no-undef
-	export let superFormData: SuperForm<T>;
+	interface Props extends SProps<{ above?: void; below?: void }> {
+		superFormData: SuperForm<T, any>;
+	}
 
-	$: ({ enhance, form, constraints, errors } = superFormData);
+	let { superFormData, above, below, ...rest }: Props = $props();
+
+	let { enhance, form, constraints, errors } = $derived(superFormData as SuperForm<UserFormSchemaType, any>);
 </script>
 
-<form method="POST" use:enhance {...$$restProps}>
+<form method="POST" use:enhance {...rest}>
 	<div class="grid gap-3">
-		<slot name="above" />
+		{@render above?.()}
 
 		<div class="grid gap-3 sm:grid-cols-2">
 			<FormInput type="text" name="firstName" bind:value={$form.firstName} {...$constraints.firstName} errors={$errors.firstName}>
@@ -28,7 +30,7 @@
 			</FormInput>
 		</div>
 
-		<slot name="below" />
+		{@render below?.()}
 
 		<Button type="submit" class="mt-3">{$t('common.submit')}</Button>
 	</div>

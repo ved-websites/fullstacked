@@ -31,7 +31,7 @@
 <Heading tag="h2">{$t('admin.users.new.heading')}</Heading>
 
 <UserForm {superFormData}>
-	<svelte:fragment slot="above">
+	{#snippet above()}
 		<FormInput
 			type="email"
 			name="email"
@@ -42,8 +42,8 @@
 		>
 			{$t('shared.userform.labels.email')}
 		</FormInput>
-	</svelte:fragment>
-	<svelte:fragment slot="below">
+	{/snippet}
+	{#snippet below()}
 		<FormInput bind:value={$form.roles} errors={$errors.roles}>
 			{$t('shared.userform.labels.roles')}
 			<MultiSelect slot="input" let:value name="roles" class="mt-2" items={availableRoles} {value} />
@@ -61,5 +61,5 @@
 				{...$constraints.emailLang}
 			/>
 		</FormInput>
-	</svelte:fragment>
+	{/snippet}
 </UserForm>

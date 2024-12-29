@@ -28,17 +28,12 @@
 		</h5>
 		<CloseButton on:click={isDrawerHidden.toggle} class="mb-4" />
 	</div>
-	<Sidebar>
+	<Sidebar activeUrl={$page.url.pathname}>
 		<SidebarWrapper>
 			<SidebarGroup>
 				{#each navElements.filter((navElement) => isNavElemVisible(navElement, $sessionUser)) as navElement}
 					{#if 'url' in navElement}
-						<SidebarItem
-							label={$t(navElement.title)}
-							active={$page.url.pathname == navElement.url}
-							href={navElement.url}
-							on:click={() => isDrawerHidden.set(true)}
-						>
+						<SidebarItem label={$t(navElement.title)} href={navElement.url} on:click={() => isDrawerHidden.set(true)}>
 							<svelte:fragment slot="icon">
 								{#if navElement.drawerIconPath}
 									<Icon class={navElement.drawerIconPath} />
@@ -64,7 +59,6 @@
 							{#each navElement.elements.filter((navSubElement) => navSubElement.isPublic || $sessionUser) as navSubElement}
 								<SidebarItem
 									label={$t(navSubElement.title)}
-									active={$page.url.pathname == navSubElement.url}
 									href={navSubElement.url}
 									class="pl-8"
 									on:click={() => isDrawerHidden.set(true)}

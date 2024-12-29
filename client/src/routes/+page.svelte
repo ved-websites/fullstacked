@@ -30,6 +30,6 @@
 
 <div class="my-sections">
 	{#each sections as section}
-		<section id={section.text} class="{section.color} h-96" />
+		<section id={section.text} class="{section.color} h-96"></section>
 	{/each}
 </div>
