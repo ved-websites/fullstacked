@@ -25,7 +25,7 @@ jobs:
         uses: fkirc/skip-duplicate-actions@v5
         continue-on-error: true
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         if: steps.skip_check.outputs.should_skip != 'true'
 
       - name: Install pnpm
@@ -53,7 +53,7 @@ jobs:
     if: needs.cache-modules.outputs.should_skip != 'true' && contains(fromJson('["ved-bot", "renovate[bot]"]'), github.actor) == false
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
@@ -82,7 +82,7 @@ jobs:
     if: needs.cache-modules.outputs.should_skip != 'true'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
@@ -120,7 +120,7 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2

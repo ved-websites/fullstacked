@@ -43,7 +43,7 @@ jobs:
           echo 'The owner of this repository didn't set the VERCEL_PROJECT_ID secret!'
           exit 1
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
