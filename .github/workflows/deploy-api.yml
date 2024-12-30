@@ -77,7 +77,7 @@ jobs:
           echo "git_head_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: Comment on deploy commit
-        uses: peter-evans/commit-comment@v2
+        uses: peter-evans/commit-comment@v3
         with:
           token: '${{ secrets.GH_BOT_TOKEN }}'
           sha: '${{ steps.commit-vars.outputs.git_head_sha }}'
