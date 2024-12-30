@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 env:
   DEPLOY_BRANCH_NAME: 'api-deploy'
-  PNPM_VERSION: 8
+  PNPM_VERSION: 9
 
 jobs:
   deploy:
@@ -53,7 +53,7 @@ jobs:
           git_push_flags: '--force'
           git_remote_url: 'ssh://dokku@${{ vars.DOKKU_SSH_HOST }}/${{ vars.DOKKU_APPNAME }}'
           ssh_private_key: ${{ secrets.DOKKU_SSH_KEY }}
-          
+
       - name: Create Sentry release
         uses: getsentry/action-release@v1
         env:
@@ -64,7 +64,7 @@ jobs:
           environment: 'api-prod'
           working_directory: './api'
           sourcemaps: './dist'
-          
+
       - name: Delete deploy branch
         uses: dawidd6/action-delete-branch@v3
         with:

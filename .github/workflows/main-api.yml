@@ -34,7 +34,7 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         if: steps.skip_check.outputs.should_skip != 'true'
         id: setup-node
         with:
@@ -60,7 +60,7 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           cache: 'pnpm'
           node-version: ${{ env.NODE_VERSION }}
@@ -89,7 +89,7 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           cache: 'pnpm'
           node-version: ${{ env.NODE_VERSION }}
@@ -127,7 +127,7 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           cache: 'pnpm'
           node-version: ${{ env.NODE_VERSION }}
