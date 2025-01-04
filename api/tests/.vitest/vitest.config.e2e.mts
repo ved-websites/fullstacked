@@ -1,6 +1,6 @@
 import swc from 'unplugin-swc';
 import { defineConfig, mergeConfig } from 'vitest/config';
-import vitestBaseConfig, { VitePlugin } from './base';
+import vitestBaseConfig, { VitePlugin } from './base.mjs';
 
 const e2eConfigs = mergeConfig(
 	vitestBaseConfig,
@@ -12,8 +12,8 @@ const e2eConfigs = mergeConfig(
 		test: {
 			include: ['**/*.e2e-spec.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
 			poolOptions: {
-				threads: {
-					singleThread: true,
+				forks: {
+					singleFork: true,
 				},
 			},
 		},

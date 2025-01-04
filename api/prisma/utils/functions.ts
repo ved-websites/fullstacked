@@ -72,7 +72,7 @@ export async function getPrismaClient() {
 		const { PrismaClient } = await import('../../src/_generated/prisma/client/index');
 
 		return new PrismaClient();
-	} catch (error) {
+	} catch (_error) {
 		throw new Error(`An error happened while getting the Prisma Client. Did you run a generate command?`);
 	}
 }

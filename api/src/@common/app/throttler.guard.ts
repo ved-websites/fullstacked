@@ -29,9 +29,9 @@ export class ThrottlerGuard extends NestThrottlerGuard {
 	}
 
 	protected override async handleRequest(...args: Parameters<NestThrottlerGuard['handleRequest']>) {
-		const [context] = args;
+		const [requestProps] = args;
 
-		const res = ContextService.getResponse(context);
+		const res = ContextService.getResponse(requestProps.context);
 
 		if (!res) {
 			// Do not restrict WebSockets / Subscriptions yet.
