@@ -38,6 +38,13 @@ export class ProfilePictureService {
 				},
 			});
 
+			if (user.profilePictureRef) {
+				// Delete old photo if it exists
+				this.minioClientService.delete(user.profilePictureRef, PROFILE_PICTURE_BUCKET_NAME).catch((e) => {
+					this.logger.error(`Couldn't delete previous profile picture of user "${user.email}"!`, e instanceof Error ? e.stack : undefined);
+				});
+			}
+
 			this.sockets.emit(wsR.users.edited, this.presenceService.convertUserToLiveUser(editedUser));
 		} catch (_error) {
 			await this.minioClientService.delete(uploadedImage.fileName, PROFILE_PICTURE_BUCKET_NAME);
