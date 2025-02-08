@@ -1,5 +1,5 @@
-export const PROFILE_PICTURE_UPLOAD_EVENT_KEY = 'profile-picture.upload';
+import { createEventDefinition } from '$events/event.definition';
 
-export type PROFILE_PICTURE_UPLOAD_EVENT_TYPE = {
+export const PROFILE_PICTURE_UPLOAD_EVENT = createEventDefinition<{
 	profilePictureRef?: string | null;
-};
+}>('profile-picture.upload');

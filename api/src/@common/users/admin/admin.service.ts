@@ -1,4 +1,6 @@
 import { EmailService } from '$email/email.service';
+import { EventData } from '$events/events.decorator';
+import { EventsService } from '$events/events.service';
 import { I18nException } from '$i18n/i18n.error';
 import { TypedI18nService } from '$i18n/i18n.service';
 import { PrismaService } from '$prisma/prisma.service';
@@ -9,12 +11,11 @@ import { LuciaUser } from '$users/auth/session.decorator';
 import { PresenceService } from '$users/presence/presence.service';
 import UserUpdateInputSchema from '$zod/inputTypeSchemas/UserUpdateInputSchema';
 import { Injectable } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { z } from 'zod';
 import { wsR } from '~contract';
 import { Roles } from '~shared';
 import { UserCreateInputNoId } from './admin.contract';
-import { ADMIN_CREATE_USER_EVENT_KEY, ADMIN_CREATE_USER_EVENT_TYPE } from './listeners/admin.events';
+import { ADMIN_CREATE_USER_EVENT } from './listeners/admin.events';
 
 @Injectable()
 export class AdminService {
@@ -22,7 +23,7 @@ export class AdminService {
 		private readonly prisma: PrismaService,
 		private readonly authService: AuthService,
 		private readonly rolesService: RolesService,
-		private readonly eventEmitter: EventEmitter2,
+		private readonly events: EventsService,
 		private readonly email: EmailService,
 		private readonly i18n: TypedI18nService,
 		private readonly presenceService: PresenceService,
@@ -77,7 +78,7 @@ export class AdminService {
 		return { user, roles };
 	}
 
-	async createUser(data: UserCreateInputNoId, origin: ADMIN_CREATE_USER_EVENT_TYPE[1]) {
+	async createUser(data: UserCreateInputNoId, origin: EventData<typeof ADMIN_CREATE_USER_EVENT>[1]) {
 		const { email, firstName, lastName, roles, emailLang } = data;
 
 		const user = (await this.authService.createUser(email, null, {
@@ -90,7 +91,7 @@ export class AdminService {
 			await this.rolesService.setUserRoles(user, roles);
 		}
 
-		this.eventEmitter.emit(ADMIN_CREATE_USER_EVENT_KEY, [user, origin] satisfies ADMIN_CREATE_USER_EVENT_TYPE);
+		this.events.emit(ADMIN_CREATE_USER_EVENT, [user, origin]);
 
 		const userRoles = await this.rolesService.getRolesOfUser(user.email);
 

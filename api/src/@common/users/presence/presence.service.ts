@@ -1,13 +1,8 @@
+import { EventsService } from '$events/events.service';
 import { User } from '$prisma-client';
 import { LuciaSession } from '$users/auth/session.decorator';
 import { Injectable, Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import {
-	USERS_ON_CONNECT_EVENT_KEY,
-	USERS_ON_CONNECT_EVENT_TYPE,
-	USERS_ON_DISCONNECT_EVENT_KEY,
-	USERS_ON_DISCONNECT_EVENT_TYPE,
-} from '../listeners/users.events';
+import { USERS_ON_CONNECT_EVENT, USERS_ON_DISCONNECT_EVENT } from '../listeners/users.events';
 
 export type UserOnlineSelector = { online: boolean };
 
@@ -17,19 +12,19 @@ export class PresenceService {
 
 	private sessions: Map<string, LuciaSession> = new Map();
 
-	constructor(private eventEmitter: EventEmitter2) {}
+	constructor(private events: EventsService) {}
 
 	onConnect(session: LuciaSession) {
 		this.sessions.set(session.id, session);
 
-		this.eventEmitter.emitAsync(USERS_ON_CONNECT_EVENT_KEY, session.userId satisfies USERS_ON_CONNECT_EVENT_TYPE);
+		this.events.emitAsync(USERS_ON_CONNECT_EVENT, session.userId);
 	}
 
 	onDisconnect(session: LuciaSession) {
 		const hadSession = this.sessions.delete(session.id);
 
 		if (hadSession) {
-			this.eventEmitter.emitAsync(USERS_ON_DISCONNECT_EVENT_KEY, session.userId satisfies USERS_ON_DISCONNECT_EVENT_TYPE);
+			this.events.emitAsync(USERS_ON_DISCONNECT_EVENT, session.userId);
 		}
 	}
 

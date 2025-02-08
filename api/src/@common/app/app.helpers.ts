@@ -1,13 +1,13 @@
 import { ConfigModule } from '$configs/config.module';
 import { ContextModule } from '$context/context.module';
 import { EmailModule } from '$email/email.module';
+import { EventsModule } from '$events/events.module';
 import { TypedI18nModule } from '$i18n/i18n.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { SentryModule } from '$sentry/sentry.module';
 import { SocketModule } from '$socket/socket.module';
 import { UsersModule } from '$users/users.module';
 import { ModuleMetadata } from '@nestjs/common';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ThrottlerModule, seconds } from '@nestjs/throttler';
 import { HomeModule } from './home/home.module';
 import { throttlerConf } from './throttler.guard';
@@ -18,10 +18,7 @@ export const BaseModules = [
 	PrismaModule,
 	ContextModule,
 	SocketModule,
-	EventEmitterModule.forRoot({
-		global: true,
-		verboseMemoryLeak: true,
-	}),
+	EventsModule,
 	ThrottlerModule.forRoot(
 		throttlerConf.map((conf) => ({
 			...conf,

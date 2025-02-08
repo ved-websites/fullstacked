@@ -1,12 +1,12 @@
+import { EventsService } from '$events/events.service';
 import { MinioClientService } from '$minio/minio-client.service';
 import { PrismaService } from '$prisma/prisma.service';
 import { SocketService } from '$socket/socket.service';
 import { PresenceService } from '$users/presence/presence.service';
 import { Injectable, Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { User } from 'lucia';
 import { wsR } from '~contract';
-import { PROFILE_PICTURE_UPLOAD_EVENT_KEY, PROFILE_PICTURE_UPLOAD_EVENT_TYPE } from './listeners/profile-picture.events';
+import { PROFILE_PICTURE_UPLOAD_EVENT } from './listeners/profile-picture.events';
 
 export const PROFILE_PICTURE_BUCKET_NAME = 'profile-pictures';
 
@@ -17,7 +17,7 @@ export class ProfilePictureService {
 	constructor(
 		private readonly minioClientService: MinioClientService,
 		private readonly prisma: PrismaService,
-		private readonly eventEmitter: EventEmitter2,
+		private readonly events: EventsService,
 		private readonly sockets: SocketService,
 		private readonly presenceService: PresenceService,
 	) {}
@@ -50,9 +50,9 @@ export class ProfilePictureService {
 			await this.minioClientService.delete(uploadedImage.fileName, PROFILE_PICTURE_BUCKET_NAME);
 		}
 
-		this.eventEmitter.emit(PROFILE_PICTURE_UPLOAD_EVENT_KEY, {
+		this.events.emit(PROFILE_PICTURE_UPLOAD_EVENT, {
 			profilePictureRef: user.profilePictureRef,
-		} satisfies PROFILE_PICTURE_UPLOAD_EVENT_TYPE);
+		});
 
 		return uploadedImage;
 	}
