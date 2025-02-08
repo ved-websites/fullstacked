@@ -2,7 +2,6 @@ import { sentrySvelteKit } from '@sentry/sveltekit';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { nodeLoaderPlugin } from '@vavite/node-loader/plugin';
 import { defineConfig, loadEnv } from 'vite';
-import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 import { defaultExclude } from 'vitest/config';
 
 export default defineConfig(({ mode }) => {
@@ -43,12 +42,6 @@ export default defineConfig(({ mode }) => {
 				adapter: 'vercel',
 			}),
 			sveltekit(),
-			// @ts-expect-error Purge CSS is not properly updated
-			purgeCss({
-				safelist: {
-					greedy: [/^mt-/],
-				},
-			}),
 			nodeLoaderPlugin(),
 		],
 	};
