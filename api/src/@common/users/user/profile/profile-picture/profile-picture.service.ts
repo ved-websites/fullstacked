@@ -6,7 +6,7 @@ import { PresenceService } from '$users/presence/presence.service';
 import { Injectable, Logger } from '@nestjs/common';
 import { User } from 'lucia';
 import { wsR } from '~contract';
-import { PROFILE_PICTURE_UPLOAD_EVENT } from './listeners/profile-picture.events';
+import { PROFILE_PICTURE_EDIT_EVENT } from './listeners/profile-picture.events';
 
 export const PROFILE_PICTURE_BUCKET_NAME = 'profile-pictures';
 
@@ -25,6 +25,8 @@ export class ProfilePictureService {
 	async uploadImage(file: Express.Multer.File, user: User) {
 		const uploadedImage = await this.minioClientService.upload(file, PROFILE_PICTURE_BUCKET_NAME);
 
+		let newProfilePictureRef: string | null = uploadedImage.fileName;
+
 		try {
 			const editedUser = await this.prisma.user.update({
 				data: {
@@ -38,20 +40,17 @@ export class ProfilePictureService {
 				},
 			});
 
-			if (user.profilePictureRef) {
-				// Delete old photo if it exists
-				this.minioClientService.delete(user.profilePictureRef, PROFILE_PICTURE_BUCKET_NAME).catch((e) => {
-					this.logger.error(`Couldn't delete previous profile picture of user "${user.email}"!`, e instanceof Error ? e.stack : undefined);
-				});
-			}
-
 			this.sockets.emit(wsR.users.edited, this.presenceService.convertUserToLiveUser(editedUser));
 		} catch (_error) {
 			await this.minioClientService.delete(uploadedImage.fileName, PROFILE_PICTURE_BUCKET_NAME);
+
+			newProfilePictureRef = user.profilePictureRef;
 		}
 
-		this.events.emit(PROFILE_PICTURE_UPLOAD_EVENT, {
-			profilePictureRef: user.profilePictureRef,
+		this.events.emit(PROFILE_PICTURE_EDIT_EVENT, {
+			userEmail: user.email,
+			oldProfilePictureRef: user.profilePictureRef,
+			newProfilePictureRef,
 		});
 
 		return uploadedImage;
@@ -76,10 +75,6 @@ export class ProfilePictureService {
 			return false;
 		}
 
-		this.minioClientService.delete(user.profilePictureRef, PROFILE_PICTURE_BUCKET_NAME).catch((e) => {
-			this.logger.error(`Couldn't delete profile picture of user "${user.email}"!`, e instanceof Error ? e.stack : undefined);
-		});
-
 		const editedUser = await this.prisma.user.update({
 			data: {
 				profilePictureRef: null,
@@ -93,6 +88,12 @@ export class ProfilePictureService {
 		});
 
 		this.sockets.emit(wsR.users.edited, this.presenceService.convertUserToLiveUser(editedUser));
+
+		this.events.emit(PROFILE_PICTURE_EDIT_EVENT, {
+			userEmail: user.email,
+			oldProfilePictureRef: user.profilePictureRef,
+			newProfilePictureRef: null,
+		});
 
 		return true;
 	}
