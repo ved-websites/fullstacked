@@ -56,6 +56,6 @@ const templateParser = parserFactory();
 })
 export class TypedI18nModule implements NestModule {
 	configure(consumer: MiddlewareConsumer) {
-		consumer.apply(I18nMiddleware).forRoutes('*');
+		consumer.apply(I18nMiddleware).forRoutes('{*slug}');
 	}
 }

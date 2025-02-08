@@ -17,6 +17,6 @@ import { LuciaMiddleware } from './lucia.middleware';
 })
 export class LuciaModule implements NestModule {
 	configure(consumer: MiddlewareConsumer) {
-		consumer.apply(LuciaMiddleware).forRoutes('*');
+		consumer.apply(LuciaMiddleware).forRoutes('{*slug}');
 	}
 }
