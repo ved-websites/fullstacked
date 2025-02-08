@@ -10,4 +10,7 @@ export class LocalEnvironmentConfig extends EnvironmentConfig {
 
 	@IsString()
 	override readonly EMAIL_AUTH_KEY: string = '';
+
+	@IsString()
+	override readonly SENTRY_DSN: string = '';
 }

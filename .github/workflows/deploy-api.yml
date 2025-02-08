@@ -54,15 +54,25 @@ jobs:
           git_remote_url: 'ssh://dokku@${{ vars.DOKKU_SSH_HOST }}/${{ vars.DOKKU_APPNAME }}'
           ssh_private_key: ${{ secrets.DOKKU_SSH_KEY }}
 
+      - name: Get SHA of HEAD commit for Logging
+        id: commit-vars
+        run: |
+          echo "git_head_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ env.DEPLOY_BRANCH_NAME }}
+
       - name: Create Sentry release
         uses: getsentry/action-release@v1
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ vars.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}-backend
         with:
           environment: 'api-prod'
-          working_directory: './api'
+          working_directory: '.'
           sourcemaps: './dist'
 
       - name: Delete deploy branch
@@ -70,11 +80,6 @@ jobs:
         with:
           github_token: ${{ secrets.GH_BOT_TOKEN }}
           branches: ${{ env.DEPLOY_BRANCH_NAME }}
-
-      - name: Get SHA of HEAD commit for Logging
-        id: commit-vars
-        run: |
-          echo "git_head_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: Comment on deploy commit
         uses: peter-evans/commit-comment@v3

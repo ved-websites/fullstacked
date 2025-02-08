@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
 			sentrySvelteKit({
 				sourceMapsUploadOptions: {
 					org: env.SENTRY_ORG,
-					project: env.SENTRY_PROJECT,
+					project: `${env.SENTRY_PROJECT}-frontend`,
 					authToken: env.SENTRY_AUTH_TOKEN,
 					sourcemaps: {
 						assets: ['./.svelte-kit/*/**/*'],
