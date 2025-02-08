@@ -59,10 +59,32 @@ jobs:
         run: |
           echo "git_head_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
+      - name: Comment on deploy commit
+        uses: peter-evans/commit-comment@v3
+        with:
+          token: '${{ secrets.GH_BOT_TOKEN }}'
+          sha: '${{ steps.commit-vars.outputs.git_head_sha }}'
+          body: |
+            🤖 This commit was deployed to the Dokku server!
+
+            App : ${{ vars.DOKKU_APPNAME }}
+
+  sentry:
+    name: Sentry Release
+    runs-on: ubuntu-latest
+    needs: [deploy]
+
+    steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ env.DEPLOY_BRANCH_NAME }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: true
 
       - name: Build api for Sentry release
         run: pnpm run build
@@ -78,18 +100,14 @@ jobs:
           working_directory: '.'
           sourcemaps: './dist'
 
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    needs: [deploy, sentry]
+
+    steps:
       - name: Delete deploy branch
         uses: dawidd6/action-delete-branch@v3
         with:
           github_token: ${{ secrets.GH_BOT_TOKEN }}
           branches: ${{ env.DEPLOY_BRANCH_NAME }}
-
-      - name: Comment on deploy commit
-        uses: peter-evans/commit-comment@v3
-        with:
-          token: '${{ secrets.GH_BOT_TOKEN }}'
-          sha: '${{ steps.commit-vars.outputs.git_head_sha }}'
-          body: |
-            🤖 This commit was deployed to the Dokku server!
-
-            App : ${{ vars.DOKKU_APPNAME }}
