@@ -64,6 +64,9 @@ jobs:
           fetch-depth: 0
           ref: ${{ env.DEPLOY_BRANCH_NAME }}
 
+      - name: Build api for Sentry release
+        run: pnpm run build
+
       - name: Create Sentry release
         uses: getsentry/action-release@v1
         env:
