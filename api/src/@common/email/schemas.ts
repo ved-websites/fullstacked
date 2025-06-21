@@ -2,7 +2,7 @@ import env from '$configs';
 import { z } from 'zod';
 import { emailSchema, fullNameSchema } from '~shared';
 
-const optionalName = fullNameSchema.optional().transform((v) => (v === null ? undefined : v) as typeof v);
+const optionalName = fullNameSchema.optional().transform((v) => (v === null ? undefined : v));
 
 export const emailUserDetails = z.object({
 	email: emailSchema,
