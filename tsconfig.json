@@ -12,7 +12,7 @@
 
     "typeRoots": ["@types", "./node_modules/@types"],
 
-    "importsNotUsedAsValues": "error",
+    "verbatimModuleSyntax": true,
 
     "forceConsistentCasingInFileNames": true,
     "strictNullChecks": true,
