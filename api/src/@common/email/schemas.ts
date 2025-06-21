@@ -4,32 +4,28 @@ import { emailSchema, fullNameSchema } from '~shared';
 
 const optionalName = fullNameSchema.optional().transform((v) => (v === null ? undefined : v) as typeof v);
 
-export const simpleSenderSchema = z.union([
-	emailSchema,
-	z.object({
-		email: emailSchema,
-		name: optionalName,
-	}),
-]);
+export const emailUserDetails = z.object({
+	email: emailSchema,
+	name: optionalName,
+});
 
-export const senderSchema = z.union([simpleSenderSchema, z.array(simpleSenderSchema)]);
+export const simpleEmailUser = emailSchema.transform((email) => ({ email }) satisfies z.input<typeof emailUserDetails>);
+
+export const emailUserSchema = z.union([simpleEmailUser, emailUserDetails]);
+
+export const multipleEmailUsersSchema = z.union([emailUserSchema.transform((v) => [v]), z.array(emailUserSchema)]);
 
 export const sendEmailSchema = z.object({
-	to: senderSchema,
-	from: emailSchema
+	to: multipleEmailUsersSchema,
+	from: simpleEmailUser
 		.optional()
 		.default(env.EMAIL_FROM)
-		.or(
-			z.object({
-				email: emailSchema.optional().default(env.EMAIL_FROM),
-				name: optionalName,
-			}),
-		),
+		.or(emailUserDetails.extend({ email: emailSchema.optional().default(env.EMAIL_FROM) })),
 	subject: z.string(),
 	html: z.string(),
-	cc: senderSchema.optional(),
-	bcc: senderSchema.optional(),
-	replyTo: senderSchema.optional(),
+	cc: multipleEmailUsersSchema.optional(),
+	bcc: multipleEmailUsersSchema.optional(),
+	replyTo: multipleEmailUsersSchema.optional(),
 });
 
 export type SendMailData = z.input<typeof sendEmailSchema>;
