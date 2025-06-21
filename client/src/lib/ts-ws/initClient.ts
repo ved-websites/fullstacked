@@ -37,9 +37,7 @@ type ClientEventRouter<T extends EventRouter> = {
 			: unknown;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 function generateUid(length = 8) {
-	// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 	return [...Array(length)].map(() => Math.random().toString(36)[2]).join('');
 }
 

@@ -9,7 +9,6 @@ export function getCookie(name: string) {
 	const value = `; ${document.cookie}`;
 	const parts = value.split(`; ${name}=`);
 
-	// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 	if (parts.length === 2) {
 		return parts.pop()!.split(';').shift();
 	}

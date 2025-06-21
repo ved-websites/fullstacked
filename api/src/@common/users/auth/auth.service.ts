@@ -192,7 +192,6 @@ export class AuthService {
 		return forgotPasswordToken;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 	protected createPasswordResetExpiryDate(maxTimeInMinutes = 15) {
 		const expiryDate = new Date();
 

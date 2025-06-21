@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
-
 export type Arg = {
 	name: string;
 	value?: string;

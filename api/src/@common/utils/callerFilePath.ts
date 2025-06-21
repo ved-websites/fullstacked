@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
-
 import path from 'path';
 
 export function getCallerFilePath(depth = 0) {

@@ -30,7 +30,6 @@ export function createToasts(...toastsData: ToastManagerData[]): ToastData[] {
 	}
 
 	const toasts = toastsData.map((toastManagerData) => {
-		// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 		const toastId = (Math.random() + 1).toString(36).substring(7);
 
 		const toast: ToastData = {

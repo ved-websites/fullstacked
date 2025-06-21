@@ -2,6 +2,7 @@ import { commonThrottlerConf } from '$app/throttler.guard';
 import { getErrorMessage } from '$i18n/i18n.error';
 import { TypedI18nService } from '$i18n/i18n.service';
 import { Origin } from '$utils/origin.decorator';
+import { msHours } from '$utils/time';
 import { Controller, ForbiddenException, InternalServerErrorException, Res, UnauthorizedException } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
@@ -101,7 +102,7 @@ export class AuthController {
 	}
 
 	@Public()
-	@Throttle(commonThrottlerConf.sensitive)
+	@Throttle({ ...commonThrottlerConf.sensitive, hourly: { limit: 20, ttl: msHours(1) } })
 	@TsRestHandler(r.auth.forgotPasswordRequest)
 	forgotPasswordRequest(@Origin() origin: string) {
 		return tsRestHandler(r.auth.forgotPasswordRequest, async ({ query: { email } }) => {

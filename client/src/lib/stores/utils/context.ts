@@ -8,11 +8,8 @@ export type StoreContextOptions<T> = {
 };
 
 export function createStoreContext<T>(options?: Partial<StoreContextOptions<T>>) {
-	const {
-		// eslint-disable-next-line @typescript-eslint/no-magic-numbers
-		key = `unnamed_context_store_${(Math.random() + 1).toString(36).substring(7)}`,
-		equalityCheck = (c: T, n: T) => c === n,
-	} = options ?? {};
+	const { key = `unnamed_context_store_${(Math.random() + 1).toString(36).substring(7)}`, equalityCheck = (c: T, n: T) => c === n } =
+		options ?? {};
 
 	function getStore<StoreType extends T>() {
 		return getContext(key) as Writable<StoreType>;

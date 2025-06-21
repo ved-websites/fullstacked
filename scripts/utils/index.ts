@@ -3,7 +3,6 @@ export function capitalize(str: string): string {
 }
 
 export function generateGuid() {
-	// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 	const dashPositions = [8, 12, 16, 20];
 	const guidLength = 32;
 	const hexSize = 16;

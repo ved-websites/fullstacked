@@ -11,7 +11,6 @@ export const commonErrorSchema = z.object({
 export type CommonError = z.infer<typeof commonErrorSchema>;
 
 // Cannot use `HttpStatus` as it messes up TS types
-// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 export const commonErrors = [400, 401, 403] as const;
 
 export function isCommonError(data: ApiFetcherData): data is ApiFetcherData<CommonError> {
