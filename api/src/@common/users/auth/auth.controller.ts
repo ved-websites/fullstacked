@@ -1,4 +1,4 @@
-import { sensitiveThrottlerConf } from '$app/throttler.guard';
+import { commonThrottlerConf } from '$app/throttler.guard';
 import { getErrorMessage } from '$i18n/i18n.error';
 import { TypedI18nService } from '$i18n/i18n.service';
 import { Origin } from '$utils/origin.decorator';
@@ -101,7 +101,7 @@ export class AuthController {
 	}
 
 	@Public()
-	@Throttle(...sensitiveThrottlerConf)
+	@Throttle(commonThrottlerConf.sensitive)
 	@TsRestHandler(r.auth.forgotPasswordRequest)
 	forgotPasswordRequest(@Origin() origin: string) {
 		return tsRestHandler(r.auth.forgotPasswordRequest, async ({ query: { email } }) => {
@@ -117,7 +117,7 @@ export class AuthController {
 	}
 
 	@Public()
-	@Throttle(...sensitiveThrottlerConf)
+	@Throttle(commonThrottlerConf.sensitive)
 	@TsRestHandler(r.auth.verifyPasswordResetAttempt)
 	verifyPasswordResetAttempt() {
 		return tsRestHandler(r.auth.verifyPasswordResetAttempt, async ({ query: { resetToken } }) => {
@@ -140,7 +140,7 @@ export class AuthController {
 	}
 
 	@Public()
-	@Throttle(...sensitiveThrottlerConf)
+	@Throttle(commonThrottlerConf.sensitive)
 	@TsRestHandler(r.auth.resetPassword)
 	resetPassword(@Origin() origin: string, @I18n() i18n: I18nContext) {
 		return tsRestHandler(r.auth.resetPassword, async ({ body: { resetToken, password } }) => {

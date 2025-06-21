@@ -8,7 +8,7 @@ import { SentryModule } from '$sentry/sentry.module';
 import { SocketModule } from '$socket/socket.module';
 import { UsersModule } from '$users/users.module';
 import { ModuleMetadata } from '@nestjs/common';
-import { ThrottlerModule, seconds } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { HomeModule } from './home/home.module';
 import { throttlerConf } from './throttler.guard';
 
@@ -19,12 +19,7 @@ export const BaseModules = [
 	ContextModule,
 	SocketModule,
 	EventsModule,
-	ThrottlerModule.forRoot(
-		throttlerConf.map((conf) => ({
-			...conf,
-			ttl: typeof conf.ttl === 'number' ? seconds(conf.ttl) : conf.ttl,
-		})),
-	),
+	ThrottlerModule.forRoot(throttlerConf),
 	UsersModule,
 	EmailModule,
 	HomeModule,

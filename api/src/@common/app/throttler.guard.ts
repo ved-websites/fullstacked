@@ -1,23 +1,31 @@
 import { ContextService } from '$context/context.service';
+import { msDays, msSeconds } from '$utils/time';
 import { ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { ThrottlerGuard as NestThrottlerGuard, Throttle, ThrottlerOptions } from '@nestjs/throttler';
 import { ThrottlerLimitDetail } from '@nestjs/throttler/dist/throttler.guard.interface';
 
-// limits here are transformed in seconds automatically
 export const throttlerConf: ThrottlerOptions[] = [
 	{
 		name: 'short',
-		ttl: 3,
+		ttl: msSeconds(3),
 		limit: 30,
 	},
 	{
 		name: 'long',
-		ttl: 30,
+		ttl: msSeconds(30),
 		limit: 500,
 	},
 ];
 
-export const sensitiveThrottlerConf: Parameters<typeof Throttle> = [{ short: { limit: 5, ttl: 5000 }, long: { limit: 15, ttl: 10000 } }];
+export type ThrottlersConfiguration = Parameters<typeof Throttle>[0];
+
+export const commonThrottlerConf = {
+	sensitive: {
+		short: { limit: 5, ttl: msSeconds(5) },
+		long: { limit: 15, ttl: msSeconds(10) },
+		daily: { limit: 100, ttl: msDays(1) },
+	},
+} satisfies Record<string, ThrottlersConfiguration>;
 
 @Injectable()
 export class ThrottlerGuard extends NestThrottlerGuard {

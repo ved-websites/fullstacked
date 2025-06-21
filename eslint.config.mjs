@@ -17,4 +17,9 @@ export default [
 			],
 		},
 	},
+	{
+		rules: {
+			'@typescript-eslint/no-magic-numbers': 'off',
+		},
+	},
 ];
