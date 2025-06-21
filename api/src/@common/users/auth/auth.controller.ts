@@ -102,7 +102,7 @@ export class AuthController {
 	}
 
 	@Public()
-	@Throttle({ ...commonThrottlerConf.sensitive, hourly: { limit: 20, ttl: msHours(1) } })
+	@Throttle({ ...commonThrottlerConf.sensitive, hourly: { limit: 25, ttl: msHours(1) } })
 	@TsRestHandler(r.auth.forgotPasswordRequest)
 	forgotPasswordRequest(@Origin() origin: string) {
 		return tsRestHandler(r.auth.forgotPasswordRequest, async ({ query: { email } }) => {
