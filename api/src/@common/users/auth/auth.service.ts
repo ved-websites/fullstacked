@@ -7,6 +7,7 @@ import { PrismaService } from '$prisma/prisma.service';
 import { SocketService } from '$socket/socket.service';
 import { PresenceService } from '$users/presence/presence.service';
 import { generateId, generateRandomSafeString } from '$utils/random';
+import { msDays } from '$utils/time';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { wsR } from '~contract';
 import { AuthError } from './auth.error';
@@ -205,15 +206,11 @@ export class AuthService {
 
 		const passwordAttempt = await this.prisma.passwordResetAttempt.findFirst({
 			where: {
-				token: {
-					equals: token,
-				},
+				token,
 				expiryDate: {
 					gt: currentDate,
 				},
-				used: {
-					equals: false,
-				},
+				used: false,
 			},
 			select: {
 				id: true,
@@ -239,6 +236,23 @@ export class AuthService {
 	}
 
 	async sendPasswordResetRequestEmail(email: string, token: string, origin: { url: string }) {
+		const attemptsInTheLastDay = await this.prisma.passwordResetAttempt.count({
+			where: {
+				user: {
+					email,
+				},
+				createdAt: {
+					gt: new Date(Date.now() - msDays(1)),
+				},
+			},
+		});
+
+		if (attemptsInTheLastDay > 15) {
+			// Prevent too many attempts, across IPs
+			// No error thrown here as it might leak existing user emails
+			return;
+		}
+
 		const { user } = await this.prisma.passwordResetAttempt
 			.create({
 				data: {
