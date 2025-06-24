@@ -7,5 +7,5 @@ export const requestPasswordSchema = z.object({
 
 export const resetPasswordSchema = z.object({
 	password: passwordSchema,
-	resetToken: z.string({ required_error: '(auth).forgot_password.reset.action.no-token' satisfies I18nKey }),
+	resetToken: z.string({ required_error: '(auth).forgot-password.reset.action.no-token' satisfies I18nKey }),
 });

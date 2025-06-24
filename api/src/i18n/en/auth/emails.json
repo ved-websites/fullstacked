@@ -1,5 +1,5 @@
 {
-	"forgot_password_request": {
+	"forgot-password_request": {
 		"subject": "Password Reset Request",
 		"body": {
 			"preview": "Forgot password?",

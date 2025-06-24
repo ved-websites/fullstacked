@@ -63,7 +63,7 @@ export const actions = {
 			result: () => tsrest.auth.forgotPasswordRequest({ query: form.data }),
 			onValid: () => ({
 				layoutAlert: createLayoutAlert({
-					text: '(auth).forgot_password.request.alert' satisfies I18nKey,
+					text: '(auth).forgot-password.request.alert' satisfies I18nKey,
 				}),
 			}),
 		});
@@ -83,7 +83,7 @@ export const actions = {
 			onValid: () => ({
 				redirectTo: '/login',
 				layoutAlert: createLayoutAlert({
-					text: '(auth).forgot_password.reset.action.success' satisfies I18nKey,
+					text: '(auth).forgot-password.reset.action.success' satisfies I18nKey,
 				}),
 			}),
 		});

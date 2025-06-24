@@ -8,8 +8,8 @@ export function handleAccessRedirect(url: URL) {
 	const pathTo = url.pathname + url.search;
 
 	// if (pathTo.includes('@')) {
-	// 	return '/no_access';
+	// 	return '/no-access';
 	// }
 
-	return `/no_access?pathTo=${pathTo}`;
+	return `/no-access?pathTo=${pathTo}`;
 }

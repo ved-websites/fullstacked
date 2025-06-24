@@ -8,7 +8,7 @@ import { StatusCodes } from 'http-status-codes';
 import { userHasRoleSpec } from '~shared';
 
 /** List of urls available to logged out users. */
-export const urlsWhitelist: string[] = ['/', '/login', '/register', '/forgot_password'] satisfies `/${string}`[];
+export const urlsWhitelist: string[] = ['/', '/login', '/register', '/forgot-password'] satisfies `/${string}`[];
 
 export function verifyUserAccess(event: RequestEvent) {
 	const {
@@ -23,7 +23,7 @@ export function verifyUserAccess(event: RequestEvent) {
 	}
 
 	if (userCanAccessNav(sessionUser, navElements, url)) {
-		if (url.pathname == '/no_access') {
+		if (url.pathname == '/no-access') {
 			const pathTo = url.searchParams.get('pathTo');
 
 			if (pathTo) {
@@ -35,7 +35,7 @@ export function verifyUserAccess(event: RequestEvent) {
 	}
 
 	if (sessionUser) {
-		if (url.pathname == '/no_access') {
+		if (url.pathname == '/no-access') {
 			return true;
 		} else {
 			redirect(StatusCodes.SEE_OTHER, handleAccessRedirect(url));
@@ -57,7 +57,7 @@ export function verifyUserAccess(event: RequestEvent) {
  */
 export function userCanAccessNav(user: SessionUser, navElements: NavElement[], url: URL) {
 	const pathname = (() => {
-		if (url.pathname === '/no_access' && url.searchParams.has('pathTo')) {
+		if (url.pathname === '/no-access' && url.searchParams.has('pathTo')) {
 			return url.searchParams.get('pathTo')!;
 		}
 

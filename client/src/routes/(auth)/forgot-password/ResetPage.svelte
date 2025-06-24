@@ -29,18 +29,18 @@
 </script>
 
 <div class="flex flex-col gap-5 sm:w-3/4 lg:w-1/2 m-auto">
-	<Heading tag="h2">{$t('(auth).forgot_password.reset.heading')}</Heading>
+	<Heading tag="h2">{$t('(auth).forgot-password.reset.heading')}</Heading>
 
 	<P>
-		{$t('(auth).forgot_password.reset.description', { email: user.email })}
+		{$t('(auth).forgot-password.reset.description', { email: user.email })}
 	</P>
 	<P>
-		{$t('(auth).forgot_password.reset.warning')}
+		{$t('(auth).forgot-password.reset.warning')}
 	</P>
 
 	<form method="POST" action="?/resetPassword" use:enhance class="flex flex-col gap-5">
 		<FormInput type="password" name="password" bind:value={$form.password} {...$constraints.password} errors={$errors.password}>
-			{$t('(auth).forgot_password.reset.labels.password')}
+			{$t('(auth).forgot-password.reset.labels.password')}
 		</FormInput>
 
 		<input name="token" type="hidden" value={$page.url.searchParams.get('resetToken')} />

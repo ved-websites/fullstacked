@@ -32,7 +32,7 @@
 	</FormInput>
 
 	<Helper>
-		<a href="/forgot_password" class="hover:underline">{$t('(auth).login.forgot.password.text')}</a>
+		<a href="/forgot-password" class="hover:underline">{$t('(auth).login.forgot.password.text')}</a>
 	</Helper>
 
 	<Button type="submit" class="mt-2" disabled={isServerDown}>{$t('common.submit')}</Button>

@@ -16,26 +16,26 @@
 </script>
 
 <div class="flex flex-col gap-5 sm:w-3/4 lg:w-1/2 m-auto">
-	<Heading tag="h2">{$t('(auth).forgot_password.request.heading')}</Heading>
+	<Heading tag="h2">{$t('(auth).forgot-password.request.heading')}</Heading>
 
 	<P>
-		{$t('(auth).forgot_password.request.description')}
+		{$t('(auth).forgot-password.request.description')}
 	</P>
 
 	{#if !validToken}
-		<Alert color="yellow">{$t('(auth).forgot_password.request.wrong_token')}</Alert>
+		<Alert color="yellow">{$t('(auth).forgot-password.request.wrong_token')}</Alert>
 	{/if}
 
 	<form method="POST" action="?/requestPasswordReset" use:enhance class="flex flex-col gap-5">
 		<FormInput
 			type="email"
 			name="email"
-			placeholder={$t('(auth).forgot_password.request.email-placeover')}
+			placeholder={$t('(auth).forgot-password.request.email-placeover')}
 			bind:value={$form.email}
 			{...$constraints.email}
 			errors={$errors.email}
 		>
-			{$t('(auth).forgot_password.request.labels.email')}
+			{$t('(auth).forgot-password.request.labels.email')}
 		</FormInput>
 
 		<Button type="submit" class="mt-2">{$t('common.submit')}</Button>

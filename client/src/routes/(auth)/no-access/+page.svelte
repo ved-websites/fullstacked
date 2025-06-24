@@ -9,6 +9,6 @@
 	$: pathTo = $page.url.searchParams.get('pathTo');
 </script>
 
-<PageError icon="i-mdi-hand-front-left" errorMessage={$t('(auth).no_access.error')}>
-	<P>{@html $t('(auth).no_access.summary', { resource: `<span class="italic">${pathTo}</span>` })}</P>
+<PageError icon="i-mdi-hand-front-left" errorMessage={$t('(auth).no-access.error')}>
+	<P>{@html $t('(auth).no-access.summary', { resource: `<span class="italic">${pathTo}</span>` })}</P>
 </PageError>

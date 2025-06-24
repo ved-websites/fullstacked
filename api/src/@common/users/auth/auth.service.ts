@@ -281,13 +281,13 @@ export class AuthService {
 		const userFullName = `${user.firstName} ${user.lastName}`;
 
 		const templateData = {
-			url: `${origin.url}/forgot_password?resetToken=${token}`,
+			url: `${origin.url}/forgot-password?resetToken=${token}`,
 			i18nLang: lang,
 		};
 
 		return this.email.renderAndSend(['./emails/ForgotPasswordRequest.hbs', templateData], {
 			to: { email: user.email, name: userFullName },
-			subject: this.i18n.t('auth.emails.forgot_password_request.subject', { lang }),
+			subject: this.i18n.t('auth.emails.forgot-password_request.subject', { lang }),
 		});
 	}
 
