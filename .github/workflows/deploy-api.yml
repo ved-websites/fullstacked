@@ -54,8 +54,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha # Cache layers using GitHub Actions cache
-          cache-to: type=gha,mode=max # Store layers in GitHub Actions cache
+          # cache-from: type=gha # Cache layers using GitHub Actions cache
+          # cache-to: type=gha,mode=max # Store layers in GitHub Actions cache
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
