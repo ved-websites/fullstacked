@@ -67,7 +67,7 @@ jobs:
       - name: Get SHA of Deployed Commit
         id: deployed-commit-sha
         run: |
-          echo "sha=$(git rev-parse HEAD" >> $GITHUB_OUTPUT
+          echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: Comment on deploy commit
         uses: peter-evans/commit-comment@v3
