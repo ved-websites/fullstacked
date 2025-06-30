@@ -68,7 +68,7 @@ jobs:
           push: true
           tags: ${{ steps.docker-meta.outputs.tags }}
           labels: ${{ steps.docker-meta.outputs.labels }}
-          cache-from: type=gha
+          # cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/arm64
 
