@@ -3,8 +3,6 @@ FROM arm64v8/node:22-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-ENV NODE_ENV=production
-
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
@@ -34,6 +32,8 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-l
 # ====================
 
 FROM base AS dokploy
+
+ENV NODE_ENV=production
 
 # Copy only the necessary files
 COPY --from=prod-deps /app/node_modules /app/node_modules
