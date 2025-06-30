@@ -83,18 +83,9 @@ jobs:
       - name: Format Docker Tags for Comment
         id: format-tags
         run: |
-          # Get the raw JSON array string from docker-meta outputs
-          # Ensure you use 'fromJSON' to parse the string into an actual JSON object/array
-          TAGS_JSON="${{ steps.docker-meta.outputs.tags }}"
-
-          # Use jq to iterate through the array and format each item as a Markdown list item
-          # The -r flag outputs raw strings without quotes
-          # .[] iterates over each element
-          # "- " + . prepends "- " to each element
-          # join("\n") joins the resulting array elements with newlines
-          FORMATTED_LIST=$(echo "$TAGS_JSON" | jq -r '
+          FORMATTED_LIST=$(jq -r '
             .[] | "- " + .
-          ')
+          ' <<< "${{ steps.docker-meta.outputs.tags }}" )
 
           # Output the formatted list so it can be used by subsequent steps
           echo "formatted_tags_list<<EOF" >> "$GITHUB_OUTPUT"
