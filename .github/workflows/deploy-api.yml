@@ -83,11 +83,10 @@ jobs:
       - name: Format Docker Tags for Comment
         id: format-tags
         run: |
-          FORMATTED_LIST=$(jq -r '
-            .[] | "- " + .
-          ' <<< "${{ steps.docker-meta.outputs.tags }}" )
+          RAW_TAGS="${{ steps.docker-meta.outputs.tags }}"
 
-          # Output the formatted list so it can be used by subsequent steps
+          FORMATTED_LIST=$(echo "$RAW_TAGS" | sed -E 's/^[[:space:]]*(.*)/- `\1`/')
+
           echo "formatted_tags_list<<EOF" >> "$GITHUB_OUTPUT"
           echo "$FORMATTED_LIST" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
