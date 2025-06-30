@@ -7,6 +7,12 @@ RUN corepack enable
 
 # ====================
 
+FROM base AS prod-deps
+
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+
+# ====================
+
 FROM base AS build
 
 WORKDIR /app
@@ -29,9 +35,11 @@ WORKDIR /app
 ENV NODE_ENV=production
  
 # Copy only the necessary files
+
+COPY --from=prod-deps /app/node_modules /app/node_modules
+
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/prisma/schema.prisma ./prisma/schema.prisma
 COPY --from=build /app/prisma/migrations ./prisma/migrations
 
