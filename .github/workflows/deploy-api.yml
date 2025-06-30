@@ -58,7 +58,7 @@ jobs:
           pnpm --filter ./api install --lockfile-only --no-frozen-lockfile
 
       - name: Build and push Docker image
-        id: push
+        id: docker-push
         uses: docker/build-push-action@v5
         with:
           context: ./api
@@ -72,8 +72,7 @@ jobs:
         uses: actions/attest-build-provenance@v2
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+          subject-digest: ${{ steps.docker-push.outputs.digest }}
 
       - name: Get SHA of Deployed Commit
         id: deployed-commit-sha
@@ -98,7 +97,7 @@ jobs:
           token: '${{ secrets.GH_BOT_TOKEN }}'
           sha: '${{ steps.deployed-commit-sha.outputs.sha }}'
           body: |
-            🤖 This commit was deployed to the GitHub Registry as version ${{ steps.api-version.outputs.current-version }}!
+            🤖 This commit was deployed to the GitHub Registry as version `${{ steps.api-version.outputs.current-version }}`!
             
             **Images** :
             ${{ steps.format-tags.outputs.formatted_tags_list }}
