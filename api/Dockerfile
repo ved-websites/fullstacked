@@ -7,6 +7,8 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
+COPY package.json pnpm-lock.yaml ./
+
 RUN corepack enable
 
 # ====================
@@ -14,17 +16,18 @@ RUN corepack enable
 FROM base AS build
 
 COPY . .
-COPY package.json pnpm-lock.yaml ./
 
 RUN --mount=type=cache,id=pnpm,target=$PNPM_HOME/store pnpm install --frozen-lockfile
 
 RUN pnpm run build
 
+RUN prisma exec prisma generate
+RUN rm -r /app/dist/_generated/prisma
+RUN mv /app/src/_generated/prisma /app/dist/_generated/prisma
+
 # ====================
 
 FROM base AS prod-deps
-
-COPY package.json pnpm-lock.yaml ./
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 

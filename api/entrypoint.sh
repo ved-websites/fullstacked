@@ -18,18 +18,6 @@ fi
 # This is important because dlx expects an exact version or a tag like 'latest'
 VERSION=$(echo "$VERSION" | sed 's/[^0-9.]*//g')
 
-# =========================
-# === Prisma Workaround ===
-# =========================
-
-pnpm dlx "prisma@$VERSION" generate
-
-rm -r /app/dist/_generated/prisma
-
-mv /app/src/_generated/prisma /app/dist/_generated/prisma
-
-rm -r /app/src
-
 # ====================
 # === DB Migration ===
 # ====================
