@@ -47,11 +47,7 @@ async function generatePrismaHelpers() {
 }
 
 async function updateDatabaseSchema() {
-	const outputs = await pushDb({ skipGenerators: true, forceReset: true });
-
-	if (outputs.stderr) {
-		throw new Error(`Database push failed: ${outputs.stderr}`);
-	}
+	await pushDb({ skipGenerators: true, forceReset: true });
 }
 
 async function seedDatabase() {
