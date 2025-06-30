@@ -33,18 +33,19 @@ pnpm run --silent init
 
 cd $cwd/api
 
-rm prisma/migrations/.gitignore 2> /dev/null
-
-HAS_INIT_MIGRATION=$(ls -l prisma/migrations | grep '_initialize$')
-
-if [[ -z $HAS_INIT_MIGRATION ]]
+# Setup prisma first migration if project not yet initialized
+if [ -f "prisma/migrations/delete_me_after_initialization" ]
 then
 	read -p "Edit your Prisma Schema how you want it to be for the initial migration, then press enter here!"
+	
+	find prisma/migrations -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
 
 	# Commented out until https://github.com/microsoft/vscode-remote-release/issues/8535 is fixed.
 	# code --wait prisma/schema.prisma
 
 	pnpm exec prisma migrate dev --skip-seed --skip-generate --name initialize
+	
+	rm prisma/migrations/delete_me_after_initialization
 else
 	echo 'Skipping Prisma migrate as this project has already been initialized ("_initialize" folder present in migrations folder)'
 fi
