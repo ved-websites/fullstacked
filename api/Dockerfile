@@ -9,6 +9,10 @@ RUN corepack enable
 
 FROM base AS prod-deps
 
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml ./
+
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
 # ====================
