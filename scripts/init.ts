@@ -37,7 +37,7 @@ if (!cli.hasArg('no-api')) {
 		}
 
 		await exec(`kill $(pgrep -f '[d]ebug-api.sh' -d ' ')`);
-	} catch (error) {
+	} catch (_error) {
 		// Do nothing on api kill error
 	}
 
