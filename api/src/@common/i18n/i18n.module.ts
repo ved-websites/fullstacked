@@ -39,14 +39,14 @@ const templateParser = parserFactory();
 				},
 				throwOnMissingKey: false,
 				// typesOutputPath: path.resolve('.', env.NODE_ENV === Environment.Production ? 'dist' : 'src', '@common/i18n/@generated/i18n.generated.ts'),
-				resolvers: [
-					new SessionI18nResolver(),
-					new QueryResolver(),
-					new AcceptLanguageResolver({ matchType: 'loose' }),
-					new HeaderResolver(['x-lang']),
-				],
 			}),
 			inject: [EnvironmentConfig],
+			resolvers: [
+				new SessionI18nResolver(),
+				new QueryResolver(),
+				new AcceptLanguageResolver({ matchType: 'loose' }),
+				new HeaderResolver(['x-lang']),
+			],
 		}),
 	],
 	providers: [
