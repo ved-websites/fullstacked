@@ -13,7 +13,7 @@ export const configs = {
 	buildDest: './dist',
 	uploadsFolder: './uploads',
 	devPort: 3005,
-	prismaGeneratedFolder: 'src/_generated',
+	prismaGeneratedFolder: './src/_generated',
 };
 
 // TASKS
@@ -29,7 +29,9 @@ async function buildNest() {
 }
 
 function buildPrisma() {
-	return gulp.src(['./prisma/schema.prisma', './prisma/migrations/**/*'], { base: '.' }).pipe(gulp.dest(configs.buildDest));
+	return gulp
+		.src([`${configs.prismaGeneratedFolder}/prisma/**/*`, `!${configs.prismaGeneratedFolder}/_generated/prisma/**/*.js`], { base: '.' })
+		.pipe(gulp.dest(`${configs.buildDest}/_generated/prisma`));
 }
 
 // Creation Tasks
