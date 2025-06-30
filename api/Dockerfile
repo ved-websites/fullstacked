@@ -19,7 +19,7 @@ RUN --mount=type=cache,id=pnpm,target=$PNPM_HOME/store pnpm install --frozen-loc
 
 RUN pnpm run build
 
-RUN prisma exec prisma generate
+RUN pnpm exec prisma generate
 RUN rm -r /app/dist/_generated/prisma
 RUN mv /app/src/_generated/prisma /app/dist/_generated/prisma
 
