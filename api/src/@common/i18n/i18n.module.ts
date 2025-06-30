@@ -9,6 +9,7 @@ import {
 	QueryResolver,
 } from 'nestjs-i18n';
 import path from 'path';
+import { Environment, EnvironmentConfig } from '~env';
 import { TypedI18nService, TypedI18nServiceFactory } from './i18n.service';
 import { SessionI18nResolver } from './session.i18n-resolver';
 
@@ -19,30 +20,33 @@ const templateParser = parserFactory();
 @Global()
 @Module({
 	imports: [
-		NestI18nModule.forRoot({
-			disableMiddleware: true,
-			fallbackLanguage,
-			loaderOptions: {
-				path: path.resolve('.', 'src/i18n'),
-				watch: true,
-				includeSubfolders: true,
-			},
-			formatter: (template: string, ...args: unknown[]) => {
-				const { __lang: lang, ...payload } = args[0] as {
-					__lang: string;
-					[x: string]: unknown;
-				};
+		NestI18nModule.forRootAsync({
+			useFactory: (env: EnvironmentConfig) => ({
+				disableMiddleware: true,
+				fallbackLanguage,
+				loaderOptions: {
+					path: path.resolve('.', env.NODE_ENV === Environment.Production ? 'dist' : 'src', 'i18n'),
+					watch: true,
+					includeSubfolders: true,
+				},
+				formatter: (template: string, ...args: unknown[]) => {
+					const { __lang: lang, ...payload } = args[0] as {
+						__lang: string;
+						[x: string]: unknown;
+					};
 
-				return templateParser.parse(template, [payload], lang, '');
-			},
-			throwOnMissingKey: false,
-			// typesOutputPath: path.resolve('.', 'src/@common/i18n/@generated/i18n.generated.ts'),
-			resolvers: [
-				new SessionI18nResolver(),
-				new QueryResolver(),
-				new AcceptLanguageResolver({ matchType: 'loose' }),
-				new HeaderResolver(['x-lang']),
-			],
+					return templateParser.parse(template, [payload], lang, '');
+				},
+				throwOnMissingKey: false,
+				// typesOutputPath: path.resolve('.', env.NODE_ENV === Environment.Production ? 'dist' : 'src', '@common/i18n/@generated/i18n.generated.ts'),
+				resolvers: [
+					new SessionI18nResolver(),
+					new QueryResolver(),
+					new AcceptLanguageResolver({ matchType: 'loose' }),
+					new HeaderResolver(['x-lang']),
+				],
+			}),
+			inject: [EnvironmentConfig],
 		}),
 	],
 	providers: [
