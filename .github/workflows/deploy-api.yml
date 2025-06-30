@@ -29,12 +29,15 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Get deployed version
         id: api-version
-        uses: martinbeentjes/npm-get-version-action@v1.3.1
-        with:
-          path: ./api
+        run: |
+          # Get the current version from package.json
+          CURRENT_VERSION=$(cat ./api/package.json | jq '.version' | tr -d '"')
+          
+          # Output the current version
+          echo "current-version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
       - name: Extract metadata for Docker
         id: docker-meta
@@ -109,7 +112,6 @@ jobs:
             
             **Images** :
             ${{ steps.format-tags.outputs.formatted_tags_list }}
-            
 
   sentry:
     name: Sentry Release
