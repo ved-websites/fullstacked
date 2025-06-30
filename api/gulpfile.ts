@@ -20,8 +20,12 @@ export const configs = {
 
 // Build Tasks
 
-function buildNest() {
-	return exec('pnpm exec nest build');
+async function buildNest() {
+	const outputs = await exec('pnpm exec nest build');
+
+	if (outputs.stderr) {
+		throw new Error(`Nest build failed: ${outputs.stderr}`);
+	}
 }
 
 function buildPrisma() {
@@ -38,12 +42,20 @@ async function setupEnv() {
 	}
 }
 
-function generatePrismaHelpers() {
-	return generatePrisma();
+async function generatePrismaHelpers() {
+	const outputs = await generatePrisma();
+
+	if (outputs.stderr) {
+		throw new Error(`Prisma generation failed: ${outputs.stderr}`);
+	}
 }
 
-function updateDatabaseSchema() {
-	return pushDb({ skipGenerators: true, forceReset: true });
+async function updateDatabaseSchema() {
+	const outputs = await pushDb({ skipGenerators: true, forceReset: true });
+
+	if (outputs.stderr) {
+		throw new Error(`Database push failed: ${outputs.stderr}`);
+	}
 }
 
 async function seedDatabase() {
