@@ -30,8 +30,14 @@ async function buildNest() {
 
 function buildPrisma() {
 	return gulp
-		.src([`${configs.prismaGeneratedFolder}/prisma/**/*`, `!${configs.prismaGeneratedFolder}/prisma/**/*.js`], { base: './src' })
-		.pipe(gulp.dest(`${configs.buildDest}`));
+		.src([`${configs.prismaGeneratedFolder}/prisma/**/*`, `!**/*.(map|ts)`], { base: './src' })
+		.pipe(gulp.dest(`${configs.buildDest}`, { overwrite: false }));
+}
+
+async function buildGeneratedPrismaBinaries() {
+	await del(`${configs.buildDest}/_generated/prisma`);
+
+	return buildPrisma();
 }
 
 // Creation Tasks
@@ -108,4 +114,4 @@ export const cleanSeed: TaskFunction = gulp.series(cleanDb, seedDatabase);
 
 // Useful commands
 
-export { deleteDist, setupEnv };
+export { buildGeneratedPrismaBinaries, deleteDist, setupEnv };
