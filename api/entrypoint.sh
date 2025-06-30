@@ -6,7 +6,7 @@
 
 PACKAGE_JSON_PATH="./package.json"
 
-VERSION=$(jq -r ".dependencies.\"prisma\" // .devDependencies.\"prisma\"" "$PACKAGE_JSON_PATH")
+VERSION=$(grep "\"prisma\":" "$PACKAGE_JSON_PATH" | awk -F': "' '{print $2}' | awk -F'"' '{print $1}')
 
 # Check if the version was found
 if [ -z "$VERSION" ]; then
