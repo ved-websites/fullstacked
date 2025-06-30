@@ -13,7 +13,6 @@ WORKDIR /app
 
 COPY . .
 COPY package.json pnpm-lock.yaml ./
-COPY prisma ./prisma/
 
 RUN --mount=type=cache,id=pnpm,target=$PNPM_HOME/store pnpm install --frozen-lockfile
 
@@ -32,6 +31,7 @@ ENV NODE_ENV=production
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/prisma ./prisma/
 
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
