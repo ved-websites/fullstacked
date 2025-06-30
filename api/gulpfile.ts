@@ -30,8 +30,8 @@ async function buildNest() {
 
 function buildPrisma() {
 	return gulp
-		.src([`${configs.prismaGeneratedFolder}/prisma/**/*`, `!${configs.prismaGeneratedFolder}/_generated/prisma/**/*.js`], { base: '.' })
-		.pipe(gulp.dest(`${configs.buildDest}/_generated/prisma`));
+		.src([`${configs.prismaGeneratedFolder}/prisma/**/*`, `!${configs.prismaGeneratedFolder}/prisma/**/*.js`], { base: './src' })
+		.pipe(gulp.dest(`${configs.buildDest}`));
 }
 
 // Creation Tasks
