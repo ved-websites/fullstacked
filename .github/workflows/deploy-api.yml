@@ -45,7 +45,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=semver,pattern={{version}},value=v${{  steps.api-version.outputs.current-version }}
+            type=semver,pattern={{version}},value=v${{ steps.api-version.outputs.current-version }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
