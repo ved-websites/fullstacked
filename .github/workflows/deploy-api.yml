@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     
     permissions:
-      contents: read
+      contents: write
       packages: write
       attestations: write
       id-token: write
@@ -29,12 +29,20 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Get deployed version
+        id: api-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+        with:
+          path: ./api
 
       - name: Extract metadata for Docker
-        id: meta
+        id: docker-meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}},value=v${{  steps.api-version.outputs.current-version }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
@@ -52,8 +60,8 @@ jobs:
         with:
           context: ./api
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.docker-meta.outputs.tags }}
+          labels: ${{ steps.docker-meta.outputs.labels }}
           # cache-from: type=gha # Cache layers using GitHub Actions cache
           # cache-to: type=gha,mode=max # Store layers in GitHub Actions cache
 
@@ -68,6 +76,28 @@ jobs:
         id: deployed-commit-sha
         run: |
           echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          
+      - name: Format Docker Tags for Comment
+        id: format-tags
+        run: |
+          # Get the raw JSON array string from docker-meta outputs
+          # Ensure you use 'fromJSON' to parse the string into an actual JSON object/array
+          TAGS_JSON="${{ steps.docker-meta.outputs.tags }}"
+
+          # Use jq to iterate through the array and format each item as a Markdown list item
+          # The -r flag outputs raw strings without quotes
+          # .[] iterates over each element
+          # "- " + . prepends "- " to each element
+          # join("\n") joins the resulting array elements with newlines
+          FORMATTED_LIST=$(echo "$TAGS_JSON" | jq -r '
+            .[] | "- " + .
+          ')
+
+          # Output the formatted list so it can be used by subsequent steps
+          echo "formatted_tags_list<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$FORMATTED_LIST" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+        shell: bash # Use bash for multi-line output via heredoc (EOF)
 
       - name: Comment on deploy commit
         uses: peter-evans/commit-comment@v3
@@ -75,7 +105,11 @@ jobs:
           token: '${{ secrets.GH_BOT_TOKEN }}'
           sha: '${{ steps.deployed-commit-sha.outputs.sha }}'
           body: |
-            🤖 This commit was deployed to the GitHub Registry!
+            🤖 This commit was deployed to the GitHub Registry as version ${{ steps.api-version.outputs.current-version }}!
+            
+            **Images** :
+            ${{ steps.format-tags.outputs.formatted_tags_list }}
+            
 
   sentry:
     name: Sentry Release
