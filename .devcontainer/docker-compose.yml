@@ -25,7 +25,7 @@ services:
       - 8.8.8.8
 
   postgres:
-    image: postgres:13
+    image: postgres:15
 
     environment:
       POSTGRES_USER: postgres
