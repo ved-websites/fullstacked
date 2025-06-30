@@ -34,12 +34,6 @@ function buildPrisma() {
 		.pipe(gulp.dest(`${configs.buildDest}`, { overwrite: false }));
 }
 
-async function buildGeneratedPrismaBinaries() {
-	await del(`${configs.buildDest}/_generated/prisma`);
-
-	return buildPrisma();
-}
-
 // Creation Tasks
 
 async function setupEnv() {
@@ -114,4 +108,4 @@ export const cleanSeed: TaskFunction = gulp.series(cleanDb, seedDatabase);
 
 // Useful commands
 
-export { buildGeneratedPrismaBinaries, deleteDist, setupEnv };
+export { deleteDist, setupEnv };

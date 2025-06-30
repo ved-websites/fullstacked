@@ -4,11 +4,13 @@
 # === Prisma Workaround ===
 # =========================
 
-pnpm run generate
+pnpm exec prisma generate
 
-pnpm run build:prisma:binaries
+rm -r /app/dist/_generated/prisma
 
-rm -r src
+mv /app/src/_generated/prisma /app/dist/_generated/prisma
+
+rm -r /app/src
 
 # ====================
 # === DB Migration ===
