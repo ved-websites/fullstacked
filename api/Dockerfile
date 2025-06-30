@@ -17,7 +17,7 @@ FROM base AS build
 
 COPY . .
 
-RUN --mount=type=cache,id=pnpm,target=$PNPM_HOME/store pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 RUN pnpm run build
 
