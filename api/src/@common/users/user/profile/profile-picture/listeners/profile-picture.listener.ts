@@ -1,7 +1,7 @@
 import { OnEvent, type EventData } from '$events/events.decorator';
 import { MinioClientService } from '$minio/minio-client.service';
 import { Injectable, Logger } from '@nestjs/common';
-import { PROFILE_PICTURE_BUCKET_NAME } from '../profile-picture.service';
+import { ProfilePictureService } from '../profile-picture.service';
 import { PROFILE_PICTURE_EDIT_EVENT } from './profile-picture.events';
 
 @Injectable()
@@ -27,7 +27,9 @@ export class ProfilePictureListener {
 		}
 
 		try {
-			await this.minioClientService.delete(oldProfilePictureRef, PROFILE_PICTURE_BUCKET_NAME);
+			await this.minioClientService.delete(oldProfilePictureRef, {
+				dir: ProfilePictureService.PROFILE_PICTURE_DIR,
+			});
 		} catch (error) {
 			this.logger.warn(`Couldn't delete "${userEmail}" user's profile picture named '${oldProfilePictureRef}'!`, error);
 		}

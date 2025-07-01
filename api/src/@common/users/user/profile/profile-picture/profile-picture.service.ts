@@ -8,11 +8,11 @@ import { User } from 'lucia';
 import { wsR } from '~contract';
 import { PROFILE_PICTURE_EDIT_EVENT } from './listeners/profile-picture.events';
 
-export const PROFILE_PICTURE_BUCKET_NAME = 'profile-pictures';
-
 @Injectable()
 export class ProfilePictureService {
 	private readonly logger = new Logger(ProfilePictureService.name);
+
+	static readonly PROFILE_PICTURE_DIR = 'profile-pictures';
 
 	constructor(
 		private readonly minioClientService: MinioClientService,
@@ -23,7 +23,9 @@ export class ProfilePictureService {
 	) {}
 
 	async uploadImage(file: Express.Multer.File, user: User) {
-		const uploadedImage = await this.minioClientService.upload(file, PROFILE_PICTURE_BUCKET_NAME);
+		const uploadedImage = await this.minioClientService.upload(file, {
+			dir: ProfilePictureService.PROFILE_PICTURE_DIR,
+		});
 
 		let newProfilePictureRef: string | null = uploadedImage.fileName;
 
@@ -42,7 +44,9 @@ export class ProfilePictureService {
 
 			this.sockets.emit(wsR.users.edited, this.presenceService.convertUserToLiveUser(editedUser));
 		} catch (_error) {
-			await this.minioClientService.delete(uploadedImage.fileName, PROFILE_PICTURE_BUCKET_NAME);
+			await this.minioClientService.delete(uploadedImage.fileName, {
+				dir: ProfilePictureService.PROFILE_PICTURE_DIR,
+			});
 
 			newProfilePictureRef = user.profilePictureRef;
 		}
@@ -65,7 +69,9 @@ export class ProfilePictureService {
 	}
 
 	async getImage(profilePictureRef: string) {
-		const profilePictureFile = await this.minioClientService.get(profilePictureRef, PROFILE_PICTURE_BUCKET_NAME);
+		const profilePictureFile = await this.minioClientService.get(profilePictureRef, {
+			dir: ProfilePictureService.PROFILE_PICTURE_DIR,
+		});
 
 		return profilePictureFile;
 	}

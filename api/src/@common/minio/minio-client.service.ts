@@ -4,6 +4,11 @@ import * as crypto from 'crypto';
 import { MinioService } from 'nestjs-minio-client';
 import { EnvironmentConfig } from '~env';
 
+export type BucketOperationOptions = {
+	dir?: string;
+	bucketName?: string;
+};
+
 @Injectable()
 export class MinioClientService {
 	private readonly logger = new Logger(MinioClientService.name);
@@ -18,7 +23,11 @@ export class MinioClientService {
 		return this.minio.client;
 	}
 
-	protected getBucketName(bucketName: string) {
+	protected getBucketName(bucketName?: string) {
+		if (!bucketName) {
+			return this.env.MINIO_BUCKET_PREFIX;
+		}
+
 		if (bucketName.startsWith(this.env.MINIO_BUCKET_PREFIX)) {
 			return bucketName;
 		}
@@ -38,27 +47,51 @@ export class MinioClientService {
 		await this.client.makeBucket(appBucketName);
 	}
 
-	public async upload(file: Express.Multer.File, bucketName: string): Promise<{ fileName: string; url: string }> {
+	public getFileName(file: Express.Multer.File) {
+		const timestamp = Date.now().toString();
+		const hashedFileName = crypto.createHash('md5').update(timestamp).digest('hex');
+		const extension = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
+
+		// We need to append the extension at the end otherwise Minio will save it as a generic file
+		const fileName = hashedFileName + extension;
+
+		return fileName;
+	}
+
+	public getFileNameWithDir(filename: string, directory?: string) {
+		if (!directory) {
+			return filename;
+		}
+
+		if (directory.endsWith('/')) {
+			return `${directory}${filename}`;
+		}
+
+		return `${directory}/${filename}`;
+	}
+
+	public async upload(
+		file: Express.Multer.File,
+		options?: BucketOperationOptions & { filename?: string },
+	): Promise<{ fileName: string; filePath: string; url: string }> {
+		const fileName = options?.filename || this.getFileName(file);
+
+		const filePath = this.getFileNameWithDir(fileName, options?.dir);
+
 		return new Promise((resolve, reject) => {
-			const timestamp = Date.now().toString();
-			const hashedFileName = crypto.createHash('md5').update(timestamp).digest('hex');
-			const extension = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
-
-			// We need to append the extension at the end otherwise Minio will save it as a generic file
-			const fileName = hashedFileName + extension;
-
-			const appBucketName = this.getBucketName(bucketName);
+			const appBucketName = this.getBucketName(options?.bucketName);
 
 			(async () => {
 				await this.verifyBucketExistence(appBucketName);
 
-				await this.client.putObject(appBucketName, fileName, file.buffer, {
+				await this.client.putObject(appBucketName, filePath, file.buffer, {
 					'Content-Type': file.mimetype,
 				});
 
 				resolve({
 					fileName,
-					url: `${this.env.MINIO_ENDPOINT}:${this.env.MINIO_PORT}/${appBucketName}/${fileName}`,
+					filePath,
+					url: `${this.env.MINIO_ENDPOINT}:${this.env.MINIO_PORT}/${appBucketName}/${filePath}`,
 				});
 			})().catch((error) => {
 				reject(
@@ -70,11 +103,13 @@ export class MinioClientService {
 		});
 	}
 
-	async get(objectName: string, bucketName: string) {
-		const appBucketName = this.getBucketName(bucketName);
+	async get(objectName: string, options?: BucketOperationOptions) {
+		const appBucketName = this.getBucketName(options?.bucketName);
+
+		const objectPath = this.getFileNameWithDir(objectName, options?.dir);
 
 		try {
-			return this.client.getObject(appBucketName, objectName);
+			return this.client.getObject(appBucketName, objectPath);
 		} catch (error) {
 			throw new HttpException('An error occured when fetching file!', HttpStatus.BAD_REQUEST, {
 				cause: error instanceof Error ? error : undefined,
@@ -82,11 +117,13 @@ export class MinioClientService {
 		}
 	}
 
-	async delete(objetName: string, bucketName: string) {
-		const appBucketName = this.getBucketName(bucketName);
+	async delete(objectName: string, options?: BucketOperationOptions) {
+		const appBucketName = this.getBucketName(options?.bucketName);
+
+		const objectPath = this.getFileNameWithDir(objectName, options?.dir);
 
 		try {
-			return this.client.removeObject(appBucketName, objetName);
+			return this.client.removeObject(appBucketName, objectPath);
 		} catch (error) {
 			throw new HttpException('An error occured when deleting!', HttpStatus.BAD_REQUEST, {
 				cause: error instanceof Error ? error : undefined,
