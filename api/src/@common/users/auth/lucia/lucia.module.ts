@@ -1,4 +1,4 @@
-import { getSchema } from '$configs/helpers';
+import { getEnvSchema } from '$configs/helpers';
 import { PrismaService } from '$prisma/prisma.service';
 import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { LuciaFactory, luciaFactory } from './lucia.factory';
@@ -9,7 +9,7 @@ import { LuciaMiddleware } from './lucia.middleware';
 	providers: [
 		{
 			provide: LuciaFactory,
-			inject: [PrismaService, getSchema()],
+			inject: [PrismaService, getEnvSchema()],
 			useFactory: luciaFactory,
 		},
 	],

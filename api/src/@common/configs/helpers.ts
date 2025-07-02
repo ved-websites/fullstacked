@@ -7,13 +7,13 @@ const isCI = process.env.CI == 'true';
 
 export const isLocal = isCI || process.env.LOCAL == 'true';
 
-export function getSchema(): typeof LocalEnvironmentConfig | typeof EnvironmentConfig {
+export function getEnvSchema(): typeof LocalEnvironmentConfig | typeof EnvironmentConfig {
 	// If Local (for example, GitHub Actions), use Local Env Config
 	return isLocal ? LocalEnvironmentConfig : EnvironmentConfig;
 }
 
 export function createConfigModule(options?: DotenvLoaderOptions): DynamicModule {
-	const schema = getSchema();
+	const schema = getEnvSchema();
 
 	const module = TypedConfigModule.forRoot({
 		isGlobal: true,
@@ -38,7 +38,7 @@ export function createConfigModule(options?: DotenvLoaderOptions): DynamicModule
 }
 
 export function selectEnvConfig(configModule: DynamicModule) {
-	return selectConfig(configModule, getSchema());
+	return selectConfig(configModule, getEnvSchema());
 }
 
 export function createAndSelectConfig(options?: DotenvLoaderOptions) {

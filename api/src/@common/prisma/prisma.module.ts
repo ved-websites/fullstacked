@@ -1,3 +1,4 @@
+import { getEnvSchema } from '$configs/helpers';
 import { Global, Module } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { EnvironmentConfig } from '~env';
@@ -14,7 +15,7 @@ import { PrismaConstructorOptions, PrismaOptionsInjectToken, PrismaService } fro
 
 				return [{ adapter }];
 			},
-			inject: [EnvironmentConfig],
+			inject: [getEnvSchema()],
 		},
 	],
 	exports: [PrismaService],
