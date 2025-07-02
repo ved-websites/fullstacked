@@ -13,7 +13,7 @@ export const configs = {
 	buildDest: './dist',
 	uploadsFolder: './uploads',
 	devPort: 3005,
-	prismaGeneratedFolder: './src/_generated',
+	generatedFolder: './src/_generated',
 };
 
 // TASKS
@@ -26,6 +26,10 @@ async function buildNest() {
 	if (outputs.stderr) {
 		throw new Error(`Nest build failed: ${outputs.stderr}`);
 	}
+}
+
+function buildPrisma() {
+	return gulp.src([`${configs.generatedFolder}/prisma/**/*`, '!**/*.ts'], { base: './src' }).pipe(gulp.dest(configs.buildDest));
 }
 
 // Creation Tasks
@@ -69,7 +73,7 @@ function deleteDist() {
 // }
 
 function deletePrismaGenerated() {
-	return del(configs.prismaGeneratedFolder);
+	return del(`${configs.generatedFolder}/prisma`);
 }
 
 // ------------------------
@@ -82,7 +86,7 @@ export const setupPrisma: TaskFunction = gulp.series(deletePrismaGenerated, gene
 
 export const setupPrismaFull: TaskFunction = gulp.series(setupPrisma, updateDatabaseSchema);
 
-export const build: TaskFunction = gulp.series(gulp.parallel(deleteDist, setupPrisma), buildNest);
+export const build: TaskFunction = gulp.series(gulp.parallel(deleteDist, setupPrisma), buildNest, buildPrisma);
 
 export const init: TaskFunction = gulp.series(deleteDist, setupEnv, setupPrismaFull);
 
