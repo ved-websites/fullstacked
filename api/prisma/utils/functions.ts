@@ -1,3 +1,4 @@
+import { PrismaPg } from '@prisma/adapter-pg';
 import { exec as execNoPromise } from 'child_process';
 import { importFixtures, type ImportFixtureOptions } from 'prisma-fixtures';
 import util from 'util';
@@ -68,10 +69,12 @@ export async function seed(options?: Partial<ImportFixtureOptions>) {
 export async function getPrismaClient() {
 	try {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
+		// @ts-ignore This errors out when the generated client doesn't yet exists.
 		const { PrismaClient } = await import('../../src/_generated/prisma/client/index');
 
-		return new PrismaClient();
+		const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+
+		return new PrismaClient({ adapter });
 	} catch (_error) {
 		throw new Error(`An error happened while getting the Prisma Client. Did you run a generate command?`);
 	}
