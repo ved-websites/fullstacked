@@ -3,7 +3,7 @@ name: CD - API
 on: workflow_dispatch
 
 env:
-  PNPM_VERSION: 9
+  PNPM_VERSION: 10.12.4
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/api
 
