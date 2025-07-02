@@ -28,8 +28,10 @@ async function buildNest() {
 	}
 }
 
-function buildPrisma() {
-	return gulp.src([`${configs.generatedFolder}/prisma/**/*`, '!**/*.ts'], { base: './src' }).pipe(gulp.dest(configs.buildDest));
+async function buildPrisma() {
+	await del(`${configs.buildDest}/_generated/prisma`);
+
+	return gulp.src([`${configs.generatedFolder}/prisma/**/*`], { base: './src', encoding: false }).pipe(gulp.dest(configs.buildDest));
 }
 
 // Creation Tasks

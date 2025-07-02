@@ -19,10 +19,6 @@ COPY . .
 
 RUN pnpm run build
 
-RUN pnpm exec prisma generate
-RUN rm -r /app/dist/_generated/prisma
-RUN mv /app/src/_generated/prisma /app/dist/_generated/prisma
-
 # ====================
 
 FROM base AS prod-deps
