@@ -22,7 +22,7 @@ VERSION=$(echo "$VERSION" | sed 's/[^0-9.]*//g')
 # === DB Migration ===
 # ====================
 
-pnpm dlx --silent "prisma@$VERSION" migrate deploy
+pnpm --silent dlx "prisma@$VERSION" migrate deploy
 
 # =========================
 # === Start Application ===
