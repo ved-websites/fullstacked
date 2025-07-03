@@ -60,6 +60,20 @@
 				"close": true,
 			}
 		},
+		{
+			"label": "Launch Studio",
+			"command": "pnpm run studio",
+			"type": "shell",
+			"problemMatcher": [],
+			"presentation": {
+				"reveal": "never",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": true,
+				"close": true,
+			}
+		},
 	],
 	"inputs": [
 		{
