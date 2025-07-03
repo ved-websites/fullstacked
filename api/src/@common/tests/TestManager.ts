@@ -4,7 +4,7 @@ import { LocalEnvironmentConfig } from '$configs/local-env.validation';
 import { TypedI18nModule } from '$i18n/i18n.module';
 import { PrismaModule } from '$prisma/prisma.module';
 import { SocketModule } from '$socket/socket.module';
-import { type ModuleMetadata } from '@nestjs/common';
+import type { ModuleMetadata } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { Test, TestingModule, TestingModuleBuilder } from '@nestjs/testing';
 import { EnvironmentConfig } from '~env';

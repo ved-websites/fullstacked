@@ -1,4 +1,5 @@
 import { setupApp } from '$app/setupApp';
+import { User } from '$prisma-client';
 import { PrismaService } from '$prisma/prisma.service';
 import { TestManager, TestOptions } from '$tests/TestManager';
 import { AuthModule } from '$users/auth/auth.module';
@@ -6,7 +7,6 @@ import { AuthService } from '$users/auth/auth.service';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { TestingModuleBuilder } from '@nestjs/testing';
 import { AppRoute } from '@ts-rest/core';
-import { User } from 'lucia';
 import supertest from 'supertest';
 import { AppModule } from '~app-module';
 import { RoleSpec, Roles } from '~shared';
@@ -159,6 +159,6 @@ export class E2ETestManager extends TestManager<E2ETestOptions> {
 	async login(user: keyof typeof users) {
 		const { session } = await this.authService.loginUser(users[user].instance!.id);
 
-		this.authToken = session.id;
+		this.authToken = session.token;
 	}
 }
