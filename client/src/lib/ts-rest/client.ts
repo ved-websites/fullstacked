@@ -4,7 +4,7 @@ import { getApiUrl } from '$lib/utils';
 import { r, tsRestFetcherApi, type ApiFetcherData, type CommonError } from '@app/contract';
 import type { RequestEvent } from '@sveltejs/kit';
 import { initClient, type ApiFetcherArgs } from '@ts-rest/core';
-import { checkForApiErrors } from './errorHandler';
+import { checkForApiErrors, type RouteErrorOptions } from './errorHandler';
 
 export type ErrorPageMessagesData = PageMessages | ((args: OnErrorFunctionArgs) => Awaitable<PageMessages>);
 
@@ -44,9 +44,11 @@ export type ApiResponseHandlerOptions = {
 	/**
 	 * Called before the common error logic is handled.
 	 *
-	 * If this function returns a truthy value, the default error logic will be skipped ("it is true that the error has been handled").
+	 * If this function returns `true`, the default error logic will be skipped ("it is true that the error has been handled").
+	 *
+	 * If it returns an object, it will be used to set the `pageMessagesData` in the routed error.
 	 */
-	onCommonError?: (args: OnErrorFunctionArgs<CommonError>) => Awaitable<unknown>;
+	onCommonError?: (args: OnErrorFunctionArgs<CommonError>) => Awaitable<void | true | Pick<RouteErrorOptions, 'pageMessagesData'>>;
 	/**
 	 * Entirely skips the default error checking.
 	 */

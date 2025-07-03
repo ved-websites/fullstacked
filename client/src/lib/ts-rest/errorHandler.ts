@@ -113,15 +113,16 @@ export async function handleTsRestCommonError(data: ApiFetcherData<CommonError>,
 
 	const message = await extractErrorMessageFromApiFetcherData(data);
 
-	const didHandle = !!(await onCommonError?.({ event, data, message }));
+	const onCommonHandlerResult = await onCommonError?.({ event, data, message });
 
-	if (didHandle) {
+	if (onCommonHandlerResult === true) {
 		return;
 	}
 
 	routeError(data.status, data.body.message, {
 		event,
 		pageMessagesData: await getErrorPageMessagesData(errorPageMessagesData, { data, event, message }),
+		...onCommonHandlerResult,
 	});
 }
 
