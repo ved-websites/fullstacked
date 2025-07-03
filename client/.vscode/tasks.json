@@ -38,7 +38,11 @@
 			"label": "Terminate Client Dev Server",
 			"command": "echo ${input:terminate-client}",
 			"type": "shell",
-			"problemMatcher": []
+			"problemMatcher": [],
+			"presentation": {
+				"reveal": "never",
+				"close": true
+			}
 		}
 	],
 	"inputs": [

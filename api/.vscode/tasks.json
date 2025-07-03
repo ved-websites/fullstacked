@@ -39,6 +39,10 @@
 			"command": "echo ${input:terminate-api}",
 			"type": "shell",
 			"problemMatcher": [],
+			"presentation": {
+				"reveal": "never",
+				"close": true
+			}
 		},
 		{
 			"label": "format prisma file",
