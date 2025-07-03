@@ -1,5 +1,16 @@
 packages:
-  - 'api/src/@contract'
-  - 'api/src/@shared'
-  - 'api'
-  - 'client'
+  - api/src/@contract
+  - api/src/@shared
+  - api
+  - client
+
+onlyBuiltDependencies:
+  - '@nestjs/core'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - '@sentry-internal/node-cpu-profiler'
+  - '@sentry/cli'
+  - '@sveltejs/kit'
+  - '@swc/core'
+  - esbuild
+  - prisma
