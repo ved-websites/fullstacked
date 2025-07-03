@@ -153,7 +153,7 @@ export class E2ETestManager extends TestManager<E2ETestOptions> {
 	async createUser(...args: Parameters<AuthService['createUser']>) {
 		const user = await this.authService.createUser(...args);
 
-		return user as User;
+		return user;
 	}
 
 	async login(user: keyof typeof users) {
