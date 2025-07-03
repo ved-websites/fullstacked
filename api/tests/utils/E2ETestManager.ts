@@ -145,9 +145,7 @@ export class E2ETestManager extends TestManager<E2ETestOptions> {
 	tsrest(route: AppRoute) {
 		const method = route.method.toLowerCase() as Lowercase<AppRoute['method']>;
 
-		const test = supertest(this.httpServer)[method](route.path);
-
-		return test.set('authorization', `Bearer ${this.authToken}`);
+		return this.rest(method, route.path as `/${string}`);
 	}
 
 	async createUser(...args: Parameters<AuthService['createUser']>) {
