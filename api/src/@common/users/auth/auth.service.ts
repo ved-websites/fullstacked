@@ -1,46 +1,43 @@
+import { CryptoService } from '$crypto/crypto.service';
 import { EmailService } from '$email/email.service';
 import { I18nException } from '$i18n/i18n.error';
 import { fallbackLanguage } from '$i18n/i18n.module';
 import { TypedI18nService } from '$i18n/i18n.service';
-import { User } from '$prisma-client';
+import { Session, User } from '$prisma-client';
 import { PrismaService } from '$prisma/prisma.service';
 import { SocketService } from '$socket/socket.service';
 import { PresenceService } from '$users/presence/presence.service';
-import { generateId, generateRandomSafeString } from '$utils/random';
 import { msDays } from '$utils/time';
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { hash, verify } from '@node-rs/argon2';
 import { wsR } from '~contract';
 import { AuthError } from './auth.error';
-import { Auth, LuciaFactory } from './lucia/lucia.factory';
-import { loadOsloPasswordModule } from './lucia/modules-compat';
-import { LuciaSession, LuciaUser } from './session.decorator';
+import { AppUser } from './session/session.decorator';
+import { SessionService } from './session/session.service';
 
-export type CreateUserLuciaAttributes = Partial<Omit<LuciaUser, 'email'>>;
+export type CreateAppUserAttributes = Partial<Omit<AppUser, 'email' | 'hashedPassword'>>;
 
 @Injectable()
 export class AuthService {
 	constructor(
-		@Inject(LuciaFactory) private readonly auth: Auth,
+		private readonly sessionService: SessionService,
 		private readonly prisma: PrismaService,
 		private readonly email: EmailService,
 		private readonly i18n: TypedI18nService,
 		private readonly sockets: SocketService,
 		private readonly presenceService: PresenceService,
+		private readonly cryptoService: CryptoService,
 	) {}
 
 	async hashPassword(password: string) {
-		const { Argon2id } = await loadOsloPasswordModule();
-
-		return new Argon2id().hash(password);
+		return hash(password);
 	}
 
 	async verifyPassword(hashedPassword: string, password: string) {
-		const { Argon2id } = await loadOsloPasswordModule();
-
-		return new Argon2id().verify(hashedPassword, password);
+		return verify(hashedPassword, password);
 	}
 
-	async getLuciaUser(userId: string) {
+	async getAppUser(userId: string) {
 		return this.prisma.user.findUniqueOrThrow({
 			where: {
 				id: userId,
@@ -49,8 +46,6 @@ export class AuthService {
 	}
 
 	async getAuthUser(email: string) {
-		// const { online, selector } = this.prisma.extractSelectors<UserOnlineSelector>(select, 'online');
-
 		const user = await this.prisma.user.findUnique({
 			where: {
 				email,
@@ -82,22 +77,19 @@ export class AuthService {
 		return user;
 	}
 
-	async createUser(email: string, password: string | null, attributes?: CreateUserLuciaAttributes) {
+	async createUser(email: string, password: string | null, attributes?: CreateAppUserAttributes) {
 		const userExists = await this.prisma.user.exists({ email });
 
 		if (userExists) {
 			throw new BadRequestException(this.i18n.t('auth.errors.email.exists'));
 		}
 
-		const id = await generateId();
-
-		const registerToken = password ? null : await generateRandomSafeString();
+		const registerToken = password ? null : this.cryptoService.generateRandomSafeString();
 
 		const hashedPassword = password ? await this.hashPassword(password) : undefined;
 
 		const user = await this.prisma.user.create({
 			data: {
-				id,
 				email,
 				hashedPassword,
 				registerToken,
@@ -114,7 +106,7 @@ export class AuthService {
 		return user;
 	}
 
-	async register(registerToken: string, password: string, attributes: CreateUserLuciaAttributes) {
+	async register(registerToken: string, password: string, attributes: CreateAppUserAttributes) {
 		const user = await this.prisma.user.findFirst({
 			where: {
 				registerToken,
@@ -175,20 +167,21 @@ export class AuthService {
 	}
 
 	async loginUser(userId: string) {
-		const session = await this.auth.createSession(userId, {});
-		const sessionCookie = this.auth.createSessionCookie(session.id);
+		const session = await this.sessionService.createSession(userId);
+
+		const sessionCookie = this.sessionService.createSessionCookie(session.token);
 
 		return { session, sessionCookie };
 	}
 
-	async logout(session: LuciaSession) {
-		await this.auth.invalidateSession(session.id);
+	async logout(session: Session) {
+		await this.sessionService.deleteSession(session.id);
 
-		return this.auth.createBlankSessionCookie();
+		return this.sessionService.createBlankSessionCookie();
 	}
 
-	async getForgotPasswordRequestToken() {
-		const forgotPasswordToken = generateRandomSafeString();
+	getForgotPasswordRequestToken() {
+		const forgotPasswordToken = this.cryptoService.generateRandomSafeString();
 
 		return forgotPasswordToken;
 	}
@@ -332,7 +325,7 @@ export class AuthService {
 				});
 			});
 
-			await this.auth.invalidateUserSessions(user.id);
+			await this.sessionService.invalidateUserSessions(user.id);
 		} catch (_error) {
 			// eh
 		}
@@ -340,7 +333,7 @@ export class AuthService {
 		return { user };
 	}
 
-	async updatePassword(user: LuciaUser, password: string) {
+	async updatePassword(user: AppUser, password: string) {
 		const hashedPassword = await this.hashPassword(password);
 
 		await this.prisma.user.update({

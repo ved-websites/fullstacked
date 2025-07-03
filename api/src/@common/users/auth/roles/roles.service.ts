@@ -1,7 +1,7 @@
+import { User } from '$prisma-client';
 import { PrismaService } from '$prisma/prisma.service';
 import RoleCreateNestedManyWithoutUsersInputSchema from '$zod/inputTypeSchemas/RoleCreateNestedManyWithoutUsersInputSchema';
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { User } from 'lucia';
 import { z } from 'zod';
 import { Roles, rolesIntersect, specRolesMap } from '~shared';
 
@@ -63,7 +63,7 @@ export class RolesService implements OnApplicationBootstrap {
 		return roles;
 	}
 
-	async setUserRoles(user: User, roles: z.output<typeof RoleCreateNestedManyWithoutUsersInputSchema>) {
+	async setUserRoles(user: Pick<User, 'email'>, roles: z.output<typeof RoleCreateNestedManyWithoutUsersInputSchema>) {
 		const updatedUser = await this.prisma.user.update({
 			where: {
 				email: user.email,
@@ -79,7 +79,7 @@ export class RolesService implements OnApplicationBootstrap {
 		return updatedUser;
 	}
 
-	async userCanSendEmail(user: User) {
+	async userCanSendEmail(user: Pick<User, 'email'>) {
 		const rolesCanSendEmail = [Roles.ADMIN.name];
 
 		const userRoles = (

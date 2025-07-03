@@ -1,15 +1,5 @@
-import type { User } from '$prisma-client';
-import type { Auth as ApiAuth } from '$users/auth/lucia/lucia.factory';
-import type { LuciaContainer } from '$users/auth/lucia/lucia.middleware';
+import type { UserContainer } from '$users/auth/types';
 import type { I18nContext } from 'nestjs-i18n';
-
-declare module 'lucia' {
-	interface Register {
-		Lucia: ApiAuth;
-		DatabaseUserAttributes: User;
-		// DatabaseSessionAttributes: {};
-	}
-}
 
 declare global {
 	type Awaitable<T> = T | PromiseLike<T>;
@@ -20,7 +10,7 @@ declare global {
 	type I18nKey = string;
 
 	declare namespace Express {
-		interface Request extends LuciaContainer {
+		interface Request extends UserContainer {
 			i18nLang: string;
 			i18nContext: I18nContext;
 		}

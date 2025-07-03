@@ -1,6 +1,6 @@
 import { getErrorMessage } from '$i18n/i18n.error';
 import { RoleCheck } from '$users/auth/roles/roles.guard';
-import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
+import { AppUser, AuthUser } from '$users/auth/session/session.decorator';
 import { Origin } from '$utils/origin.decorator';
 import { Controller, ForbiddenException } from '@nestjs/common';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
@@ -71,7 +71,7 @@ export class AdminController {
 	}
 
 	@TsRestHandler(r.users.admin.createUser)
-	createUser(@AuthUser() user: LuciaUser, @Origin() origin: string) {
+	createUser(@AuthUser() user: AppUser, @Origin() origin: string) {
 		return tsRestHandler(r.users.admin.createUser, async ({ body }) => {
 			await this.adminService.createUser(body, { url: origin, user });
 
@@ -101,7 +101,7 @@ export class AdminController {
 	}
 
 	@TsRestHandler(r.users.admin.resendInviteLink)
-	resendInviteLink(@AuthUser() user: LuciaUser, @Origin() origin: string) {
+	resendInviteLink(@AuthUser() user: AppUser, @Origin() origin: string) {
 		return tsRestHandler(r.users.admin.resendInviteLink, async ({ body: { email } }) => {
 			const sendSuccess = await this.adminService.resendUserInviteLink(email, { url: origin, user });
 

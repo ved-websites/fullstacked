@@ -1,7 +1,7 @@
 import { TypedI18nService } from '$i18n/i18n.service';
 import { FileValidationPipe } from '$minio/minio-client.constants';
 import { Public } from '$users/auth/auth.guard';
-import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
+import { AppUser, AuthUser } from '$users/auth/session/session.decorator';
 import { BadRequestException, Controller, Get, Header, Param, StreamableFile, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
@@ -36,7 +36,7 @@ export class ProfilePictureController {
 
 	@TsRestHandler(r.user.settings.profile.uploadPicture)
 	@UseInterceptors(FileInterceptor('profile-picture'))
-	async uploadProfilePicture(@AuthUser() user: LuciaUser, @UploadedFile(FileValidationPipe) file: Express.Multer.File) {
+	async uploadProfilePicture(@AuthUser() user: AppUser, @UploadedFile(FileValidationPipe) file: Express.Multer.File) {
 		return tsRestHandler(r.user.settings.profile.uploadPicture, async () => {
 			await this.profilePictureService.uploadImage(file, user);
 
@@ -48,7 +48,7 @@ export class ProfilePictureController {
 	}
 
 	@TsRestHandler(r.user.settings.profile.deletePicture)
-	async deleteProfilePicture(@AuthUser() user: LuciaUser) {
+	async deleteProfilePicture(@AuthUser() user: AppUser) {
 		return tsRestHandler(r.user.settings.profile.deletePicture, async () => {
 			await this.profilePictureService.deleteUserImage(user);
 

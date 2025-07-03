@@ -1,5 +1,5 @@
 import { WsEventSub, WsGateway } from '$socket/ts-ws/ws-event.decorator';
-import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
+import { AppUser, AuthUser } from '$users/auth/session/session.decorator';
 import { Logger } from '@nestjs/common';
 import { tsWsHandler, wsR } from '~contract';
 
@@ -8,7 +8,7 @@ export class MessageGateway {
 	private readonly logger = new Logger(MessageGateway.name);
 
 	@WsEventSub(wsR.messages.new)
-	async chat(@AuthUser() user: LuciaUser) {
+	async chat(@AuthUser() user: AppUser) {
 		// Code before the handler is run when the client sends any data through the event route key.
 
 		this.logger.debug(`User subbed to chat : ${user.email}`);

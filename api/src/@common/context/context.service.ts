@@ -1,17 +1,10 @@
-import { TypedI18nService } from '$i18n/i18n.service';
 import type { TypedWebSocket } from '$socket/types';
-import { Auth, LuciaFactory } from '$users/auth/lucia/lucia.factory';
-import type { LuciaContainer } from '$users/auth/lucia/types';
-import { ExecutionContext, Inject, Injectable } from '@nestjs/common';
+import { UserContainer } from '$users/auth/types';
+import { ExecutionContext, Injectable } from '@nestjs/common';
 import type { Request, Response } from 'express';
 
 @Injectable()
 export class ContextService {
-	constructor(
-		@Inject(LuciaFactory) private readonly auth: Auth,
-		private readonly i18n: TypedI18nService,
-	) {}
-
 	/**
 	 * This function is used to get the request object from the given context, beit the WS Request or the HTTP request.
 	 */
@@ -39,7 +32,7 @@ export class ContextService {
 		throw new Error('Response type not supported!');
 	}
 
-	protected static getLuciaContainer(context: ExecutionContext): LuciaContainer {
+	protected static getUserContainer(context: ExecutionContext): UserContainer {
 		if (context.getType() === 'ws') {
 			const socket = context.switchToWs().getClient<TypedWebSocket>();
 
@@ -52,13 +45,13 @@ export class ContextService {
 	}
 
 	static getSession(context: ExecutionContext) {
-		const { session } = this.getLuciaContainer(context);
+		const { session } = this.getUserContainer(context);
 
 		return session;
 	}
 
 	static getUser(context: ExecutionContext) {
-		const { user } = this.getLuciaContainer(context);
+		const { user } = this.getUserContainer(context);
 
 		return user;
 	}

@@ -20,6 +20,8 @@ CREATE TABLE "sessions" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "expires_at" TIMESTAMP(3) NOT NULL,
+    "secret_hash" BYTEA NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "sessions_pkey" PRIMARY KEY ("id")
 );

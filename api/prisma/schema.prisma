@@ -26,7 +26,7 @@ generator zod {
 // ===========
 
 model User {
-  id String @id @unique
+  id String @id @unique @default(uuid())
 
   email     String  @unique
   firstName String? @map("first_name")
@@ -53,11 +53,14 @@ model User {
 }
 
 model Session {
-  id        String   @id @unique
-  userId    String   @map("user_id")
-  expiresAt DateTime @map("expires_at")
+  id         String   @id @unique
+  userId     String   @map("user_id")
+  expiresAt  DateTime @map("expires_at")
+  secretHash Bytes    @map("secret_hash")
 
   user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@index([userId])
   @@map("sessions")

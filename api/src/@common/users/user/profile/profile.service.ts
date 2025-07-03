@@ -1,6 +1,6 @@
+import { User } from '$prisma-client';
 import { PrismaService } from '$prisma/prisma.service';
 import { SocketService } from '$socket/socket.service';
-import { LuciaUser } from '$users/auth/types';
 import { PresenceService } from '$users/presence/presence.service';
 import UserUpdateInputSchema from '$zod/inputTypeSchemas/UserUpdateInputSchema';
 import { Injectable } from '@nestjs/common';
@@ -15,7 +15,7 @@ export class UserProfileService {
 		private readonly sockets: SocketService,
 	) {}
 
-	async editUser(user: LuciaUser, data: Omit<z.output<typeof UserUpdateInputSchema>, 'email' | 'hashedPassword'>) {
+	async editUser(user: Pick<User, 'id'>, data: Omit<z.output<typeof UserUpdateInputSchema>, 'email' | 'hashedPassword'>) {
 		const updatedUser = await this.prisma.user.update({
 			where: {
 				id: user.id,

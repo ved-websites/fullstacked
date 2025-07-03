@@ -1,7 +1,11 @@
-import type { User as PrismaUser } from '$prisma-client';
-import type { Session, User } from 'lucia';
+import type { Session, User } from '$prisma-client';
 
-export type LuciaSession = Session;
-export type LuciaUser = User;
+export type AppUser = Prettify<User & { hashedPassword: null; fullName: string | null }>;
 
-export type LiveUser = PrismaUser & { online: boolean };
+export type LiveUser = Prettify<User & { online: boolean }>;
+
+export type UserContainer = { user: AppUser | null; session: Session | null };
+
+export interface SessionWithToken extends Session {
+	token: string;
+}

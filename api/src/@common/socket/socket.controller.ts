@@ -1,4 +1,5 @@
-import { AuthSession, AuthUser, LuciaSession, LuciaUser } from '$users/auth/session.decorator';
+import { Session } from '$prisma-client';
+import { AppUser, AuthSession, AuthUser } from '$users/auth/session/session.decorator';
 import { BadRequestException, Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { SocketService } from './socket.service';
 
@@ -8,11 +9,7 @@ export class SocketController {
 
 	@Post('/ws-handshake')
 	@HttpCode(HttpStatus.OK)
-	async wsHandshake(
-		@AuthSession() session: LuciaSession | null,
-		@AuthUser() user: LuciaUser | null,
-		@Body('token') token: string | undefined,
-	) {
+	async wsHandshake(@AuthSession() session: Session | null, @AuthUser() user: AppUser | null, @Body('token') token: string | undefined) {
 		if (!user || !session) {
 			throw new BadRequestException('You need to be logged in to access the websocket endpoint!');
 		}

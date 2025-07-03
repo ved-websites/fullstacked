@@ -1,7 +1,7 @@
+import { User } from '$prisma-client';
 import { PrismaService } from '$prisma/prisma.service';
 import { SocketService } from '$socket/socket.service';
 import { Injectable } from '@nestjs/common';
-import type { User } from 'lucia';
 import { wsR } from '~contract';
 
 @Injectable()
@@ -31,7 +31,7 @@ export class MessageService {
 		return messages;
 	}
 
-	async create(user: User, text: string) {
+	async create(user: Pick<User, 'email'>, text: string) {
 		const message = await this.prisma.message.create({
 			data: {
 				text,

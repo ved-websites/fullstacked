@@ -1,11 +1,11 @@
+import { CryptoService } from '$crypto/crypto.service';
 import { EmailService } from '$email/email.service';
 import { TypedI18nService } from '$i18n/i18n.service';
 import { PrismaService } from '$prisma/prisma.service';
 import { SocketService } from '$socket/socket.service';
 import { AuthService } from '$users/auth/auth.service';
-import { LuciaUser } from '$users/auth/session.decorator';
+import { AppUser } from '$users/auth/types';
 import { PresenceService } from '$users/presence/presence.service';
-import { generateRandomSafeString } from '$utils/random';
 import { Injectable } from '@nestjs/common';
 import { wsR } from '~contract';
 
@@ -20,13 +20,14 @@ export class UserSecurityService {
 		private readonly i18n: TypedI18nService,
 		private readonly sockets: SocketService,
 		private readonly presenceService: PresenceService,
+		private readonly cryptoService: CryptoService,
 	) {}
 
-	async editSelfPassword(user: LuciaUser, newPassword: string) {
+	async editSelfPassword(user: AppUser, newPassword: string) {
 		await this.authService.updatePassword(user, newPassword);
 	}
 
-	async requestEditUserEmail(user: LuciaUser, email: string, origin: string) {
+	async requestEditUserEmail(user: AppUser, email: string, origin: string) {
 		const emailAlreadyUsed = await this.prisma.user.exists({ email });
 
 		if (emailAlreadyUsed) {
@@ -52,7 +53,7 @@ export class UserSecurityService {
 			i18nLang: lang,
 		};
 
-		const emailResetToken = await generateRandomSafeString();
+		const emailResetToken = this.cryptoService.generateRandomSafeString();
 
 		await this.prisma.userEmailChangeRequest.create({
 			data: {

@@ -1,6 +1,7 @@
 import { commonThrottlerConf } from '$app/throttler.guard';
 import { getErrorMessage } from '$i18n/i18n.error';
 import { TypedI18nService } from '$i18n/i18n.service';
+import { Session } from '$prisma-client';
 import { Origin } from '$utils/origin.decorator';
 import { msHours } from '$utils/time';
 import { Controller, ForbiddenException, InternalServerErrorException, Res, UnauthorizedException } from '@nestjs/common';
@@ -12,8 +13,7 @@ import { r } from '~contract';
 import { AuthError } from './auth.error';
 import { Public } from './auth.guard';
 import { AuthService } from './auth.service';
-import { setResponseCookie } from './lucia/lucia.factory';
-import { AuthSession, AuthUser, LuciaSession, LuciaUser } from './session.decorator';
+import { AppUser, AuthSession, AuthUser } from './session/session.decorator';
 
 @Controller()
 export class AuthController {
@@ -23,7 +23,7 @@ export class AuthController {
 	) {}
 
 	@TsRestHandler(r.auth.session)
-	getAuthUser(@AuthUser() authUser: LuciaUser) {
+	getAuthUser(@AuthUser() authUser: AppUser) {
 		return tsRestHandler(r.auth.session, async () => {
 			const user = await this.authService.getAuthUser(authUser.email);
 
@@ -41,7 +41,7 @@ export class AuthController {
 			try {
 				const { sessionCookie } = await this.authService.login(email, password);
 
-				setResponseCookie(res, sessionCookie);
+				res.cookie(sessionCookie.name, sessionCookie.value, sessionCookie.options);
 
 				return {
 					status: 200,
@@ -60,11 +60,11 @@ export class AuthController {
 	}
 
 	@TsRestHandler(r.auth.logout)
-	logout(@AuthSession() session: LuciaSession, @Res({ passthrough: true }) res: Response) {
+	logout(@AuthSession() session: Session, @Res({ passthrough: true }) res: Response) {
 		return tsRestHandler(r.auth.logout, async () => {
 			const sessionCookie = await this.authService.logout(session);
 
-			setResponseCookie(res, sessionCookie);
+			res.cookie(sessionCookie.name, sessionCookie.value, sessionCookie.options);
 
 			return {
 				status: 200,
@@ -92,7 +92,7 @@ export class AuthController {
 		return tsRestHandler(r.auth.register, async ({ body: { registerToken, password, user: userAttributes } }) => {
 			const { sessionCookie } = await this.authService.register(registerToken, password, userAttributes);
 
-			setResponseCookie(res, sessionCookie);
+			res.cookie(sessionCookie.name, sessionCookie.value, sessionCookie.options);
 
 			return {
 				status: 200,

@@ -1,10 +1,10 @@
 import { EventsService } from '$events/events.service';
 import { MinioClientService } from '$minio/minio-client.service';
+import { User } from '$prisma-client';
 import { PrismaService } from '$prisma/prisma.service';
 import { SocketService } from '$socket/socket.service';
 import { PresenceService } from '$users/presence/presence.service';
 import { Injectable, Logger } from '@nestjs/common';
-import { User } from 'lucia';
 import { wsR } from '~contract';
 import { PROFILE_PICTURE_EDIT_EVENT } from './listeners/profile-picture.events';
 

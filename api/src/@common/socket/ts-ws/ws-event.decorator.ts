@@ -24,7 +24,7 @@ export const EVENT_ROUTE_METADATA_KEY = '__ts-ws_wsEventRoute';
  * @example
  * // Log data whenever this event is sent
  * ⁣@WsEventSub(wsR.messages.new)
- * chat(@AuthUser() user: LuciaUser) {
+ * chat(@AuthUser() user: AppUser) {
  *   return tsWsHandler(wsR.messages.new, ({ data }) => {
  *     console.log(`User ${user.email} will receive :`, { data });
  *     return {};

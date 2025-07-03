@@ -4,14 +4,13 @@ import { TestManager } from '$tests/TestManager';
 import { PresenceModule } from '$users/presence/presence.module';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { AuthService } from './auth.service';
-import { LuciaFactory } from './lucia/lucia.factory';
 import { RolesModule } from './roles/roles.module';
 
 describe('AuthService', () => {
 	const manager = new TestManager({
 		metadata: {
 			imports: [ConfigModule, RolesModule, EmailModule, PresenceModule],
-			providers: [AuthService, { provide: LuciaFactory, useValue: {} }],
+			providers: [AuthService],
 		},
 	});
 	let service: AuthService;

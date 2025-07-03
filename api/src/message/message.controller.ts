@@ -1,5 +1,5 @@
 import { RoleCheck } from '$users/auth/roles/roles.guard';
-import { AuthUser, LuciaUser } from '$users/auth/session.decorator';
+import { AppUser, AuthUser } from '$users/auth/session/session.decorator';
 import { Controller } from '@nestjs/common';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
 import { r } from '~contract';
@@ -24,7 +24,7 @@ export class MessageController {
 	}
 
 	@TsRestHandler(r.messages.new)
-	newMessage(@AuthUser() user: LuciaUser) {
+	newMessage(@AuthUser() user: AppUser) {
 		return tsRestHandler(r.messages.new, async ({ body: { text } }) => {
 			await this.messageService.create(user, text);
 

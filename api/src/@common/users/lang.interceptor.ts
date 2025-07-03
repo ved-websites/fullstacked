@@ -1,7 +1,7 @@
 import { ContextService } from '$context/context.service';
 import { PrismaService } from '$prisma/prisma.service';
 import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common';
-import { LuciaUser } from './auth/session.decorator';
+import { AppUser } from './auth/session/session.decorator';
 
 @Injectable()
 export class LangInterceptor implements NestInterceptor {
@@ -19,7 +19,7 @@ export class LangInterceptor implements NestInterceptor {
 		return next.handle();
 	}
 
-	async handleEmailLang(lang: string, user: LuciaUser) {
+	async handleEmailLang(lang: string, user: AppUser) {
 		if (lang == user.emailLang) {
 			return;
 		}

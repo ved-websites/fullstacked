@@ -1,11 +1,11 @@
 import { ContextService } from '$context/context.service';
 import { TypedI18nService } from '$i18n/i18n.service';
+import { User } from '$prisma-client';
 import { PrismaService } from '$prisma/prisma.service';
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { WsException } from '@nestjs/websockets';
 import { RoleSpec, userHasRoleSpec } from '~shared';
-import { LuciaUser } from '../types';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -44,7 +44,7 @@ export class RolesGuard implements CanActivate {
 		return true;
 	}
 
-	protected async userHasDefinedRoles(user: LuciaUser, definedRoles: RoleSpec[]) {
+	protected async userHasDefinedRoles(user: Pick<User, 'id'>, definedRoles: RoleSpec[]) {
 		const { roles: rawUserRoles } = await this.prisma.user.findFirstOrThrow({
 			where: {
 				id: user.id,

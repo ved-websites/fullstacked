@@ -7,7 +7,7 @@ import { PrismaService } from '$prisma/prisma.service';
 import { SocketService } from '$socket/socket.service';
 import { AuthService } from '$users/auth/auth.service';
 import { RolesService } from '$users/auth/roles/roles.service';
-import { LuciaUser } from '$users/auth/session.decorator';
+import { AppUser } from '$users/auth/session/session.decorator';
 import { PresenceService } from '$users/presence/presence.service';
 import UserUpdateInputSchema from '$zod/inputTypeSchemas/UserUpdateInputSchema';
 import { Injectable } from '@nestjs/common';
@@ -85,7 +85,7 @@ export class AdminService {
 			firstName,
 			lastName,
 			emailLang,
-		})) satisfies LuciaUser as unknown as Omit<LuciaUser, 'registerToken'> & { registerToken: NonNullable<LuciaUser['registerToken']> };
+		})) satisfies AppUser as Omit<AppUser, 'registerToken'> & { registerToken: NonNullable<AppUser['registerToken']> };
 
 		if (roles) {
 			await this.rolesService.setUserRoles(user, roles);
@@ -174,7 +174,7 @@ export class AdminService {
 		return deletedUser;
 	}
 
-	async resendUserInviteLink(email: string, origin: { url: string; user: LuciaUser }) {
+	async resendUserInviteLink(email: string, origin: { url: string; user: AppUser }) {
 		try {
 			const dbUserToResendTo = await this.getUser(email);
 
@@ -182,7 +182,7 @@ export class AdminService {
 				return false;
 			}
 
-			const userToResendTo = await this.authService.getLuciaUser(dbUserToResendTo.id);
+			const userToResendTo = await this.authService.getAppUser(dbUserToResendTo.id);
 
 			await this.sendNewUserRegistrationEmail(userToResendTo, origin);
 			return true;
@@ -191,7 +191,7 @@ export class AdminService {
 		}
 	}
 
-	async sendNewUserRegistrationEmail(user: LuciaUser, origin: { url: string; user: LuciaUser }) {
+	async sendNewUserRegistrationEmail(user: AppUser, origin: { url: string; user: AppUser }) {
 		if (!user.registerToken) {
 			return;
 		}

@@ -1,6 +1,5 @@
 import { EventsService } from '$events/events.service';
-import { User } from '$prisma-client';
-import { LuciaSession } from '$users/auth/session.decorator';
+import { Session, User } from '$prisma-client';
 import { Injectable, Logger } from '@nestjs/common';
 import { USERS_ON_CONNECT_EVENT, USERS_ON_DISCONNECT_EVENT } from '../listeners/users.events';
 
@@ -10,17 +9,17 @@ export type UserOnlineSelector = { online: boolean };
 export class PresenceService {
 	private readonly logger = new Logger(PresenceService.name);
 
-	private sessions: Map<string, LuciaSession> = new Map();
+	private sessions: Map<string, Session> = new Map();
 
 	constructor(private events: EventsService) {}
 
-	onConnect(session: LuciaSession) {
+	onConnect(session: Session) {
 		this.sessions.set(session.id, session);
 
 		this.events.emitAsync(USERS_ON_CONNECT_EVENT, session.userId);
 	}
 
-	onDisconnect(session: LuciaSession) {
+	onDisconnect(session: Session) {
 		const hadSession = this.sessions.delete(session.id);
 
 		if (hadSession) {

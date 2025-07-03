@@ -1,4 +1,4 @@
-import { LuciaContainer } from '$users/auth/lucia/types';
+import { UserContainer } from '$users/auth/types';
 import { PresenceService } from '$users/presence/presence.service';
 import { Injectable, Logger } from '@nestjs/common';
 import type { IncomingMessage } from 'http';
@@ -14,7 +14,7 @@ export class SocketService {
 
 	server!: Server;
 
-	private handshakeMap = new Map<string, LuciaContainer>();
+	private handshakeMap = new Map<string, UserContainer>();
 
 	constructor(
 		private readonly wsEmitter: WsEventEmitter,
@@ -61,7 +61,7 @@ export class SocketService {
 		}
 	}
 
-	addHandshake(token: string, container: LuciaContainer) {
+	addHandshake(token: string, container: UserContainer) {
 		this.handshakeMap.set(token, container);
 
 		const handshakeMaximumDelay = 10; // in seconds
