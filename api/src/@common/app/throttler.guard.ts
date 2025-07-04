@@ -49,9 +49,13 @@ export class ThrottlerGuard extends NestThrottlerGuard {
 		return super.handleRequest(...args);
 	}
 
-	protected override async throwThrottlingException(context: ExecutionContext, _throttlerLimitDetail: ThrottlerLimitDetail): Promise<void> {
+	protected override async throwThrottlingException(context: ExecutionContext, throttlerLimitDetail: ThrottlerLimitDetail): Promise<void> {
 		const { i18nContext: i18n } = ContextService.getRequest(context);
 
-		throw new ForbiddenException(i18n.t('common.errors.throttler.forbidden'));
+		const keyedErrorMessage = i18n.t(`common.errors.throttler.forbidden.${throttlerLimitDetail.key}`, { defaultValue: '' });
+
+		const errorMessage = keyedErrorMessage || i18n.t('common.errors.throttler.forbidden._default');
+
+		throw new ForbiddenException(errorMessage);
 	}
 }

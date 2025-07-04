@@ -1,7 +1,10 @@
 {
 	"errors": {
 		"throttler": {
-			"forbidden": "You have sent too many requests and have been throttled. Try again in a few moments!"
+			"forbidden": {
+				"_default": "You have sent too many requests and have been throttled. Try again in a few moments!",
+				"daily": "You have sent too many requests today and have been throttled. Try again tomorrow!"
+			}
 		},
 		"internal-server-error": "Internal server error"
 	}
