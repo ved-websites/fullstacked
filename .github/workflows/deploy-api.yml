@@ -78,7 +78,7 @@ jobs:
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.docker-push.outputs.digest }}
-          push-to-registry: true
+          push-to-registry: false
 
       - name: Get SHA of Deployed Commit
         id: deployed-commit-sha
