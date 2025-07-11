@@ -5,6 +5,7 @@
 	import { page } from '$app/stores';
 	import { setI18n } from '$i18n';
 	import LayoutAlert from '$lib/components/LayoutAlert/LayoutAlert.svelte';
+	import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
 	import ToastManager from '$lib/components/ToastManager/ToastManager.svelte';
 	import HasJs from '$lib/components/head/HasJS.svelte';
 	import InitialTheme from '$lib/components/head/InitialTheme.svelte';
@@ -111,6 +112,7 @@
 <ToastManager data={toasts} />
 
 <main class="container mx-auto mt-20 py-3 px-5 flex flex-col gap-3">
+	<LayoutAlert data={createLayoutAlert({ text: 'Hello Vercel Preview Deploys!' })} />
 	<LayoutAlert data={layoutAlert} />
 	<slot />
 </main>
