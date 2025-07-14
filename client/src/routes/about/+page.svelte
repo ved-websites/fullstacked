@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { getI18n } from '$i18n';
+	import { contextPublic } from '$lib/runes';
 	import { P } from 'flowbite-svelte';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
+
+	let {
+		i18n: { t },
+	} = contextPublic();
 </script>
 
 <P>{$t('about.main')}</P>

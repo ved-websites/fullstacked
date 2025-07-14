@@ -1,49 +1,64 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { getI18n } from '$i18n';
+	import { contextPublic } from '$lib/runes';
 	import { cn } from '$lib/twMerge';
 	import { Toast } from 'flowbite-svelte';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, untrack, type Snippet } from 'svelte';
 	import Icon from '../Icon.svelte';
 	import { toastBorderColorMapping, toastColorMapping, type ToastData } from './helper';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
+
+	let {
+		i18n: { t },
+	} = contextPublic();
+
+	interface Props {
+		data: ToastData[];
+		toastIcon?: Snippet<[{ icon?: string }]>;
+	}
+
+	let { data, toastIcon }: Props = $props();
 
 	const toastOffTimeout = 500;
 
-	export let data: ToastData[];
-
-	$: data.forEach((toast) => {
-		if (toasts.some((existingToast) => toast.id === existingToast.id)) {
-			return;
-		}
-
-		toast.text = t.get(toast.text, toast.i18nPayload);
-
-		toasts = [...toasts, toast];
-	});
-
-	$: toasts.forEach((toast) => {
-		if (!browser || toast.timeoutId !== undefined || !toast.timeout) {
-			return;
-		}
-
-		toast.timeoutId = setTimeout(() => {
-			toast.open = false;
-			toasts = [...toasts];
-			setTimeout(() => {
-				toast.markedForDeletion = true;
-				toasts = toasts.filter((toast) => !toast.markedForDeletion);
-			}, toastOffTimeout);
-		}, toast.timeout);
-	});
-
-	let toasts: ToastData[] = [];
+	let toasts: ToastData[] = $state([]);
 
 	onDestroy(() => {
 		toasts.forEach((toast) => {
 			clearTimeout(toast.timeoutId);
 		});
+	});
+
+	$effect(() => {
+		data.forEach((toast) => {
+			const currToasts = untrack(() => toasts);
+			const currToast = untrack(() => toast);
+
+			if (currToasts.some((existingToast) => currToast.id === existingToast.id)) {
+				return;
+			}
+
+			currToast.text = untrack(() => t).get(currToast.text, currToast.i18nPayload);
+
+			currToasts.push(currToast);
+		});
+	});
+
+	$effect(() => {
+		for (const toast of toasts) {
+			if (!browser || toast.timeoutId !== undefined || !toast.timeout) {
+				return;
+			}
+
+			toast.timeoutId = setTimeout(() => {
+				toast.open = false;
+
+				setTimeout(() => {
+					toast.markedForDeletion = true;
+
+					toasts = toasts.filter((toast) => !toast.markedForDeletion);
+				}, toastOffTimeout);
+			}, toast.timeout);
+		}
 	});
 </script>
 
@@ -56,11 +71,11 @@
 				class={cn('border-b-2', toastBorderColorMapping[toast.type], toast.classes)}
 				contentClass="w-full text-sm font-normal flex flex-col"
 			>
-				<svelte:fragment slot="icon">
-					{#if toast.icon}
-						<Icon class={toast.icon} />
-					{/if}
-				</svelte:fragment>
+				{#if toastIcon}
+					{@render toastIcon({ icon: toast.icon })}
+				{:else if toast.icon}
+					<Icon class={toast.icon} />
+				{/if}
 				<span>{toast.text}</span>
 				{#if toast.extraData}
 					{@html toast.extraData}
@@ -70,7 +85,7 @@
 	</div>
 {/if}
 
-<style lang="postcss">
+<style>
 	div.toast-manager {
 		position: fixed;
 		right: 1rem;

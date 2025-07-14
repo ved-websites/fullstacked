@@ -1,5 +1,4 @@
-import { fallbackLocale, locales, type I18nInstanceType } from '$i18n-config';
-import { createStoreContext } from '$lib/stores/utils/context';
+import { fallbackLocale, locales } from '$i18n-config';
 import { pick } from 'accept-language-parser';
 
 export function getBrowserLang(request: Request) {
@@ -13,18 +12,3 @@ export function getBrowserLang(request: Request) {
 
 	return lang ?? fallbackLocale;
 }
-
-const i18nStoreContext = createStoreContext<I18nInstanceType>({
-	key: 'i18n',
-});
-
-/**
- * ```ts
- * let i18n = getI18n();
- * $: ({ t } = $i18n);
- * ```
- *
- * Gets the i18n store from the current context.
- */
-export const getI18n = i18nStoreContext.getStore;
-export const setI18n = i18nStoreContext.setStore;

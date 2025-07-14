@@ -1,4 +1,4 @@
-import type { ZodType, z } from 'zod';
+import type { ZodType, z } from 'zod/v4';
 import type { TypedWebSocket } from '../../@common/socket/types';
 import type { EventRoute, EventRouteConfig, EventRouteInput, EventRouteOutput } from './eventRoute';
 

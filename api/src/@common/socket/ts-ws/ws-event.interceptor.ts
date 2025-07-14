@@ -4,7 +4,7 @@ import type { TypedWebSocket } from '$socket/types';
 import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable, of, switchMap } from 'rxjs';
-import { ZodError } from 'zod';
+import { ZodError } from 'zod/v4';
 import { EventRoute, EventRouteInput, EventRouteOutput, RouteEventHandler } from '~contract';
 import { EVENT_ROUTE_METADATA_KEY } from './ws-event.decorator';
 import { WsEventEmitter } from './ws-event.emitter';
@@ -58,7 +58,7 @@ export class WsEventInterceptor implements NestInterceptor {
 			if (error instanceof ZodError) {
 				this.socketService.sendError(socket, {
 					message: this.i18n.t('ws.errors.input'),
-					errors: error.errors,
+					errors: error.issues,
 				});
 			} else {
 				this.logger.error('Error other than expected ZodError happened...', error instanceof Error ? error.stack : undefined);
@@ -91,7 +91,7 @@ export class WsEventInterceptor implements NestInterceptor {
 									const partialImplOutput = await impl({
 										socket,
 										uid,
-										input,
+										input: input as undefined,
 										data: emittedData as object,
 									});
 

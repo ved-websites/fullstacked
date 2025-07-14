@@ -4,7 +4,7 @@ import { SocketService } from '$socket/socket.service';
 import { PresenceService } from '$users/presence/presence.service';
 import UserUpdateInputSchema from '$zod/inputTypeSchemas/UserUpdateInputSchema';
 import { Injectable } from '@nestjs/common';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { wsR } from '~contract';
 
 @Injectable()

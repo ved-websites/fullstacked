@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { c, createResponses } from '~contract';
 import { emailSchema, passwordSchema } from '~shared';
 

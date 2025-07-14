@@ -1,5 +1,5 @@
 import { WsEventSub, WsGateway } from '$socket/ts-ws/ws-event.decorator';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { tsWsHandler, wsR } from '~contract';
 import type { OptionalUserSpecifierSchema } from './users.contract';
 

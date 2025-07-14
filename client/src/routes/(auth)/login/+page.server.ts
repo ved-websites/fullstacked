@@ -4,8 +4,8 @@ import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { redirect } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
-import { z } from 'zod';
+import { zod4 } from 'sveltekit-superforms/adapters';
+import { z } from 'zod/v4';
 import { emailSchema, passwordSchema } from '~shared';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -15,7 +15,7 @@ const schema = z.object({
 });
 
 export const load = (async ({ url, locals: { sessionUser } }) => {
-	const form = await superValidate(zod(schema));
+	const form = await superValidate(zod4(schema));
 
 	const redirectTo = getRedirectTo(url);
 
@@ -45,7 +45,7 @@ export const actions = {
 			locals: { tsrest },
 		} = event;
 
-		const form = await superValidate(request, zod(schema));
+		const form = await superValidate(request, zod4(schema));
 
 		return assertTsRestActionResultOK({
 			form,

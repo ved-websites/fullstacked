@@ -1,5 +1,5 @@
 import { flashStore } from '$lib/utils/flash';
-import type { Toast } from 'flowbite-svelte';
+import type { ToastProps } from 'flowbite-svelte';
 
 export const defaultToastTimeout = 10000;
 
@@ -64,7 +64,7 @@ export function createToasts(...toastsData: ToastManagerData[]): ToastData[] {
 	return toasts;
 }
 
-export const toastColorMapping: Record<ToastAlertType, Toast['$$prop_def']['color']> = {
+export const toastColorMapping: Record<ToastAlertType, ToastProps['color']> = {
 	info: 'blue',
 	warning: 'yellow',
 	error: 'red',

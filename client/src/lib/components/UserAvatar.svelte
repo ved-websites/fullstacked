@@ -1,34 +1,28 @@
 <script lang="ts">
 	import { getProfilePictureImageUrl } from '$lib/utils/images';
-	import { Avatar } from 'flowbite-svelte';
+	import { Avatar, type AvatarProps } from 'flowbite-svelte';
 
-	export let profilePictureRef: string | undefined | null;
-	export let online: boolean | undefined | null = undefined;
+	interface Props {
+		profilePictureRef: string | undefined | null;
+		online?: boolean | undefined | null;
+		firstName?: string | null;
+		lastName?: string | null;
+		avatarProps?: AvatarProps;
+	}
 
-	export let firstName: string | null = null;
-	export let lastName: string | null = null;
+	let { profilePictureRef, online = undefined, firstName = null, lastName = null, avatarProps }: Props = $props();
 
-	$: profilePictureSrc = getProfilePictureImageUrl(profilePictureRef);
+	let profilePictureSrc = $derived(getProfilePictureImageUrl(profilePictureRef));
 
-	$: dot = (() => {
-		if (typeof online !== 'boolean') {
-			return;
-		}
+	const defaultDotOptions: AvatarProps['dot'] = { placement: 'top-right', size: 'md' };
 
-		if (online) {
-			return { color: 'green' };
-		}
-
-		return {};
-	})();
-
-	$: ({ id, class: klass } = $$restProps);
+	let dot = $derived<AvatarProps['dot']>(
+		typeof online !== 'boolean' ? undefined : online ? { ...defaultDotOptions, color: 'green' } : defaultDotOptions,
+	);
 </script>
 
-{#if profilePictureSrc || firstName || lastName}
-	<Avatar {id} class={klass} src={profilePictureSrc} {dot}>
+<Avatar {...avatarProps} src={profilePictureSrc} {dot}>
+	{#if firstName || lastName}
 		{firstName ? firstName.charAt(0) : ''}{lastName ? lastName.charAt(0) : ''}
-	</Avatar>
-{:else}
-	<Avatar {id} class={klass} src={profilePictureSrc} {dot} />
-{/if}
+	{/if}
+</Avatar>

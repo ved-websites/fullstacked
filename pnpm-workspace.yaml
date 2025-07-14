@@ -4,6 +4,9 @@ packages:
   - api
   - client
 
+ignoredBuiltDependencies:
+  - '@tailwindcss/oxide'
+
 onlyBuiltDependencies:
   - '@nestjs/core'
   - '@prisma/client'

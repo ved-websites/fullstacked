@@ -1,5 +1,5 @@
 import RoleSchema from '$zod/modelSchema/RoleSchema';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { c, createResponses } from '~contract';
 import { UserSchema, emailSchema, passwordSchema } from '~shared';
 
@@ -7,8 +7,8 @@ export const SessionUserSchema = UserSchema.extend({
 	roles: RoleSchema.omit({ createdAt: true }).array(),
 });
 
-export const RegisterTokenSchema = z.string({ description: 'Registration Token' });
-export const ResetPasswordTokenSchema = z.string({ description: 'Reset Password Token' });
+export const RegisterTokenSchema = z.string().meta({ description: 'Registration Token' });
+export const ResetPasswordTokenSchema = z.string().meta({ description: 'Reset Password Token' });
 
 export const authContract = c.router(
 	{

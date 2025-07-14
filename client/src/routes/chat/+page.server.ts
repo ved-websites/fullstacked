@@ -1,11 +1,11 @@
 import { assertFormValid, assertTsRestResultOK } from '$lib/utils/assertions';
 import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 import { chatSchema } from './schema';
 
 export const load = (async ({ locals: { tsrest } }) => {
-	const form = await superValidate(zod(chatSchema));
+	const form = await superValidate(zod4(chatSchema));
 
 	const result = await tsrest.messages.list({
 		errPageData: { form },
@@ -18,7 +18,7 @@ export const load = (async ({ locals: { tsrest } }) => {
 
 export const actions = {
 	async default({ request, locals: { tsrest } }) {
-		const form = await superValidate(request, zod(chatSchema));
+		const form = await superValidate(request, zod4(chatSchema));
 
 		return assertFormValid(form, async () => {
 			const result = await tsrest.messages.new({

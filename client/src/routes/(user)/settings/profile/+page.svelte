@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export const meta: SettingsRouteMeta = {
 		icon: 'i-mdi-account',
 		order: 1,
@@ -6,20 +6,19 @@
 </script>
 
 <script lang="ts">
-	import type { ConfirmedSessionUser } from '$auth/auth-handler';
-	import { getI18n } from '$i18n';
 	import UserForm from '$lib/components/UserForm/UserForm.svelte';
-	import { getSessionUser } from '$lib/stores';
+	import { context } from '$lib/runes';
 	import { Badge, Heading } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import type { SettingsRouteMeta } from '../types';
 	import ProfilePictureForm from './ProfilePictureForm.svelte';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
 
-	export let data;
+	let {
+		i18n: { t },
+		sessionUser,
+	} = context();
 
-	let sessionUser = getSessionUser<ConfirmedSessionUser>();
+	let { data } = $props();
 
 	const superFormData = superForm(data.form, { dataType: 'json' });
 </script>
@@ -30,7 +29,7 @@
 		<div class="flex flex-col gap-y-5">
 			<Heading tag="h4">{$t('settings.profile.roles.header')}</Heading>
 			<div class="flex gap-3 flex-wrap justify-stretch">
-				{#each $sessionUser.roles as role}
+				{#each sessionUser.roles as role}
 					<Badge color="indigo" large>{$t(`shared.userform.roles.${role.text}`)}</Badge>
 				{:else}
 					<span class="italic">{$t('settings.profile.roles.no-roles')}</span>
@@ -41,6 +40,6 @@
 	<ProfilePictureForm
 		hasJs={data.userHasJs}
 		class="col-span-1 order-1 lg:order-none"
-		currentProfilePictureRef={$sessionUser?.profilePictureRef}
+		currentProfilePictureRef={sessionUser.profilePictureRef}
 	/>
 </div>

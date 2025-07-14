@@ -1,5 +1,5 @@
 import MessageSchema from '$zod/modelSchema/MessageSchema';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { c, createResponses, wsC } from '~contract';
 import { UserSchema } from '~shared';
 

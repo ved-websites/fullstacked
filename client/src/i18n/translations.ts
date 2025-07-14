@@ -70,6 +70,9 @@ export const fallbackLocale = 'en';
 const config: Config<Params> = {
 	loaders: translationFiles,
 	fallbackLocale,
+	log: {
+		level: 'error',
+	},
 };
 
 export async function loadI18n(locale: string, route: string) {

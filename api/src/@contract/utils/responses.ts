@@ -1,5 +1,5 @@
 import type { AppRoute } from '@ts-rest/core';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import type { ApiFetcherData } from './tsRestFetcherApi';
 
 export const commonErrorSchema = z.object({

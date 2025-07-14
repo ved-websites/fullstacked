@@ -11,7 +11,7 @@ import { AppUser } from '$users/auth/session/session.decorator';
 import { PresenceService } from '$users/presence/presence.service';
 import UserUpdateInputSchema from '$zod/inputTypeSchemas/UserUpdateInputSchema';
 import { Injectable } from '@nestjs/common';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { wsR } from '~contract';
 import { Roles } from '~shared';
 import { UserCreateInputNoId } from './admin.contract';

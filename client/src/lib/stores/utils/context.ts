@@ -38,3 +38,31 @@ export function createStoreContext<T>(options?: Partial<StoreContextOptions<T>>)
 		setStore,
 	};
 }
+
+export function createContextRune<T>(options?: Partial<StoreContextOptions<T>>) {
+	const { key = `unnamed_context_store_${(Math.random() + 1).toString(36).substring(7)}`, equalityCheck = (c: T, n: T) => c === n } =
+		options ?? {};
+
+	let state = $state<T>();
+
+	const wrapper = {
+		get current() {
+			if (!state) {
+				throw new Error('You did not set the context store yet. Use `setContext` to set it before accessing.');
+			}
+
+			return state;
+		},
+		set(value: T) {
+			if (state !== undefined && equalityCheck(state, value)) {
+				return;
+			}
+
+			state = value;
+
+			setContext(key, state);
+		},
+	};
+
+	return wrapper;
+}

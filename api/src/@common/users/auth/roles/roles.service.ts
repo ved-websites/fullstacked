@@ -2,7 +2,7 @@ import { User } from '$prisma-client';
 import { PrismaService } from '$prisma/prisma.service';
 import RoleCreateNestedManyWithoutUsersInputSchema from '$zod/inputTypeSchemas/RoleCreateNestedManyWithoutUsersInputSchema';
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { Roles, rolesIntersect, specRolesMap } from '~shared';
 
 @Injectable()

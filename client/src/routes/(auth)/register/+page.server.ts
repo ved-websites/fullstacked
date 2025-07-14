@@ -2,7 +2,7 @@ import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/ass
 import { error, type Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
 import { registerSchema } from './schema';
 
@@ -19,7 +19,7 @@ export const load = (async ({ url, locals: { tsrest } }) => {
 
 	const { email, ...attributes } = result.body;
 
-	const form = await superValidate({ registerToken, ...attributes }, zod(registerSchema));
+	const form = await superValidate({ registerToken, ...attributes }, zod4(registerSchema));
 
 	return {
 		form,
@@ -34,7 +34,7 @@ export const actions = {
 			locals: { tsrest },
 		} = event;
 
-		const form = await superValidate(request, zod(registerSchema));
+		const form = await superValidate(request, zod4(registerSchema));
 
 		const { registerToken, password, ...user } = form.data;
 

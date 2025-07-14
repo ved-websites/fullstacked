@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export const meta: SettingsRouteMeta = {
 		icon: 'i-mdi-face-man-shimmer',
 		order: 2,
@@ -6,17 +6,19 @@
 </script>
 
 <script lang="ts">
-	import { getI18n } from '$i18n';
-	import VSelect from '$lib/components/flowbite-custom/VSelect/VSelect.svelte';
 	import type { VSelectOptionType } from '$lib/components/flowbite-custom/VSelect/types';
+	import VSelect from '$lib/components/flowbite-custom/VSelect/VSelect.svelte';
 	import FormInput from '$lib/components/forms/FormInput.svelte';
+	import { context } from '$lib/runes';
 	import { Button } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import type { SettingsRouteMeta } from '../types.js';
-	let i18n = getI18n();
-	$: ({ t, setLocale, locales } = $i18n);
 
-	export let data;
+	let {
+		i18n: { t, setLocale, locales },
+	} = context();
+
+	let { data } = $props();
 
 	const { form, errors, constraints, enhance } = superForm(data.form, {
 		onUpdate() {
@@ -24,13 +26,15 @@
 		},
 	});
 
-	$: allowedLocales = [null, ...$locales];
+	let allowedLocales = $derived([null, ...$locales]);
 
-	$: selectableLocales = allowedLocales.map<VSelectOptionType>((l) => ({
-		name: `settings.experience.lang.map.${l}` satisfies I18nKey,
-		value: l as string,
-		selected: $form.lang === l,
-	}));
+	let selectableLocales = $derived(
+		allowedLocales.map<VSelectOptionType>((l) => ({
+			name: $t(`settings.experience.lang.map.${l}` satisfies I18nKey),
+			value: l as string,
+			selected: $form.lang === l,
+		})),
+	);
 
 	function handleAutoSubmit(e: Event) {
 		const selectElement = e.target as HTMLSelectElement;
@@ -44,16 +48,17 @@
 <form method="POST" use:enhance class="w-auto lg:w-[50%] flex flex-col gap-3">
 	<FormInput bind:value={$form.lang} errors={$errors.lang}>
 		{$t('settings.experience.lang.label')}
-		<VSelect
-			slot="input"
-			class="mt-2"
-			on:change={handleAutoSubmit}
-			name="lang"
-			placeholder=""
-			items={selectableLocales}
-			bind:value={$form.lang}
-			{...$constraints.lang}
-		/>
+		{#snippet input()}
+			<VSelect
+				class="mt-2"
+				onchange={handleAutoSubmit}
+				name="lang"
+				placeholder=""
+				items={selectableLocales}
+				bind:value={$form.lang}
+				{...$constraints.lang}
+			/>
+		{/snippet}
 	</FormInput>
 
 	<Button type="submit" class={data.userHasJs ? 'hidden' : undefined}>{$t('common.submit')}</Button>

@@ -6,7 +6,7 @@ import { error, fail, type RequestEvent } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
 import type { Infer, SuperValidated } from 'sveltekit-superforms';
-import type { AnyZodObject } from 'zod';
+import type { AnyZodObject } from 'zod/v4';
 import type { ApiFetcherData } from '~contract';
 
 export type ValidResult<T extends { status: number }> = T extends { status: StatusCodes.OK } ? T : never;

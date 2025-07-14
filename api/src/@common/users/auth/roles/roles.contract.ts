@@ -1,5 +1,5 @@
 import RoleSchema from '$zod/modelSchema/RoleSchema';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { c, createResponses } from '~contract';
 
 export const rolesContract = c.router(

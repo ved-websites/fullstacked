@@ -1,13 +1,34 @@
+<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
-	import { twMerge } from 'tailwind-merge';
+	import { cn } from '$lib/twMerge';
+	import type { Snippet } from 'svelte';
 
-	export let value = '';
-	export let files: FileList | undefined = undefined;
-	export let defaultClass =
-		'flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600';
+	// export let value = '';
+	// export let files: FileList | undefined = undefined;
+	// export let defaultClass =
+	// 	'flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600';
 
-	export let input: HTMLInputElement;
-	let isDraggingOver = false;
+	// export let input: HTMLInputElement;
+
+	interface Props {
+		value?: string;
+		files?: FileList;
+		defaultClass?: string;
+		input: HTMLInputElement;
+		layout: Snippet<[{ isDraggingOver: boolean }]>;
+		[key: string]: any;
+	}
+
+	let {
+		value = $bindable(''),
+		files,
+		defaultClass = 'flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600',
+		input = $bindable(),
+		layout,
+		...rest
+	}: Props = $props();
+
+	let isDraggingOver = $state(false);
 
 	function keydown(ev: KeyboardEvent) {
 		if ([' ', 'Enter'].includes(ev.key)) {
@@ -24,33 +45,20 @@
 	}
 </script>
 
-<button
-	class={twMerge(defaultClass, $$props.class)}
-	on:keydown={keydown}
-	on:focus
-	on:blur
-	on:mouseenter
-	on:mouseleave
-	on:mouseover
-	on:dragenter
-	on:dragleave
-	on:dragover
-	on:drop
-	type="button"
->
+<button class={cn(defaultClass, rest.class)} onkeydown={keydown} type="button">
 	<label
 		class="w-full h-full flex justify-center cursor-pointer"
-		on:dragenter={dragIn}
-		on:dragleave={dragOut}
-		on:dragexit={dragOut}
-		on:dragend={dragOut}
-		on:drop={dragOut}
+		ondragenter={dragIn}
+		ondragleave={dragOut}
+		ondragexit={dragOut}
+		ondragend={dragOut}
+		ondrop={dragOut}
 		tabIndex="0"
 	>
 		<div class="flex-initial flex-col self-center max-w-full max-h-full">
-			<slot {isDraggingOver} />
+			{@render layout({ isDraggingOver })}
 		</div>
-		<input {...$$restProps} bind:value bind:files bind:this={input} on:change on:click type="file" class="hidden" />
+		<input {...rest} bind:value bind:files bind:this={input} type="file" class="hidden" />
 	</label>
 </button>
 

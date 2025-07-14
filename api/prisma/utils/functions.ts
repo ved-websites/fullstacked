@@ -7,10 +7,6 @@ const exec = util.promisify(execNoPromise);
 
 // Prisma Utils
 
-export async function generate() {
-	return exec(`pnpm exec prisma generate`);
-}
-
 export async function seedDb() {
 	return exec(`pnpm exec prisma db seed`);
 }

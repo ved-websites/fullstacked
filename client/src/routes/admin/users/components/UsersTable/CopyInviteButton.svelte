@@ -1,18 +1,24 @@
 <script lang="ts">
-	import { getI18n } from '$i18n';
 	import { createToasts, setPageToasts } from '$lib/components/ToastManager/helper';
+	import { context } from '$lib/runes';
 	import { Button } from 'flowbite-svelte';
 	import type { BaseUser } from '../../types';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
 
-	export let user: BaseUser & { registerToken: string | null };
-	export let showCopiedTextDuration: number = 3000;
+	let {
+		i18n: { t },
+	} = context();
+
+	interface Props {
+		user: BaseUser & { registerToken: string | null };
+		showCopiedTextDuration?: number;
+	}
+
+	let { user, showCopiedTextDuration = 3000 }: Props = $props();
 </script>
 
 <Button
 	size="xs"
-	on:click={() => {
+	onclick={() => {
 		navigator.clipboard.writeText(`${window.location.origin}/register?token=${user.registerToken}`);
 
 		setPageToasts(

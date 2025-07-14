@@ -1,5 +1,5 @@
 import { flashStore } from '$lib/utils/flash';
-import type { Alert } from 'flowbite-svelte';
+import type { AlertProps } from 'flowbite-svelte';
 
 export type LayoutAlertType = 'info' | 'warning' | 'error';
 
@@ -32,7 +32,7 @@ export function createLayoutAlert(data: Required<Pick<LayoutAlertData, 'text'>> 
 	return layoutAlert;
 }
 
-export const alertColorMapping: Record<LayoutAlertType, Alert['$$prop_def']['color']> = {
+export const alertColorMapping: Record<LayoutAlertType, AlertProps['color']> = {
 	info: 'blue',
 	warning: 'yellow',
 	error: 'red',

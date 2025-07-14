@@ -1,17 +1,19 @@
 <script lang="ts">
-	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
 	import FormInput from '$lib/components/forms/FormInput.svelte';
+	import { contextPublic } from '$lib/runes/context.rune.js';
 	import { Alert, Button, Helper } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
 
-	export let data;
+	let {
+		i18n: { t },
+	} = contextPublic();
+
+	let { data } = $props();
 
 	const { enhance, form, constraints, errors } = superForm(data.form);
 
-	$: isServerDown = data.sessionUser === undefined;
+	let isServerDown = $derived(data.sessionUser === undefined);
 </script>
 
 <form method="POST" use:enhance class="flex flex-col gap-5 w-3/4 lg:w-1/2 m-auto">

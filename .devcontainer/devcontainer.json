@@ -18,7 +18,6 @@
 				"svelte.svelte-vscode",
 				"esbenp.prettier-vscode",
 				"dbaeumer.vscode-eslint",
-				"stylelint.vscode-stylelint",
 				"prisma.prisma",
 				"bradlc.vscode-tailwindcss",
 				"vitest.explorer",

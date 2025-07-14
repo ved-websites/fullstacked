@@ -1,42 +1,54 @@
 <script lang="ts">
-	import '../app.postcss';
+	import '../app.css';
 
 	import { afterNavigate, invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { setI18n } from '$i18n';
+	import { page } from '$app/state';
 	import LayoutAlert from '$lib/components/LayoutAlert/LayoutAlert.svelte';
 	import ToastManager from '$lib/components/ToastManager/ToastManager.svelte';
 	import HasJs from '$lib/components/head/HasJS.svelte';
 	import InitialTheme from '$lib/components/head/InitialTheme.svelte';
 	import LanguageChecker from '$lib/components/head/LanguageChecker.svelte';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
-	import { setSessionUser, themeStore } from '$lib/stores';
+	import { globalContext, type ContextData } from '$lib/runes';
+	import { themeStore } from '$lib/stores';
 	import { wsClient, type WsClientType } from '$lib/ts-ws/client';
 	import { WS_READY_STATES } from '$lib/ts-ws/readyStates';
 	import type { PageMessages } from '$lib/types';
 	import { flashStore } from '$lib/utils/flash';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, untrack } from 'svelte';
 	import { removeKeys, rolesObjectIntersect } from '~shared';
 	import { getTextFromRouteId } from '../i18n/utils';
 
-	export let data;
+	let { data = $bindable(), children } = $props();
 
-	$: setI18n(data.i18n);
-	$: setSessionUser(data.sessionUser);
+	let contextData = $state<ContextData>({
+		sessionUser: data.sessionUser,
+		i18n: data.i18n,
+	});
+	globalContext.set(contextData);
+
+	$effect.pre(() => {
+		contextData.i18n = data.i18n;
+	});
+	$effect.pre(() => {
+		contextData.sessionUser = data.sessionUser;
+	});
 
 	const flash = flashStore();
 
 	const titleHeader = 'Fullstacked';
-	const titleI18nText = getTextFromRouteId(data.i18n.t, (path) => `${path}.title`);
+	const titleI18nText = $derived(getTextFromRouteId(data.i18n.t, (path) => `${path}.title`));
 
-	$: title = $titleI18nText ? `${titleHeader} - ${$titleI18nText}` : titleHeader;
+	let title = $derived(titleI18nText ? `${titleHeader} - ${titleI18nText}` : titleHeader);
 
-	$: themeStore.set(data.theme ?? null);
+	$effect(() => {
+		themeStore.set(data.theme ?? null);
+	});
 
-	$: formData = $page.form as PageMessages | undefined;
+	let formData = $derived(page.form as PageMessages | undefined);
 
-	$: layoutAlert = $flash?.layoutAlert || data.layoutAlert || $page.data.layoutAlert || formData?.layoutAlert;
-	$: toasts = [...($page.data.toasts ?? []), ...($flash?.toasts ?? []), ...(formData?.toasts ?? [])];
+	let layoutAlert = $derived($flash?.layoutAlert || data.layoutAlert || page.data.layoutAlert || formData?.layoutAlert);
+	let toasts = $derived([...(untrack(() => page.data.toasts) ?? []), ...($flash?.toasts ?? []), ...(formData?.toasts ?? [])]);
 
 	let sessionUnsubscriber: ReturnType<WsClientType['users']['edited']> | undefined;
 
@@ -78,20 +90,22 @@
 		}
 	});
 
-	let serverDownRefreshInterval: ReturnType<typeof setInterval> | undefined;
+	let serverDownRefreshInterval: ReturnType<typeof setInterval> | undefined = $state();
 
-	$: if (data.sessionUser === undefined) {
-		if (serverDownRefreshInterval === undefined) {
-			const refreshDelayInSeconds = 10;
+	$effect(() => {
+		if (data.sessionUser === undefined) {
+			if (serverDownRefreshInterval === undefined) {
+				const refreshDelayInSeconds = 10;
 
-			serverDownRefreshInterval = setInterval(() => {
-				invalidateAll();
-			}, refreshDelayInSeconds * 1000);
+				serverDownRefreshInterval = setInterval(() => {
+					invalidateAll();
+				}, refreshDelayInSeconds * 1000);
+			}
+		} else {
+			clearInterval(serverDownRefreshInterval);
+			serverDownRefreshInterval = undefined;
 		}
-	} else {
-		clearInterval(serverDownRefreshInterval);
-		serverDownRefreshInterval = undefined;
-	}
+	});
 
 	onDestroy(() => {
 		clearInterval(serverDownRefreshInterval);
@@ -110,7 +124,8 @@
 
 <ToastManager data={toasts} />
 
-<main class="container mx-auto mt-20 py-3 px-5 flex flex-col gap-3">
+<main class="container mx-auto mt-18 py-3 px-5 flex flex-col gap-3">
 	<LayoutAlert data={layoutAlert} />
-	<slot />
+
+	{@render children?.()}
 </main>

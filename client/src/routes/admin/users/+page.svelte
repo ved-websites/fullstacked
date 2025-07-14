@@ -1,21 +1,22 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { getI18n } from '$i18n';
 	import { createLayoutAlert } from '$lib/components/LayoutAlert/helper';
+	import { context } from '$lib/runes';
 	import { wsClient } from '$lib/ts-ws/client';
 	import { handleStreamed, type StreamedData } from '$lib/utils/streaming';
 	import { Button, Heading, Modal } from 'flowbite-svelte';
-	import type { ComponentEvents } from 'svelte';
 	import CopyInviteButton from './components/UsersTable/CopyInviteButton.svelte';
 	import ResendInviteButton from './components/UsersTable/ResendInviteButton.svelte';
 	import UsersTable from './components/UsersTable/UsersTable.svelte';
 	import type { BaseUser } from './types';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
 
-	export let data;
+	let {
+		i18n: { t },
+	} = context();
 
-	let users: StreamedData<typeof data.users> | undefined;
+	let { data } = $props();
+
+	let users: StreamedData<typeof data.users> | undefined = $state();
 
 	wsClient.users.edited({}, ({ data: editedUser }) => {
 		users = users?.map((u) => {
@@ -63,13 +64,7 @@
 		},
 	});
 
-	let deletionUser: BaseUser | undefined;
-
-	function onDeleteUser(event: ComponentEvents<UsersTable>['deleteUser']) {
-		const { detail: user } = event;
-
-		deletionUser = user;
-	}
+	let deletionUser = $state<BaseUser | undefined>();
 </script>
 
 <Heading tag="h2">{$t('admin.users.heading')}</Heading>
@@ -78,13 +73,13 @@
 	<Button href="/admin/users/new">{$t('admin.users.create-button')}</Button>
 </div>
 
-<UsersTable heading={$t('admin.users.tables.heading')} {users} on:deleteUser={onDeleteUser}>
-	<svelte:fragment slot="more-actions" let:user>
+<UsersTable heading={$t('admin.users.tables.heading')} {users} onDeleteUser={(user) => (deletionUser = user)}>
+	{#snippet moreActions({ user })}
 		{#if user.registerToken}
 			<ResendInviteButton {user} tsrest={data.tsrest} />
 			<CopyInviteButton {user} />
 		{/if}
-	</svelte:fragment>
+	{/snippet}
 </UsersTable>
 
 <Modal title={$t('admin.users.modal.title')} open={!!deletionUser}>
@@ -93,7 +88,7 @@
 		<p>{@html $t('admin.users.modal.body.confirmation', { email: deletionUser?.email })}</p>
 	</div>
 
-	<form method="POST" action="?/delete" class="flex" use:enhance on:submit={() => (deletionUser = undefined)}>
+	<form method="POST" action="?/delete" class="flex" use:enhance onsubmit={() => (deletionUser = undefined)}>
 		<Button class="ml-auto" color="red" type="submit">{$t('common.confirm')}</Button>
 		<input type="hidden" name="email" value={deletionUser?.email} />
 	</form>

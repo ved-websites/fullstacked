@@ -1,19 +1,21 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export const meta: SettingsRouteMeta = {
 		icon: 'i-mdi-security',
 	};
 </script>
 
 <script lang="ts">
-	import { getI18n } from '$i18n';
 	import FormInput from '$lib/components/forms/FormInput.svelte';
+	import { context } from '$lib/runes';
 	import { Button, Heading } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import type { SettingsRouteMeta } from '../types.js';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
 
-	export let data;
+	let {
+		i18n: { t },
+	} = context();
+
+	let { data } = $props();
 
 	const { form, errors, constraints, enhance } = superForm(data.form);
 </script>

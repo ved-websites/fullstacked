@@ -1,12 +1,18 @@
 <script lang="ts">
-	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
 	import { alertColorMapping, type LayoutAlertData } from '$lib/components/LayoutAlert/helper';
+	import { contextPublic } from '$lib/runes';
 	import { Alert } from 'flowbite-svelte';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
 
-	export let data: LayoutAlertData | null | undefined;
+	let {
+		i18n: { t },
+	} = contextPublic();
+
+	interface Props {
+		data: LayoutAlertData | null | undefined;
+	}
+
+	let { data }: Props = $props();
 </script>
 
 {#if data}

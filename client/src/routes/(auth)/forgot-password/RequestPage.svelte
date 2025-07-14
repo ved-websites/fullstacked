@@ -1,16 +1,22 @@
 <script lang="ts">
-	import { getI18n } from '$i18n';
 	import FormInput from '$lib/components/forms/FormInput.svelte';
+	import { contextPublic } from '$lib/runes';
 	import { Alert, Button, Heading, P } from 'flowbite-svelte';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms';
-	import type { z } from 'zod';
+	import type { z } from 'zod/v4';
 	import type { requestPasswordSchema } from './schemas';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
 
-	export let sForm: SuperValidated<z.output<typeof requestPasswordSchema>>;
-	export let validToken: boolean = true;
+	let {
+		i18n: { t },
+	} = contextPublic();
+
+	interface Props {
+		sForm: SuperValidated<z.output<typeof requestPasswordSchema>>;
+		validToken?: boolean;
+	}
+
+	let { sForm, validToken = true }: Props = $props();
 
 	const { enhance, form, constraints, errors } = superForm(sForm);
 </script>

@@ -12,14 +12,30 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
-	"Use i18n Store": {
+	"Use context rune": {
 		"scope": "svelte,typescript",
-		"prefix": "i18nstore",
+		"prefix": "runecontext",
 		"body": [
-			"import { getI18n } from '\\$i18n';",
-			"let i18n = getI18n();",
-			"$: ({ t } = \\$i18n);"
+			"import { context } from '\\$lib/runes';",
+			"",
+			"let {",
+			"\ti18n: { t },",
+			"\tsessionUser",
+			"} = context();",
 		],
-		"description": "Inserts the i18n store snippet to the current file"
-	}
+		"description": "Inserts the context rune snippet to the current file"
+	},
+	"Use public context rune": {
+		"scope": "svelte,typescript",
+		"prefix": "runecontextpublic",
+		"body": [
+			"import { contextPublic } from '\\$lib/runes';",
+			"",
+			"let {",
+			"\ti18n: { t },",
+			"\tsessionUser",
+			"} = contextPublic();",
+		],
+		"description": "Inserts the public context rune snippet to the current file"
+	},
 }

@@ -1,57 +1,54 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import type { ConfirmedSessionUser } from '$auth/auth-handler.js';
-	import { getI18n } from '$i18n';
+	import { page } from '$app/state';
 	import Icon from '$lib/components/Icon.svelte';
 	import UserAvatar from '$lib/components/UserAvatar.svelte';
-	import { getSessionUser } from '$lib/stores/index.js';
+	import { context } from '$lib/runes';
 	import { findDeepRoute } from '$lib/utils/routes.js';
-	import { Heading, P, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
+	import { Heading, P, Sidebar, SidebarGroup, SidebarItem } from 'flowbite-svelte';
 
-	export let data;
+	let {
+		i18n: { t },
+		sessionUser,
+	} = context();
 
-	let sessionUser = getSessionUser<ConfirmedSessionUser>();
+	let { data, children } = $props();
 
-	$: currentRoute = findDeepRoute(data.routesInfo, $page.url.pathname.replace('/settings/', ''));
+	let currentRoute = $derived(findDeepRoute(data.routesInfo, page.url.pathname.replace('/settings/', '')));
 
-	$: label = currentRoute && ($t(`settings.${currentRoute.name}.name`) as string);
+	let label = $derived(currentRoute && ($t(`settings.${currentRoute.name}.name`) as string));
 </script>
 
 <header class="flex gap-5 mb-5">
-	<UserAvatar {...$sessionUser} />
+	<UserAvatar {...sessionUser} />
 	<P size="lg" class="self-center">
-		{#if $sessionUser.fullName}
-			{$sessionUser.fullName} ({$sessionUser.email})
+		{#if sessionUser.fullName}
+			{sessionUser.fullName} ({sessionUser.email})
 		{:else}
-			{$sessionUser.email}
+			{sessionUser.email}
 		{/if}
 	</P>
 </header>
 
 <div class="flex gap-10 flex-col md:flex-row">
 	<section>
-		<Sidebar activeUrl={$page.url.pathname} class="w-full md:w-64">
-			<SidebarWrapper>
-				<SidebarGroup>
-					{#each data.routesInfo as route}
-						<SidebarItem href={route.url} label={$t(`settings.${route.name}.name`)}>
-							<svelte:fragment slot="icon">
-								{#if route.icon}
-									<Icon class={route.icon} />
-								{/if}
-							</svelte:fragment>
-						</SidebarItem>
-					{/each}
-				</SidebarGroup>
-			</SidebarWrapper>
+		<Sidebar alwaysOpen={true} backdrop={false} position="static" activeUrl={page.url.pathname} class="z-50 w-full md:w-64">
+			<SidebarGroup>
+				{#each data.routesInfo as route}
+					<SidebarItem href={route.url} label={$t(`settings.${route.name}.name`)}>
+						{#snippet icon()}
+							{#if route.icon}
+								<Icon class={route.icon} />
+							{/if}
+						{/snippet}
+					</SidebarItem>
+				{/each}
+			</SidebarGroup>
 		</Sidebar>
 	</section>
 	<section class="grow flex flex-col gap-5">
 		{#if label}
 			<Heading tag="h2">{label}</Heading>
 		{/if}
-		<slot />
+		{@render children?.()}
 	</section>
 </div>

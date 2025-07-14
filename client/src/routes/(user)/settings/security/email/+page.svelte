@@ -1,19 +1,18 @@
 <script lang="ts">
-	import type { ConfirmedSessionUser } from '$auth/auth-handler.js';
-	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
 	import FormInput from '$lib/components/forms/FormInput.svelte';
-	import { getSessionUser } from '$lib/stores/index.js';
+	import { context } from '$lib/runes';
 	import { flashStore } from '$lib/utils/flash.js';
 	import { Alert, Button } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import type { EmailFlashProps } from './+page.server.js';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
 
-	export let data;
+	let {
+		i18n: { t },
+		sessionUser,
+	} = context();
 
-	let sessionUser = getSessionUser<ConfirmedSessionUser>();
+	let { data } = $props();
 
 	let flash = flashStore<EmailFlashProps>();
 
@@ -32,7 +31,7 @@
 	<FormInput
 		type="email"
 		name="email"
-		placeholder={$sessionUser.email}
+		placeholder={sessionUser.email}
 		bind:value={$form.email}
 		{...$constraints.email}
 		errors={$errors.email}

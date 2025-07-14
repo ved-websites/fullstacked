@@ -1,11 +1,13 @@
 <script lang="ts" generics="T extends UserFormSchemaType = UserFormSchemaType">
-	import { getI18n } from '$i18n';
+	import { contextPublic } from '$lib/runes';
 	import { Button } from 'flowbite-svelte';
 	import type { SuperForm } from 'sveltekit-superforms';
 	import FormInput from '../forms/FormInput.svelte';
 	import type { UserFormSchemaType } from './userform.schema';
-	let i18n = getI18n();
-	let { t } = $i18n;
+
+	let {
+		i18n: { t },
+	} = contextPublic();
 
 	interface Props extends SProps<{ above?: void; below?: void }> {
 		superFormData: SuperForm<T, any>;

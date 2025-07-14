@@ -1,28 +1,48 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
-	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
 	import VDropzone from '$lib/components/flowbite-custom/VDropzone.svelte';
+	import { context } from '$lib/runes';
 	import { getProfilePictureImageUrl } from '$lib/utils/images';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { Button, Label } from 'flowbite-svelte';
 	import { ACCEPTED_PICTURE_TYPES } from '~shared';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
 
-	export let currentProfilePictureRef: string | undefined | null;
-	export let hasJs: boolean;
+	let {
+		i18n: { t },
+	} = context();
 
+	interface Props {
+		currentProfilePictureRef: string | undefined | null;
+		hasJs: boolean;
+		[key: string]: any;
+	}
+
+	let { currentProfilePictureRef = $bindable(), hasJs, ...rest }: Props = $props();
+
+	// svelte-ignore non_reactive_update
 	let inputRef: HTMLInputElement;
-	let profilePictureFile: File | undefined;
-	let isSendingProfilePicture = false;
 
-	$: !currentProfilePictureRef && (profilePictureFile = undefined);
-	$: profilePictureSrc = profilePictureFile ? URL.createObjectURL(profilePictureFile) : getProfilePictureImageUrl(currentProfilePictureRef);
+	let profilePictureFile: File | undefined = $state();
+	let isSendingProfilePicture = $state(false);
+
+	$effect(() => {
+		if (!currentProfilePictureRef) {
+			profilePictureFile = undefined;
+		}
+	});
+
+	let profilePictureSrc = $derived(
+		profilePictureFile ? URL.createObjectURL(profilePictureFile) : getProfilePictureImageUrl(currentProfilePictureRef),
+	);
 
 	const handlePictureDrop = (event: DragEvent) => {
 		event.preventDefault();
+
+		if (!inputRef) {
+			return;
+		}
 
 		const files = event.dataTransfer?.items ?? event.dataTransfer?.files;
 
@@ -93,7 +113,7 @@
 	};
 </script>
 
-<form method="POST" enctype="multipart/form-data" use:enhance={handleEnhance} {...$$restProps}>
+<form method="POST" enctype="multipart/form-data" use:enhance={handleEnhance} {...rest}>
 	<Label>{$t('settings.profile.picture.label')}</Label>
 	<VDropzone
 		id="dropzone"
@@ -107,32 +127,33 @@
 		class="mt-2"
 		accept={ACCEPTED_PICTURE_TYPES.map((type) => `image/${type}`).join(', ')}
 		bind:input={inputRef}
-		let:isDraggingOver
 	>
-		<div class="grid grid-cols-2 p-5 gap-3">
-			<div class="flex flex-col justify-center items-center">
-				<Icon class="i-mdi-upload"></Icon>
-				<p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-					{@html $t('settings.profile.picture.zone.instructions', { hasJs })}
-				</p>
-				<p class="text-xs text-gray-500 dark:text-gray-400">
-					{$t('settings.profile.picture.zone.formats', {
-						formats: new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_PICTURE_TYPES),
-					})}
-				</p>
-				{#if isDraggingOver}
-					<p>{$t('settings.profile.picture.zone.dragging')}</p>
-				{/if}
-			</div>
+		{#snippet layout({ isDraggingOver })}
+			<div class="grid grid-cols-2 p-5 gap-3">
+				<div class="flex flex-col justify-center items-center">
+					<Icon class="i-mdi-upload"></Icon>
+					<p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+						{@html $t('settings.profile.picture.zone.instructions', { hasJs })}
+					</p>
+					<p class="text-xs text-gray-500 dark:text-gray-400">
+						{$t('settings.profile.picture.zone.formats', {
+							formats: new Intl.ListFormat('en', { style: 'long', type: 'conjunction' }).format(ACCEPTED_PICTURE_TYPES),
+						})}
+					</p>
+					{#if isDraggingOver}
+						<p>{$t('settings.profile.picture.zone.dragging')}</p>
+					{/if}
+				</div>
 
-			<div class="flex justify-center items-center">
-				{#if profilePictureSrc}
-					<img src={profilePictureSrc} alt="user profile" class="max-h-36" />
-				{:else}
-					<Icon class="i-mdi-account-off-outline s-36"></Icon>
-				{/if}
+				<div class="flex justify-center items-center">
+					{#if profilePictureSrc}
+						<img src={profilePictureSrc} alt="user profile" class="max-h-36" />
+					{:else}
+						<Icon class="i-mdi-account-off-outline s-36"></Icon>
+					{/if}
+				</div>
 			</div>
-		</div>
+		{/snippet}
 	</VDropzone>
 
 	<div class="mt-5 grid grid-cols-2 gap-5">

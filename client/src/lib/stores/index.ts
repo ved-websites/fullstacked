@@ -1,13 +1,13 @@
 import { navigating } from '$app/stores';
 import type { SessionUser } from '$auth/auth-handler';
 import { reconstructUrl } from '$lib/utils/urls';
+import { Context } from 'runed';
 import { readable, writable } from 'svelte/store';
-import { createStoreContext } from './utils/context';
 import { useToggleable } from './utils/toggleable';
 
 export const isDrawerHidden = useToggleable(writable(true), (drawerOpenStore) => drawerOpenStore.update((isOpen) => !isOpen));
 
-export const { getStore: getSessionUser, setStore: setSessionUser } = createStoreContext<SessionUser>();
+export const sessionUserContext = new Context<SessionUser>('sessionUser');
 
 export const previousPage = readable<string | undefined>(undefined, (set) => {
 	const unsubscribe = navigating.subscribe(($navigating) => {

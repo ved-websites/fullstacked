@@ -6,7 +6,7 @@ import { commonErrors, isCommonError, type ApiFetcherData, type CommonError } fr
 import { error, type RequestEvent } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
-import type { ZodError } from 'zod';
+import type { ZodError } from 'zod/v4';
 import type { ApiResponseHandlerOptions, ErrorPageMessagesData, OnErrorFunctionArgs } from './client';
 
 function getErrorPageMessagesData(handler: ErrorPageMessagesData | undefined, args: OnErrorFunctionArgs) {

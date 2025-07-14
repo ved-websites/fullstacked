@@ -1,23 +1,23 @@
 <script lang="ts">
-	import type { ConfirmedSessionUser } from '$auth/auth-handler';
-	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
 	import FormInput from '$lib/components/forms/FormInput.svelte';
-	import { getSessionUser } from '$lib/stores';
+	import { context } from '$lib/runes';
 	import { wsClient } from '$lib/ts-ws/client';
 	import { Button } from 'flowbite-svelte';
 	import { onMount, tick } from 'svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import type { ChatMessageType } from './types';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
 
-	export let data;
+	let {
+		i18n: { t },
+		sessionUser,
+	} = context();
+
+	let { data } = $props();
 	let { chatMessages } = data;
 
-	let sessionUser = getSessionUser<ConfirmedSessionUser>();
+	let isSending = $state(false);
 
-	let isSending = false;
 	let messageViewElement: HTMLDivElement;
 
 	const { enhance, form, constraints, errors } = superForm(data.form, {
@@ -34,7 +34,7 @@
 
 			const newMessage: ChatMessageType = {
 				active: false,
-				user: { email: $sessionUser.email },
+				user: { email: sessionUser.email },
 				text: message,
 				time: new Date(),
 			};
@@ -56,7 +56,7 @@
 	});
 
 	wsClient.messages.new(async ({ data }) => {
-		if (data.user.email == $sessionUser.email) {
+		if (data.user.email == sessionUser.email) {
 			messages = messages.map((m) => {
 				if (!m.id && m.text == data.text) {
 					m = { ...data, active: true };
@@ -79,20 +79,22 @@
 		messageViewElement.scrollTop = messageViewElement.scrollHeight;
 	});
 
-	$: messages = chatMessages.map<ChatMessageType>((rawMessage) => ({
-		id: rawMessage.id,
-		user: {
-			email: rawMessage.user.email,
-			name: rawMessage.user.firstName
-				? `${rawMessage.user.firstName}${rawMessage.user.lastName ? ` ${rawMessage.user.lastName}` : ''}`
-				: undefined,
-		},
-		text: rawMessage.text,
-		time: rawMessage.time,
-		active: true,
-	}));
+	let messages = $derived(
+		chatMessages.map<ChatMessageType>((rawMessage) => ({
+			id: rawMessage.id,
+			user: {
+				email: rawMessage.user.email,
+				name: rawMessage.user.firstName
+					? `${rawMessage.user.firstName}${rawMessage.user.lastName ? ` ${rawMessage.user.lastName}` : ''}`
+					: undefined,
+			},
+			text: rawMessage.text,
+			time: rawMessage.time,
+			active: true,
+		})),
+	);
 
-	$: canSend = !data.userHasJs || (!!$form.message && !isSending);
+	let canSend = $derived(!data.userHasJs || (!!$form.message && !isSending));
 
 	onMount(() => {
 		messageViewElement.scrollTop = messageViewElement.scrollHeight;

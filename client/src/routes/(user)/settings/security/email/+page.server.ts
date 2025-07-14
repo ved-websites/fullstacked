@@ -5,8 +5,8 @@ import type { Actions } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
 import { setError, superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
-import { z } from 'zod';
+import { zod4 } from 'sveltekit-superforms/adapters';
+import { z } from 'zod/v4';
 import { emailSchema } from '~shared';
 import type { PageServerLoad } from './$types';
 
@@ -28,7 +28,7 @@ export const load = (async (event) => {
 
 	const token = url.searchParams.get(paramTokenKey);
 
-	const form = await superValidate(zod(emailChangeSchema));
+	const form = await superValidate(zod4(emailChangeSchema));
 
 	if (token) {
 		const result = await tsrest.user.settings.security.updateEmail({ body: { token } });
@@ -52,7 +52,7 @@ export const actions = {
 			locals: { tsrest },
 		} = event;
 
-		const form = await superValidate(request, zod(emailChangeSchema));
+		const form = await superValidate(request, zod4(emailChangeSchema));
 
 		return assertTsRestActionResultOK({
 			form,

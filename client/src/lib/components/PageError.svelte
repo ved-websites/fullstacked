@@ -1,18 +1,27 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { getI18n } from '$i18n';
+	import { page } from '$app/state';
+	import { contextPublic } from '$lib/runes';
 	import { previousPage } from '$lib/stores';
 	import { reconstructUrl } from '$lib/utils/urls';
 	import { Alert, Button } from 'flowbite-svelte';
+	import type { Snippet } from 'svelte';
 	import Icon from './Icon.svelte';
-	let i18n = getI18n();
-	$: ({ t, tPayload } = $i18n);
 
-	export let icon: string;
-	export let errorMessage: string;
-	export let i18nPayload: Record<string, unknown> | undefined = undefined;
+	let {
+		i18n: { t, tPayload },
+	} = contextPublic();
 
-	$: previousPageUrl = $previousPage && $previousPage !== reconstructUrl($page.url) ? $previousPage : undefined;
+	interface Props {
+		icon: string;
+		errorMessage: string;
+		i18nPayload?: Record<string, unknown> | undefined;
+		children?: Snippet;
+		redirect?: Snippet;
+	}
+
+	let { icon, errorMessage, i18nPayload = undefined, children, redirect }: Props = $props();
+
+	let previousPageUrl = $derived($previousPage && $previousPage !== reconstructUrl(page.url) ? $previousPage : undefined);
 </script>
 
 <div class="flex flex-col self-center items-center gap-10">
@@ -21,24 +30,24 @@
 		<span class="text-lg text-center">{$t(errorMessage, tPayload(i18nPayload))}</span>
 	</div>
 
-	<slot />
+	{@render children?.()}
 
-	<slot name="redirect">
-		{#if previousPageUrl || $page.url.pathname !== '/'}
-			<div class="flex gap-3 flex-col sm:flex-row">
-				{#if previousPageUrl}
-					<Button href={previousPageUrl}>{$t('common.errorpage.previous-page')}</Button>
-				{/if}
+	{#if redirect}
+		{@render redirect()}
+	{:else if previousPageUrl || page.url.pathname !== '/'}
+		<div class="flex gap-3 flex-col sm:flex-row">
+			{#if previousPageUrl}
+				<Button href={previousPageUrl}>{$t('common.errorpage.previous-page')}</Button>
+			{/if}
 
-				{#if $page.url.pathname !== '/'}
-					<Button href="/">{$t('common.errorpage.home-button')}</Button>
-				{/if}
-			</div>
-		{:else}
-			<Alert color="yellow" class="flex flex-col gap-3 items-center">
-				<span>{$t('common.errorpage.already-home.summary')}</span>
-				<span>{$t('common.errorpage.already-home.detail')}</span>
-			</Alert>
-		{/if}
-	</slot>
+			{#if page.url.pathname !== '/'}
+				<Button href="/">{$t('common.errorpage.home-button')}</Button>
+			{/if}
+		</div>
+	{:else}
+		<Alert color="yellow" class="flex flex-col gap-3 items-center">
+			<span>{$t('common.errorpage.already-home.summary')}</span>
+			<span>{$t('common.errorpage.already-home.detail')}</span>
+		</Alert>
+	{/if}
 </div>

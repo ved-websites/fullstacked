@@ -7,17 +7,6 @@ export default [
 	},
 	...vedConfigs,
 	{
-		files: ['**/schemas/**/*.ts', '**/schemas.ts'],
-		rules: {
-			camelcase: [
-				'error',
-				{
-					allow: ['required_error'],
-				},
-			],
-		},
-	},
-	{
 		rules: {
 			'@typescript-eslint/no-magic-numbers': 'off',
 		},

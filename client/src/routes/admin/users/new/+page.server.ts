@@ -4,7 +4,7 @@ import { assertTsRestActionResultOK, assertTsRestResultOK } from '$lib/utils/ass
 import { fail } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { setError, superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import { adminNewUserFormSchema } from '../schema/schema';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -13,7 +13,7 @@ export const load = (async ({ locals: { tsrest } }) => {
 
 	assertTsRestResultOK(result);
 
-	const form = await superValidate(zod(adminNewUserFormSchema));
+	const form = await superValidate(zod4(adminNewUserFormSchema));
 
 	return {
 		form,
@@ -28,7 +28,7 @@ export const actions = {
 			locals: { tsrest },
 		} = event;
 
-		const form = await superValidate(request, zod(adminNewUserFormSchema));
+		const form = await superValidate(request, zod4(adminNewUserFormSchema));
 
 		return assertTsRestActionResultOK({
 			form,

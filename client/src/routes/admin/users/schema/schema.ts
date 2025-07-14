@@ -1,5 +1,5 @@
 import { userFormSchema } from '$lib/components/UserForm/userform.schema';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { emailSchema } from '~shared';
 
 export const adminUserFormSchema = userFormSchema.extend({

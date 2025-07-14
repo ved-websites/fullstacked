@@ -1,21 +1,20 @@
 <script lang="ts">
-	import { getI18n } from '$i18n';
-	import { getSessionUser } from '$lib/stores';
+	import { contextPublic } from '$lib/runes';
 	import { wsClient } from '$lib/ts-ws/client';
 	import { cn } from '$lib/twMerge';
 	import { Popover } from 'flowbite-svelte';
 	import { WsStatusCodes } from '~contract';
 	import Icon from '../Icon.svelte';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
 
-	let sessionUser = getSessionUser();
+	let {
+		i18n: { t },
+		sessionUser,
+	} = contextPublic();
 
-	let issueMessage: string | undefined = undefined;
+	let issueMessage = $state<string | undefined>(undefined);
+	let iconColor = $state<string | undefined>(undefined);
 
-	let iconColor: string | undefined = undefined;
-
-	$: showWsIssue = issueMessage !== undefined || $sessionUser === undefined;
+	let showWsIssue = $derived(issueMessage !== undefined || sessionUser === undefined);
 
 	wsClient.$socket.onConnChange = (event) => {
 		if (event.type === 'open') {

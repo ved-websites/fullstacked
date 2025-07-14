@@ -1,4 +1,4 @@
-import type { ZodSchema, ZodType, z } from 'zod';
+import type { ZodType, z } from 'zod/v4';
 
 export type EventUID = string;
 
@@ -27,8 +27,8 @@ export type EventRoute<C extends EventRouteConfig = EventRouteConfig> = C & {
 };
 export type EventRouteConfig = {
 	type: EventRouteType;
-	input?: ZodSchema;
-	emitted: ZodSchema;
+	input?: ZodType;
+	emitted: ZodType;
 };
 
 export type EventRouter = {

@@ -1,17 +1,19 @@
 <script lang="ts">
-	import { getI18n } from '$i18n';
 	import FormInput from '$lib/components/forms/FormInput.svelte';
+	import { contextPublic } from '$lib/runes';
 	import { Button, Heading } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { zod4Client } from 'sveltekit-superforms/adapters';
 	import { registerSchema } from './schema.js';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
 
-	export let data;
+	let {
+		i18n: { t },
+	} = contextPublic();
+
+	let { data } = $props();
 
 	const { enhance, form, constraints, errors } = superForm(data.form, {
-		validators: zodClient(registerSchema),
+		validators: zod4Client(registerSchema),
 	});
 </script>
 

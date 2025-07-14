@@ -2,8 +2,8 @@ import { locales } from '$i18n-config';
 import { createToasts } from '$lib/components/ToastManager/helper';
 import { assertTsRestActionResultOK } from '$lib/utils/assertions';
 import { superValidate } from 'sveltekit-superforms';
-import { zod, type Infer } from 'sveltekit-superforms/adapters';
-import { z } from 'zod';
+import { zod4, type Infer } from 'sveltekit-superforms/adapters';
+import { z } from 'zod/v4';
 import type { Actions, PageServerLoad } from './$types';
 
 const langSchema = z.object({
@@ -13,7 +13,7 @@ const langSchema = z.object({
 export const load = (async ({ locals: { sessionUser, browserLang } }) => {
 	const lang = sessionUser!.lang;
 
-	const form = await superValidate<Infer<typeof langSchema>, string>({ lang }, zod(langSchema));
+	const form = await superValidate<Infer<typeof langSchema>, string>({ lang }, zod4(langSchema));
 
 	return { form, browserLang };
 }) satisfies PageServerLoad;
@@ -25,7 +25,7 @@ export const actions = {
 			locals: { tsrest },
 		} = event;
 
-		const form = await superValidate(request, zod(langSchema));
+		const form = await superValidate(request, zod4(langSchema));
 
 		const lang = locales.includes(form.data.lang as string) ? form.data.lang : null;
 

@@ -2,8 +2,11 @@ import { exec as execNoPromise } from 'child_process';
 import del from 'del';
 import fs from 'fs';
 import gulp, { type TaskFunction } from 'gulp';
+import replace from 'replace-in-file';
 import util from 'util';
-import { generate as generatePrisma, pushDb, seedDb } from './prisma/utils/functions';
+import { pushDb, seedDb } from './prisma/utils/functions';
+
+const { replaceInFile } = replace;
 
 const exec = util.promisify(execNoPromise);
 
@@ -45,10 +48,23 @@ async function setupEnv() {
 }
 
 async function generatePrismaHelpers() {
-	const outputs = await generatePrisma();
+	const outputs = await exec(`pnpm exec prisma generate`);
 
 	if (outputs.stderr) {
 		throw new Error(`Prisma generation failed: ${outputs.stderr}`);
+	}
+
+	try {
+		await replaceInFile({
+			files: [`${configs.generatedFolder}/zod/**/*.ts`],
+			from: `} from 'zod';`,
+			to: `} from 'zod/v4';`,
+			allowEmptyPaths: true,
+		});
+	} catch (error) {
+		console.error(`An error happened while enabling Renovate! Check file permissions and try again.`);
+
+		throw error;
 	}
 }
 

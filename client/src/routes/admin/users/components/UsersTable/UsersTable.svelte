@@ -1,12 +1,11 @@
 <script lang="ts" generics="T extends BaseUser = BaseUser">
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	import type { BaseUser } from '../../types';
 
-	import { getI18n } from '$i18n';
 	import Icon from '$lib/components/Icon.svelte';
 	import UserAvatar from '$lib/components/UserAvatar.svelte';
 	import VSelect from '$lib/components/flowbite-custom/VSelect/VSelect.svelte';
 	import type { VSelectOptionType } from '$lib/components/flowbite-custom/VSelect/types';
+	import { context } from '$lib/runes';
 	import {
 		Badge,
 		Button,
@@ -23,24 +22,23 @@
 		TableHead,
 		TableHeadCell,
 	} from 'flowbite-svelte';
-	import { createEventDispatcher } from 'svelte';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
+	import type { Snippet } from 'svelte';
 
-	// eslint-disable-next-line no-undef
-	export let users: T[] | undefined;
-	export let name: string = '';
-	export let heading: string;
+	let {
+		i18n: { t },
+	} = context();
 
-	export let tableClass: string = '';
-	export let tableBodyClass: string = 'divide-y';
+	interface Props {
+		heading: string;
+		tableClass?: string;
+		tableBodyClass?: string;
+		users?: T[];
+		name?: string;
+		onDeleteUser: (user: T) => unknown;
+		moreActions?: Snippet<[{ user: T; popoverId: string }]>;
+	}
 
-	type Events = {
-		// eslint-disable-next-line no-undef
-		deleteUser: T;
-	};
-
-	const dispatch = createEventDispatcher<Events>();
+	let { users, name = '', heading, tableClass = '', tableBodyClass = 'divide-y', onDeleteUser, moreActions }: Props = $props();
 
 	type UserType = '' | 'registered' | 'unregistered';
 
@@ -50,42 +48,44 @@
 		{ name: 'admin.users.tables.filters.types.unregistered' satisfies I18nKey, value: 'unregistered' },
 	];
 
-	let filterOpen = true;
-	let searchTerm: string = '';
-	let userTypeChoice: UserType = '';
+	let filterOpen = $state(true);
+	let searchTerm = $state<string>('');
+	let userTypeChoice = $state<UserType>('');
 
-	$: shownUsers = users?.filter((u) => {
-		// Check registration type
-		const isRegistered = !u.registerToken;
+	let shownUsers = $derived(
+		users?.filter((u) => {
+			// Check registration type
+			const isRegistered = !u.registerToken;
 
-		if (userTypeChoice === 'registered' && !isRegistered) {
+			if (userTypeChoice === 'registered' && !isRegistered) {
+				return false;
+			}
+			if (userTypeChoice === 'unregistered' && isRegistered) {
+				return false;
+			}
+
+			// Check search terms
+			const safeSearchTerm = searchTerm.toLowerCase();
+
+			const email = u.email.toLowerCase();
+			const name = u.fullName?.toLowerCase();
+
+			if (email.includes(safeSearchTerm)) {
+				return true;
+			}
+			if (name?.includes(safeSearchTerm)) {
+				return true;
+			}
+
 			return false;
-		}
-		if (userTypeChoice === 'unregistered' && isRegistered) {
-			return false;
-		}
-
-		// Check search terms
-		const safeSearchTerm = searchTerm.toLowerCase();
-
-		const email = u.email.toLowerCase();
-		const name = u.fullName?.toLowerCase();
-
-		if (email.includes(safeSearchTerm)) {
-			return true;
-		}
-		if (name?.includes(safeSearchTerm)) {
-			return true;
-		}
-
-		return false;
-	});
+		}),
+	);
 </script>
 
 <div class="flex justify-between">
 	<Heading tag="h4" class="mb-2">{heading}</Heading>
 	<div class="sm:hidden">
-		<Button size="sm" pill on:click={() => (filterOpen = !filterOpen)}>
+		<Button size="sm" pill onclick={() => (filterOpen = !filterOpen)}>
 			<Icon class="i-mdi-magnify-expand mr-1" />
 			{$t('admin.users.tables.filters.toggle')}
 			<Icon class="ml-1 {filterOpen ? 'i-mdi-chevron-down' : 'i-mdi-chevron-up'}" />
@@ -97,13 +97,15 @@
 	<div class="flex flex-col gap-3 sm:flex-row justify-between">
 		<div class="w-full max-w-full sm:max-w-[50vw]">
 			<Input type="text" placeholder={$t('admin.users.tables.filters.fields.search')} bind:value={searchTerm}>
-				<Icon slot="left" class="i-mdi-magnify" />
+				{#snippet left()}
+					<Icon class="i-mdi-magnify w-5" />
+				{/snippet}
 			</Input>
 		</div>
 
 		<Label class="flex content-center gap-5">
 			<span class="my-auto text-nowrap">{$t('admin.users.tables.filters.fields.type')} :</span>
-			<VSelect items={userTypes} placeholder="" bind:value={userTypeChoice}></VSelect>
+			<VSelect items={userTypes} placeholder="" value={userTypeChoice}></VSelect>
 		</Label>
 	</div>
 </div>
@@ -113,7 +115,7 @@
 		<TableHeadCell>{$t('admin.users.tables.columns.user')}</TableHeadCell>
 		<TableHeadCell class="text-right">{$t('admin.users.tables.columns.actions')}</TableHeadCell>
 	</TableHead>
-	<TableBody {tableBodyClass}>
+	<TableBody class={tableBodyClass}>
 		{#if shownUsers === undefined}
 			<TableBodyRow>
 				<TableBodyCell colspan={2}>
@@ -143,10 +145,10 @@
 					<TableBodyCell class="px-4">
 						<div class="flex justify-end gap-1 flex-wrap">
 							<Button size="xs" href="/admin/users/{user.email}">{$t('admin.users.tables.actions.edit')}</Button>
-							<Button size="xs" on:click={() => dispatch('deleteUser', user)} color="red">
+							<Button size="xs" onclick={() => onDeleteUser(user)} color="red">
 								{$t('admin.users.tables.actions.delete')}
 							</Button>
-							<slot name="more-actions" {user} {popoverId} />
+							{@render moreActions?.({ user, popoverId })}
 						</div>
 					</TableBodyCell>
 				</TableBodyRow>
@@ -158,7 +160,11 @@
 {#if shownUsers?.length}
 	{#each shownUsers as user, i (user.email)}
 		<Popover defaultClass="p-3 flex flex-col gap-3" class="w-64 text-sm font-light" triggeredBy="#info-{name}{i}">
-			<div slot="title" class="font-semibold text-gray-900 dark:text-white text-center">{$t('admin.users.tables.userinfo.heading')}</div>
+			{#snippet title()}
+				<div class="font-semibold text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700 text-center rounded-t-md border-b py-1 px-3">
+					{$t('admin.users.tables.userinfo.heading')}
+				</div>
+			{/snippet}
 			<div class="flex justify-between gap-3">
 				<UserAvatar {...user} />
 				<div class="self-center text-right min-w-0">
@@ -174,7 +180,7 @@
 					</div>
 				</div>
 			</div>
-			<Hr hrClass="h-px bg-gray-200 border-0 dark:bg-gray-700" />
+			<Hr class="h-px bg-gray-200 border-0 dark:bg-gray-700 my-0" />
 			<div class="flex gap-5 justify-between p-2">
 				<span class="self-center leading-none text-gray-900 dark:text-white">{$t('admin.users.tables.userinfo.fields.roles.title')}</span>
 				<div class="flex gap-1 flex-wrap justify-stretch">

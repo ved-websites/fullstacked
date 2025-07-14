@@ -1,6 +1,6 @@
 import RoleSchema from '$zod/modelSchema/RoleSchema';
 import GeneratedUserSchema from '$zod/modelSchema/UserSchema';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const onlineSchema = z.boolean().nullable();
 

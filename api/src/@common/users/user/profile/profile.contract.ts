@@ -1,5 +1,5 @@
 import type UserUpdateInputSchema from '$zod/inputTypeSchemas/UserUpdateInputSchema';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { c, createResponses } from '~contract';
 
 export const userProfileContract = c.router(

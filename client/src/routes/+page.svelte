@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { getI18n } from '$i18n';
+	import { contextPublic } from '$lib/runes';
 	import { Alert } from 'flowbite-svelte';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
+
+	let {
+		i18n: { t },
+	} = contextPublic();
 
 	const sections: { text: string; color: string }[] = [
 		{ text: 'teal', color: 'bg-teal-400' },
@@ -23,7 +25,7 @@
 </div>
 
 <div class="px-2">
-	<Alert color="blue">
+	<Alert color="secondary">
 		{@html $t('home.info')}
 	</Alert>
 </div>

@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import RequestPage from './RequestPage.svelte';
 	import ResetPage from './ResetPage.svelte';
 
-	export let data;
+	let { data } = $props();
 
-	$: validToken = !$page.url.searchParams.has('resetToken') || data.resetToken !== null;
+	let validToken = $derived(!page.url.searchParams.has('resetToken') || data.resetToken !== null);
 </script>
 
 {#if data.resetToken === null}

@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { themeStore, useMediaQuery } from '$lib/stores';
 	import { Button, ButtonGroup } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { derived } from 'svelte/store';
 	import { classList } from '../stores/utils/classlist';
 	import Icon from './Icon.svelte';
+
+	interface Props {
+		[key: string]: any;
+	}
+
+	let { ...rest }: Props = $props();
 
 	const mediaDarkScheme = useMediaQuery('(prefers-color-scheme: dark)');
 
@@ -18,10 +24,12 @@
 		return $theme == 'dark';
 	});
 
-	let classListStore: ReturnType<typeof classList>;
+	let classListStore: ReturnType<typeof classList> | undefined = $state();
 
-	const handleThemeSubmit = async ({ submitter }: SubmitEvent) => {
-		const theme = submitter?.dataset?.theme;
+	const handleThemeSubmit = async (event: SubmitEvent) => {
+		event.preventDefault();
+
+		const theme = event.submitter?.dataset?.theme;
 
 		switch (theme) {
 			case 'dark':
@@ -40,14 +48,16 @@
 		classListStore = classList(document.documentElement, '');
 
 		return () => {
-			classListStore.destroy();
+			classListStore?.destroy();
 		};
 	});
 
-	$: classListStore?.update(`${$isDark ? 'dark' : ''}`);
+	$effect(() => {
+		classListStore?.update(`${$isDark ? 'dark' : ''}`);
+	});
 </script>
 
-<form method="POST" use:enhance on:submit|preventDefault={handleThemeSubmit} {...$$restProps}>
+<form method="POST" use:enhance onsubmit={handleThemeSubmit} {...rest}>
 	<ButtonGroup>
 		<Button
 			data-theme="dark"
@@ -80,5 +90,5 @@
 			<Icon class="i-mdi-white-balance-sunny s-4" />
 		</Button>
 	</ButtonGroup>
-	<input type="hidden" name="redirectTo" value={$page.url.href.replace($page.url.origin, '')} />
+	<input type="hidden" name="redirectTo" value={page.url.href.replace(page.url.origin, '')} />
 </form>

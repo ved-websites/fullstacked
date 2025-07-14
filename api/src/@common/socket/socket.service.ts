@@ -3,7 +3,7 @@ import { PresenceService } from '$users/presence/presence.service';
 import { Injectable, Logger } from '@nestjs/common';
 import type { IncomingMessage } from 'http';
 import { Server, WebSocket } from 'ws';
-import type { z } from 'zod';
+import type { z } from 'zod/v4';
 import { EventRouteOutput, EventUID, extractEventRouteKey, type EventRoute } from '~contract';
 import { WsEventEmitter } from './ts-ws/ws-event.emitter';
 import type { SocketOrSessionId, TypedWebSocket } from './types';

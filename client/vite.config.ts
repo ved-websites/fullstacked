@@ -1,11 +1,14 @@
+import type * as EnvPrivate from '$env/static/private';
+import type * as EnvPublic from '$env/static/public';
 import { sentrySvelteKit } from '@sentry/sveltekit';
 import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
 import { nodeLoaderPlugin } from '@vavite/node-loader/plugin';
 import { defineConfig, loadEnv } from 'vite';
 import { defaultExclude } from 'vitest/config';
 
 export default defineConfig(({ mode }) => {
-	const env = { ...process.env, ...loadEnv(mode, process.cwd(), '') };
+	const env = { ...process.env, ...loadEnv(mode, process.cwd(), '') } as typeof EnvPrivate & typeof EnvPublic;
 
 	return {
 		server: {
@@ -36,13 +39,16 @@ export default defineConfig(({ mode }) => {
 					sourcemaps: {
 						assets: ['./.svelte-kit/*/**/*'],
 						ignore: ['**/.svelte-kit/client/**/*'],
-						filesToDeleteAfterUpload: ['./.svelte-kit/**/*.map'],
 					},
 				},
 				adapter: 'vercel',
 			}),
+			tailwindcss(),
 			sveltekit(),
 			nodeLoaderPlugin(),
 		],
+		optimizeDeps: {
+			include: ['flowbite-svelte', 'zod'],
+		},
 	};
 });

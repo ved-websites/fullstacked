@@ -1,10 +1,15 @@
 <script lang="ts">
 	import { cn } from '$lib/twMerge';
 
-	let klass = '';
-	export { klass as class };
+	interface Props {
+		class?: string;
+		[key: string]: any
+	}
 
-	$: classes = cn('s-5', klass);
+	let { class: klass = '', ...rest }: Props = $props();
+	
+
+	let classes = $derived(cn('s-5', klass));
 </script>
 
-<span {...$$restProps} class={classes}></span>
+<span {...rest} class={classes}></span>

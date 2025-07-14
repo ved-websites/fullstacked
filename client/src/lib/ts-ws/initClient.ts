@@ -2,7 +2,7 @@ import { browser, dev } from '$app/environment';
 import SuperSocket from '@shippr/supersocket';
 import type { CloseEvent as SuperSocketCloseEvent, Event as SuperSocketEvent } from '@shippr/supersocket/lib/esm/types/events';
 import { onDestroy } from 'svelte';
-import type { ZodType, z } from 'zod';
+import type { ZodType, z } from 'zod/v4';
 import {
 	WsStatusCodes,
 	isEventRoute,
@@ -60,14 +60,18 @@ function initRoute<TRoute extends EventRoute>(route: TRoute, socket: KitSocket) 
 			TRoute
 		>;
 
-		const unsubscriber = socket.subscribeToEvent(route, { input, subscriber });
+		const unsubscriber = socket.subscribeToEvent(route, {
+			// @ts-expect-error - input is optional, so it can be undefined
+			input,
+			subscriber,
+		});
 
 		try {
 			onDestroy(() => {
 				unsubscriber();
 			});
 		} catch (error) {
-			if (error instanceof Error && error.message !== 'Function called outside component initialization') {
+			if (error instanceof Error && !error.message.includes('lifecycle_outside_component')) {
 				console.error('An unexpected error happened!', error.message);
 			}
 		}
@@ -153,7 +157,7 @@ class KitSocket extends SuperSocket {
 			},
 		};
 
-		const subscriptionValue: SubscriptionEventValue = {
+		const subscriptionValue: SubscriptionEventValue<TRoute> = {
 			subscriptionRequest,
 			subscriber: args.subscriber,
 		};

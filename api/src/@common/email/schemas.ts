@@ -1,5 +1,5 @@
 import env from '$configs';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { emailSchema, fullNameSchema } from '~shared';
 
 const optionalName = fullNameSchema.optional().transform((v) => (v === null ? undefined : v));
@@ -19,7 +19,7 @@ export const sendEmailSchema = z.object({
 	to: multipleEmailUsersSchema,
 	from: simpleEmailUser
 		.optional()
-		.default(env.EMAIL_FROM)
+		.default({ email: env.EMAIL_FROM })
 		.or(emailUserDetails.extend({ email: emailSchema.optional().default(env.EMAIL_FROM) })),
 	subject: z.string(),
 	html: z.string(),

@@ -1,19 +1,24 @@
 <script lang="ts">
-	import { getI18n } from '$i18n';
 	import { createToasts, setPageToasts, type ToastData } from '$lib/components/ToastManager/helper';
+	import { context } from '$lib/runes';
 	import type { TsRestClient } from '$lib/ts-rest/client';
 	import { Button } from 'flowbite-svelte';
 	import { StatusCodes } from 'http-status-codes';
 	import type { BaseUser } from '../../types';
-	let i18n = getI18n();
-	$: ({ t } = $i18n);
 
-	export let user: BaseUser & { registerToken: string | null };
-	export let showInviteResentTextDuration: number = 3000;
+	let {
+		i18n: { t },
+	} = context();
 
-	export let tsrest: TsRestClient;
+	interface Props {
+		user: BaseUser & { registerToken: string | null };
+		showInviteResentTextDuration?: number;
+		tsrest: TsRestClient;
+	}
 
-	let isSendingNewInvite = false;
+	let { user, showInviteResentTextDuration = 3000, tsrest }: Props = $props();
+
+	let isSendingNewInvite = $state(false);
 
 	async function handleResend() {
 		isSendingNewInvite = true;
@@ -56,6 +61,6 @@
 	}
 </script>
 
-<Button size="xs" on:click={handleResend} color="green" disabled={isSendingNewInvite}>
+<Button size="xs" onclick={handleResend} color="green" disabled={isSendingNewInvite}>
 	{$t('admin.users.tables.actions.resend-invite.button')}
 </Button>

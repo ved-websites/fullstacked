@@ -1,7 +1,7 @@
 import type UserCreateInputSchema from '$zod/inputTypeSchemas/UserCreateInputSchema';
 import type UserUpdateInputSchema from '$zod/inputTypeSchemas/UserUpdateInputSchema';
 import type UserFindManyArgsSchema from '$zod/outputTypeSchemas/UserFindManyArgsSchema';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { c, createResponses } from '~contract';
 import { LiveUserSchema, UserRolesSchemaExtension, UserSchema, emailSchema } from '~shared';
 
