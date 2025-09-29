@@ -9,7 +9,7 @@
 	import InitialTheme from '$lib/components/head/InitialTheme.svelte';
 	import LanguageChecker from '$lib/components/head/LanguageChecker.svelte';
 	import Navbar from '$lib/components/nav/Navbar.svelte';
-	import { globalContext, type ContextData } from '$lib/runes';
+	import { contextKeys, setupContext } from '$lib/runes';
 	import { themeStore } from '$lib/stores';
 	import { wsClient, type WsClientType } from '$lib/ts-ws/client';
 	import { WS_READY_STATES } from '$lib/ts-ws/readyStates';
@@ -21,17 +21,13 @@
 
 	let { data = $bindable(), children } = $props();
 
-	let contextData = $state<ContextData>({
-		sessionUser: data.sessionUser,
-		i18n: data.i18n,
-	});
-	globalContext.set(contextData);
+	let contextData = setupContext(data);
 
 	$effect.pre(() => {
-		contextData.i18n = data.i18n;
-	});
-	$effect.pre(() => {
-		contextData.sessionUser = data.sessionUser;
+		for (const contextKey of contextKeys) {
+			// @ts-expect-error TS shenanigans to get confirmed data.
+			contextData[contextKey] = data[contextKey];
+		}
 	});
 
 	const flash = flashStore();
@@ -90,7 +86,7 @@
 		}
 	});
 
-	let serverDownRefreshInterval: ReturnType<typeof setInterval> | undefined = $state();
+	let serverDownRefreshInterval: ReturnType<typeof setInterval> | undefined;
 
 	$effect(() => {
 		if (data.sessionUser === undefined) {

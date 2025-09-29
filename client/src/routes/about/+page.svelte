@@ -4,7 +4,7 @@
 
 	let {
 		i18n: { t },
-	} = contextPublic();
+	} = $derived(contextPublic());
 </script>
 
 <P>{$t('about.main')}</P>

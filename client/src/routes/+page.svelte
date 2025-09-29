@@ -4,7 +4,7 @@
 
 	let {
 		i18n: { t },
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	const sections: { text: string; color: string }[] = [
 		{ text: 'teal', color: 'bg-teal-400' },

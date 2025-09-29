@@ -21,7 +21,7 @@
 			"let {",
 			"\ti18n: { t },",
 			"\tsessionUser",
-			"} = context();",
+			"} = \\$derived(context());",
 		],
 		"description": "Inserts the context rune snippet to the current file"
 	},
@@ -34,7 +34,7 @@
 			"let {",
 			"\ti18n: { t },",
 			"\tsessionUser",
-			"} = contextPublic();",
+			"} = \\$derived(contextPublic());",
 		],
 		"description": "Inserts the public context rune snippet to the current file"
 	},

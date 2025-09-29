@@ -9,7 +9,7 @@
 	let {
 		i18n: { t },
 		sessionUser,
-	} = context();
+	} = $derived(context());
 
 	let { data, children } = $props();
 

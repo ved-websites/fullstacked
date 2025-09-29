@@ -7,7 +7,7 @@
 
 	let {
 		i18n: { t },
-	} = contextPublic();
+	} = $derived(contextPublic());
 </script>
 
 {#if page.status == StatusCodes.NOT_FOUND}

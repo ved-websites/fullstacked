@@ -26,7 +26,7 @@
 
 	let {
 		i18n: { t },
-	} = context();
+	} = $derived(context());
 
 	interface Props {
 		heading: string;

@@ -7,7 +7,7 @@
 
 	let {
 		i18n: { t },
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	interface Props extends SProps<{ above?: void; below?: void }> {
 		superFormData: SuperForm<T, any>;

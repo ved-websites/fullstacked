@@ -6,7 +6,7 @@ import { error, fail, type RequestEvent } from '@sveltejs/kit';
 import { StatusCodes } from 'http-status-codes';
 import { redirect } from 'sveltekit-flash-message/server';
 import type { Infer, SuperValidated } from 'sveltekit-superforms';
-import type { AnyZodObject } from 'zod/v4';
+import type { ZodObject } from 'zod/v4';
 import type { ApiFetcherData } from '~contract';
 
 export type ValidResult<T extends { status: number }> = T extends { status: StatusCodes.OK } ? T : never;
@@ -39,17 +39,17 @@ export type ActionNotValidData = {
 	errorMessage: string;
 	pageData:
 		| {
-				form: SuperValidated<Infer<AnyZodObject>> | undefined;
+				form: SuperValidated<Infer<ZodObject>> | undefined;
 				layoutAlert: LayoutAlertData;
 		  }
 		| {
-				form: SuperValidated<Infer<AnyZodObject>> | undefined;
+				form: SuperValidated<Infer<ZodObject>> | undefined;
 				toasts: ToastData[];
 		  };
 };
 
 export type AssertTsRestActionResultOKArgs<T extends { status: number }> = {
-	form?: SuperValidated<Infer<AnyZodObject>>;
+	form?: SuperValidated<Infer<ZodObject>>;
 	event: RequestEvent;
 	result: () => Awaitable<T>;
 	onValid?: (result: ValidResult<T>) => Awaitable<
@@ -123,7 +123,7 @@ export function assertTsRestActionResultOK<T extends ApiFetcherData>(args: Asser
  * You **need** to return the value of this function or it will do nothing.
  * On valid form, the callback's return value will be used as this function's return value.
  */
-export function assertFormValid<T>(form: SuperValidated<Infer<AnyZodObject>>, onValid: () => Awaitable<T>) {
+export function assertFormValid<T>(form: SuperValidated<Infer<ZodObject>>, onValid: () => Awaitable<T>) {
 	if (!form.valid) {
 		return fail(StatusCodes.BAD_REQUEST, { form });
 	}

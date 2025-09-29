@@ -8,7 +8,7 @@
 
 	let {
 		i18n: { t },
-	} = context();
+	} = $derived(context());
 
 	interface Props {
 		user: BaseUser & { registerToken: string | null };

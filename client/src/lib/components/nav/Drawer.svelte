@@ -12,7 +12,7 @@
 	let {
 		i18n: { t },
 		sessionUser,
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	let transitionParams = {
 		x: -320,

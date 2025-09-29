@@ -4,7 +4,7 @@
 
 	let {
 		i18n: { t },
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	type ZodArrayErrors = {
 		_errors?: string[] | undefined;

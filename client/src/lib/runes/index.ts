@@ -1,1 +1,1 @@
-export * from './context.rune';
+export * from './context.rune.svelte';

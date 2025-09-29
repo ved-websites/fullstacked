@@ -9,7 +9,7 @@
 
 	let {
 		i18n: { t },
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	interface Props {
 		data: ToastData[];
@@ -37,7 +37,7 @@
 				return;
 			}
 
-			currToast.text = untrack(() => t).get(currToast.text, currToast.i18nPayload);
+			currToast.text = t.get(currToast.text, currToast.i18nPayload);
 
 			currToasts.push(currToast);
 		});

@@ -9,7 +9,7 @@
 	let {
 		i18n: { t },
 		sessionUser,
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	let issueMessage = $state<string | undefined>(undefined);
 	let iconColor = $state<string | undefined>(undefined);

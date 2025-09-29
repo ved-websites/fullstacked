@@ -8,7 +8,7 @@
 
 	let {
 		i18n: { t },
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	let { data } = $props();
 

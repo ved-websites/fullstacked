@@ -7,7 +7,7 @@
 
 	let {
 		i18n: { t },
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	interface Props extends Omit<HTMLSelectAttributes, 'size' | 'disabled'> {
 		items: VSelectOptionType[];

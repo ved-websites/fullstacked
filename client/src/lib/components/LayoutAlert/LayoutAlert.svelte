@@ -6,7 +6,7 @@
 
 	let {
 		i18n: { t },
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	interface Props {
 		data: LayoutAlertData | null | undefined;

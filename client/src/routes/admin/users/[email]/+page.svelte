@@ -7,7 +7,7 @@
 
 	let {
 		i18n: { t },
-	} = context();
+	} = $derived(context());
 
 	let { data } = $props();
 

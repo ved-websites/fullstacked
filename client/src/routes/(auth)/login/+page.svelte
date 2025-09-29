@@ -1,13 +1,13 @@
 <script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
 	import FormInput from '$lib/components/forms/FormInput.svelte';
-	import { contextPublic } from '$lib/runes/context.rune.js';
+	import { contextPublic } from '$lib/runes/context.rune.svelte.js';
 	import { Alert, Button, Helper } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms';
 
 	let {
 		i18n: { t },
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	let { data } = $props();
 

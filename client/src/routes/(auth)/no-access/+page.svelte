@@ -6,7 +6,7 @@
 
 	let {
 		i18n: { t },
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	let pathTo = $derived(page.url.searchParams.get('pathTo'));
 </script>

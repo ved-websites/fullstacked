@@ -12,7 +12,7 @@
 	let {
 		i18n: { t },
 		sessionUser,
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	interface Props {
 		sForm: SuperValidated<z.output<typeof resetPasswordSchema>>;

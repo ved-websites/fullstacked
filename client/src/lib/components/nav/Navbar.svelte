@@ -28,7 +28,7 @@
 	let {
 		i18n: { t },
 		sessionUser,
-	} = contextPublic();
+	} = $derived(contextPublic());
 </script>
 
 <Navbar class="sm:px-3 fixed w-[100vw] z-20 top-0 left-0 border-b" navContainerClass="py-0">

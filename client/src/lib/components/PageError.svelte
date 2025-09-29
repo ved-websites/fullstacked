@@ -9,7 +9,7 @@
 
 	let {
 		i18n: { t, tPayload },
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	interface Props {
 		icon: string;

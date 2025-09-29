@@ -9,7 +9,7 @@
 
 	let {
 		i18n: { t },
-	} = contextPublic();
+	} = $derived(contextPublic());
 
 	interface Props {
 		sForm: SuperValidated<z.output<typeof requestPasswordSchema>>;

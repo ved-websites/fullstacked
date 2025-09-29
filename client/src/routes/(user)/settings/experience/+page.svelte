@@ -16,7 +16,7 @@
 
 	let {
 		i18n: { t, setLocale, locales },
-	} = context();
+	} = $derived(context());
 
 	let { data } = $props();
 
