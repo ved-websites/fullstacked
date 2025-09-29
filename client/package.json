@@ -74,7 +74,7 @@
 		"sveltekit-flash-message": "2.4.4",
 		"tailwindcss": "4.1.11",
 		"tslib": "2.8.1",
-		"typescript": "5.8.3",
+		"typescript": "5.9.2",
 		"vite": "7.0.4",
 		"vite-tsconfig-paths": "5.1.4",
 		"vitest": "3.2.4"
