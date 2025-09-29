@@ -36,7 +36,7 @@ declare global {
 	 * set keys with a typed array of the args given for this specific snippet.
 	 */
 	type SProps<S extends { [key: PropertyKey]: void | unknown[] } = {}> = {
-		[K in keyof S]: S[K] extends void ? Snippet : Snippet<S[K]>;
+		[K in keyof S]: S[K] extends void ? Snippet : Snippet<NonNullable<S[K]>>;
 	} & { [rest: PropertyKey]: unknown };
 
 	type Awaitable<T> = T | PromiseLike<T>;
