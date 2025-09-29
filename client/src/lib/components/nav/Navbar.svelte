@@ -3,7 +3,7 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
 	import { contextPublic } from '$lib/runes';
-	import { isDrawerHidden } from '$lib/stores';
+	import { isDrawerOpen } from '$lib/stores';
 	import { cn } from '$lib/twMerge';
 	import { navElements } from '$navigation/routes';
 	import {
@@ -31,14 +31,14 @@
 	} = $derived(contextPublic());
 </script>
 
-<Navbar class="sm:px-3 fixed w-[100vw] z-20 top-0 left-0 border-b" navContainerClass="py-0">
+<Navbar class="sm:px-3 fixed w-[100vw] z-20 top-0 left-0 border-b bg-white dark:bg-gray-900" navContainerClass="py-0">
 	{#snippet children()}
-		<NavHamburger onclick={isDrawerHidden.toggle} />
+		<NavHamburger onclick={isDrawerOpen.toggle} />
 		<NavBrand href="/" class="ml-1 md:ml-0">
 			<img src="/images/logo.svg" width="30px" class="mr-3 h-9" alt="Flowbite Logo" />
 			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Flowbite</span>
 		</NavBrand>
-		<NavUl activeUrl={page.url.pathname} ulClass="py-2">
+		<NavUl activeUrl={page.url.pathname} classes={{ ul: 'py-2' }}>
 			{#each navElements as navElement}
 				{#if isNavElemVisible(navElement, sessionUser)}
 					{#if 'url' in navElement}
