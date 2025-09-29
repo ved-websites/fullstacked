@@ -1,4 +1,4 @@
-import { UserContainer } from '$users/auth/types';
+import type { UserContainer } from '$users/auth/types';
 import type { WebSocket } from 'ws';
 
 export type TypedWebSocket = WebSocket & UserContainer;

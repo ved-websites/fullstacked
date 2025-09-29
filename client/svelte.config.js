@@ -6,6 +6,7 @@ const apiAliases = {
 	'~shared': '../api/src/@shared',
 	'~contract': '../api/src/@contract',
 	'$prisma-client': '../api/src/_generated/prisma/client',
+	$users: '../api/src/@common/users',
 	$zod: '../api/src/_generated/zod',
 };
 
