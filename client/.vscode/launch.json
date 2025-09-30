@@ -15,6 +15,10 @@
 			"includeDefaultArgs": true,
 			"pauseForSourceMap": true,
 			"sourceMaps": true,
+			"resolveSourceMapLocations": [
+				"${workspaceFolder}/**",
+				"!**/node_modules/**"
+			],
 			"skipFiles": [
 				"<node_internals>/**",
 				"**/node_modules/**",
