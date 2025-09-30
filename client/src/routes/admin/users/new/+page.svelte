@@ -5,7 +5,7 @@
 	import FormInput from '$lib/components/forms/FormInput.svelte';
 	import ValidationErrors from '$lib/components/forms/ValidationErrors.svelte';
 	import { context } from '$lib/runes';
-	import { Heading, Label, MultiSelect, type SelectOptionType } from 'flowbite-svelte';
+	import { Badge, Heading, Label, MultiSelect, type SelectOptionType } from 'flowbite-svelte';
 	import { superForm } from 'sveltekit-superforms';
 
 	let {
@@ -56,7 +56,19 @@
 		<Label>
 			<span>{$t('shared.userform.labels.roles')}</span>
 		</Label>
-		<MultiSelect name="roles" items={availableRoles} bind:value={$form.roles} color={$errors.roles ? 'red' : 'default'} />
+		<MultiSelect name="roles" items={availableRoles} bind:value={$form.roles} color={$errors.roles ? 'red' : 'default'}>
+			{#snippet children({ item, clear })}
+				<Badge
+					color="primary"
+					dismissable={!item.disabled}
+					params={{ duration: 100 }}
+					onclose={clear}
+					class={[item.disabled && 'pointer-events-none']}
+				>
+					{item.name}
+				</Badge>
+			{/snippet}
+		</MultiSelect>
 		<ValidationErrors errors={$errors.roles} />
 
 		<FormInput value={$form.emailLang} errors={$errors.emailLang}>
