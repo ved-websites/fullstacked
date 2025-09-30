@@ -159,7 +159,7 @@
 
 {#if shownUsers?.length}
 	{#each shownUsers as user, i (user.email)}
-		<Popover defaultClass="p-3 flex flex-col gap-3" class="w-64 text-sm font-light" triggeredBy="#info-{name}{i}">
+		<Popover class="w-64 text-sm font-light" classes={{ content: 'p-3 flex flex-col gap-3' }} triggeredBy="#info-{name}{i}">
 			{#snippet title()}
 				<div class="font-semibold text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-700 text-center rounded-t-md border-b py-1 px-3">
 					{$t('admin.users.tables.userinfo.heading')}

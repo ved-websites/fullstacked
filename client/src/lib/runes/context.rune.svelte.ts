@@ -1,17 +1,20 @@
+import { page } from '$app/state';
 import type { SessionUser } from '$auth/auth-handler';
 import type { I18nInstanceType } from '$i18n-config';
-import { Context } from 'runed';
+import { reconstructUrl } from '$lib/utils/urls';
+import { Context, Previous } from 'runed';
 
 export interface ContextData {
 	sessionUser: SessionUser;
 	i18n: I18nInstanceType;
+	previousPage: Previous<string>;
 }
 
-export const contextKeys: (keyof ContextData)[] = ['sessionUser', 'i18n'] as const;
+export const contextKeys = ['sessionUser', 'i18n'] as const satisfies (keyof ContextData)[];
 
 const globalContext = new Context<ContextData | null>('globalContext');
 
-export function setupContext(data: ContextData) {
+export function setupContext(data: Pick<ContextData, (typeof contextKeys)[number]>) {
 	const contextData = {} as ContextData;
 
 	for (const contextKey of contextKeys) {
@@ -20,6 +23,10 @@ export function setupContext(data: ContextData) {
 			contextData[contextKey] = data[contextKey];
 		}
 	}
+
+	const previousPage = new Previous(() => reconstructUrl(page.url));
+
+	contextData.previousPage = previousPage;
 
 	const contextState = $state(contextData);
 

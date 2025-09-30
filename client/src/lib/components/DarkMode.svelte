@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
-	import { themeStore, useMediaQuery } from '$lib/stores';
+	import { themeStore } from '$lib/stores';
 	import { Button, ButtonGroup } from 'flowbite-svelte';
-	import { onMount } from 'svelte';
-	import { derived } from 'svelte/store';
-	import { classList } from '../stores/utils/classlist';
+	import { MediaQuery } from 'svelte/reactivity';
 	import Icon from './Icon.svelte';
 
 	interface Props {
@@ -14,17 +12,15 @@
 
 	let { ...rest }: Props = $props();
 
-	const mediaDarkScheme = useMediaQuery('(prefers-color-scheme: dark)');
+	let mediaDarkScheme = new MediaQuery('prefers-color-scheme: dark');
 
-	let isDark = derived([themeStore, mediaDarkScheme], ([$theme, $mediaDark]) => {
-		if (!$theme) {
-			return $mediaDark;
+	let isDark = $derived.by(() => {
+		if (!$themeStore) {
+			return mediaDarkScheme;
 		}
 
-		return $theme == 'dark';
+		return $themeStore == 'dark';
 	});
-
-	let classListStore: ReturnType<typeof classList> | undefined = $state();
 
 	const handleThemeSubmit = async (event: SubmitEvent) => {
 		event.preventDefault();
@@ -44,16 +40,14 @@
 		}
 	};
 
-	onMount(() => {
-		classListStore = classList(document.documentElement, '');
-
-		return () => {
-			classListStore?.destroy();
-		};
-	});
+	const flowbiteDarkToken = 'dark';
 
 	$effect(() => {
-		classListStore?.update(`${$isDark ? 'dark' : ''}`);
+		if (isDark) {
+			document.documentElement.classList.add(flowbiteDarkToken);
+		} else {
+			document.documentElement.classList.remove(flowbiteDarkToken);
+		}
 	});
 </script>
 

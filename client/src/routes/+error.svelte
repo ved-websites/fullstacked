@@ -2,19 +2,13 @@
 	import { page } from '$app/state';
 	import PageError from '$lib/components/PageError.svelte';
 	import { contextPublic } from '$lib/runes';
-	import { P } from 'flowbite-svelte';
-	import { StatusCodes } from 'http-status-codes';
 
 	let {
 		i18n: { t },
 	} = $derived(contextPublic());
 </script>
 
-{#if page.status == StatusCodes.NOT_FOUND}
-	<PageError icon="i-mdi-select-search" errorMessage={$t('common.errorpage.types.404.summary')}>
-		<P>{@html $t('common.errorpage.types.404.explanation', { pathname: `<span class="italic">${page.url.pathname}</span>` })}</P>
-	</PageError>
-{:else if page.status.toString().startsWith('5')}
+{#if page.status.toString().startsWith('5')}
 	<PageError
 		icon="i-mdi-server-network-off"
 		errorMessage={$t('common.errorpage.types.server.summary', { errorCode: page.status, errorMessage: page.error?.message })}

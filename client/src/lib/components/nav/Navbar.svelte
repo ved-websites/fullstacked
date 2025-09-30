@@ -2,8 +2,7 @@
 	import { browser } from '$app/environment';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
-	import { contextPublic } from '$lib/runes';
-	import { isDrawerOpen } from '$lib/stores';
+	import { contextPublic, isDrawerOpen } from '$lib/runes';
 	import { cn } from '$lib/twMerge';
 	import { navElements } from '$navigation/routes';
 	import {

@@ -1,27 +1,24 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { contextPublic } from '$lib/runes';
-	import { previousPage } from '$lib/stores';
 	import { reconstructUrl } from '$lib/utils/urls';
 	import { Alert, Button } from 'flowbite-svelte';
-	import type { Snippet } from 'svelte';
 	import Icon from './Icon.svelte';
 
 	let {
 		i18n: { t, tPayload },
+		previousPage,
 	} = $derived(contextPublic());
 
-	interface Props {
+	interface Props extends SProps<{ children?: void; redirect?: void }> {
 		icon: string;
 		errorMessage: string;
 		i18nPayload?: Record<string, unknown> | undefined;
-		children?: Snippet;
-		redirect?: Snippet;
 	}
 
 	let { icon, errorMessage, i18nPayload = undefined, children, redirect }: Props = $props();
 
-	let previousPageUrl = $derived($previousPage && $previousPage !== reconstructUrl(page.url) ? $previousPage : undefined);
+	let previousPageUrl = $derived(previousPage.current !== reconstructUrl(page.url) ? previousPage.current : undefined);
 </script>
 
 <div class="flex flex-col self-center items-center gap-10">
