@@ -1,4 +1,4 @@
-import { page } from '$app/stores';
+import { page } from '$app/state';
 import type { PageMessages } from '$lib/types';
 import type { RequestEvent } from '@sveltejs/kit';
 import type { Writable } from 'svelte/store';
