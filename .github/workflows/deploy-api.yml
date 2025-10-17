@@ -88,15 +88,14 @@ jobs:
       - name: Send webhook to notify deployment to Dokploy
         run: |
             curl -X 'POST' \
-            '${{ secrets.DOKPLOY_WEBHOOK }}' \
+            '${{ vars.DOKPLOY_HOST }}/api/application.deploy' \
             -H 'accept: application/json' \
-            -H 'x-github-event: package' \
             -H 'Content-Type: application/json' \
+            -H 'x-api-key: ${{ secrets.DOKPLOY_API_KEY }}' \
             -d '{
-              "head_commit":{
-                "id": "${{ steps.deployed-commit-sha.outputs.sha }}",
-                "message": "New Package Version : ${{ steps.api-version.outputs.current-version }}"
-              }
+              "applicationId": "${{ secrets.DOKPLOY_APP_ID }}",
+              "title": "New Package Version : ${{ steps.api-version.outputs.current-version }}",
+              "description": "Hash: ${{ steps.deployed-commit-sha.outputs.sha }}",
             }'
 
       - name: Format Docker Tags for Comment
