@@ -1,7 +1,7 @@
 {
 	"name": "@app/client",
 	"description": "Web client using Sveltekit, Flowbite and TS-Rest, with a custom realtime library named TS-WS.",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"private": true,
 	"type": "module",
 	"engines": {
